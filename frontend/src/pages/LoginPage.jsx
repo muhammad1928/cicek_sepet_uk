@@ -52,7 +52,7 @@ const LoginPage = () => {
             <input
               type="text"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-gray-50"
-              placeholder="Örn: superadmin"
+              placeholder="Örn: kullanici123"
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
