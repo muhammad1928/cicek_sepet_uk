@@ -25,6 +25,11 @@ app.use('/api/payment', paymentRoute);
 app.use('/api/stats', statsRoute);
 app.use('/api/coupons', couponRoute);
 
+// HEALTH CHECK (Sunucuyu uyanık tutmak için)
+app.get('/api/health', (req, res) => {
+  res.status(200).send('Sunucu ayakta ve çalışıyor! 🚀');
+});
+
 // Debug için: Konsola veritabanı linkini yazdıralım (Sorunu görmek için)
 console.log("Veritabanı Linki:", process.env.MONGO_URI); 
 
@@ -42,12 +47,18 @@ mongoose.connect(process.env.MONGO_URI)
     .catch((err) => console.log("Veritabanı Hatası:", err));
 
 const PORT = process.env.PORT || 5000;
-// GEÇİCİ TEMİZLİK ROTASI (İşin bitince silebilirsin)
-// const Order = require('./models/Order');
-// app.get('/api/clean-orders', async (req, res) => {
-//     await Order.deleteMany({});
-//     res.send("Tüm eski siparişler silindi!");
-// });
+// GEÇİCİ: KULLANICI SİLME ROTASI
+const User = require('./models/User'); // User modelini çağırdık
+
+app.get('/api/reset-user/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        await User.deleteOne({ username: username });
+        res.send(`<h1>✅ ${username} başarıyla silindi!</h1><p>Şimdi Thunder Client ile tekrar oluşturabilirsin.</p>`);
+    } catch (err) {
+        res.send("Hata: " + err.message);
+    }
+});
 app.listen(PORT, () => {
     console.log(`Sunucu ${PORT} portunda çalışıyor...`);
 });
