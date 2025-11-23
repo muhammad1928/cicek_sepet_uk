@@ -19,7 +19,7 @@ const FavoritesPage = () => {
     const fetchFavorites = async () => {
       try {
         // Backend'deki populate edilmiş favori rotasını çağırıyoruz
-        const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}/favorites`);
+        const res = await axios.get(`http://localhost:5000/api/users/${user._id}/favorites`);
         setProducts(res.data);
       } catch (err) {
         console.log(err);

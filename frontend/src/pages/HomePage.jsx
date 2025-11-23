@@ -41,7 +41,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/products");
+        const res = await axios.get("http://localhost:5000/api/products");
         const active = res.data.filter(p => p.stock > 0 && p.isActive === true);
         setProducts(active);
         setFilteredProducts(active);

@@ -60,7 +60,7 @@ const DashboardStats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/stats");
+        const res = await axios.get("http://localhost:5000/api/stats");
         setStats(res.data);
       } catch (err) { console.log(err); }
     };
@@ -112,7 +112,7 @@ const ProductManager = () => {
   const [formData, setFormData] = useState(initialForm);
 
   const fetchProducts = async () => {
-    try { const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/products"); setProducts(res.data); } catch (err) { console.log(err); }
+    try { const res = await axios.get("http://localhost:5000/api/products"); setProducts(res.data); } catch (err) { console.log(err); }
   };
   useEffect(() => { fetchProducts(); }, []);
 
@@ -123,7 +123,7 @@ const ProductManager = () => {
     setUploading(true);
     const data = new FormData(); data.append("file", file);
     try {
-      const res = await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/upload", data);
+      const res = await axios.post("http://localhost:5000/api/upload", data);
       setFormData((prev) => ({ ...prev, img: res.data }));
       notify("Resim yüklendi! 🖼️", "success");
     } catch (err) { notify("Resim yüklenemedi!", "error"); } finally { setUploading(false); }
@@ -133,14 +133,14 @@ const ProductManager = () => {
     e.preventDefault();
     if (!formData.title || !formData.price) { notify("Zorunlu alanları doldurun!", "warning"); return; }
     try {
-      if (editMode) { await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${editMode}`, formData); notify("Güncellendi!", "success"); } 
-      else { await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/products", formData); notify("Eklendi!", "success"); }
+      if (editMode) { await axios.put(`http://localhost:5000/api/products/${editMode}`, formData); notify("Güncellendi!", "success"); } 
+      else { await axios.post("http://localhost:5000/api/products", formData); notify("Eklendi!", "success"); }
       setFormData(initialForm); setShowForm(false); setEditMode(null); fetchProducts();
     } catch (err) { notify("Hata!", "error"); }
   };
 
   const handleEditClick = (product) => { setFormData({ ...product, category: product.category || "Doğum Günü" }); setEditMode(product._id); setShowForm(true); window.scrollTo(0,0); };
-  const handleDelete = async (id) => { if(confirm("Silinsin mi?")) { try { await axios.delete(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${id}`); fetchProducts(); } catch(e){} } };
+  const handleDelete = async (id) => { if(confirm("Silinsin mi?")) { try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } catch(e){} } };
 
   const filteredProducts = products.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -211,12 +211,12 @@ const OrderManager = () => {
 
   const fetchOrders = async () => {
     setLoading(true);
-    try { const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/orders"); setOrders(res.data); } 
+    try { const res = await axios.get("http://localhost:5000/api/orders"); setOrders(res.data); } 
     catch (err) { console.log(err); } finally { setTimeout(() => setLoading(false), 500); }
   };
   useEffect(() => { fetchOrders(); }, []);
 
-  const handleStatusChange = async (id, st) => { try { await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/orders/${id}`, { status: st }); notify(`Sipariş: ${st}`, "success"); setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } catch (err) { notify("Hata", "error"); } };
+  const handleStatusChange = async (id, st) => { try { await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st }); notify(`Sipariş: ${st}`, "success"); setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } catch (err) { notify("Hata", "error"); } };
   
   const getStatusStyle = (status) => {
     switch(status) {
@@ -259,10 +259,10 @@ const CouponManager = () => {
   const [coupons, setCoupons] = useState([]);
   const [formData, setFormData] = useState({ code: "", discountRate: "" });
   const { notify } = useCart();
-  const fetchCoupons = async () => { try { const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/coupons"); setCoupons(res.data); } catch (err) { console.log(err); } };
+  const fetchCoupons = async () => { try { const res = await axios.get("http://localhost:5000/api/coupons"); setCoupons(res.data); } catch (err) { console.log(err); } };
   useEffect(() => { fetchCoupons(); }, []);
-  const handleSubmit = async (e) => { e.preventDefault(); if (!formData.code || !formData.discountRate) return notify("Bilgileri doldurun", "warning"); try { await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/coupons", { code: formData.code.toUpperCase(), discountRate: Number(formData.discountRate) }); notify("Kupon oluşturuldu! 🎉", "success"); setFormData({ code: "", discountRate: "" }); fetchCoupons(); } catch (err) { notify("Hata oluştu", "error"); } };
-  const handleDelete = async (id) => { if (confirm("Kuponu silmek istiyor musunuz?")) { try { await axios.delete(`https://ciceksepeti-api-m8ir.onrender.com/api/coupons/${id}`); notify("Silindi.", "success"); fetchCoupons(); } catch (err) { notify("Silinemedi", "error"); } } };
+  const handleSubmit = async (e) => { e.preventDefault(); if (!formData.code || !formData.discountRate) return notify("Bilgileri doldurun", "warning"); try { await axios.post("http://localhost:5000/api/coupons", { code: formData.code.toUpperCase(), discountRate: Number(formData.discountRate) }); notify("Kupon oluşturuldu! 🎉", "success"); setFormData({ code: "", discountRate: "" }); fetchCoupons(); } catch (err) { notify("Hata oluştu", "error"); } };
+  const handleDelete = async (id) => { if (confirm("Kuponu silmek istiyor musunuz?")) { try { await axios.delete(`http://localhost:5000/api/coupons/${id}`); notify("Silindi.", "success"); fetchCoupons(); } catch (err) { notify("Silinemedi", "error"); } } };
   return (
     <div className="space-y-8 max-w-4xl mx-auto animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800">İndirim Kuponları</h2>
@@ -276,9 +276,9 @@ const CouponManager = () => {
 const ReviewManager = () => {
   const [allReviews, setAllReviews] = useState([]);
   const { notify } = useCart();
-  const fetchReviews = async () => { try { const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/products"); let gathered = []; res.data.forEach(p => { p.reviews.forEach(r => { gathered.push({ ...r, productId: p._id, productName: p.title, productImg: p.img }); }); }); gathered.sort((a, b) => new Date(b.date) - new Date(a.date)); setAllReviews(gathered); } catch (err) { console.log(err); } };
+  const fetchReviews = async () => { try { const res = await axios.get("http://localhost:5000/api/products"); let gathered = []; res.data.forEach(p => { p.reviews.forEach(r => { gathered.push({ ...r, productId: p._id, productName: p.title, productImg: p.img }); }); }); gathered.sort((a, b) => new Date(b.date) - new Date(a.date)); setAllReviews(gathered); } catch (err) { console.log(err); } };
   useEffect(() => { fetchReviews(); }, []);
-  const handleDelete = async (pid, rid) => { if(!confirm("Silinsin mi?")) return; try { await axios.delete(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${pid}/reviews/${rid}`); notify("Silindi", "success"); fetchReviews(); } catch (err) { notify("Hata", "error"); } };
+  const handleDelete = async (pid, rid) => { if(!confirm("Silinsin mi?")) return; try { await axios.delete(`http://localhost:5000/api/products/${pid}/reviews/${rid}`); notify("Silindi", "success"); fetchReviews(); } catch (err) { notify("Hata", "error"); } };
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center"><h2 className="text-2xl font-bold text-gray-800">Yorumlar ({allReviews.length})</h2><button onClick={fetchReviews} className="text-blue-600 hover:underline text-sm font-bold">🔄 Yenile</button></div>
@@ -295,7 +295,7 @@ const QuickStockUpdate = ({ product, refresh }) => {
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
-    try { await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
+    try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
     catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
   };
   const isChanged = Number(stock) !== product.stock;

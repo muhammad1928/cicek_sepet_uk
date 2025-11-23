@@ -39,7 +39,7 @@ const CourierPage = () => {
   const fetchOrders = async (isAuto = false) => {
     if (!isAuto) setLoading(true);
     try {
-      const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/orders");
+      const res = await axios.get("http://localhost:5000/api/orders");
       const allOrders = res.data;
       
       // Sadece "Hazırlanıyor" olanlar (Havuz)
@@ -61,7 +61,7 @@ const CourierPage = () => {
 
   const takeOrder = async (orderId) => {
     try {
-      await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/orders/${orderId}`, {
+      await axios.put(`http://localhost:5000/api/orders/${orderId}`, {
         status: "Yola Çıktı",
         courierId: user._id
       });
@@ -75,7 +75,7 @@ const CourierPage = () => {
   const completeOrder = async (orderId) => {
     if (!confirm("Teslimatı onaylıyor musun?")) return;
     try {
-      await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/orders/${orderId}`, { status: "Teslim Edildi" });
+      await axios.put(`http://localhost:5000/api/orders/${orderId}`, { status: "Teslim Edildi" });
       notify("Harika iş! Teslim edildi ✅", "success");
       fetchOrders();
     } catch (err) { notify("Hata oluştu", "error"); }

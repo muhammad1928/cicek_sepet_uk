@@ -1,96 +1,132 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const navigate = useNavigate(); // Sayfa değiştirmek için kullanacağız
+  const [loading, setLoading] = useState(false); // Yükleniyor durumu
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(false);
+    setLoading(true); // İşlem başladı
 
     try {
-      // 1. Backend'e istek at (Port 5000)
-      const res = await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/auth/login", {
+      // Localhost'a istek atıyoruz
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
         username,
         password,
       });
 
-      // 2. Gelen bileti (Token) ve bilgileri kaydet
-      // localStorage: Tarayıcı kapanana kadar veriyi tutar
+      // Kullanıcıyı hafızaya kaydet
       localStorage.setItem("user", JSON.stringify(res.data));
       
-      // 3. Rolüne göre yönlendir
+      // Rolüne göre yönlendir
+      // (window.location.href kullanıyoruz ki sayfa yenilensin ve Navbar güncellensin)
       if (res.data.role === "admin") {
-        alert("Hoşgeldin Patron! Admin paneline gidiyorsun...");
-        navigate("/admin");
+        window.location.href = "/admin";
+      } else if (res.data.role === "courier") {
+        window.location.href = "/courier";
       } else {
-        alert("Hoşgeldin " + res.data.username);
-        navigate("/");
+        window.location.href = "/";
       }
 
     } catch (err) {
-      // Backend hata dönerse (400, 404 vs)
       setError(true);
-      console.log(err);
+      setLoading(false); // Hata olursa yükleniyor'u kapat
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-100 p-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans">
+      
+      <div className="bg-white w-full max-w-md p-10 rounded-3xl shadow-2xl animate-fade-in relative overflow-hidden">
         
-        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-2">Tekrar Hoşgeldiniz</h2>
-        <p className="text-center text-gray-500 mb-8">Hesabınıza giriş yapın</p>
+        {/* Süsleme Çemberi (Arka Plan) */}
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-pink-100 rounded-full opacity-50 blur-xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-100 rounded-full opacity-50 blur-xl"></div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        {/* Başlık */}
+        <div className="text-center mb-8 relative z-10">
+          <h2 className="text-4xl font-extrabold text-gray-800 mb-2 tracking-tight">Hoşgeldiniz</h2>
+          <p className="text-gray-500">ÇiçekSepeti UK dünyasına giriş yapın</p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+          
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Kullanıcı Adı</label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-gray-50"
-              placeholder="Örn: kullanici123"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Kullanıcı Adı</label>
+            <div className="flex items-center border-2 border-gray-100 rounded-xl bg-gray-50 focus-within:border-pink-400 focus-within:bg-white transition overflow-hidden">
+              <span className="pl-4 text-gray-400">👤</span>
+              <input 
+                type="text" 
+                className="w-full px-4 py-3 outline-none bg-transparent text-gray-700 font-medium"
+                placeholder="Kullanıcı adınız"
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Şifre</label>
-            <input
-              type="password"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-gray-50"
-              placeholder="••••••••"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Şifre</label>
+            <div className="flex items-center border-2 border-gray-100 rounded-xl bg-gray-50 focus-within:border-pink-400 focus-within:bg-white transition overflow-hidden">
+              <span className="pl-4 text-gray-400">🔒</span>
+              <input 
+                type="password" 
+                className="w-full px-4 py-3 outline-none bg-transparent text-gray-700 font-medium"
+                placeholder="••••••••"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
 
+          {/* Hata Mesajı */}
           {error && (
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
-              <p className="font-bold">Hata!</p>
-              <p>Kullanıcı adı veya şifre yanlış.</p>
+            <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2 animate-shake">
+              <span>⚠️</span> Kullanıcı adı veya şifre yanlış!
             </div>
           )}
 
+          {/* Giriş Butonu */}
           <button
             type="submit"
-            className="w-full bg-pink-600 text-white font-bold py-3 rounded-lg hover:bg-pink-700 transition transform active:scale-95 shadow-lg"
+            disabled={loading}
+            className={`w-full text-white font-bold py-4 rounded-xl transition shadow-lg flex justify-center items-center gap-2 text-lg 
+              ${loading 
+                ? "bg-pink-400 cursor-not-allowed" 
+                : "bg-gradient-to-r from-pink-600 to-purple-600 hover:shadow-pink-500/30 active:scale-95"
+              }`}
           >
-            Giriş Yap
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Giriş Yapılıyor...
+              </>
+            ) : (
+              "Giriş Yap"
+            )}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
-          Hesabınız yok mu?{" "}
-          <Link to="/register" className="text-pink-600 font-bold hover:underline">
-            Kayıt Ol (Yakında)
-          </Link>
-        </div>
-        
-        <div className="mt-4 text-center">
-           <Link to="/" className="text-gray-400 text-xs hover:text-gray-600">← Ana Sayfaya Dön</Link>
+        {/* Alt Linkler */}
+        <div className="mt-8 text-center relative z-10">
+          <p className="text-sm text-gray-500">
+            Hesabınız yok mu?{" "}
+            <Link to="/register" className="text-pink-600 font-bold hover:underline hover:text-pink-700 transition">
+              Hemen Kayıt Ol
+            </Link>
+          </p>
+          <div className="mt-4">
+             <Link to="/" className="text-gray-400 text-xs hover:text-gray-600 transition">← Ana Sayfaya Dön</Link>
+          </div>
         </div>
 
       </div>

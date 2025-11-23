@@ -24,7 +24,7 @@ const ProductDetailPage = () => {
     useEffect(() => {
       const fetchRelated = async () => {
         try {
-          const res = await axios.get("https://ciceksepeti-api-m8ir.onrender.com/api/products");
+          const res = await axios.get("hhttp://localhost:5000/api/products");
           // Mantık: Aynı kategorideki ürünleri bul, ama şu an baktığım ürünü hariç tut.
           const filtered = res.data.filter(
             p => p.category === currentProduct.category && p._id !== currentProduct._id
@@ -67,7 +67,7 @@ const ProductDetailPage = () => {
   // Ürünü Çek
   const fetchProduct = async () => {
     try {
-      const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${id}`);
+      const res = await axios.get(`http://localhost:5000/api/products/${id}`);
       setProduct(res.data);
     } catch (err) {
       console.log(err);
@@ -85,7 +85,7 @@ const ProductDetailPage = () => {
     if (!reviewText) return notify("Yorum yazın.", "warning");
 
     try {
-      await axios.post(`https://ciceksepeti-api-m8ir.onrender.com/api/products/${id}/reviews`, {
+      await axios.post(`http://localhost:5000/api/products/${id}/reviews`, {
         user: user.username,
         rating,
         comment: reviewText

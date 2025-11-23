@@ -28,7 +28,7 @@ const ProfilePage = () => {
 
   const fetchAddresses = async (userId) => {
     try {
-      const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${userId}/addresses`);
+      const res = await axios.get(`http://localhost:5000/api/users/${userId}/addresses`);
       setAddresses(res.data);
     } catch (err) { console.log(err); } 
     finally { setLoading(false); }
@@ -47,7 +47,7 @@ const ProfilePage = () => {
     }
 
     try {
-      await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}`, {
+      await axios.put(`http://localhost:5000/api/users/${user._id}`, {
         password: passwords.newPass
       });
       notify("Şifreniz başarıyla güncellendi! Lütfen tekrar giriş yapın.", "success");
@@ -64,7 +64,7 @@ const ProfilePage = () => {
   const handleDeleteAddress = async (addressId) => {
     if (!confirm("Bu adresi silmek istiyor musunuz?")) return;
     try {
-      await axios.delete(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}/addresses/${addressId}`);
+      await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${addressId}`);
       notify("Adres silindi.", "success");
       fetchAddresses(user._id); // Listeyi yenile
     } catch (err) {
