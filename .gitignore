@@ -1,0 +1,17 @@
+# Bağımlılıklar (Çok ağır, yükleme)
+node_modules/
+*/node_modules/
+
+# Çevre Değişkenleri (ŞİFRELER BURADA - ASLA YÜKLEME!)
+.env
+backend/.env
+frontend/.env
+
+# İşletim Sistemi Dosyaları
+.DS_Store
+Thumbs.db
+
+# Build Dosyaları
+dist/
+build/
+.next/
