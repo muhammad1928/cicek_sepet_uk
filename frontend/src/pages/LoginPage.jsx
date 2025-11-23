@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     try {
       // 1. Backend'e istek at (Port 5000)
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const res = await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/auth/login", {
         username,
         password,
       });

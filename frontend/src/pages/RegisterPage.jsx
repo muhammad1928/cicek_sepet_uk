@@ -14,7 +14,7 @@ const RegisterPage = () => {
     setError(false);
     try {
       // Backend'e kayıt isteği
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/auth/register", {
         username,
         email,
         password,

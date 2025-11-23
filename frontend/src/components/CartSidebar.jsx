@@ -38,7 +38,7 @@ const CartSidebar = () => {
     if (user && showCheckoutForm) {
       const fetchAddresses = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/users/${user._id}/addresses`);
+          const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}/addresses`);
           setSavedAddresses(res.data);
         } catch (err) { console.log(err); }
       };
@@ -50,7 +50,7 @@ const CartSidebar = () => {
   const handleApplyCoupon = async () => {
     if (!couponCode) return notify("Kod girmediniz", "warning");
     try {
-      const res = await axios.get(`http://localhost:5000/api/coupons/validate/${couponCode}`);
+      const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/coupons/validate/${couponCode}`);
       setDiscount(res.data.discountRate);
       setCouponApplied(true);
       notify(`%${res.data.discountRate} İndirim Uygulandı! 🎉`, "success");
@@ -114,7 +114,7 @@ const CartSidebar = () => {
       // 4. Stripe Linki İste (Buraya ürünleri gönderiyoruz)
       // Not: Gerçek senaryoda kupon bilgisini de göndermek gerekir ama şimdilik sepet tutarını backend hesaplıyor.
       // Basitlik için backend'deki payment rotası item fiyatlarını kullanıyor.
-      const res = await axios.post("http://localhost:5000/api/payment/create-checkout-session", {
+      const res = await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/payment/create-checkout-session", {
         items: cart
       });
 

@@ -28,7 +28,7 @@ const SuccessPage = () => {
 
       try {
         // SİPARİŞİ KAYDET (Backend'e Gönder)
-        await axios.post("http://localhost:5000/api/orders", storedCart);
+        await axios.post("https://ciceksepeti-api-m8ir.onrender.com/api/orders", storedCart);
         
         notify("Ödeme Başarılı! Siparişiniz alındı 🌸", "success");
         clearCart(); // Context sepetini temizle

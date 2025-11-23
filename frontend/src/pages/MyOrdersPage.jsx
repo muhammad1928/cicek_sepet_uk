@@ -18,7 +18,7 @@ const MyOrdersPage = () => {
 
     const fetchMyOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
+        const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/orders/find/${user._id}`);
         setOrders(res.data);
       } catch (err) {
         console.log(err);

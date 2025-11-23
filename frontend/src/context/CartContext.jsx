@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
     if (user) {
       const fetchFavs = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/users/${user._id}/favorites`);
+          const res = await axios.get(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}/favorites`);
           // Sadece ID listesini tutuyoruz
           setFavorites(res.data.map(item => item._id));
         } catch (err) { console.log(err); }
@@ -45,7 +45,7 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/users/${user._id}/favorites`, { productId });
+      await axios.put(`https://ciceksepeti-api-m8ir.onrender.com/api/users/${user._id}/favorites`, { productId });
       
       if (favorites.includes(productId)) {
         setFavorites(prev => prev.filter(id => id !== productId));
