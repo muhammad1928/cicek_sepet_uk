@@ -17,12 +17,18 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 2. TÜM ÜRÜNLERİ GETİR
+// 2. TÜM ÜRÜNLERİ GETİR (GÜNCELLENDİ)
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    // .populate ile satıcının 'username' ve 'isBlocked' bilgilerini çekiyoruz
+    const products = await Product.find()
+      .populate('vendor', 'username isBlocked') 
+      .sort({ createdAt: -1 });
+      
     res.status(200).json(products);
-  } catch (err) { res.status(500).json(err); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // 3. TEK ÜRÜN GETİR (DETAY SAYFASI İÇİN - YENİ!)
