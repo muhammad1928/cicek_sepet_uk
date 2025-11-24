@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
+import Seo from "../components/Seo";
 
 const SuccessPage = () => {
   const location = useLocation();
@@ -46,6 +47,10 @@ const SuccessPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 font-sans p-4 text-center">
+      <Seo 
+        title="Sipariş Alındı" 
+        noindex={true} 
+      />
       {isProcessing ? (
         <div className="text-2xl font-bold text-green-700 animate-pulse">Siparişiniz Onaylanıyor...</div>
       ) : (

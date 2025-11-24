@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 // KATEGORİLER VE İKONLARI
 const CATEGORIES = ["Tümü", "Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
@@ -89,8 +90,14 @@ const HomePage = () => {
   };
 
   return (
+    
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 relative">
-      
+      {/* --- SEO AYARLARI --- */}
+      <Seo 
+        title="Ana Sayfa - En Taze Çiçekler" 
+        description="Londra'nın en taze çiçek sipariş sitesi. Aynı gün teslimat ve özel tasarım buketler."
+        keywords="çiçek, londra çiçekçi, hediye, gül, orkide"
+      />
       {/* HERO & ARAMA */}
       <div className="pt-32 pb-16 text-center bg-gradient-to-b from-pink-50 to-white px-4">
         <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight">
@@ -165,7 +172,7 @@ const HomePage = () => {
                       
                       {/* Kategori İkonu */}
                       {product.category && (
-                        <div className="absolute top-3 left-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md text-lg cursor-help transition hover:scale-110" title={product.category}>
+                        <div className="absolute top-3 left-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md text-lg transition hover:scale-110" title={product.category}>
                           {getCategoryIcon(product.category)}
                         </div>
                       )}
@@ -174,14 +181,11 @@ const HomePage = () => {
 
                   {/* Favori Butonu */}
                   <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleFavorite(product._id);
-                    }}
-                    className="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition"
+                    onClick={(e) => { e.preventDefault(); toggleFavorite(product._id); }}
+                    className={`absolute top-3 right-3 z-20 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110 ${isFav ? "text-red-600" : "text-gray-400 hover:text-red-500"}`} // Arka plan kaldırıldı
                     title="Favorilere Ekle"
                   >
-                    <span className={`text-lg transition ${isFav ? "scale-125" : "scale-100"}`}>
+                    <span className="text-2xl drop-shadow-md"> {/* Gölge ekledik ki resim üstünde belli olsun */}
                       {isFav ? "❤️" : "🤍"}
                     </span>
                   </button>

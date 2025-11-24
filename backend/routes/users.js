@@ -38,18 +38,26 @@ router.delete('/:id/addresses/:addressId', async (req, res) => {
   }
 });
 
-// 3. FAVORİ EKLE / ÇIKAR
+// 3. FAVORİ EKLE / ÇIKAR (GÜNCELLENDİ: SAYAÇLI SİSTEM)
 router.put('/:id/favorites', async (req, res) => {
   const { productId } = req.body;
   try {
     const user = await User.findById(req.params.id);
-    
-    // Ürün favorilerde var mı kontrol et
-    if (user.favorites.includes(productId)) {
+    const isFavorited = user.favorites.includes(productId);
+
+    if (isFavorited) {
+      // 1. Kullanıcıdan Çıkar
       await user.updateOne({ $pull: { favorites: productId } });
+      // 2. Ürün Sayacını Azalt (-1)
+      await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: -1 } });
+      
       res.status(200).json("Çıkarıldı");
     } else {
+      // 1. Kullanıcıya Ekle
       await user.updateOne({ $push: { favorites: productId } });
+      // 2. Ürün Sayacını Artır (+1)
+      await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: 1 } });
+      
       res.status(200).json("Eklendi");
     }
   } catch (err) {
@@ -78,4 +86,30 @@ router.get('/:id/addresses', async (req, res) => {
   }
 });
 
+// 6. TÜM KULLANICILARI GETİR (ADMİN İÇİN)
+router.get('/', async (req, res) => {
+  try {
+    // Şifreleri gönderme, sadece gerekli bilgileri al
+    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 7. KULLANICI ROLÜNÜ DEĞİŞTİR (ADMİN İÇİN)
+router.put('/:id/role', async (req, res) => {
+  try {
+    const { role } = req.body; // 'admin', 'vendor', 'courier', 'customer'
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { role: role },
+      { new: true }
+    ).select('-password');
+    
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

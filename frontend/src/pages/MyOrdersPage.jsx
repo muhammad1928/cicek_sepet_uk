@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import InvoiceModal from "../components/InvoiceModal"; // <--- İMPORT
+import Seo from "../components/Seo";
 
 const MyOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -44,6 +45,10 @@ const MyOrdersPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans pt-24 pb-10 px-4">
+      <Seo 
+        title="Siparişlerim" 
+        noindex={true} // <--- Google burayı İNDEKSLEMEYECEK
+      />
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Siparişlerim 📦</h1>
 

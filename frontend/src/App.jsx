@@ -17,6 +17,11 @@ import CourierPage from "./pages/CourierPage";
 import SuccessPage from "./pages/SuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import FavoritesPage from "./pages/FavoritesPage";
+import VerifyPage from "./pages/VerifyPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import VendorPage from "./pages/VendorPage";
+
 
 function App() {
   return (
@@ -44,6 +49,10 @@ function App() {
               <Route path="/success" element={<SuccessPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/verify/:token" element={<VerifyPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+              <Route path="/vendor" element={<VendorPage />} />
             </Routes>
           </div>
 

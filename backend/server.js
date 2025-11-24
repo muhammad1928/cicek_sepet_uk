@@ -1,64 +1,71 @@
-// 1. EN TEPEYE BUNU YAZ (Şifreleri yükle)
-require('dotenv').config(); 
-
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+// --- GÜVENLİK KÜTÜPHANELERİ ---
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+// ------------------------------
+
 const authRoute = require('./routes/auth');
 const productRoute = require('./routes/product');
 const orderRoute = require('./routes/order');
-const uploadRoute = require('./routes/upload');
-const userRoute = require('./routes/users');
 const paymentRoute = require('./routes/payment');
-const statsRoute = require('./routes/stats');
+const userRoute = require('./routes/users');
 const couponRoute = require('./routes/coupon');
+const statsRoute = require('./routes/stats');
+const uploadRoute = require('./routes/upload');
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use('/api/products', productRoute);
-app.use('/api/orders', orderRoute);
-app.use('/api/upload', uploadRoute);
-app.use('/api/users', userRoute);
-app.use('/api/payment', paymentRoute);
-app.use('/api/stats', statsRoute);
-app.use('/api/coupons', couponRoute);
+// 1. GÜVENLİK DUVARLARI
+app.use(helmet()); // HTTP Başlıklarını Güvenli Hale Getir
+app.use(cors());   // Frontend erişimine izin ver
 
-// HEALTH CHECK (Sunucuyu uyanık tutmak için)
-app.get('/api/health', (req, res) => {
-  res.status(200).send('Sunucu ayakta ve çalışıyor! 🚀');
+// 2. RATE LIMITING (DDOS ve Brute Force Koruması)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 dakika
+  max: 100, // Her IP'den max 100 istek
+  message: "Çok fazla istek yaptınız, lütfen 15 dakika sonra tekrar deneyin."
 });
+app.use('/api', limiter); // Sadece /api rotalarına uygula
 
-// Debug için: Konsola veritabanı linkini yazdıralım (Sorunu görmek için)
-console.log("Veritabanı Linki:", process.env.MONGO_URI); 
+// 3. VERİ TEMİZLEME
+app.use(express.json({ limit: '10kb' })); // Çok büyük verileri engelle
+app.use(mongoSanitize()); // SQL Injection Koruması ($ ve . işaretlerini siler)
+app.use(xss()); // HTML Script Koruması (<script>alert(1)</script> gibi)
+app.use(hpp()); // Parametre Kirliliği Koruması
+
+// --- ROTALAR ---
+app.get('/api/health', (req, res) => { res.status(200).send('Sunucu Güvende ve Çalışıyor! 🛡️'); });
 
 app.use('/api/auth', authRoute);
+app.use('/api/products', productRoute);
+app.use('/api/orders', orderRoute);
+app.use('/api/payment', paymentRoute);
+app.use('/api/users', userRoute);
+app.use('/api/coupons', couponRoute);
+app.use('/api/stats', statsRoute);
+app.use('/api/upload', uploadRoute);
 
-// Veritabanı Bağlantısı
-// Eğer MONGO_URI yoksa hata vermesin diye kontrol ekleyelim
-if (!process.env.MONGO_URI) {
-    console.error("HATA: .env dosyası okunamadı veya MONGO_URI boş!");
-    process.exit(1); // Uygulamayı durdur
-}
+// TEMİZLİK ROTALARI (Geliştirme aşaması bittiğinde bunları silebilirsin)
+const User = require('./models/User');
+const Product = require('./models/Product');
+const Order = require('./models/Order');
+app.get('/api/clean-users/:username', async (req, res) => { await User.deleteOne({username: req.params.username}); res.send("Silindi"); });
+app.get('/api/clean-products', async (req, res) => { await Product.deleteMany({}); res.send("Ürünler Silindi"); });
+app.get('/api/clean-orders', async (req, res) => { await Order.deleteMany({}); res.send("Siparişler Silindi"); });
 
+// DB BAĞLANTISI
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Veritabanı Bağlantısı BAŞARILI!"))
-    .catch((err) => console.log("Veritabanı Hatası:", err));
+    .catch((err) => console.log("DB Hatası:", err));
 
 const PORT = process.env.PORT || 5000;
-// GEÇİCİ: KULLANICI SİLME ROTASI
-const User = require('./models/User'); // User modelini çağırdık
-
-app.get('/api/reset-user/:username', async (req, res) => {
-    try {
-        const username = req.params.username;
-        await User.deleteOne({ username: username });
-        res.send(`<h1>✅ ${username} başarıyla silindi!</h1><p>Şimdi Thunder Client ile tekrar oluşturabilirsin.</p>`);
-    } catch (err) {
-        res.send("Hata: " + err.message);
-    }
-});
 app.listen(PORT, () => {
-    console.log(`Sunucu ${PORT} portunda çalışıyor...`);
+    console.log(`Sunucu ${PORT} portunda güvenli şekilde çalışıyor...`);
 });

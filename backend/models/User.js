@@ -4,28 +4,15 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  
-  role: {
-    type: String,
-    enum: ['customer', 'vendor', 'admin', 'courier'],
-    default: 'customer'
-  }, 
-  
+  role: { type: String, enum: ['customer', 'vendor', 'admin', 'courier'], default: 'customer' },
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+  savedAddresses: [{ title: String, recipientName: String, recipientPhone: String, address: String, city: String, postcode: String }],
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 
-  favorites: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }
-  ],
- 
-  savedAddresses: [
-    {
-      title: String, // Örn: "Ev", "Ofis - Londra"
-      recipientName: String,
-      recipientPhone: String,
-      address: String,
-      city: String,
-      postcode: String
-    }
-  ]
+
 
 }, { timestamps: true });
 
