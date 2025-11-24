@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import InvoiceModal from "../components/InvoiceModal"; // Fatura Modalı
 
 const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
@@ -24,7 +25,7 @@ const VendorPage = () => {
   return (
     <div className="min-h-screen flex bg-gray-100 font-sans pt-20">
       {/* SIDEBAR */}
-      <aside className="w-64 bg-white text-gray-800 flex flex-col shadow-xl z-10 fixed h-full top-20 left-0 border-r border-gray-200">
+      <aside className="w-64 bg-white text-gray-800 flex flex-col shadow-xl z-10 fixed h-full top-20 left-0 border-r border-gray-200 overflow-y-auto pb-20">
         <div className="p-6 text-xl font-bold text-pink-600 border-b border-gray-100 flex items-center gap-2">
           🏪 <span>Mağaza Paneli</span>
         </div>
@@ -34,8 +35,8 @@ const VendorPage = () => {
           <button onClick={() => setActiveTab("orders")} className={`w-full text-left px-4 py-3 rounded-lg transition font-bold ${activeTab === "orders" ? "bg-pink-50 text-pink-600 border-l-4 border-pink-600" : "hover:bg-gray-50 text-gray-500"}`}>🚚 Siparişler</button>
         </nav>
         <div className="p-4 border-t border-gray-100">
-          <div className="text-xs text-gray-400 mb-2">Giriş: {user?.username}</div>
-          <button onClick={handleLogout} className="w-full bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 py-2 rounded text-sm font-bold transition">Çıkış Yap</button>
+          <div className="text-xs text-gray-400 mb-2 font-bold uppercase">Hesap: {user?.username}</div>
+          <button onClick={handleLogout} className="w-full bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 py-2 rounded text-sm font-bold transition border border-gray-200">Çıkış Yap</button>
         </div>
       </aside>
 
@@ -49,18 +50,15 @@ const VendorPage = () => {
   );
 };
 
-// --- 1. VENDOR DASHBOARD (ÖZET) ---
+// --- 1. VENDOR DASHBOARD ---
 const VendorDashboard = ({ user }) => {
   const [stats, setStats] = useState({ totalSales: 0, orderCount: 0, productCount: 0 });
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Sadece bu satıcıya ait verileri çekiyoruz
         const prodRes = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`);
         const ordRes = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
-        
-        // Ciro Hesabı
         const totalSales = ordRes.data.reduce((acc, o) => acc + o.totalAmount, 0);
         
         setStats({
@@ -76,44 +74,37 @@ const VendorDashboard = ({ user }) => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto animate-fade-in">
       <h2 className="text-3xl font-bold text-gray-800">Mağaza Özeti</h2>
-      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Ciro Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl">💷</div>
-          <div><div className="text-sm text-gray-500 font-bold uppercase">Toplam Ciro</div><div className="text-2xl font-extrabold text-gray-800">£{stats.totalSales}</div></div>
+          <div><div className="text-sm text-gray-500 font-bold uppercase">Toplam Ciro</div><div className="text-2xl font-extrabold text-gray-800">£{stats.totalSales.toLocaleString()}</div></div>
         </div>
-        {/* Sipariş Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl">📦</div>
           <div><div className="text-sm text-gray-500 font-bold uppercase">Alınan Sipariş</div><div className="text-2xl font-extrabold text-gray-800">{stats.orderCount}</div></div>
         </div>
-        {/* Ürün Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-2xl">🌸</div>
           <div><div className="text-sm text-gray-500 font-bold uppercase">Ürün Sayısı</div><div className="text-2xl font-extrabold text-gray-800">{stats.productCount}</div></div>
         </div>
       </div>
-
       <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 flex items-start gap-4">
-        <div className="text-4xl">👋</div>
+        <span className="text-4xl">👋</span>
         <div>
           <h3 className="font-bold text-blue-800 mb-1">Hoşgeldin, {user.username}!</h3>
-          <p className="text-sm text-blue-600">
-            Mağazan şu an aktif. Ürünlerini güncel tutarak satışlarını artırabilirsin. 
-            Ödemelerin her hafta Cuma günü hesabına yatırılır.
-          </p>
+          <p className="text-sm text-blue-600">Mağazan şu an aktif. Siparişlerini 'Siparişler' sekmesinden takip edebilir, faturasını yazdırabilir ve kuryeye teslim edebilirsin.</p>
         </div>
       </div>
     </div>
   );
 };
 
-// --- 2. VENDOR PRODUCT MANAGER (ÜRÜNLER) ---
+// --- 2. VENDOR ÜRÜN YÖNETİMİ (GÜNCELLENDİ: RESİM YÜKLEME & HIZLI STOK) ---
 const VendorProductManager = ({ user }) => {
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({ title: "", price: "", desc: "", img: "", stock: 10, category: "Doğum Günü" });
 
   const fetchProducts = async () => {
@@ -124,59 +115,68 @@ const VendorProductManager = ({ user }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
   
+  // Resim Yükleme (Cloudinary)
+  const handleUpload = async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    setUploading(true); const data = new FormData(); data.append("file", file);
+    try { const res = await axios.post("http://localhost:5000/api/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi! 🖼️", "success"); } 
+    catch (err) { notify("Yüklenemedi", "error"); } finally { setUploading(false); }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Vendor ID'sini ekleyerek gönderiyoruz
       await axios.post("http://localhost:5000/api/products", { ...formData, vendor: user._id, isActive: true });
-      notify("Ürün başarıyla eklendi! 🌸", "success");
-      setShowForm(false);
-      fetchProducts();
+      notify("Ürün eklendi! 🌸", "success"); setShowForm(false); fetchProducts();
     } catch (err) { notify("Hata oluştu", "error"); }
   };
 
   const handleDelete = async (id) => {
-    if(confirm("Bu ürünü silmek istediğine emin misin?")) { 
-      try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } 
-      catch(e){} 
-    }
+    if(confirm("Silinsin mi?")) { try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } catch(e){} }
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
       <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h2 className="text-xl font-bold text-gray-800">Ürünlerim ({products.length})</h2>
-        <button onClick={() => setShowForm(!showForm)} className="bg-pink-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-pink-700 transition">
-          {showForm ? "İptal" : "+ Yeni Ürün Ekle"}
-        </button>
+        <button onClick={() => setShowForm(!showForm)} className={`px-4 py-2 rounded-lg font-bold text-white transition ${showForm ? 'bg-gray-500' : 'bg-pink-600 hover:bg-pink-700'}`}>{showForm ? "Kapat" : "+ Yeni Ürün Ekle"}</button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-fade-in-down">
-           <input name="title" onChange={handleChange} placeholder="Ürün Adı" className="p-2 border rounded outline-none focus:border-pink-500" required />
+        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 animate-fade-in-down">
+           <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">Ürün Adı</label><input name="title" onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
            <div className="flex gap-2">
-             <input name="price" type="number" onChange={handleChange} placeholder="Fiyat" className="p-2 border rounded w-full outline-none focus:border-pink-500" required />
-             <input name="stock" type="number" onChange={handleChange} placeholder="Stok" className="p-2 border rounded w-full outline-none focus:border-pink-500" />
+             <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Fiyat</label><input name="price" type="number" onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
+             <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Stok</label><input name="stock" type="number" onChange={handleChange} placeholder="10" className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
            </div>
-           <select name="category" onChange={handleChange} className="p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
-           <input name="img" onChange={handleChange} placeholder="Resim URL (veya yükleme)" className="p-2 border rounded outline-none focus:border-pink-500" />
-           <textarea name="desc" onChange={handleChange} placeholder="Açıklama" className="p-2 border rounded md:col-span-2 h-20 outline-none focus:border-pink-500" />
-           <button type="submit" className="bg-green-600 text-white py-2 rounded font-bold md:col-span-2 hover:bg-green-700 transition">Kaydet ve Yayınla</button>
+           <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label><select name="category" onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
+           <div>
+             <label className="text-xs font-bold text-gray-500 uppercase mb-1">Görsel</label>
+             <div className="flex items-center gap-2 border p-2 rounded bg-gray-50">
+                <label className="cursor-pointer bg-white border hover:bg-gray-100 px-3 py-1 rounded text-xs font-bold text-gray-600 shadow-sm">{uploading?"...":"📷 Seç"}<input type="file" className="hidden" onChange={handleUpload} /></label>
+                <input name="img" value={formData.img} onChange={handleChange} placeholder="URL" className="flex-1 bg-transparent outline-none text-xs" />
+             </div>
+           </div>
+           <div className="md:col-span-2"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Açıklama</label><textarea name="desc" onChange={handleChange} className="w-full p-2 border rounded h-20 outline-none focus:border-pink-500" /></div>
+           <button type="submit" disabled={uploading} className="bg-green-600 text-white py-3 rounded font-bold md:col-span-2 hover:bg-green-700 shadow-lg disabled:opacity-50">Kaydet ve Yayınla</button>
         </form>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {products.length === 0 ? <div className="text-gray-400 col-span-4 text-center py-10">Henüz ürün eklemediniz.</div> :
-        products.map(p => (
-          <div key={p._id} className="bg-white border rounded-xl overflow-hidden group hover:shadow-md transition">
-            <div className="h-40 overflow-hidden relative">
-               <img src={p.img} className="w-full h-full object-cover group-hover:scale-105 transition" />
-               <div className="absolute top-2 right-2 bg-white/90 text-[10px] font-bold px-2 py-1 rounded shadow">Stok: {p.stock}</div>
-            </div>
-            <div className="p-3">
-              <div className="font-bold truncate text-gray-800">{p.title}</div>
-              <div className="font-bold text-pink-600 text-sm mt-1">£{p.price}</div>
-              <button onClick={() => handleDelete(p._id)} className="w-full mt-3 bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 transition">Sil</button>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {products.map(p => (
+          <div key={p._id} className="bg-white border rounded-xl overflow-hidden group hover:shadow-md transition flex flex-col relative">
+            {p.stock<=0 && <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold shadow z-10">TÜKENDİ</div>}
+            <div className="h-40 relative bg-gray-100"><img src={p.img} className="w-full h-full object-cover" /></div>
+            <div className="p-3 flex-1 flex flex-col">
+              <div className="font-bold truncate text-gray-800 mb-1">{p.title}</div>
+              <div className="font-bold text-pink-600 text-sm">£{p.price}</div>
+              
+              <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center mb-2">
+                <span className="text-[10px] font-bold text-gray-400 uppercase">Hızlı Stok</span>
+                <QuickStockUpdate product={p} refresh={fetchProducts} />
+              </div>
+              
+              <button onClick={() => handleDelete(p._id)} className="w-full bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 border border-red-100">Ürünü Sil</button>
             </div>
           </div>
         ))}
@@ -185,9 +185,10 @@ const VendorProductManager = ({ user }) => {
   );
 };
 
-// --- 3. VENDOR ORDER MANAGER (SİPARİŞLER) ---
+// --- 3. VENDOR SİPARİŞLERİ (KARTLI & FATURALI) ---
 const VendorOrderManager = ({ user }) => {
   const [orders, setOrders] = useState([]);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -197,37 +198,77 @@ const VendorOrderManager = ({ user }) => {
     fetchOrders();
   }, [user]);
 
+  const getStatusStyle = (status) => {
+    switch(status) {
+      case "Sipariş Alındı": return "border-l-blue-500";
+      case "Hazırlanıyor": return "border-l-yellow-500";
+      case "Yola Çıktı": return "border-l-purple-500";
+      case "Teslim Edildi": return "border-l-green-500";
+      case "İptal": return "border-l-red-500";
+      default: return "border-l-gray-500";
+    }
+  };
+
   return (
     <div className="space-y-4 max-w-5xl mx-auto animate-fade-in">
-      <h2 className="text-xl font-bold text-gray-800">Gelen Siparişler</h2>
+      <h2 className="text-xl font-bold text-gray-800 bg-white p-4 rounded-xl border border-gray-200">Gelen Siparişler ({orders.length})</h2>
       {orders.length === 0 ? <div className="text-center py-10 text-gray-400">Henüz sipariş yok.</div> : 
         orders.map(order => (
-          <div key={order._id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-              <div className="text-xs text-gray-400 font-mono">#{order._id.slice(-6)}</div>
+          <div key={order._id} className={`bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4 hover:shadow-md transition border-l-4 ${getStatusStyle(order.status)}`}>
+            <div className="min-w-[200px]">
+              <div className="text-xs text-gray-400 font-mono mb-1">#{order._id.slice(-6)}</div>
               <div className="font-bold text-gray-800 text-lg">{order.recipient.name}</div>
               <div className="text-xs text-gray-500 mt-1 bg-gray-50 px-2 py-1 rounded inline-block">📍 {order.recipient.city}</div>
+              <div className="text-xs text-gray-400 mt-1">{new Date(order.createdAt).toLocaleDateString()}</div>
             </div>
             
-            {/* Ürünler */}
-            <div className="flex gap-2">
-               {order.items.map((item, i) => (
-                 <div key={i} className="relative group">
-                    <img src={item.img} className="w-10 h-10 rounded-lg object-cover border" title={item.title} />
-                    <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full shadow">{item.quantity}</span>
-                 </div>
-               ))}
+            <div className="flex-1 space-y-2 border-l border-gray-100 pl-4">
+               <div className="text-xs font-bold text-gray-400 uppercase">Sipariş İçeriği</div>
+               <div className="flex gap-2 overflow-x-auto pb-2">
+                 {order.items.map((item, i) => (
+                   <div key={i} className="relative group flex-shrink-0">
+                      <img src={item.img} className="w-10 h-10 rounded-lg object-cover border shadow-sm" title={item.title} />
+                      <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full shadow border border-white">{item.quantity}</span>
+                   </div>
+                 ))}
+               </div>
+               {order.delivery.cardMessage && <div className="text-xs text-pink-600 bg-pink-50 p-2 rounded border border-pink-100 italic">💌 "{order.delivery.cardMessage}"</div>}
             </div>
 
-            <div className="text-right">
-              <div className="font-bold text-pink-600 text-lg">£{order.totalAmount}</div>
-              <span className={`text-xs px-3 py-1 rounded-full font-bold ${order.status === 'Teslim Edildi' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                {order.status}
-              </span>
+            <div className="text-right flex flex-col justify-between items-end min-w-[120px]">
+              <div className="font-bold text-pink-600 text-xl">£{order.totalAmount}</div>
+              <div className="flex flex-col gap-2 items-end mt-2">
+                <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">{order.status}</span>
+                <button onClick={() => setSelectedInvoice(order)} className="text-xs flex items-center gap-1 text-blue-600 hover:underline font-bold bg-blue-50 px-2 py-1 rounded">
+                  🖨️ Fatura
+                </button>
+              </div>
             </div>
           </div>
         ))
       }
+      {selectedInvoice && <InvoiceModal order={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
+    </div>
+  );
+};
+
+// --- YARDIMCI: HIZLI STOK GÜNCELLEME ---
+const QuickStockUpdate = ({ product, refresh }) => {
+  const [stock, setStock] = useState(product.stock);
+  const [loading, setLoading] = useState(false);
+  const { notify } = useCart();
+
+  const handleUpdate = async () => {
+    if (Number(stock) === product.stock) return;
+    setLoading(true);
+    try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
+    catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
+  };
+
+  return (
+    <div className="flex items-center gap-1">
+      <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-10 p-1 border rounded text-center text-xs font-bold outline-none focus:border-pink-500" />
+      <button onClick={handleUpdate} disabled={loading || Number(stock)===product.stock} className={`text-xs px-2 py-1 rounded font-bold transition ${Number(stock)!==product.stock ? "bg-green-100 text-green-600 hover:bg-green-200 cursor-pointer" : "bg-gray-100 text-gray-300 cursor-default"}`}>{loading?"..":"✓"}</button>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import InvoiceModal from "../components/InvoiceModal";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("orders"); // Varsayılan: Siparişlerim
+  const [confirmData, setConfirmData] = useState(null);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   
@@ -22,6 +23,18 @@ const ProfilePage = () => {
     localStorage.removeItem("user");
     navigate("/login");
     window.location.reload();
+  };
+
+  // Fonksiyonu değiştir:
+  const handleDeleteRequest = (addrId) => {
+    setConfirmData({
+      isOpen: true, title: "Adresi Sil?", message: "Bu adres silinecek.", isDanger: true,
+      action: async () => {
+        try { await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${addrId}`); notify("Silindi", "success"); fetchAddresses(user._id); }
+        catch { notify("Hata", "error"); }
+        setConfirmData(null);
+      }
+    });
   };
 
   if (!user) return null;
@@ -57,6 +70,7 @@ const ProfilePage = () => {
               <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition flex items-center gap-3">
                 <span>🚪</span> Çıkış Yap
               </button>
+              {confirmData && <ConfirmModal {...confirmData} />}
             </nav>
           </aside>
 
