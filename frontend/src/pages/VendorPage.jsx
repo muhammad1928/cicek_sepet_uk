@@ -49,17 +49,18 @@ const VendorPage = () => {
   );
 };
 
-// --- 1. VENDOR DASHBOARD ---
+// --- 1. VENDOR DASHBOARD (ÖZET) ---
 const VendorDashboard = ({ user }) => {
   const [stats, setStats] = useState({ totalSales: 0, orderCount: 0, productCount: 0 });
   
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Sadece bu satıcıya ait verileri çekiyoruz
         const prodRes = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`);
         const ordRes = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
         
-        // Basit Ciro Hesabı (Sipariş toplamı üzerinden - Komisyon düşülmemiş hali)
+        // Ciro Hesabı
         const totalSales = ordRes.data.reduce((acc, o) => acc + o.totalAmount, 0);
         
         setStats({
@@ -75,29 +76,40 @@ const VendorDashboard = ({ user }) => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto animate-fade-in">
       <h2 className="text-3xl font-bold text-gray-800">Mağaza Özeti</h2>
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Ciro Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl">💷</div>
           <div><div className="text-sm text-gray-500 font-bold uppercase">Toplam Ciro</div><div className="text-2xl font-extrabold text-gray-800">£{stats.totalSales}</div></div>
         </div>
+        {/* Sipariş Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl">📦</div>
           <div><div className="text-sm text-gray-500 font-bold uppercase">Alınan Sipariş</div><div className="text-2xl font-extrabold text-gray-800">{stats.orderCount}</div></div>
         </div>
+        {/* Ürün Kartı */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-purple-100 flex items-center gap-4">
           <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-2xl">🌸</div>
           <div><div className="text-sm text-gray-500 font-bold uppercase">Ürün Sayısı</div><div className="text-2xl font-extrabold text-gray-800">{stats.productCount}</div></div>
         </div>
       </div>
-      <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-        <h3 className="font-bold text-blue-800 mb-2">👋 Hoşgeldin, {user.username}!</h3>
-        <p className="text-sm text-blue-600">Buradan ürünlerini ekleyebilir, siparişlerini takip edebilirsin. Bol satışlar!</p>
+
+      <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 flex items-start gap-4">
+        <div className="text-4xl">👋</div>
+        <div>
+          <h3 className="font-bold text-blue-800 mb-1">Hoşgeldin, {user.username}!</h3>
+          <p className="text-sm text-blue-600">
+            Mağazan şu an aktif. Ürünlerini güncel tutarak satışlarını artırabilirsin. 
+            Ödemelerin her hafta Cuma günü hesabına yatırılır.
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-// --- 2. VENDOR PRODUCT MANAGER ---
+// --- 2. VENDOR PRODUCT MANAGER (ÜRÜNLER) ---
 const VendorProductManager = ({ user }) => {
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
@@ -117,42 +129,54 @@ const VendorProductManager = ({ user }) => {
     try {
       // Vendor ID'sini ekleyerek gönderiyoruz
       await axios.post("http://localhost:5000/api/products", { ...formData, vendor: user._id, isActive: true });
-      notify("Ürün eklendi! 🌸", "success");
+      notify("Ürün başarıyla eklendi! 🌸", "success");
       setShowForm(false);
       fetchProducts();
     } catch (err) { notify("Hata oluştu", "error"); }
   };
 
   const handleDelete = async (id) => {
-    if(confirm("Silinsin mi?")) { try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } catch(e){} }
+    if(confirm("Bu ürünü silmek istediğine emin misin?")) { 
+      try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } 
+      catch(e){} 
+    }
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
       <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h2 className="text-xl font-bold text-gray-800">Ürünlerim ({products.length})</h2>
-        <button onClick={() => setShowForm(!showForm)} className="bg-pink-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-pink-700 transition">+ Yeni Ürün Ekle</button>
+        <button onClick={() => setShowForm(!showForm)} className="bg-pink-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-pink-700 transition">
+          {showForm ? "İptal" : "+ Yeni Ürün Ekle"}
+        </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-           <input name="title" onChange={handleChange} placeholder="Ürün Adı" className="p-2 border rounded" required />
-           <div className="flex gap-2"><input name="price" type="number" onChange={handleChange} placeholder="Fiyat" className="p-2 border rounded w-full" required /><input name="stock" type="number" onChange={handleChange} placeholder="Stok" className="p-2 border rounded w-full" /></div>
-           <select name="category" onChange={handleChange} className="p-2 border rounded bg-white">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
-           <input name="img" onChange={handleChange} placeholder="Resim URL" className="p-2 border rounded" />
-           <textarea name="desc" onChange={handleChange} placeholder="Açıklama" className="p-2 border rounded md:col-span-2" />
-           <button type="submit" className="bg-green-600 text-white py-2 rounded font-bold md:col-span-2">Kaydet</button>
+        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-fade-in-down">
+           <input name="title" onChange={handleChange} placeholder="Ürün Adı" className="p-2 border rounded outline-none focus:border-pink-500" required />
+           <div className="flex gap-2">
+             <input name="price" type="number" onChange={handleChange} placeholder="Fiyat" className="p-2 border rounded w-full outline-none focus:border-pink-500" required />
+             <input name="stock" type="number" onChange={handleChange} placeholder="Stok" className="p-2 border rounded w-full outline-none focus:border-pink-500" />
+           </div>
+           <select name="category" onChange={handleChange} className="p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
+           <input name="img" onChange={handleChange} placeholder="Resim URL (veya yükleme)" className="p-2 border rounded outline-none focus:border-pink-500" />
+           <textarea name="desc" onChange={handleChange} placeholder="Açıklama" className="p-2 border rounded md:col-span-2 h-20 outline-none focus:border-pink-500" />
+           <button type="submit" className="bg-green-600 text-white py-2 rounded font-bold md:col-span-2 hover:bg-green-700 transition">Kaydet ve Yayınla</button>
         </form>
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {products.map(p => (
-          <div key={p._id} className="bg-white border rounded-xl overflow-hidden group">
-            <img src={p.img} className="h-40 w-full object-cover" />
+        {products.length === 0 ? <div className="text-gray-400 col-span-4 text-center py-10">Henüz ürün eklemediniz.</div> :
+        products.map(p => (
+          <div key={p._id} className="bg-white border rounded-xl overflow-hidden group hover:shadow-md transition">
+            <div className="h-40 overflow-hidden relative">
+               <img src={p.img} className="w-full h-full object-cover group-hover:scale-105 transition" />
+               <div className="absolute top-2 right-2 bg-white/90 text-[10px] font-bold px-2 py-1 rounded shadow">Stok: {p.stock}</div>
+            </div>
             <div className="p-3">
-              <div className="font-bold truncate">{p.title}</div>
-              <div className="flex justify-between text-sm mt-1"><span className="font-bold text-pink-600">£{p.price}</span><span className="text-gray-500">Stok: {p.stock}</span></div>
-              <button onClick={() => handleDelete(p._id)} className="w-full mt-2 bg-red-50 text-red-600 text-xs py-1 rounded font-bold hover:bg-red-100">Sil</button>
+              <div className="font-bold truncate text-gray-800">{p.title}</div>
+              <div className="font-bold text-pink-600 text-sm mt-1">£{p.price}</div>
+              <button onClick={() => handleDelete(p._id)} className="w-full mt-3 bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 transition">Sil</button>
             </div>
           </div>
         ))}
@@ -161,9 +185,10 @@ const VendorProductManager = ({ user }) => {
   );
 };
 
-// --- 3. VENDOR ORDER MANAGER ---
+// --- 3. VENDOR ORDER MANAGER (SİPARİŞLER) ---
 const VendorOrderManager = ({ user }) => {
   const [orders, setOrders] = useState([]);
+  
   useEffect(() => {
     const fetchOrders = async () => {
       try { const res = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`); setOrders(res.data); } 
@@ -177,15 +202,28 @@ const VendorOrderManager = ({ user }) => {
       <h2 className="text-xl font-bold text-gray-800">Gelen Siparişler</h2>
       {orders.length === 0 ? <div className="text-center py-10 text-gray-400">Henüz sipariş yok.</div> : 
         orders.map(order => (
-          <div key={order._id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center">
+          <div key={order._id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <div className="font-bold text-gray-800">{order.recipient.name}</div>
-              <div className="text-xs text-gray-500">#{order._id.slice(-6)} • {new Date(order.createdAt).toLocaleDateString()}</div>
-              <div className="text-xs mt-1 bg-gray-50 px-2 py-1 rounded inline-block">📍 {order.recipient.city}</div>
+              <div className="text-xs text-gray-400 font-mono">#{order._id.slice(-6)}</div>
+              <div className="font-bold text-gray-800 text-lg">{order.recipient.name}</div>
+              <div className="text-xs text-gray-500 mt-1 bg-gray-50 px-2 py-1 rounded inline-block">📍 {order.recipient.city}</div>
             </div>
+            
+            {/* Ürünler */}
+            <div className="flex gap-2">
+               {order.items.map((item, i) => (
+                 <div key={i} className="relative group">
+                    <img src={item.img} className="w-10 h-10 rounded-lg object-cover border" title={item.title} />
+                    <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full shadow">{item.quantity}</span>
+                 </div>
+               ))}
+            </div>
+
             <div className="text-right">
-              <div className="font-bold text-pink-600">£{order.totalAmount}</div>
-              <span className={`text-xs px-2 py-1 rounded font-bold ${order.status === 'Teslim Edildi' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>{order.status}</span>
+              <div className="font-bold text-pink-600 text-lg">£{order.totalAmount}</div>
+              <span className={`text-xs px-3 py-1 rounded-full font-bold ${order.status === 'Teslim Edildi' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                {order.status}
+              </span>
             </div>
           </div>
         ))

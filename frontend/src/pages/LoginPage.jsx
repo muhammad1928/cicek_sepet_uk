@@ -30,8 +30,15 @@ const LoginPage = () => {
 
       // Yönlendirme (1 saniye bekleyip sayfayı yenileyerek git)
       setTimeout(() => {
-        if (res.data.role === "admin") window.location.href = "/admin";
-        else if (res.data.role === "courier") window.location.href = "/courier";
+        const u = res.data;
+        
+        // Eğer Kurye/Satıcı ise ve Onaylı Değilse -> Başvuruya Git
+        if ((u.role === "vendor" || u.role === "courier") && u.applicationStatus !== "approved") {
+           window.location.href = "/partner-application";
+        } 
+        else if (u.role === "admin") window.location.href = "/admin";
+        else if (u.role === "courier") window.location.href = "/courier";
+        else if (u.role === "vendor") window.location.href = "/vendor";
         else window.location.href = "/";
       }, 1000);
 

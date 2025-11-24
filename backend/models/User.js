@@ -11,8 +11,15 @@ const UserSchema = new mongoose.Schema({
   verificationToken: { type: String },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+  isBlocked: { type: Boolean, default: false },
 
-
+  // --- YENİ: BAŞVURU SİSTEMİ ---
+  applicationStatus: { 
+    type: String, 
+    enum: ['none', 'pending', 'approved', 'rejected'], 
+    default: 'none' // Müşteriler için hep 'approved' sayılabilir veya kullanılmaz
+  },
+  applicationData: { type: Object }
 
 }, { timestamps: true });
 

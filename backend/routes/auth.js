@@ -95,31 +95,23 @@ router.post('/verify', async (req, res) => {
 // ---------------------------------------------------------
 router.post('/login', async (req, res) => {
   try {
-    // 1. Kullanıcıyı Bul
     const user = await User.findOne({ username: req.body.username });
     if (!user) return res.status(404).json("Kullanıcı bulunamadı!");
 
-    // 2. Şifreyi Kontrol Et
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).json("Şifre yanlış!");
 
-    // 3. --- ONAY KONTROLÜ (YENİ) ---
-    // Eğer hesap onaylı değilse girişi engelle
     if (!user.isVerified) {
-      return res.status(403).json({ 
-        message: "Lütfen önce e-postanıza gelen linkten hesabınızı onaylayın.",
-        isVerified: false 
-      });
+      return res.status(403).json({ message: "Lütfen e-postanızı onaylayın.", isVerified: false });
     }
-    // -------------------------------
 
-    // 4. Token Üret ve Gönder
-    const accessToken = jwt.sign(
-        { id: user._id, role: user.role },
-        process.env.JWT_SEC,
-        { expiresIn: "3d" }
-    );
+    // --- YENİ: ENGEL KONTROLÜ ---
+    if (user.isBlocked) {
+      return res.status(403).json({ message: "Hesabınız yönetici tarafından askıya alınmıştır! 🚫" });
+    }
+    // ----------------------------
 
+    const accessToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SEC, { expiresIn: "3d" });
     const { password, ...others } = user._doc;
     res.status(200).json({ ...others, accessToken });
 
@@ -188,6 +180,37 @@ router.post('/reset-password', async (req, res) => {
 
   } catch (err) {
     res.status(500).json("Hata oluştu.");
+  }
+});
+
+// 8. KULLANICIYI ENGELLE / AÇ (TOGGLE BLOCK)
+router.put('/:id/block', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    // Durumu tersine çevir (True ise False, False ise True)
+    user.isBlocked = !user.isBlocked;
+    await user.save();
+    
+    res.status(200).json({ 
+      message: user.isBlocked ? "Kullanıcı engellendi." : "Kullanıcı engeli kaldırıldı.", 
+      isBlocked: user.isBlocked 
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 9. ADMİN TARAFINDAN ŞİFRE DEĞİŞTİRME
+router.put('/:id/admin-reset-password', async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await User.findByIdAndUpdate(req.params.id, { password: hashedPassword });
+    res.status(200).json("Şifre başarıyla güncellendi.");
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 module.exports = router;

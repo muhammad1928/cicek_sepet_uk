@@ -27,16 +27,16 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// 2. ADRES SİLME
-router.delete('/:id/addresses/:addressId', async (req, res) => {
+// ADRES EKLEME
+router.post('/:id/addresses', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    await user.updateOne({ $pull: { savedAddresses: { _id: req.params.addressId } } });
-    res.status(200).json("Adres silindi.");
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    // req.body içinde adres objesi gelecek
+    await user.updateOne({ $push: { savedAddresses: req.body } });
+    res.status(200).json("Adres eklendi");
+  } catch (err) { res.status(500).json(err); }
 });
+
 
 // 3. FAVORİ EKLE / ÇIKAR (GÜNCELLENDİ: SAYAÇLI SİSTEM)
 router.put('/:id/favorites', async (req, res) => {
@@ -112,4 +112,82 @@ router.put('/:id/role', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// 8. KULLANICI ENGELLE / AÇ (TOGGLE)
+router.put('/:id/block', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    
+    if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
+
+    // Admin kendini engelleyemesin
+    if (user.role === 'admin') return res.status(400).json("Yönetici engellenemez!");
+
+    user.isBlocked = !user.isBlocked; // Durumu tersine çevir
+    await user.save();
+    
+    res.status(200).json({ 
+      message: user.isBlocked ? "Kullanıcı engellendi." : "Kullanıcı engeli kaldırıldı.", 
+      isBlocked: user.isBlocked 
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 10. KULLANICI KENDİ ŞİFRESİNİ DEĞİŞTİRİR (Eski Şifre Kontrollü)
+router.put('/:id/change-password', async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.params.id);
+
+    // 1. Eski şifre doğru mu?
+    const validPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!validPassword) {
+      return res.status(400).json("Eski şifreniz hatalı!");
+    }
+
+    // 2. Yeni şifreyi hashle ve kaydet
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json("Şifreniz başarıyla güncellendi.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 11. BAŞVURU FORMU GÖNDER
+router.post('/:id/apply', async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.params.id, {
+      applicationStatus: 'pending',
+      applicationData: req.body // Formdan gelen tüm veriler (IBAN, Ehliyet vb.)
+    });
+    res.status(200).json("Başvurunuz alındı, onay bekleniyor.");
+  } catch (err) { res.status(500).json(err); }
+});
+
+// 12. BAŞVURU ONAYLA / REDDET (ADMİN)
+router.put('/:id/application-status', async (req, res) => {
+  try {
+    const { status } = req.body; // 'approved' veya 'rejected'
+    await User.findByIdAndUpdate(req.params.id, { applicationStatus: status });
+    res.status(200).json(`Kullanıcı durumu: ${status}`);
+  } catch (err) { res.status(500).json(err); }
+});
+
+// 13. SATICI PROFİLİ GETİR (HERKES İÇİN - PUBLIC)
+router.get('/vendor-profile/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('username email createdAt'); // Sadece güvenli bilgileri gönder
+    if (!user || user.role !== 'vendor') return res.status(404).json("Satıcı bulunamadı.");
+    
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

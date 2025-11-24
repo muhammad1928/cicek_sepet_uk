@@ -21,7 +21,11 @@ import VerifyPage from "./pages/VerifyPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import VendorPage from "./pages/VendorPage";
-
+import AboutPage from "./pages/AboutPage";
+import RegisterVendorPage from "./pages/RegisterVendorPage"; 
+import RegisterCourierPage from "./pages/RegisterCourierPage";
+import PartnerApplicationPage from "./pages/PartnerApplicationPage";
+import StorePage from "./pages/StorePage";
 
 function App() {
   return (
@@ -53,6 +57,11 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
               <Route path="/vendor" element={<VendorPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/become-seller" element={<RegisterVendorPage />} />
+              <Route path="/become-courier" element={<RegisterCourierPage />} />
+              <Route path="/partner-application" element={<PartnerApplicationPage />} />
+              <Route path="/store/:vendorId" element={<StorePage />} />
             </Routes>
           </div>
 

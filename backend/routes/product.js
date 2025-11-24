@@ -98,4 +98,14 @@ router.delete('/:id', async (req, res) => {
   try { await Product.findByIdAndDelete(req.params.id); res.status(200).json("Silindi"); } catch (err) { res.status(500).json(err); }
 });
 
+// SATICININ ÜRÜNLERİNİ GETİR
+router.get('/vendor/:vendorId', async (req, res) => {
+  try {
+    // Sadece 'vendor' alanı bu ID olanları getir
+    const products = await Product.find({ vendor: req.params.vendorId }).sort({ createdAt: -1 });
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

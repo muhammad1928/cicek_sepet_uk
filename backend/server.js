@@ -5,12 +5,15 @@ const cors = require('cors');
 
 // --- GÜVENLİK KÜTÜPHANELERİ ---
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
-// ------------------------------
 
+// --- MODELLER (Temizlik ve Onay işlemleri için burada çağırıyoruz) ---
+const User = require('./models/User');
+const Product = require('./models/Product');
+const Order = require('./models/Order');
+
+// --- ROTA DOSYALARI ---
 const authRoute = require('./routes/auth');
 const productRoute = require('./routes/product');
 const orderRoute = require('./routes/order');
@@ -22,25 +25,41 @@ const uploadRoute = require('./routes/upload');
 
 const app = express();
 
-// 1. GÜVENLİK DUVARLARI
-app.use(helmet()); // HTTP Başlıklarını Güvenli Hale Getir
-app.use(cors());   // Frontend erişimine izin ver
+// 1. TEMEL AYARLAR
+app.use(cors());
+app.use(express.json({ limit: '10kb' })); 
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// 2. RATE LIMITING (DDOS ve Brute Force Koruması)
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 dakika
-  max: 100, // Her IP'den max 100 istek
-  message: "Çok fazla istek yaptınız, lütfen 15 dakika sonra tekrar deneyin."
+// 2. GÜVENLİK DUVARLARI
+app.use(helmet());
+app.use(hpp());
+
+// --- MANUEL GÜVENLİK FİLTRESİ (NoSQL Injection) ---
+app.use((req, res, next) => {
+  const sanitize = (obj) => {
+    for (let key in obj) {
+      if (typeof obj[key] === 'string') {
+        obj[key] = obj[key].replace(/\$/g, ""); 
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+        sanitize(obj[key]);
+      }
+    }
+  };
+  if (req.body) sanitize(req.body);
+  if (req.query) sanitize(req.query);
+  if (req.params) sanitize(req.params);
+  next();
 });
-app.use('/api', limiter); // Sadece /api rotalarına uygula
 
-// 3. VERİ TEMİZLEME
-app.use(express.json({ limit: '10kb' })); // Çok büyük verileri engelle
-app.use(mongoSanitize()); // SQL Injection Koruması ($ ve . işaretlerini siler)
-app.use(xss()); // HTML Script Koruması (<script>alert(1)</script> gibi)
-app.use(hpp()); // Parametre Kirliliği Koruması
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  message: "Çok fazla istek yaptınız, lütfen biraz bekleyin."
+});
+app.use('/api', limiter);
 
-// --- ROTALAR ---
+// --- API ROTALARI ---
 app.get('/api/health', (req, res) => { res.status(200).send('Sunucu Güvende ve Çalışıyor! 🛡️'); });
 
 app.use('/api/auth', authRoute);
@@ -52,20 +71,31 @@ app.use('/api/coupons', couponRoute);
 app.use('/api/stats', statsRoute);
 app.use('/api/upload', uploadRoute);
 
-// TEMİZLİK ROTALARI (Geliştirme aşaması bittiğinde bunları silebilirsin)
-const User = require('./models/User');
-const Product = require('./models/Product');
-const Order = require('./models/Order');
-app.get('/api/clean-users/:username', async (req, res) => { await User.deleteOne({username: req.params.username}); res.send("Silindi"); });
+// --- GEÇİCİ YÖNETİM ROTALARI (Burada Hata Yok Artık) ---
+
+// 1. Tüm Kullanıcıları Onayla (Eski hesaplara girebilmek için)
+app.get('/api/verify-all-users', async (req, res) => {
+    try {
+        await User.updateMany({}, { isVerified: true });
+        res.send("<h1>✅ Başarılı!</h1><p>Tüm kullanıcılar (eski ve yeni) onaylandı. Artık giriş yapabilirsin.</p>");
+    } catch (err) {
+        res.send("Hata: " + err.message);
+    }
+});
+
+// 2. Temizlik Rotaları
+app.get('/api/clean-users/:username', async (req, res) => { await User.deleteOne({username: req.params.username}); res.send("Kullanıcı Silindi"); });
 app.get('/api/clean-products', async (req, res) => { await Product.deleteMany({}); res.send("Ürünler Silindi"); });
 app.get('/api/clean-orders', async (req, res) => { await Order.deleteMany({}); res.send("Siparişler Silindi"); });
 
 // DB BAĞLANTISI
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Veritabanı Bağlantısı BAŞARILI!"))
-    .catch((err) => console.log("DB Hatası:", err));
+    .catch((err) => {
+        console.log("DB Hatası:", err);
+    });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Sunucu ${PORT} portunda güvenli şekilde çalışıyor...`);
+    console.log(`Sunucu ${PORT} portunda çalışıyor...`);
 });
