@@ -15,7 +15,7 @@ const CartSidebar = () => {
 
   // Kupon State'leri
   const [couponCode, setCouponCode] = useState("");
-  const [discount, setDiscount] = useState(0); // İndirim oranı (% kaç?)
+  const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
 
   // Adres Defteri State
@@ -33,12 +33,20 @@ const CartSidebar = () => {
   const [errors, setErrors] = useState({});
 
   // --- HESAPLAMALAR ---
-  const discountAmount = (totalPrice * discount) / 100;
-  const finalPrice = totalPrice - discountAmount;
+  const DELIVERY_THRESHOLD = 200;
+  const DELIVERY_COST = 20;
 
-  // --- ADRESLERİ ÇEK ---
+  const discountAmount = (totalPrice * discount) / 100;
+  const priceAfterDiscount = totalPrice - discountAmount;
+  const deliveryFee = (cart.length > 0 && priceAfterDiscount < DELIVERY_THRESHOLD) ? DELIVERY_COST : 0;
+  const finalPrice = priceAfterDiscount + deliveryFee;
+
+  // --- DÜZELTİLEN KISIM: FORM AÇILINCA BİLGİLERİ ÇEK ---
   useEffect(() => {
+    // Sadece kullanıcı varsa VE form açılmışsa çalışsın
     if (user && showCheckoutForm) {
+      
+      // 1. Adresleri Çek
       const fetchAddresses = async () => {
         try {
           const res = await axios.get(`http://localhost:5000/api/users/${user._id}/addresses`);
@@ -47,14 +55,14 @@ const CartSidebar = () => {
       };
       fetchAddresses();
       
-      // Formu kullanıcı bilgileriyle ön doldur
+      // 2. Formu Otomatik Doldur
       setFormData(prev => ({
         ...prev,
-        senderName: user.username || "",
+        senderName: user.fullName || user.username || "", // Ad Soyad varsa onu, yoksa kullanıcı adını yaz
         senderEmail: user.email || ""
       }));
     }
-  }, [showCheckoutForm]);
+  }, [showCheckoutForm, user]); // <--- BURASI DÜZELTİLDİ (showCheckoutForm eklendi)
 
   // --- KUPON İŞLEMLERİ ---
   const handleApplyCoupon = async () => {
@@ -97,71 +105,51 @@ const CartSidebar = () => {
   const proceedToPayment = async (e) => {
     e.preventDefault();
     
-    // 1. Zorunlu Alan Kontrolü (Hata varsa kırmızı işaretle)
     const newErrors = {};
-    if (!formData.senderName) newErrors.senderName = true;
-    if (!formData.senderPhone) newErrors.senderPhone = true;
-    if (!formData.recipientName) newErrors.recipientName = true;
-    if (!formData.recipientPhone) newErrors.recipientPhone = true;
-    if (!formData.address) newErrors.address = true;
-    if (!formData.city) newErrors.city = true;
-    if (!formData.deliveryDate) newErrors.deliveryDate = true;
+    const required = ["senderName", "senderPhone", "recipientName", "recipientPhone", "address", "city", "deliveryDate"];
+    required.forEach(field => {
+        if (!formData[field]) newErrors[field] = true;
+    });
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Inputları kırmızı yap
+      setErrors(newErrors);
       notify("Lütfen kırmızı işaretli alanları doldurun!", "error");
-      return; // Durdur
+      return;
     }
 
-    // 2. Sipariş Paketini Hazırla
     const orderData = {
       userId: user ? user._id : null,
       items: cart,
-      totalAmount: finalPrice, // İndirimli tutar
+      totalAmount: finalPrice,
       couponCode: couponApplied ? couponCode : null,
+      deliveryFee: deliveryFee,
       sender: { name: formData.senderName, phone: formData.senderPhone, email: formData.senderEmail },
       recipient: { name: formData.recipientName, phone: formData.recipientPhone, address: formData.address, city: formData.city, postcode: formData.postcode },
       delivery: { date: formData.deliveryDate, timeSlot: formData.timeSlot, cardMessage: formData.cardMessage, courierNote: formData.courierNote, isAnonymous: formData.isAnonymous }
     };
 
-    // 3. Bedava Sipariş Kontrolü (0 TL ise Stripe'a gitme)
+    // 0 TL Sipariş (Stripe'a gitme)
     if (finalPrice <= 0) {
       try {
-        const res = await axios.post("http://localhost:5000/api/orders", orderData);
-        notify("Siparişiniz başarıyla alındı! (Ücretsiz) 🌸", "success");
-        
-        // Temizlik
-        setCart([]);
-        setIsCartOpen(false);
-        setShowCheckoutForm(false);
-        
-        // Yönlendirme
-        setTimeout(() => {
-           window.location.href = "/my-orders";
-        }, 1500);
-        
-      } catch (err) {
-        notify("Hata oluştu", "error");
-      }
-      return; // Fonksiyonu bitir
+        await axios.post("http://localhost:5000/api/orders", orderData);
+        notify("Siparişiniz alındı! (Ücretsiz) 🌸", "success");
+        setCart([]); setIsCartOpen(false); setShowCheckoutForm(false);
+        setTimeout(() => { window.location.href = "/my-orders"; }, 1500);
+      } catch (err) { notify("Hata oluştu", "error"); }
+      return;
     }
 
-    // 4. Normal Ödeme (Stripe için veriyi kaydet)
     localStorage.setItem("tempOrderData", JSON.stringify(orderData));
 
     try {
       notify("Ödeme sayfasına yönlendiriliyorsunuz... 💳", "success");
-      
       const res = await axios.post("http://localhost:5000/api/payment/create-checkout-session", {
         items: cart,
         couponCode: couponApplied ? couponCode : null,
         userEmail: formData.senderEmail,
         userId: user ? user._id : null
       });
-
-      // Stripe'a Git
       window.location.href = res.data.url;
-
     } catch (err) {
       notify("Ödeme sistemi başlatılamadı.", "error");
       console.log(err);
@@ -174,7 +162,6 @@ const CartSidebar = () => {
   const confirmDelete = () => { if (itemToDelete) { removeFromCart(itemToDelete._id, itemToDelete.title); setItemToDelete(null); } };
   const confirmClearAll = () => { clearCart(); setShowClearConfirm(false); };
   const handleDecrease = (item) => { if (item.quantity === 1) setItemToDelete(item); else decreaseQuantity(item._id, item.title); };
-  
   const handleQuantityInput = (e, item) => {
     const val = e.target.value;
     if (val === "") { updateItemQuantity(item._id, 1, item.stock, item.title); return; }
@@ -182,7 +169,7 @@ const CartSidebar = () => {
     if (!isNaN(numVal)) updateItemQuantity(item._id, numVal, item.stock, item.title);
   };
 
-  const inputClass = (fieldName) => `w-full p-2 border rounded outline-none transition ${errors[fieldName] ? "border-red-500 bg-red-50 animate-pulse" : "border-gray-300 focus:border-pink-500"}`;
+  const inputClass = (name) => `w-full p-2 border rounded outline-none transition ${errors[name] ? "border-red-500 bg-red-50 animate-pulse" : "border-gray-300 focus:border-pink-500"}`;
 
   if (!isCartOpen) return null;
 
@@ -229,9 +216,11 @@ const CartSidebar = () => {
             )}
           </div>
           <div className="p-6 pt-4">
-            <div className="flex justify-between text-gray-500 mb-1"><span>Ara Toplam:</span><span>£{totalPrice}</span></div>
+            <div className="flex justify-between text-gray-500 mb-1"><span>Ara Toplam:</span><span>£{totalPrice.toFixed(2)}</span></div>
             {couponApplied && (<div className="flex justify-between text-green-600 mb-1"><span>İndirim:</span><span>-£{discountAmount.toFixed(2)}</span></div>)}
-            <div className="flex justify-between text-xl font-bold text-gray-800 mb-4 pt-2 border-t border-gray-200"><span>Toplam:</span><span className="text-pink-600">£{finalPrice.toFixed(2)}</span></div>
+            <div className="flex justify-between text-blue-600 mb-1"><span>Kargo:</span><span>{deliveryFee === 0 ? "Ücretsiz 🚚" : `£${deliveryFee.toFixed(2)}`}</span></div>
+            {deliveryFee > 0 && <div className="text-[10px] text-gray-400 text-right">£{DELIVERY_THRESHOLD} üzeri kargo bedava!</div>}
+            <div className="flex justify-between text-xl font-bold text-gray-800 mb-4 pt-2 border-t border-gray-200 mt-2"><span>Toplam:</span><span className="text-pink-600">£{finalPrice.toFixed(2)}</span></div>
             <button onClick={handleCheckoutClick} className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg shadow-green-500/30">Ödemeye Geç &gt;</button>
           </div>
         </div>

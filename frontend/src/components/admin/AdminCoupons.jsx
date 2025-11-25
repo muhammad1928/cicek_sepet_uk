@@ -4,7 +4,8 @@ import { useCart } from "../../context/CartContext";
 
 const AdminCoupons = () => {
   const [coupons, setCoupons] = useState([]);
-  const [formData, setFormData] = useState({ code: "", discountRate: "", expiryDate: "" });
+  // includeDelivery: false varsayılan
+  const [formData, setFormData] = useState({ code: "", discountRate: "", expiryDate: "", includeDelivery: false });
   const { notify } = useCart();
 
   const fetchCoupons = async () => {
@@ -19,15 +20,21 @@ const AdminCoupons = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.code || !formData.discountRate) return notify("Bilgileri doldurun", "warning");
+    
+    // --- YENİ: YÜZDE KONTROLÜ ---
+    if (Number(formData.discountRate) > 100) return notify("İndirim oranı %100'den fazla olamaz!", "warning");
+    if (Number(formData.discountRate) < 1) return notify("Geçersiz indirim oranı", "warning");
+    // ----------------------------
 
     try {
       await axios.post("http://localhost:5000/api/coupons", {
         code: formData.code.toUpperCase(),
         discountRate: Number(formData.discountRate),
-        expiryDate: formData.expiryDate
+        expiryDate: formData.expiryDate,
+        includeDelivery: formData.includeDelivery // Checkbox değeri
       });
       notify("Kupon oluşturuldu! 🎉", "success");
-      setFormData({ code: "", discountRate: "", expiryDate: "" });
+      setFormData({ code: "", discountRate: "", expiryDate: "", includeDelivery: false });
       fetchCoupons();
     } catch (err) { notify("Hata oluştu (Kod aynı olabilir)", "error"); }
   };
@@ -48,8 +55,10 @@ const AdminCoupons = () => {
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <h3 className="text-lg font-bold text-gray-700 mb-4">Yeni Kupon Oluştur</h3>
-        <form onSubmit={handleSubmit} className="flex gap-4 items-end">
-          <div className="flex-1">
+        
+        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 items-end">
+          
+          <div className="flex-1 w-full">
             <label className="text-xs font-bold text-gray-500 uppercase mb-1">Kupon Kodu</label>
             <input 
               value={formData.code} 
@@ -58,17 +67,21 @@ const AdminCoupons = () => {
               placeholder="Örn: YAZ2024" 
             />
           </div>
-          <div className="w-32">
-            <label className="text-xs font-bold text-gray-500 uppercase mb-1">İndirim (%)</label>
+          
+          <div className="w-full md:w-24">
+            <label className="text-xs font-bold text-gray-500 uppercase mb-1">İndirim %</label>
             <input 
               type="number" 
+              max="100" // HTML tarafında da limit
+              min="1"
               value={formData.discountRate} 
               onChange={(e) => setFormData({...formData, discountRate: e.target.value})} 
               className="w-full p-3 border rounded outline-none focus:border-pink-500" 
               placeholder="10" 
             />
           </div>
-          <div className="w-40">
+          
+          <div className="w-full md:w-40">
             <label className="text-xs font-bold text-gray-500 uppercase mb-1">Son Tarih</label>
             <input 
               type="date" 
@@ -77,7 +90,23 @@ const AdminCoupons = () => {
               className="w-full p-3 border rounded outline-none focus:border-pink-500" 
             />
           </div>
-          <button type="submit" className="bg-green-600 text-white px-6 py-3 rounded font-bold hover:bg-green-700 transition">
+
+          {/* --- YENİ: CHECKBOX --- */}
+          <div className="flex items-center gap-2 h-12 pb-1">
+             <input 
+               type="checkbox" 
+               id="delivery" 
+               checked={formData.includeDelivery} 
+               onChange={(e) => setFormData({...formData, includeDelivery: e.target.checked})}
+               className="w-5 h-5 accent-pink-600 cursor-pointer"
+             />
+             <label htmlFor="delivery" className="text-xs font-bold text-gray-600 cursor-pointer select-none leading-tight w-20">
+               Kargo Ücretini Kapsa
+             </label>
+          </div>
+          {/* -------------------- */}
+
+          <button type="submit" className="bg-green-600 text-white px-6 py-3 rounded font-bold hover:bg-green-700 transition w-full md:w-auto">
             Oluştur
           </button>
         </form>
@@ -90,7 +119,10 @@ const AdminCoupons = () => {
             <div>
               <div className="text-xl font-bold text-gray-800 font-mono">{coupon.code}</div>
               <div className="text-sm text-green-600 font-bold">%{coupon.discountRate} İndirim</div>
-              <div className="text-xs text-gray-400 mt-1">{coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : "Süresiz"}</div>
+              <div className="text-xs text-gray-400 mt-1 flex flex-col">
+                <span>{coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : "Süresiz"}</span>
+                {coupon.includeDelivery && <span className="text-purple-500 font-bold">+ Kargo Dahil</span>}
+              </div>
             </div>
             <button onClick={() => handleDelete(coupon._id)} className="text-gray-400 hover:text-red-500 transition p-2">
               🗑️

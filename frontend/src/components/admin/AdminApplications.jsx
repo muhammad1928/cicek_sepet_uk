@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "../../context/CartContext";
+import ConfirmModal from "../ConfirmModal";
 
 const AdminApplications = () => {
   const [applicants, setApplicants] = useState([]);
+  const [selectedApp, setSelectedApp] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
   const { notify } = useCart();
 
   const fetchApplicants = async () => {
@@ -14,64 +17,52 @@ const AdminApplications = () => {
     } catch (err) { console.log(err); }
   };
 
-  useEffect(() => { fetchApplicants(); }, []);
+  // --- PERFORMANS AYARI ---
+  useEffect(() => {
+    fetchApplicants();
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') fetchApplicants();
+    }, 30000); // 30 Saniye
+    return () => clearInterval(interval); // Temizlik
+  }, []);
+  // -----------------------
 
-  const handleDecision = async (userId, status) => {
-    const action = status === 'approved' ? 'ONAYLAMAK' : 'REDDETMEK';
-    if(!confirm(`Bu başvuruyu ${action} istiyor musunuz?`)) return;
-
-    try {
-      await axios.put(`http://localhost:5000/api/users/${userId}/application-status`, { status });
-      notify(`Başvuru ${status === 'approved' ? 'Onaylandı ✅' : 'Reddedildi ❌'}`, status === 'approved' ? "success" : "error");
-      fetchApplicants();
-    } catch (err) { notify("İşlem sırasında hata oluştu", "error"); }
+  const handleDecisionRequest = (userId, status) => {
+    if (selectedApp) setSelectedApp(null);
+    setConfirmData({
+      isOpen: true, title: status==='approved'?"Onayla?":"Reddet?", message: "İşlem yapılsın mı?", isDanger: status==='rejected',
+      action: async () => { 
+        try { await axios.put(`http://localhost:5000/api/users/${userId}/application-status`, { status }); notify("İşlem tamam", "success"); fetchApplicants(); } 
+        catch { notify("Hata", "error"); } 
+        setConfirmData(null); 
+      }
+    });
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
-      <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Bekleyen Başvurular 
-          <span className="ml-2 text-sm bg-orange-100 text-orange-600 px-2 py-1 rounded-full">{applicants.length}</span>
-        </h2>
-        <button onClick={fetchApplicants} className="text-blue-600 hover:underline text-sm font-bold">🔄 Yenile</button>
+      <div className="bg-white p-4 rounded border shadow-sm flex justify-between items-center">
+        <h2 className="font-bold text-xl text-gray-800">Başvurular ({applicants.length})</h2>
+        <button onClick={fetchApplicants} className="text-blue-600 font-bold hover:underline text-sm">Yenile</button>
       </div>
-
-      {applicants.length === 0 ? (
-        <div className="text-center py-20 text-gray-400 bg-white rounded-xl border border-dashed">
-          Şu an onay bekleyen başvuru yok.
-        </div>
-      ) : (
-        <div className="grid gap-6">
-          {applicants.map(app => (
-            <div key={app._id} className="bg-white rounded-xl shadow-md border-l-4 border-l-orange-400 overflow-hidden p-6 hover:shadow-lg transition">
-              <div className="flex justify-between items-start mb-4 border-b pb-3 border-gray-100">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">{app.username}</h3>
-                  <p className="text-sm text-gray-500">{app.email}</p>
-                </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase text-white shadow ${app.role === 'vendor' ? 'bg-purple-500' : 'bg-blue-500'}`}>
-                  {app.role === 'vendor' ? '🏪 Mağaza Başvurusu' : '🛵 Kurye Başvurusu'}
-                </span>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg text-sm mb-6 border border-gray-200">
-                {app.applicationData && Object.entries(app.applicationData).map(([key, value]) => (
-                  <div key={key} className="flex flex-col">
-                    <span className="font-bold text-gray-400 uppercase text-[10px] tracking-wider">{key.replace(/([A-Z])/g, ' $1')}</span>
-                    <span className="font-medium text-gray-800 break-words">{value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-4 justify-end">
-                <button onClick={() => handleDecision(app._id, 'rejected')} className="px-6 py-2 border border-red-200 text-red-600 font-bold rounded-lg hover:bg-red-50 transition">Reddet</button>
-                <button onClick={() => handleDecision(app._id, 'approved')} className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-lg transition transform active:scale-95">Onayla ve Yetki Ver</button>
-              </div>
+      {applicants.length === 0 ? <div className="text-center py-20 text-gray-400">Başvuru yok.</div> : 
+        <div className="grid gap-4">{applicants.map(a=>(<div key={a._id} className="bg-white p-5 rounded shadow border-l-4 border-orange-400 flex justify-between items-center"><div><h3 className="font-bold">{a.username}</h3><span className="text-xs bg-gray-100 px-2 py-1 rounded uppercase">{a.role === 'vendor' ? 'Mağaza' : 'Kurye'}</span></div><button onClick={()=>setSelectedApp(a)} className="bg-gray-800 text-white px-4 py-2 rounded font-bold hover:bg-black">İncele</button></div>))}</div>
+      }
+      
+      {/* Detay Modalı */}
+      {selectedApp && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b flex justify-between"><h3 className="font-bold text-xl">{selectedApp.username}</h3><button onClick={()=>setSelectedApp(null)} className="text-2xl font-bold text-gray-400 hover:text-red-500">✕</button></div>
+            <div className="p-8 overflow-y-auto bg-gray-50 space-y-4">
+               <div className="grid md:grid-cols-2 gap-4">{selectedApp.applicationData && Object.entries(selectedApp.applicationData).map(([k,v]) => k!=='licenseImage' && <div key={k} className="bg-white p-3 rounded border"><span className="block text-xs font-bold text-gray-400 uppercase">{k}</span><span className="font-medium">{v}</span></div>)}</div>
+               {selectedApp.applicationData?.licenseImage && <img src={selectedApp.applicationData.licenseImage} className="w-full h-64 object-contain bg-white border rounded" />}
             </div>
-          ))}
+            <div className="p-6 border-t flex justify-end gap-4 bg-white"><button onClick={()=>handleDecisionRequest(selectedApp._id, 'rejected')} className="px-6 py-2 border border-red-200 text-red-600 font-bold rounded hover:bg-red-50">Reddet</button><button onClick={()=>handleDecisionRequest(selectedApp._id, 'approved')} className="px-6 py-2 bg-green-600 text-white font-bold rounded hover:bg-green-700">Onayla</button></div>
+          </div>
         </div>
       )}
+      {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };

@@ -12,7 +12,8 @@ export const CartProvider = ({ children }) => {
   // Bildirim Sistemi
   const [notification, setNotification] = useState(null);
   const [notificationType, setNotificationType] = useState("success");
-
+  // Arama Terimi (Header'dan erişim için)
+  const [searchTerm, setSearchTerm] = useState("");
   // --- BİLDİRİM FONKSİYONLARI ---
   const notify = (msg, type = "success") => {
     setNotification(msg);
@@ -153,7 +154,10 @@ export const CartProvider = ({ children }) => {
       notification, notificationType, notify, closeNotification,
 
       // Favori Sistemi
-      favorites, toggleFavorite
+      favorites, toggleFavorite,
+
+      // Arama Terimi
+      searchTerm, setSearchTerm
     }}>
       {children}
     </CartContext.Provider>

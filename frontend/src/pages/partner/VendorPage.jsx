@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
-import InvoiceModal from "../components/InvoiceModal"; // Fatura Modalı
+import { useCart } from "../../context/CartContext";
+import InvoiceModal from "../../components/InvoiceModal";
 
 const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
@@ -12,8 +12,12 @@ const VendorPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
+    // Eğer kullanıcı yoksa, satıcı veya admin değilse at
     if (!user || (user.role !== "vendor" && user.role !== "admin")) {
       navigate("/");
+    } else if (user.role === "vendor" && user.applicationStatus !== 'approved') {
+      // Onaylı değilse başvuru sayfasına at
+      navigate("/partner-application");
     }
   }, [navigate, user]);
 
@@ -59,7 +63,13 @@ const VendorDashboard = ({ user }) => {
       try {
         const prodRes = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`);
         const ordRes = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
-        const totalSales = ordRes.data.reduce((acc, o) => acc + o.totalAmount, 0);
+        
+        // Ciro Hesabı: Kendi ürünlerinin indirimsiz (ham) fiyatı
+        const totalSales = ordRes.data.reduce((acc, order) => {
+           // Siparişin içindeki ürünleri gez
+           const myItemsTotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+           return acc + myItemsTotal;
+        }, 0);
         
         setStats({
           totalSales,
@@ -92,14 +102,14 @@ const VendorDashboard = ({ user }) => {
         <span className="text-4xl">👋</span>
         <div>
           <h3 className="font-bold text-blue-800 mb-1">Hoşgeldin, {user.username}!</h3>
-          <p className="text-sm text-blue-600">Mağazan şu an aktif. Siparişlerini 'Siparişler' sekmesinden takip edebilir, faturasını yazdırabilir ve kuryeye teslim edebilirsin.</p>
+          <p className="text-sm text-blue-600">Mağazan şu an aktif. Ödemelerin haftalık olarak IBAN adresine yatırılır.</p>
         </div>
       </div>
     </div>
   );
 };
 
-// --- 2. VENDOR ÜRÜN YÖNETİMİ (GÜNCELLENDİ: RESİM YÜKLEME & HIZLI STOK) ---
+// --- 2. VENDOR PRODUCT MANAGER (RESİM & HIZLI STOKLU) ---
 const VendorProductManager = ({ user }) => {
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
@@ -115,7 +125,6 @@ const VendorProductManager = ({ user }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
   
-  // Resim Yükleme (Cloudinary)
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
@@ -162,11 +171,11 @@ const VendorProductManager = ({ user }) => {
         </form>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {products.map(p => (
           <div key={p._id} className="bg-white border rounded-xl overflow-hidden group hover:shadow-md transition flex flex-col relative">
             {p.stock<=0 && <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold shadow z-10">TÜKENDİ</div>}
-            <div className="h-40 relative bg-gray-100"><img src={p.img} className="w-full h-full object-cover" /></div>
+            <div className="h-40 relative bg-gray-100"><img src={p.img} className="w-full h-full object-cover group-hover:scale-105 transition" /></div>
             <div className="p-3 flex-1 flex flex-col">
               <div className="font-bold truncate text-gray-800 mb-1">{p.title}</div>
               <div className="font-bold text-pink-600 text-sm">£{p.price}</div>
@@ -176,7 +185,7 @@ const VendorProductManager = ({ user }) => {
                 <QuickStockUpdate product={p} refresh={fetchProducts} />
               </div>
               
-              <button onClick={() => handleDelete(p._id)} className="w-full bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 border border-red-100">Ürünü Sil</button>
+              <button onClick={() => handleDelete(p._id)} className="w-full bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 border border-red-100">Sil</button>
             </div>
           </div>
         ))}
@@ -185,10 +194,11 @@ const VendorProductManager = ({ user }) => {
   );
 };
 
-// --- 3. VENDOR SİPARİŞLERİ (KARTLI & FATURALI) ---
+// --- 3. VENDOR ORDER MANAGER (FATURALI & DURUM DEĞİŞTİRMELİ) ---
 const VendorOrderManager = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const { notify } = useCart();
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -198,12 +208,19 @@ const VendorOrderManager = ({ user }) => {
     fetchOrders();
   }, [user]);
 
+  const handleStatusChange = async (id, st) => {
+    try { await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st }); notify("Güncellendi", "success"); 
+          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } 
+    catch { notify("Hata", "error"); }
+  };
+
   const getStatusStyle = (status) => {
     switch(status) {
       case "Sipariş Alındı": return "border-l-blue-500";
       case "Hazırlanıyor": return "border-l-yellow-500";
+      case "Hazır": return "border-l-green-400"; // Kurye Bekleniyor
       case "Yola Çıktı": return "border-l-purple-500";
-      case "Teslim Edildi": return "border-l-green-500";
+      case "Teslim Edildi": return "border-l-green-600";
       case "İptal": return "border-l-red-500";
       default: return "border-l-gray-500";
     }
@@ -235,13 +252,26 @@ const VendorOrderManager = ({ user }) => {
                {order.delivery.cardMessage && <div className="text-xs text-pink-600 bg-pink-50 p-2 rounded border border-pink-100 italic">💌 "{order.delivery.cardMessage}"</div>}
             </div>
 
-            <div className="text-right flex flex-col justify-between items-end min-w-[120px]">
+            <div className="text-right flex flex-col justify-between items-end min-w-[140px]">
               <div className="font-bold text-pink-600 text-xl">£{order.totalAmount}</div>
-              <div className="flex flex-col gap-2 items-end mt-2">
-                <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">{order.status}</span>
-                <button onClick={() => setSelectedInvoice(order)} className="text-xs flex items-center gap-1 text-blue-600 hover:underline font-bold bg-blue-50 px-2 py-1 rounded">
-                  🖨️ Fatura
-                </button>
+              
+              <div className="flex flex-col gap-2 items-end mt-2 w-full">
+                {/* Fatura */}
+                <button onClick={() => setSelectedInvoice(order)} className="text-xs flex items-center justify-center gap-1 text-blue-600 hover:underline font-bold bg-blue-50 px-2 py-1 rounded w-full">🖨️ Fatura</button>
+
+                {/* Durum (Satıcı Sadece Hazır Yapabilir) */}
+                <select 
+                  value={order.status} 
+                  onChange={(e) => handleStatusChange(order._id, e.target.value)} 
+                  className="text-xs font-bold px-2 py-2 rounded-lg border cursor-pointer outline-none bg-white w-full"
+                  disabled={order.status === 'Yola Çıktı' || order.status === 'Teslim Edildi'} // Kuryeye geçince satıcı değiştiremez
+                >
+                  <option value="Sipariş Alındı">Sipariş Alındı</option>
+                  <option value="Hazırlanıyor">Hazırlanıyor 👨‍🍳</option>
+                  <option value="Hazır">Hazır (Kurye Bekle) 📦</option>
+                  <option disabled value="Yola Çıktı">Yola Çıktı 🛵</option>
+                  <option disabled value="Teslim Edildi">Teslim Edildi ✅</option>
+                </select>
               </div>
             </div>
           </div>
@@ -252,19 +282,17 @@ const VendorOrderManager = ({ user }) => {
   );
 };
 
-// --- YARDIMCI: HIZLI STOK GÜNCELLEME ---
+// YARDIMCI: Hızlı Stok
 const QuickStockUpdate = ({ product, refresh }) => {
   const [stock, setStock] = useState(product.stock);
   const [loading, setLoading] = useState(false);
   const { notify } = useCart();
-
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
     try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
     catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
   };
-
   return (
     <div className="flex items-center gap-1">
       <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-10 p-1 border rounded text-center text-xs font-bold outline-none focus:border-pink-500" />

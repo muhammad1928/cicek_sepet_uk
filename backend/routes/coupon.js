@@ -28,10 +28,18 @@ router.get('/validate/:code', async (req, res) => {
   }
 });
 
-// 2. KUPON OLUŞTUR (Admin İçin)
+// 2. KUPON OLUŞTUR
 router.post('/', async (req, res) => {
   try {
-    const newCoupon = new Coupon(req.body);
+    const { code, discountRate, expiryDate, includeDelivery } = req.body; // includeDelivery eklendi
+
+    const newCoupon = new Coupon({
+      code,
+      discountRate,
+      expiryDate,
+      includeDelivery // Veritabanına kaydet
+    });
+
     const savedCoupon = await newCoupon.save();
     res.status(200).json(savedCoupon);
   } catch (err) {

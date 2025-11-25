@@ -36,13 +36,15 @@ const Footer = () => {
 
           {/* 2. KOLON: Hızlı Erişim */}
           <div>
-            <h3 className="text-white font-bold mb-4 text-lg border-b border-slate-700 pb-2 inline-block">Hızlı Erişim</h3>
+            <h3 className="text-white font-bold mb-4 text-lg border-b border-slate-700 pb-2 inline-block">Kurumsal</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/" className="hover:text-pink-500 transition flex items-center gap-1">› Ana Sayfa</Link></li>
-              <li><Link to="/about" className="hover:text-pink-500 transition flex items-center gap-1">› Hakkımızda</Link></li>
-              <li><Link to="/register" className="hover:text-pink-500 transition flex items-center gap-1">› Müşteri Kaydı</Link></li>
-              <li><Link to="/login" className="hover:text-pink-500 transition flex items-center gap-1">› Giriş Yap</Link></li>
-              <li><Link to="/my-orders" className="hover:text-pink-500 transition flex items-center gap-1">› Sipariş Takibi</Link></li>
+              <li><Link to="/about" className="hover:text-pink-500 transition">› Hakkımızda</Link></li>
+              {/* SSS Sayfası (Henüz yapmadık ama linki hazır olsun) */}
+              <li><Link to="/faq" className="hover:text-pink-500 transition">› Sıkça Sorulan Sorular</Link></li>
+              <li><Link to="/contact" className="hover:text-pink-500 transition">› İletişim / Destek</Link></li>
+              {/* Giriş/Kayıt linklerini buradan kaldırdık (Zaten Navbar'da var) */}
+              <li><a href="#" className="hover:text-pink-500 transition">› Kariyer</a></li>
+              <li><a href="#" className="hover:text-pink-500 transition">› Blog</a></li>
             </ul>
           </div>
 
@@ -82,6 +84,7 @@ const Footer = () => {
                 <div className="text-pink-500 group-hover:text-white transition"><FaPhone /></div>
                 <span className="text-gray-400 group-hover:text-gray-300">+44 20 7946 0000</span>
               </li>
+              <li><Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-1">› İletişim</Link></li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaEnvelope /></div>
                 <a href="mailto:destek@ciceksepeti.uk" className="text-gray-400 hover:text-white transition">destek@ciceksepeti.uk</a>

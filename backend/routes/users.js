@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Product = require('../models/Product'); // <--- BU SATIR EKLENDİ (Populate için gerekli)
 const bcrypt = require('bcryptjs');
+const sendEmail = require('../utils/sendEmail');
 
 // 1. KULLANICI GÜNCELLE (Şifre veya Bilgi)
 router.put('/:id', async (req, res) => {
@@ -23,6 +24,24 @@ router.put('/:id', async (req, res) => {
     const { password, ...others } = updatedUser._doc;
     res.status(200).json(others);
   } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 2. ADRES SİLME (DÜZELTİLMİŞ)
+router.delete('/:id/addresses/:addressId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
+
+    // Adres dizisinden ilgili ID'ye sahip olanı çıkar ($pull)
+    await user.updateOne({ 
+      $pull: { savedAddresses: { _id: req.params.addressId } } 
+    });
+    
+    res.status(200).json("Adres başarıyla silindi.");
+  } catch (err) {
+    console.log(err); // Hatayı terminale yazdır ki görelim
     res.status(500).json(err);
   }
 });
@@ -135,22 +154,32 @@ router.put('/:id/block', async (req, res) => {
   }
 });
 
-// 10. KULLANICI KENDİ ŞİFRESİNİ DEĞİŞTİRİR (Eski Şifre Kontrollü)
+// 10. KULLANICI KENDİ ŞİFRESİNİ DEĞİŞTİRİR (Mail Bildirimli)
 router.put('/:id/change-password', async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findById(req.params.id);
 
-    // 1. Eski şifre doğru mu?
+    // Eski şifre kontrolü
     const validPassword = await bcrypt.compare(oldPassword, user.password);
-    if (!validPassword) {
-      return res.status(400).json("Eski şifreniz hatalı!");
-    }
+    if (!validPassword) return res.status(400).json("Eski şifreniz hatalı!");
 
-    // 2. Yeni şifreyi hashle ve kaydet
+    // Yeni şifre kaydı
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
+
+    // --- GÜVENLİK MAİLİ ---
+    const emailContent = `
+      <div style="font-family: Arial; padding: 20px;">
+        <h2 style="color: #d00;">⚠️ Şifreniz Değiştirildi</h2>
+        <p>Merhaba ${user.username},</p>
+        <p>Hesabınızın şifresi az önce başarıyla değiştirildi.</p>
+        <p>Eğer bu işlemi siz yapmadıysanız, lütfen <b>hemen</b> bizimle iletişime geçin.</p>
+      </div>
+    `;
+    sendEmail(user.email, "Güvenlik Uyarısı: Şifreniz Değişti", emailContent).catch(console.error);
+    // ----------------------
 
     res.status(200).json("Şifreniz başarıyla güncellendi.");
   } catch (err) {
@@ -169,13 +198,62 @@ router.post('/:id/apply', async (req, res) => {
   } catch (err) { res.status(500).json(err); }
 });
 
-// 12. BAŞVURU ONAYLA / REDDET (ADMİN)
+// 12. BAŞVURU ONAYLA / REDDET (GÜNCELLENDİ: MAİL BİLDİRİMLİ)
 router.put('/:id/application-status', async (req, res) => {
   try {
-    const { status } = req.body; // 'approved' veya 'rejected'
-    await User.findByIdAndUpdate(req.params.id, { applicationStatus: status });
+    const { status, reason } = req.body; // reason: Red sebebi
+    const user = await User.findById(req.params.id);
+
+    if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
+
+    // Durumu güncelle
+    // Eğer reddedildiyse, sebebini de veritabanına not düşebiliriz (Opsiyonel)
+    if (status === 'rejected' && reason) {
+        // applicationData objesini bozmadan içine rejectionReason ekliyoruz
+        user.applicationData = { ...user.applicationData, rejectionReason: reason };
+    }
+    
+    user.applicationStatus = status;
+    await user.save();
+
+    // --- BİLDİRİM MAİLİ ---
+    let subject = "";
+    let htmlContent = "";
+
+    if (status === 'approved') {
+      subject = "Başvurunuz Onaylandı! 🎉";
+      htmlContent = `
+        <div style="font-family: Arial; padding: 20px; border: 1px solid #eee;">
+          <h2 style="color: green;">Tebrikler ${user.username}!</h2>
+          <p><b>${user.role === 'vendor' ? 'Mağaza' : 'Kurye'}</b> başvurunuz onaylanmıştır.</p>
+          <p>Artık sisteme giriş yapabilir ve panelinizi kullanmaya başlayabilirsiniz.</p>
+          <a href="http://localhost:5173/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Giriş Yap</a>
+        </div>
+      `;
+    } 
+    else if (status === 'rejected') {
+      subject = "Başvurunuz Hakkında ⚠️";
+      htmlContent = `
+        <div style="font-family: Arial; padding: 20px; border: 1px solid #eee;">
+          <h2 style="color: #d00;">Başvurunuz Reddedildi</h2>
+          <p>Merhaba ${user.username},</p>
+          <p>Yapmış olduğunuz başvuru incelenmiş ve aşağıdaki sebepten dolayı uygun görülmemiştir:</p>
+          <div style="background: #fff0f0; padding: 15px; border-left: 4px solid #d00; margin: 20px 0; font-style: italic;">
+            "${reason || 'Belgelerinizdeki eksiklikler nedeniyle.'}"
+          </div>
+          <p>Bilgilerinizi güncelleyip tekrar başvurmak için bizimle iletişime geçebilirsiniz.</p>
+        </div>
+      `;
+    }
+
+    // Maili gönder
+    sendEmail(user.email, subject, htmlContent).catch(console.error);
+    // ---------------------
+
     res.status(200).json(`Kullanıcı durumu: ${status}`);
-  } catch (err) { res.status(500).json(err); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // 13. SATICI PROFİLİ GETİR (HERKES İÇİN - PUBLIC)

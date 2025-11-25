@@ -1,20 +1,17 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
+  // --- SİPARİŞİ VEREN ÜYE (Varsa) ---
+  userId: { type: String }, // Üye ID'si (Misafir ise boş olabilir)
 
-  // 1. GÖNDEREN BİLGİLERİ
-  userId: { type: String }, 
-  // 2. KURYE BİLGİLERİ (İsteğe Bağlı)
-  courierId: { type: String },
-  
-  // 3. GÖNDEREN
+  // --- 1. GÖNDERİCİ BİLGİLERİ ---
   sender: {
     name: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, required: true }
   },
   
-  // 2. ALICI
+  // --- 2. ALICI BİLGİLERİ ---
   recipient: {
     name: { type: String, required: true },
     phone: { type: String, required: true },
@@ -23,16 +20,16 @@ const OrderSchema = new mongoose.Schema({
     postcode: { type: String }
   },
 
-  // 3. TESLİMAT
+  // --- 3. TESLİMAT DETAYLARI ---
   delivery: {
     date: { type: Date, required: true },
     timeSlot: { type: String, default: "Gün İçinde" },
-    cardMessage: { type: String },
-    courierNote: { type: String },
-    isAnonymous: { type: Boolean, default: false }
+    cardMessage: { type: String }, // Kart notu
+    courierNote: { type: String }, // Kuryeye not
+    isAnonymous: { type: Boolean, default: false } // İsim gizli mi?
   },
 
-  // 4. ÜRÜNLER
+  // --- 4. ÜRÜNLER ---
   items: [
     {
       _id: String,
@@ -42,14 +39,24 @@ const OrderSchema = new mongoose.Schema({
       img: String
     }
   ],
-  totalAmount: { type: Number, required: true },
-  
-  // 5. DURUM
+
+  // --- 5. FİNANSAL BİLGİLER ---
+  totalAmount: { type: Number, required: true }, // Toplam Tutar
+  deliveryFee: { type: Number, default: 0 },     // Teslimat Ücreti (YENİ)
+  rawTotal: { type: Number }, // Ürün Toplamı (YENİ)
+
+  // --- 6. OPERASYONEL DURUMLAR ---
   status: { 
     type: String, 
     default: 'Sipariş Alındı',
-    enum: ['Sipariş Alındı', 'Hazırlanıyor', 'Yola Çıktı', 'Teslim Edildi', 'İptal']
-  }
+    // 'Hazır' durumu Satıcı -> Kurye geçişi için eklendi
+    enum: ['Sipariş Alındı', 'Hazırlanıyor', 'Hazır', 'Yola Çıktı', 'Teslim Edildi', 'İptal']
+  },
+
+  // --- 7. KURYE DETAYLARI ---
+  courierId: { type: String }, // Hangi kurye taşıyor?
+  courierRejectionReason: { type: String } // Kurye işi neden bıraktı? (YENİ)
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', OrderSchema);

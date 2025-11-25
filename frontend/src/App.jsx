@@ -13,19 +13,24 @@ import RegisterPage from "./pages/RegisterPage";
 import AdminPage from "./pages/AdminPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
-import CourierPage from "./pages/CourierPage";
+import CourierPage from "./pages/partner/CourierPage";
 import SuccessPage from "./pages/SuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import FavoritesPage from "./pages/FavoritesPage";
 import VerifyPage from "./pages/VerifyPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import VendorPage from "./pages/VendorPage";
+import VendorPage from "./pages/partner/VendorPage";
 import AboutPage from "./pages/AboutPage";
 import RegisterVendorPage from "./pages/RegisterVendorPage"; 
 import RegisterCourierPage from "./pages/RegisterCourierPage";
-import PartnerApplicationPage from "./pages/PartnerApplicationPage";
+import PartnerApplicationPage from "./pages/partner/PartnerApplicationPage";
 import StorePage from "./pages/StorePage";
+import ContactPage from "./pages/ContactPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import VerificationPending from "./pages/VerificationPending";
+import FaqPage from "./pages/FaqPage";
+import BadgeDisplay from "./components/BadgeDisplay";
 
 function App() {
   return (
@@ -62,6 +67,11 @@ function App() {
               <Route path="/become-courier" element={<RegisterCourierPage />} />
               <Route path="/partner-application" element={<PartnerApplicationPage />} />
               <Route path="/store/:vendorId" element={<StorePage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              <Route path="/verification-pending" element={<VerificationPending />} />
+              <Route path="/faq" element={<FaqPage />} />
+              <Route path="/badge-display" element={<BadgeDisplay />} />
             </Routes>
           </div>
 

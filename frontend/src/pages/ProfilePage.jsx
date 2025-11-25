@@ -3,13 +3,18 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import InvoiceModal from "../components/InvoiceModal";
+import ConfirmModal from "../components/ConfirmModal";
+import BadgeDisplay from "../components/BadgeDisplay"; // Rozetler
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("orders"); // Varsayılan: Siparişlerim
-  const [confirmData, setConfirmData] = useState(null);
   const [user, setUser] = useState(null);
+  const [orderCount, setOrderCount] = useState(0); // Rozet için gerekli
+
   const navigate = useNavigate();
+  const { notify } = useCart();
   
+  // 1. Güvenlik Kontrolü
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (!storedUser) {
@@ -19,22 +24,23 @@ const ProfilePage = () => {
     setUser(storedUser);
   }, [navigate]);
 
+  // 2. Sipariş Sayısını Çek (Rozet Hesaplaması İçin)
+  useEffect(() => {
+    if (user) {
+      const fetchCount = async () => {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
+          setOrderCount(res.data.length);
+        } catch (e) {}
+      };
+      fetchCount();
+    }
+  }, [user]);
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/login");
     window.location.reload();
-  };
-
-  // Fonksiyonu değiştir:
-  const handleDeleteRequest = (addrId) => {
-    setConfirmData({
-      isOpen: true, title: "Adresi Sil?", message: "Bu adres silinecek.", isDanger: true,
-      action: async () => {
-        try { await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${addrId}`); notify("Silindi", "success"); fetchAddresses(user._id); }
-        catch { notify("Hata", "error"); }
-        setConfirmData(null);
-      }
-    });
   };
 
   if (!user) return null;
@@ -48,29 +54,32 @@ const ProfilePage = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* --- SOL MENÜ (SIDEBAR) --- */}
-          <aside className="w-full lg:w-72 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden h-fit shrink-0">
+          <aside className="w-full lg:w-80 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden h-fit shrink-0">
             
             {/* Profil Özeti */}
             <div className="p-6 border-b border-gray-100 text-center bg-gradient-to-b from-white to-gray-50">
-              <div className="w-20 h-20 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-3 shadow-inner border-4 border-white">
+              <div className="w-24 h-24 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-4xl font-bold mx-auto mb-3 shadow-inner border-4 border-white relative">
                 {user.username[0].toUpperCase()}
+                {/* VIP Tacı */}
+                {orderCount >= 50 && <div className="absolute -top-2 -right-2 text-3xl animate-bounce">👑</div>}
               </div>
+              
               <h2 className="font-bold text-gray-800 text-lg">{user.username}</h2>
-              <p className="text-xs text-gray-500">{user.email}</p>
-              <span className="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full inline-block mt-2 uppercase tracking-wider">
-                {user.role}
-              </span>
+              <p className="text-xs text-gray-500 mb-3">{user.email}</p>
+              
+              {/* --- ROZETLER --- */}
+              <BadgeDisplay user={user} orderCount={orderCount} />
             </div>
 
-            {/* Menü Butonları */}
+            {/* Menü */}
             <nav className="p-3 space-y-1">
               <MenuButton active={activeTab === "orders"} onClick={() => setActiveTab("orders")} icon="📦" label="Siparişlerim" />
               <MenuButton active={activeTab === "addresses"} onClick={() => setActiveTab("addresses")} icon="📍" label="Adres Defteri" />
-              <MenuButton active={activeTab === "info"} onClick={() => setActiveTab("info")} icon="👤" label="Kullanıcı Bilgileri" />
-              <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition flex items-center gap-3">
-                <span>🚪</span> Çıkış Yap
+              <MenuButton active={activeTab === "info"} onClick={() => setActiveTab("info")} icon="👤" label="Bilgilerim & Şifre" />
+              
+              <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition flex items-center gap-3 border-t border-gray-100 mt-2">
+                <span>🚪</span> ÇiçekSepeti'nden Çıkış
               </button>
-              {confirmData && <ConfirmModal {...confirmData} />}
             </nav>
           </aside>
 
@@ -87,12 +96,8 @@ const ProfilePage = () => {
   );
 };
 
-// YARDIMCI: Menü Butonu
 const MenuButton = ({ active, onClick, icon, label }) => (
-  <button 
-    onClick={onClick} 
-    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition flex items-center gap-3 ${active ? "bg-pink-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-100"}`}
-  >
+  <button onClick={onClick} className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold transition flex items-center gap-3 ${active ? "bg-pink-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-100"}`}>
     <span className="text-lg">{icon}</span> {label}
   </button>
 );
@@ -105,6 +110,7 @@ const OrderHistory = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
   const { notify } = useCart();
 
   useEffect(() => {
@@ -118,14 +124,19 @@ const OrderHistory = ({ user }) => {
     fetchOrders();
   }, [user]);
 
-  const cancelOrder = async (e, id) => {
+  const requestCancelOrder = (e, id) => {
     e.stopPropagation();
-    if (!confirm("Siparişi iptal etmek istiyor musunuz?")) return;
-    try {
-      await axios.put(`http://localhost:5000/api/orders/${id}`, { status: "İptal" });
-      notify("Sipariş iptal edildi.", "success");
-      setOrders(prev => prev.map(o => o._id === id ? { ...o, status: "İptal" } : o));
-    } catch (err) { notify("Hata oluştu", "error"); }
+    setConfirmData({
+      isOpen: true, title: "İptal Et?", message: "Sipariş iptal edilecek. Onaylıyor musunuz?", isDanger: true,
+      action: async () => {
+        try {
+          await axios.put(`http://localhost:5000/api/orders/${id}`, { status: "İptal" });
+          notify("Sipariş iptal edildi.", "success");
+          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: "İptal" } : o));
+        } catch (err) { notify("Hata oluştu", "error"); }
+        setConfirmData(null);
+      }
+    });
   };
 
   const getStatusColor = (s) => {
@@ -143,7 +154,7 @@ const OrderHistory = ({ user }) => {
       {orders.map((order) => (
         <div key={order._id} className={`bg-white rounded-xl shadow-sm border transition-all cursor-pointer overflow-hidden ${expandedId === order._id ? 'border-pink-300 ring-2 ring-pink-50' : 'border-gray-200 hover:border-pink-200'}`} onClick={() => setExpandedId(expandedId === order._id ? null : order._id)}>
           
-          {/* ÖZET (TIKLANABİLİR) */}
+          {/* ÖZET */}
           <div className="p-5 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-4 w-full sm:w-auto">
               <div className={`w-2 h-12 rounded-full ${order.status === 'Teslim Edildi' ? 'bg-green-500' : order.status === 'İptal' ? 'bg-red-500' : 'bg-blue-500'}`}></div>
@@ -162,7 +173,7 @@ const OrderHistory = ({ user }) => {
             </div>
           </div>
 
-          {/* DETAY (AÇILIR KISIM) */}
+          {/* DETAY */}
           {expandedId === order._id && (
             <div className="border-t border-gray-100 bg-gray-50 p-6 cursor-default" onClick={e => e.stopPropagation()}>
                <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -187,14 +198,20 @@ const OrderHistory = ({ user }) => {
                   ))}
                </div>
                <div className="mt-6 flex justify-end gap-3 pt-4 border-t border-gray-200">
-                  {order.status === "Sipariş Alındı" && <button onClick={(e) => cancelOrder(e, order._id)} className="text-sm text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg font-bold transition">İptal Et</button>}
-                  <button onClick={() => setSelectedInvoice(order)} className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-900 transition"><span>🖨️</span> Faturayı Görüntüle</button>
+                  {order.status === "Sipariş Alındı" && (
+                    <button onClick={(e) => requestCancelOrder(e, order._id)} className="text-sm text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg font-bold transition">İptal Et</button>
+                  )}
+                  <button onClick={() => setSelectedInvoice(order)} className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-900 transition">
+                    <span>🖨️</span> Faturayı Görüntüle
+                  </button>
                </div>
             </div>
           )}
         </div>
       ))}
+      
       {selectedInvoice && <InvoiceModal order={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
+      {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };
@@ -206,6 +223,7 @@ const AddressBook = ({ user }) => {
   const [addresses, setAddresses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newAddress, setNewAddress] = useState({ title: "", recipientName: "", recipientPhone: "", address: "", city: "Londra", postcode: "" });
+  const [confirmData, setConfirmData] = useState(null);
   const { notify } = useCart();
 
   const fetchAddresses = async () => {
@@ -226,12 +244,15 @@ const AddressBook = ({ user }) => {
     } catch(e){ notify("Hata", "error"); }
   };
 
-  const handleDelete = async (id) => {
-    if(!confirm("Silinsin mi?")) return;
-    try {
-      await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${id}`);
-      fetchAddresses();
-    } catch(e){ notify("Hata", "error"); }
+  const handleDeleteRequest = (id) => {
+    setConfirmData({
+      isOpen: true, title: "Adresi Sil?", message: "Bu adres defterinizden silinecek.", isDanger: true,
+      action: async () => {
+        try { await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${id}`); notify("Adres silindi.", "success"); fetchAddresses(); } 
+        catch { notify("Hata", "error"); }
+        setConfirmData(null);
+      }
+    });
   };
 
   return (
@@ -244,7 +265,7 @@ const AddressBook = ({ user }) => {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-xl border border-green-200 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-xl border border-green-200 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in-down">
            <input placeholder="Başlık (Ev, İş)" className="p-3 border rounded outline-none focus:border-pink-500" value={newAddress.title} onChange={e=>setNewAddress({...newAddress, title:e.target.value})} required />
            <input placeholder="Alıcı Adı" className="p-3 border rounded outline-none focus:border-pink-500" value={newAddress.recipientName} onChange={e=>setNewAddress({...newAddress, recipientName:e.target.value})} />
            <input placeholder="Telefon" className="p-3 border rounded outline-none focus:border-pink-500" value={newAddress.recipientPhone} onChange={e=>setNewAddress({...newAddress, recipientPhone:e.target.value})} />
@@ -263,11 +284,12 @@ const AddressBook = ({ user }) => {
                  <div className="text-sm text-gray-600 mt-1">{addr.recipientName} • {addr.recipientPhone}</div>
                  <div className="text-xs text-gray-500 mt-2 bg-gray-50 p-2 rounded inline-block">{addr.address}, {addr.postcode}</div>
               </div>
-              <button onClick={() => handleDelete(addr._id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded transition" title="Sil">🗑️</button>
+              <button onClick={() => handleDeleteRequest(addr._id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded transition" title="Sil">🗑️</button>
             </div>
           ))}
         </div>
       }
+      {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };
@@ -313,7 +335,10 @@ const UserInfo = ({ user }) => {
         {/* ŞİFRE DEĞİŞTİRME BUTONU VE FORMU */}
         <div className="pt-6 border-t border-gray-100">
           {!showPasswordForm ? (
-            <button onClick={() => setShowPasswordForm(true)} className="flex items-center gap-2 text-pink-600 font-bold hover:bg-pink-50 px-4 py-2 rounded-lg transition border border-pink-200">
+            <button 
+              onClick={() => setShowPasswordForm(true)}
+              className="flex items-center gap-2 text-pink-600 font-bold hover:bg-pink-50 px-4 py-2 rounded-lg transition border border-pink-200"
+            >
               <span>🔒</span> Şifremi Değiştir
             </button>
           ) : (
@@ -324,14 +349,26 @@ const UserInfo = ({ user }) => {
               </div>
               
               <form onSubmit={handlePasswordUpdate} className="space-y-4">
-                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mevcut Şifre</label><input type="password" required className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" placeholder="••••••••" onChange={e => setPasswords({...passwords, oldPass: e.target.value})} /></div>
-                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Yeni Şifre</label><input type="password" required minLength={6} className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" onChange={e => setPasswords({...passwords, newPass: e.target.value})} /></div>
-                <div><label className="block text-xs font-bold text-gray-500 uppercase mb-1">Yeni Şifre (Tekrar)</label><input type="password" required minLength={6} className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" onChange={e => setPasswords({...passwords, confirmPass: e.target.value})} /></div>
-                <button type="submit" className="bg-pink-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-pink-700 transition w-full shadow-md mt-2">Şifreyi Güncelle</button>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mevcut Şifre</label>
+                  <input type="password" required className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" placeholder="••••••••" onChange={e => setPasswords({...passwords, oldPass: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Yeni Şifre</label>
+                  <input type="password" required minLength={6} className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" onChange={e => setPasswords({...passwords, newPass: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Yeni Şifre (Tekrar)</label>
+                  <input type="password" required minLength={6} className="w-full p-3 border rounded-lg outline-none focus:border-pink-500 bg-white" onChange={e => setPasswords({...passwords, confirmPass: e.target.value})} />
+                </div>
+                <button type="submit" className="bg-pink-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-pink-700 transition w-full shadow-md mt-2">
+                  Şifreyi Güncelle
+                </button>
               </form>
             </div>
           )}
         </div>
+
       </div>
     </div>
   );

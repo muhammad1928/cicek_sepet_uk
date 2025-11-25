@@ -33,3 +33,71 @@ input[type=number] {
     margin: 0;
   }
 }
+/* Yavaş dönme animasyonu */
+@keyframes spin-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-reverse 3s linear infinite;
+}
+
+/* Fade-in animasyonları */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Kartlar için Aşağıdan Yukarı Süzülme Efekti */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px); /* Aşağıdan başla */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Yerine otur */
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0; /* Başlangıçta görünmez olsun */
+}
+
+/* Shimmer (Parlama) Efekti */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Sepet: Sağdan Kayma Animasyonu */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Sepet: Kapanırken Sağa Gitme (Opsiyonel, JS ile kontrol edilir genelde ama CSS ile giriş efekti yeterli) */
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; /* Yumuşak geçiş */
+}
+
+/* Arama Sonuçları İçin Fade In */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.2s ease-out forwards;
+}
