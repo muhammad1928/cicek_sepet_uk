@@ -118,7 +118,7 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-2 sm:gap-3">
               <Link to="/profile" className="hidden sm:flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-pink-600 transition border border-gray-200 px-3 py-1.5 rounded-full hover:bg-pink-50">
-                👤 <span className="max-w-[80px] truncate">{user.username}</span>
+                👤 <span className="max-w-[80px] truncate">{user.fullName}</span>
               </Link>
               {user.role === "admin" && <Link to="/admin" title="Yönetim" className="text-lg">⚙️</Link>}
               {user.role === "vendor" && <Link to="/vendor" title="Mağaza" className="text-lg">🏪</Link>}

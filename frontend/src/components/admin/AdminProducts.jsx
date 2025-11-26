@@ -34,7 +34,7 @@ const AdminProducts = () => {
     // 1. Arama (Ürün Adı VEYA Satıcı Adı)
     const term = searchTerm.toLowerCase();
     const titleMatch = p.title.toLowerCase().includes(term);
-    const vendorMatch = p.vendor?.username?.toLowerCase().includes(term) || false; // Satıcı adı araması
+    const vendorMatch = p.vendor?.fullName?.toLowerCase().includes(term) || false; // Satıcı adı araması
     
     // 2. Kategori Filtresi
     const categoryMatch = filterCategory === "Tümü" || p.category === filterCategory;
@@ -171,7 +171,7 @@ const AdminProducts = () => {
                 
                 {/* Satıcı Bilgisi */}
                 <div className="text-[10px] font-bold text-gray-400 uppercase mb-1 flex items-center gap-1">
-                  🏪 {product.vendor?.username || "ÇiçekSepeti"}
+                  🏪 {product.vendor?.fullName || "ÇiçekSepeti"}
                 </div>
 
                 <h4 className="font-bold text-gray-800 mb-1 truncate" title={product.title}>{product.title}</h4>

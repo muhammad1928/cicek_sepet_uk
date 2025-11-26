@@ -5,49 +5,43 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); 
 const sendEmail = require('../utils/sendEmail');
 
-// ---------------------------------------------------------
 // 1. KAYIT OL (REGISTER)
-// ---------------------------------------------------------
 router.post('/register', async (req, res) => {
   try {
-    // 1. KULLANICI VAR MI KONTROLÜ
-    const existingUser = await User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] });
-    if (existingUser) {
-        return res.status(400).json({ message: "Bu kullanıcı adı veya e-posta zaten kullanılıyor." });
+    const { email, password, role, fullName } = req.body; // username ÇIKARILDI
+
+    // --- E-POSTA KONTROLÜ (TEK KONTROL) ---
+    const checkEmail = await User.findOne({ email: email });
+    if (checkEmail) {
+      return res.status(400).json({ message: "Bu e-posta adresiyle zaten bir hesap var." });
     }
+    // --------------------------------------
 
-    // 2. ŞİFREYİ KRİPTOLA (HASHING) - İŞTE BU KISIM ŞART!
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    // -----------------------------------------------------
-
-    // 3. TOKEN OLUŞTUR
+    const hashedPassword = await bcrypt.hash(password, salt);
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
-    // 4. KULLANICIYI OLUŞTUR
     const newUser = new User({
-      fullName: req.body.fullName || req.body.username, // İsim yoksa kullanıcı adını kullan
-      username: req.body.username,
-      email: req.body.email,
-      password: hashedPassword, // <--- Şifrelenmiş halini kaydediyoruz
-      role: req.body.role || 'customer',
-      isVerified: false, 
-      verificationToken: verifyToken
+      fullName, // Zorunlu alan
+      email,
+      password: hashedPassword,
+      role: role || 'customer',
+      isVerified: false,
+      verificationToken: verifyToken,
+      badges: []
     });
 
     const savedUser = await newUser.save();
 
-    // 5. MAİL GÖNDER
+    // Mail Linki
     const frontendUrl = "http://localhost:5173"; 
     const verifyLink = `${frontendUrl}/verify/${verifyToken}`;
     
     const emailContent = `
       <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h1 style="color: #db2777;">Hoşgeldiniz, ${savedUser.username}! 🌸</h1>
-        <p>ÇiçekSepeti UK ailesine katıldığınız için teşekkürler.</p>
-        <p>Lütfen aşağıdaki butona tıklayarak hesabınızı doğrulayın:</p>
-        <br/>
-        <a href="${verifyLink}" style="background-color: #db2777; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Hesabımı Onayla</a>
+        <h1 style="color: #db2777;">Hoşgeldiniz, ${savedUser.fullName}! 🌸</h1>
+        <p>Hesabınızı aktifleştirmek için tıklayın:</p>
+        <a href="${verifyLink}" style="background-color: #db2777; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Hesabımı Onayla</a>
       </div>
     `;
 
@@ -61,46 +55,32 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ---------------------------------------------------------
-// 2. HESAP ONAYLA (VERIFY)
-// ---------------------------------------------------------
+// 2. HESAP ONAYLA (AYNI KALDI)
 router.post('/verify', async (req, res) => {
   try {
     const { token } = req.body;
     const user = await User.findOne({ verificationToken: token });
-
-    if (!user) return res.status(400).json("Geçersiz veya süresi dolmuş onay linki.");
-
+    if (!user) return res.status(400).json("Geçersiz link.");
     user.isVerified = true;
     user.verificationToken = undefined; 
     await user.save();
-
-    res.status(200).json("Hesap başarıyla onaylandı! Şimdi giriş yapabilirsiniz.");
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    res.status(200).json("Hesap başarıyla onaylandı!");
+  } catch (err) { res.status(500).json(err); }
 });
 
-// ---------------------------------------------------------
-// 3. GİRİŞ YAP (LOGIN)
-// ---------------------------------------------------------
+// 3. GİRİŞ YAP (LOGIN) - GÜNCELLENDİ (Email ile giriş)
 router.post('/login', async (req, res) => {
   try {
-    // Kullanıcıyı Bul
-    const user = await User.findOne({ username: req.body.username });
-    if (!user) return res.status(404).json({ message: "Kullanıcı bulunamadı!" });
+    // ARTIK EMAIL İLE ARIYORUZ
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(404).json({ message: "Bu e-posta ile kayıtlı kullanıcı bulunamadı!" });
 
-    // Şifreyi Kontrol Et (Hash karşılaştırması)
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).json({ message: "Şifre yanlış!" });
 
-    // Engel Kontrolü
+    if (!user.isVerified) return res.status(403).json({ message: "Lütfen e-postanızı onaylayın." });
     if (user.isBlocked) return res.status(403).json({ message: "Hesabınız askıya alınmıştır! 🚫" });
 
-    // Onay Kontrolü
-    if (!user.isVerified) return res.status(403).json({ message: "Lütfen önce e-postanızı onaylayın." });
-
-    // Token Üret
     const accessToken = jwt.sign(
         { id: user._id, role: user.role },
         process.env.JWT_SEC,

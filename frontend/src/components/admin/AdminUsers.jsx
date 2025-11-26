@@ -51,7 +51,7 @@ const AdminUsers = () => {
             {users.map(u => (
               <tr key={u._id} className={`hover:bg-gray-50 ${u.isBlocked ? 'bg-red-50' : ''}`}>
                 <td className="p-4">
-                  <div className="font-bold text-gray-800">{u.username} {u._id===userMe._id && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded">BEN</span>}</div>
+                  <div className="font-bold text-gray-800">{u.fullName} {u._id===userMe._id && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded">BEN</span>}</div>
                   <div className="text-xs text-gray-500">{u.email}</div>
                 </td>
                 <td className="p-4"><span className={`text-xs font-bold px-2 py-1 rounded uppercase bg-gray-100 text-gray-600`}>{u.role}</span></td>

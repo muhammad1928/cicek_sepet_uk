@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterPage = () => {
-  const [formData, setFormData] = useState({ fullName: "", username: "", email: "", password: "", role: "customer" });
+  const [formData, setFormData] = useState({ fullName: "", email: "", password: "", role: "customer" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setTouchedFields({ fullName: true, username: true, email: true, password: true });
+    setTouchedFields({ fullName: true, email: true, password: true });
 
     if (!passwordValid) return notify("Lütfen şifre kurallarını sağlayın!", "error");
     if (!acceptedTerms) return notify("Lütfen sözleşmeyi onaylayın! ⚠️", "warning");
@@ -100,20 +100,11 @@ const RegisterPage = () => {
         <form onSubmit={handleRegister} className="space-y-4">
           
           {/* Grid: Ad Soyad ve Kullanıcı Adı */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Ad Soyad</label>
-              <div className={getContainerClass("fullName")}>
-                <span className="pl-3 text-gray-400">📝</span>
-                <input name="fullName" type="text" className={getInputClass("fullName")} placeholder="Ad Soyad" onChange={handleChange} onBlur={() => handleBlur("fullName")} />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Kullanıcı Adı</label>
-              <div className={getContainerClass("username")}>
-                <span className="pl-3 text-gray-400">👤</span>
-                <input name="username" type="text" className={getInputClass("username")} placeholder="Kullanıcı Adı" onChange={handleChange} onBlur={() => handleBlur("username")} />
-              </div>
+          <div>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Ad Soyad</label>
+            <div className={getContainerClass("fullName")}>
+              <span className="pl-3 text-gray-400">📝</span>
+              <input name="fullName" type="text" className={getInputClass("fullName")} placeholder="Adınız Soyadınız" onChange={handleChange} onBlur={() => handleBlur("fullName")} />
             </div>
           </div>
 

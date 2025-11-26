@@ -59,12 +59,12 @@ const ProfilePage = () => {
             {/* Profil Özeti */}
             <div className="p-6 border-b border-gray-100 text-center bg-gradient-to-b from-white to-gray-50">
               <div className="w-24 h-24 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-4xl font-bold mx-auto mb-3 shadow-inner border-4 border-white relative">
-                {user.username[0].toUpperCase()}
+                {user.fullName[0].toUpperCase()}
                 {/* VIP Tacı */}
                 {orderCount >= 50 && <div className="absolute -top-2 -right-2 text-3xl animate-bounce">👑</div>}
               </div>
               
-              <h2 className="font-bold text-gray-800 text-lg">{user.username}</h2>
+              <h2 className="font-bold text-gray-800 text-lg">{user.fullName}</h2>
               <p className="text-xs text-gray-500 mb-3">{user.email}</p>
               
               {/* --- ROZETLER --- */}
@@ -328,7 +328,7 @@ const UserInfo = ({ user }) => {
       <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Profil Bilgileri</h3>
       
       <div className="space-y-6 max-w-md">
-        <div><label className="text-xs font-bold text-gray-400 uppercase">Kullanıcı Adı</label><div className="text-lg font-medium text-gray-800 border-b border-gray-100 pb-2">{user.username}</div></div>
+        <div><label className="text-xs font-bold text-gray-400 uppercase">Kullanıcı Adı</label><div className="text-lg font-medium text-gray-800 border-b border-gray-100 pb-2">{user.fullName}</div></div>
         <div><label className="text-xs font-bold text-gray-400 uppercase">E-Posta Adresi</label><div className="text-lg font-medium text-gray-800 border-b border-gray-100 pb-2">{user.email}</div></div>
         <div><label className="text-xs font-bold text-gray-400 uppercase">Hesap Türü</label><div className="mt-1"><span className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full uppercase">{user.role}</span></div></div>
 

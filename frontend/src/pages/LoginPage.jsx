@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,14 +18,14 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
-        username,
+        email,
         password,
       });
 
       localStorage.setItem("user", JSON.stringify(res.data));
       window.dispatchEvent(new Event("user-change")); 
 
-      notify(`Hoşgeldin ${res.data.username}! 👋`, "success");
+      notify(`Hoşgeldin ${res.data.fullName}! 👋`, "success");
 
       setTimeout(() => {
         if (res.data.role === "admin") window.location.href = "/admin";
@@ -70,8 +70,8 @@ const LoginPage = () => {
               <input 
                 type="text" 
                 className="w-full px-4 py-2.5 outline-none bg-transparent text-gray-700 font-medium placeholder-gray-400 text-sm" 
-                placeholder="Kullanıcı adınız" 
-                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="E-posta adresiniz" 
+                onChange={(e) => setEmail(e.target.value)} 
                 required 
               />
             </div>
