@@ -31,12 +31,14 @@ import NotFoundPage from "./pages/NotFoundPage";
 import VerificationPending from "./pages/VerificationPending";
 import FaqPage from "./pages/FaqPage";
 import BadgeDisplay from "./components/BadgeDisplay";
+import ScrollToTop from "./components/ScrollToTop";
+import LegalPage from "./pages/LegalPage";
 
 function App() {
   return (
     <CartProvider>
       <Router>
-        
+        <ScrollToTop /> 
         {/* 2. FLEX YAPISI KURUYORUZ (Footer en alta yapışsın diye) */}
         <div className="flex flex-col min-h-screen">
           
@@ -72,6 +74,7 @@ function App() {
               <Route path="/verification-pending" element={<VerificationPending />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/badge-display" element={<BadgeDisplay />} />
+              <Route path="/legal" element={<LegalPage />} />
             </Routes>
           </div>
 

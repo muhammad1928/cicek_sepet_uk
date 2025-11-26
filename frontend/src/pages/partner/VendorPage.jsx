@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import InvoiceModal from "../../components/InvoiceModal";
+import ConfirmModal from "../../components/ConfirmModal";
 
 const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
@@ -12,11 +13,9 @@ const VendorPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    // Eğer kullanıcı yoksa, satıcı veya admin değilse at
     if (!user || (user.role !== "vendor" && user.role !== "admin")) {
       navigate("/");
     } else if (user.role === "vendor" && user.applicationStatus !== 'approved') {
-      // Onaylı değilse başvuru sayfasına at
       navigate("/partner-application");
     }
   }, [navigate, user]);
@@ -35,7 +34,7 @@ const VendorPage = () => {
         </div>
         <nav className="flex-1 p-4 space-y-2">
           <button onClick={() => setActiveTab("dashboard")} className={`w-full text-left px-4 py-3 rounded-lg transition font-bold ${activeTab === "dashboard" ? "bg-pink-50 text-pink-600 border-l-4 border-pink-600" : "hover:bg-gray-50 text-gray-500"}`}>📊 Özet & Ciro</button>
-          <button onClick={() => setActiveTab("products")} className={`w-full text-left px-4 py-3 rounded-lg transition font-bold ${activeTab === "products" ? "bg-pink-50 text-pink-600 border-l-4 border-pink-600" : "hover:bg-gray-50 text-gray-500"}`}>📦 Ürünlerim</button>
+          <button onClick={() => setActiveTab("products")} className={`w-full text-left px-4 py-3 rounded-lg transition font-bold ${activeTab === "products" ? "bg-pink-50 text-pink-600 border-l-4 border-pink-600" : "hover:bg-gray-50 text-gray-500"}`}>📦 Ürün Yönetimi</button>
           <button onClick={() => setActiveTab("orders")} className={`w-full text-left px-4 py-3 rounded-lg transition font-bold ${activeTab === "orders" ? "bg-pink-50 text-pink-600 border-l-4 border-pink-600" : "hover:bg-gray-50 text-gray-500"}`}>🚚 Siparişler</button>
         </nav>
         <div className="p-4 border-t border-gray-100">
@@ -64,12 +63,8 @@ const VendorDashboard = ({ user }) => {
         const prodRes = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`);
         const ordRes = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
         
-        // Ciro Hesabı: Kendi ürünlerinin indirimsiz (ham) fiyatı
-        const totalSales = ordRes.data.reduce((acc, order) => {
-           // Siparişin içindeki ürünleri gez
-           const myItemsTotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-           return acc + myItemsTotal;
-        }, 0);
+        // Ciro: Sadece kendi ürünleri üzerinden hesaplama (Basitleştirilmiş)
+        const totalSales = ordRes.data.reduce((acc, o) => acc + o.totalAmount, 0);
         
         setStats({
           totalSales,
@@ -102,20 +97,23 @@ const VendorDashboard = ({ user }) => {
         <span className="text-4xl">👋</span>
         <div>
           <h3 className="font-bold text-blue-800 mb-1">Hoşgeldin, {user.username}!</h3>
-          <p className="text-sm text-blue-600">Mağazan şu an aktif. Ödemelerin haftalık olarak IBAN adresine yatırılır.</p>
+          <p className="text-sm text-blue-600">Mağazan şu an aktif. Ürünlerini yönetebilir ve gelen siparişleri hazırlayabilirsin.</p>
         </div>
       </div>
     </div>
   );
 };
 
-// --- 2. VENDOR PRODUCT MANAGER (RESİM & HIZLI STOKLU) ---
+// --- 2. VENDOR ÜRÜN YÖNETİMİ (MODALLI SİLME) ---
 const VendorProductManager = ({ user }) => {
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({ title: "", price: "", desc: "", img: "", stock: 10, category: "Doğum Günü" });
+  const [confirmData, setConfirmData] = useState(null); // Modal State
+  
+  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, category: "Doğum Günü" };
+  const [formData, setFormData] = useState(initialForm);
 
   const fetchProducts = async () => {
     try { const res = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`); setProducts(res.data); } 
@@ -140,8 +138,16 @@ const VendorProductManager = ({ user }) => {
     } catch (err) { notify("Hata oluştu", "error"); }
   };
 
-  const handleDelete = async (id) => {
-    if(confirm("Silinsin mi?")) { try { await axios.delete(`http://localhost:5000/api/products/${id}`); fetchProducts(); } catch(e){} }
+  // SİLME İŞLEMİ (MODAL İLE)
+  const handleDeleteRequest = (id) => {
+    setConfirmData({
+      isOpen: true, title: "Ürünü Sil?", message: "Bu işlem geri alınamaz. Ürünü silmek istiyor musunuz?", isDanger: true,
+      action: async () => {
+        try { await axios.delete(`http://localhost:5000/api/products/${id}`); notify("Ürün silindi.", "success"); fetchProducts(); }
+        catch { notify("Hata oluştu.", "error"); }
+        setConfirmData(null);
+      }
+    });
   };
 
   return (
@@ -158,7 +164,7 @@ const VendorProductManager = ({ user }) => {
              <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Fiyat</label><input name="price" type="number" onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
              <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Stok</label><input name="stock" type="number" onChange={handleChange} placeholder="10" className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
            </div>
-           <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label><select name="category" onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
+           <select name="category" onChange={handleChange} className="p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
            <div>
              <label className="text-xs font-bold text-gray-500 uppercase mb-1">Görsel</label>
              <div className="flex items-center gap-2 border p-2 rounded bg-gray-50">
@@ -167,7 +173,7 @@ const VendorProductManager = ({ user }) => {
              </div>
            </div>
            <div className="md:col-span-2"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Açıklama</label><textarea name="desc" onChange={handleChange} className="w-full p-2 border rounded h-20 outline-none focus:border-pink-500" /></div>
-           <button type="submit" disabled={uploading} className="bg-green-600 text-white py-3 rounded font-bold md:col-span-2 hover:bg-green-700 shadow-lg disabled:opacity-50">Kaydet ve Yayınla</button>
+           <button type="submit" disabled={uploading} className="bg-green-600 text-white py-2 rounded font-bold md:col-span-2 hover:bg-green-700 shadow-lg disabled:opacity-50">Kaydet ve Yayınla</button>
         </form>
       )}
 
@@ -179,22 +185,22 @@ const VendorProductManager = ({ user }) => {
             <div className="p-3 flex-1 flex flex-col">
               <div className="font-bold truncate text-gray-800 mb-1">{p.title}</div>
               <div className="font-bold text-pink-600 text-sm">£{p.price}</div>
-              
               <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center mb-2">
                 <span className="text-[10px] font-bold text-gray-400 uppercase">Hızlı Stok</span>
                 <QuickStockUpdate product={p} refresh={fetchProducts} />
               </div>
-              
-              <button onClick={() => handleDelete(p._id)} className="w-full bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 border border-red-100">Sil</button>
+              <button onClick={() => handleDeleteRequest(p._id)} className="w-full bg-red-50 text-red-600 text-xs py-1.5 rounded font-bold hover:bg-red-100 border border-red-100">Sil</button>
             </div>
           </div>
         ))}
       </div>
+
+      {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };
 
-// --- 3. VENDOR ORDER MANAGER (FATURALI & DURUM DEĞİŞTİRMELİ) ---
+// --- 3. VENDOR ORDER MANAGER ---
 const VendorOrderManager = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -209,8 +215,7 @@ const VendorOrderManager = ({ user }) => {
   }, [user]);
 
   const handleStatusChange = async (id, st) => {
-    try { await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st }); notify("Güncellendi", "success"); 
-          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } 
+    try { await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st }); notify("Güncellendi", "success"); setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } 
     catch { notify("Hata", "error"); }
   };
 
@@ -259,12 +264,12 @@ const VendorOrderManager = ({ user }) => {
                 {/* Fatura */}
                 <button onClick={() => setSelectedInvoice(order)} className="text-xs flex items-center justify-center gap-1 text-blue-600 hover:underline font-bold bg-blue-50 px-2 py-1 rounded w-full">🖨️ Fatura</button>
 
-                {/* Durum (Satıcı Sadece Hazır Yapabilir) */}
+                {/* Durum (Satıcı sadece "Hazır" yapabilir, kuryeye devredebilir) */}
                 <select 
                   value={order.status} 
                   onChange={(e) => handleStatusChange(order._id, e.target.value)} 
                   className="text-xs font-bold px-2 py-2 rounded-lg border cursor-pointer outline-none bg-white w-full"
-                  disabled={order.status === 'Yola Çıktı' || order.status === 'Teslim Edildi'} // Kuryeye geçince satıcı değiştiremez
+                  disabled={order.status === 'Yola Çıktı' || order.status === 'Teslim Edildi'} 
                 >
                   <option value="Sipariş Alındı">Sipariş Alındı</option>
                   <option value="Hazırlanıyor">Hazırlanıyor 👨‍🍳</option>
@@ -282,17 +287,19 @@ const VendorOrderManager = ({ user }) => {
   );
 };
 
-// YARDIMCI: Hızlı Stok
+// --- YARDIMCI: HIZLI STOK GÜNCELLEME ---
 const QuickStockUpdate = ({ product, refresh }) => {
   const [stock, setStock] = useState(product.stock);
   const [loading, setLoading] = useState(false);
   const { notify } = useCart();
+
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
     try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
     catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
   };
+
   return (
     <div className="flex items-center gap-1">
       <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} className="w-10 p-1 border rounded text-center text-xs font-bold outline-none focus:border-pink-500" />

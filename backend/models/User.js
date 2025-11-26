@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-  fullName: { type: String, required: true }, // Ad Soyad
+  // ... (Eski alanlar: username, email, password, role, favorites, savedAddresses, isVerified, verificationToken, reset..., isBlocked, application...) ...
+  
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -13,14 +14,17 @@ const UserSchema = new mongoose.Schema({
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
   isBlocked: { type: Boolean, default: false },
+  applicationStatus: { type: String, enum: ['none', 'pending', 'approved', 'rejected'], default: 'none' },
+  applicationData: { type: Object },
 
-  // --- YENİ: BAŞVURU SİSTEMİ ---
-  applicationStatus: { 
-    type: String, 
-    enum: ['none', 'pending', 'approved', 'rejected'], 
-    default: 'none' // Müşteriler için hep 'approved' sayılabilir veya kullanılmaz
-  },
-  applicationData: { type: Object }
+  // --- YENİ: MAĞAZA AYARLARI ---
+  storeSettings: {
+    logo: { type: String }, // Mağaza Logosu URL
+    banner: { type: String }, // Kapak Fotoğrafı URL
+    description: { type: String }, // Hakkımızda yazısı
+    phone: { type: String } // İletişim No
+  }
+  // ----------------------------
 
 }, { timestamps: true });
 

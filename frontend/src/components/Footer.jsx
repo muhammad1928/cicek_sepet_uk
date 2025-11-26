@@ -38,13 +38,36 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold mb-4 text-lg border-b border-slate-700 pb-2 inline-block">Kurumsal</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="hover:text-pink-500 transition">› Hakkımızda</Link></li>
-              {/* SSS Sayfası (Henüz yapmadık ama linki hazır olsun) */}
-              <li><Link to="/faq" className="hover:text-pink-500 transition">› Sıkça Sorulan Sorular</Link></li>
-              <li><Link to="/contact" className="hover:text-pink-500 transition">› İletişim / Destek</Link></li>
-              {/* Giriş/Kayıt linklerini buradan kaldırdık (Zaten Navbar'da var) */}
-              <li><a href="#" className="hover:text-pink-500 transition">› Kariyer</a></li>
-              <li><a href="#" className="hover:text-pink-500 transition">› Blog</a></li>
+              <li>
+                <Link to="/about" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>🏢</span> Hakkımızda
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>❓</span> Sıkça Sorulan Sorular
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>📞</span> İletişim / Destek
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>💼</span> Kariyer
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>📰</span> Blog & Haberler
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-pink-500 transition flex items-center gap-2">
+                  <span>🛡️</span> KVKK ve Gizlilik
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -67,6 +90,8 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
+          
 
           {/* 4. KOLON: İletişim */}
           <div>
@@ -99,9 +124,9 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} ÇiçekSepeti UK. Tüm hakları saklıdır.</p>
           
           <div className="flex gap-6">
-            <span className="hover:text-white cursor-pointer transition">Gizlilik Politikası</span>
-            <span className="hover:text-white cursor-pointer transition">Mesafeli Satış Sözleşmesi</span>
-            <span className="hover:text-white cursor-pointer transition">Çerez Politikası</span>
+            <Link to="/legal/privacy-policy" className="hover:text-white cursor-pointer transition">Gizlilik Politikası</Link>
+            <Link to="/legal/terms-of-use" className="hover:text-white cursor-pointer transition">Mesafeli Satış Sözleşmesi</Link>
+            <Link to="/legal/cookie-policy" className="hover:text-white cursor-pointer transition">Çerez Politikası</Link>
           </div>
         </div>
 
