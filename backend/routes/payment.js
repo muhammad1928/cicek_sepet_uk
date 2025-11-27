@@ -1,70 +1,72 @@
 const router = require('express').Router();
+// .env dosyasındaki STRIPE_KEY'i aldığından emin ol
 const stripe = require('stripe')(process.env.STRIPE_KEY);
-const Coupon = require('../models/Coupon'); // Kupon modelini çağır
 
 router.post('/create-checkout-session', async (req, res) => {
-  const { items, couponCode, userEmail, userId } = req.body; // Yeni parametreler
-
   try {
-    let discountRate = 0;
+    // Frontend'den gelen verileri al
+    const { items, userEmail, deliveryFee, userId, couponCode } = req.body;
 
-    // 1. Kupon Varsa Backend'de Doğrula (Güvenlik)
-    if (couponCode) {
-      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase() });
-      // Tarih ve Kullanım kontrolü burada da yapılabilir ama basitlik için aktif mi diye bakalım
-      if (coupon && coupon.isActive) {
-        discountRate = coupon.discountRate;
-        
-        // Eğer sipariş tamamlanırsa kuponu "kullanıldı" işaretlemek için Webhook gerekir.
-        // Ancak basit MVP mantığında, kullanıcıyı buraya kadar getirdiysek kuponu "kullandı" sayabiliriz
-        // veya sipariş oluştuğunda (/api/orders) işaretleyebiliriz. 
-        // Biz Stripe'a odaklanalım.
-      }
-    }
-
-    // 2. Ürünleri Hazırla ve İndirimi Uygula
-    const lineItems = items.map((product) => {
-      // Orijinal Fiyat
-      let unitAmount = Math.round(product.price * 100);
-      
-      // İndirim Varsa Uygula
-      if (discountRate > 0) {
-        const discountAmount = (unitAmount * discountRate) / 100;
-        unitAmount = Math.round(unitAmount - discountAmount);
-      }
+    // 1. ÜRÜNLERİ STRIPE FORMATINA ÇEVİR
+    const line_items = items.map((item) => {
+      // Stripe resim URL'lerinin "http" ile başlamasını zorunlu kılar.
+      // Base64 veya bozuk link gelirse ödeme sayfası açılmaz.
+      // Bu yüzden basit bir kontrol yapıyoruz:
+      const validImage = item.img && item.img.startsWith("http") ? [item.img] : [];
 
       return {
         price_data: {
-          currency: 'gbp',
+          currency: 'gbp', // İngiltere Sterlini
           product_data: {
-            name: product.title,
-            images: [product.img],
-            description: discountRate > 0 ? `%${discountRate} İndirim Uygulandı` : undefined,
+            name: item.title,
+            description: item.desc ? item.desc.substring(0, 100) : "ÇiçekSepeti Ürünü",
+            images: validImage, 
           },
-          unit_amount: unitAmount,
+          // Stripe kuruş cinsinden çalışır (10.50 £ -> 1050 penny)
+          unit_amount: Math.round(item.price * 100),
         },
-        quantity: product.quantity,
+        quantity: item.quantity,
       };
     });
 
-    // 3. Oturumu Başlat (Email Ekli)
+    // 2. KARGO ÜCRETİNİ EKLE (Eğer varsa)
+    if (deliveryFee && deliveryFee > 0) {
+      line_items.push({
+        price_data: {
+          currency: 'gbp',
+          product_data: {
+            name: "Teslimat Ücreti",
+            description: "Kargo ve Paketleme Hizmeti",
+            images: ["https://cdn-icons-png.flaticon.com/512/709/709790.png"], // Temsili kargo ikonu
+          },
+          unit_amount: Math.round(deliveryFee * 100),
+        },
+        quantity: 1,
+      });
+    }
+
+    // 3. OTURUMU OLUŞTUR
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: lineItems,
+      payment_method_types: ['card'], // Sadece kart ile ödeme
+      line_items: line_items,
       mode: 'payment',
-      customer_email: userEmail, // Stripe formunda email otomatik dolar
-      success_url: 'http://localhost:5173/success',
-      cancel_url: 'http://localhost:5173/',
+      success_url: 'http://localhost:5173/success', // Başarılı dönüş
+      cancel_url: 'http://localhost:5173/',        // İptal dönüş
+      customer_email: userEmail, // Müşterinin emailini Stripe'a otomatik doldur
+      
+      // Ekstra bilgileri sakla (İleride Webhook kullanırsan işine yarar)
       metadata: {
-        userId: userId,
-        couponCode: couponCode // Stripe panelinde görmek için
+        userId: userId || "guest",
+        couponCode: couponCode || "none"
       }
     });
 
-    res.status(200).json({ id: session.id, url: session.url });
+    // 4. URL'İ DÖNDÜR
+    res.status(200).json({ url: session.url });
+
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    console.error("STRIPE HATASI:", err.message); // Terminalde hatayı gör
+    res.status(500).json({ message: err.message });
   }
 });
 

@@ -101,3 +101,124 @@ input[type=number] {
 .animate-fade-in-down {
   animation: fadeInDown 0.2s ease-out forwards;
 }
+
+/* --- YUMUŞAK NEFES ALMA (SOFT BREATHING) EFEKTİ --- */
+@keyframes soft-breathing {
+  0% {
+    transform: scale(1); /* Başlangıç: Normal */
+    filter: drop-shadow(0 0 0 rgba(219, 39, 119, 0)); /* Gölge yok */
+  }
+  50% {
+    transform: scale(1.2); /* Orta: Sadece %15 Büyü (Daha kibar) */
+    filter: drop-shadow(0 0 8px rgba(219, 39, 119, 0.5)); /* Hafif, yumuşak pembe bir hare */
+  }
+  100% {
+    transform: scale(1); /* Bitiş: Normal */
+    filter: drop-shadow(0 0 0 rgba(219, 39, 119, 0));
+  }
+}
+
+/* Navbar Link'inin üzerine gelince çalışır */
+.group:hover .heart-anim {
+  /* 2.5 saniye: Çok yavaş, sakin ve hipnotik bir ritim */
+  animation: soft-breathing 2.5s infinite ease-in-out;
+  
+  /* Animasyonun pürüzsüz görünmesi için */
+  will-change: transform, filter;
+}
+
+
+/* Kısa Zıplama Efekti */
+@keyframes bounce-short {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-bounce-short {
+  animation: bounce-short 0.5s ease-in-out 1; /* Sadece 1 kere zıplar */
+}
+
+/* PREMIUM CUSTOM BUTTON */
+.custom-btn {
+  position: relative;
+  overflow: hidden; /* Bu özellik, ::before ve ::after pseudoelementlerinin dışa taşmasını engeller */
+  padding: 0.5rem 1.25rem; /* px-5 py-2 */
+  border-radius: 9999px; /* rounded-full */
+  color: #ffffff;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+
+  display: inline-flex; /* flex items-center */
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* gap-2 */
+
+  background: linear-gradient(90deg, #a020f0, #ff2d8d);
+  box-shadow: 0 0 15px rgba(255, 45, 141, 0.4);
+
+  transition: 
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    background 200ms ease,
+    opacity 200ms ease;
+}
+
+/* Hover efekti (biraz daha güçlü) */
+.custom-btn:hover {
+  box-shadow: 0 0 20px rgba(255, 45, 141, 0.6);
+}
+
+/* Click animasyonu (active:scale-95) */
+.custom-btn:active {
+  transform: scale(0.95);
+}
+
+/* Gradient Glow Border */
+.custom-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 2px;
+  background: linear-gradient(90deg, #ff2d8d, #a020f0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+/* Shine effect */
+.custom-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 40%,
+    transparent 80%
+  );
+  transition: all 0.6s ease;
+}
+
+/* Hover durumunda shine ve border opacity'yi arttır */
+.custom-btn:hover::before {
+  opacity: 1;
+}
+
+.custom-btn:hover::after {
+  left: 150%;
+}
+
+/* Metin her zaman üstte kalsın */
+.custom-btn .inner-text {
+  position: relative;
+  z-index: 10;
+}

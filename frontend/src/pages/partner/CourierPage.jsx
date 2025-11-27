@@ -133,7 +133,9 @@ const CourierPage = () => {
           <h1 className="text-2xl font-bold text-gray-800">Kurye Paneli 🛵</h1>
           <div className="text-right">
             <div className="text-xs text-gray-500 font-bold">{user?.username}</div>
-            <button onClick={() => { localStorage.removeItem("user"); navigate("/login"); }} className="text-sm text-red-500 font-bold hover:underline">Çıkış</button>
+            <button onClick={() => { localStorage.removeItem("user");
+            window.dispatchEvent(new Event("user-change"));
+            navigate("/login"); }} className="text-sm text-red-500 font-bold hover:underline">Çıkış</button>
           </div>
         </div>
 

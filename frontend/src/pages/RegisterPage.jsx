@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterPage = () => {
-  const [formData, setFormData] = useState({ fullName: "", email: "", password: "", role: "customer" });
+  const [formData, setFormData] = useState({ fullName: "", username: "", email: "", password: "", role: "customer" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,15 @@ const RegisterPage = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [touchedFields, setTouchedFields] = useState({});
-  const [rules, setRules] = useState({ length: false, upper: false, lower: false, number: false, special: false });
+
+  // Şifre Kuralları
+  const [rules, setRules] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false
+  });
 
   const navigate = useNavigate();
   const { notify } = useCart();
@@ -53,10 +61,18 @@ const RegisterPage = () => {
     if (!acceptedTerms) return notify("Lütfen sözleşmeyi onaylayın! ⚠️", "warning");
     
     setLoading(true);
+
     try {
       await axios.post("http://localhost:5000/api/auth/register", formData);
       notify("Kayıt Başarılı! 🎉 Lütfen mailinizi onaylayın.", "success");
-      setTimeout(() => { navigate("/verification-pending"); }, 2000);
+      
+      // --- GÜNCELLEME BURADA ---
+      // navigate fonksiyonuna ikinci parametre olarak 'state' veriyoruz
+      setTimeout(() => {
+        navigate("/verification-pending", { state: { email: formData.email } }); 
+      }, 2000);
+      // -------------------------
+
     } catch (err) {
       setLoading(false);
       notify(err.response?.data?.message || "Kayıt başarısız!", "error");
@@ -82,7 +98,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden pt-20">
       
-      {/* Arka Plan Efektleri */}
+      {/* Arka Plan */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
         <div className="absolute -bottom-8 left-20 w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -99,7 +115,7 @@ const RegisterPage = () => {
 
         <form onSubmit={handleRegister} className="space-y-4">
           
-          {/* Grid: Ad Soyad ve Kullanıcı Adı */}
+          {/* Ad Soyad */}
           <div>
             <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Ad Soyad</label>
             <div className={getContainerClass("fullName")}>
@@ -108,7 +124,6 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">E-Posta</label>
             <div className={getContainerClass("email")}>
@@ -117,32 +132,50 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Şifre */}
+          {/* ŞİFRE ALANI VE DİNAMİK LİSTE */}
           <div className="relative">
             <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Şifre</label>
             <div className={getContainerClass("password")}>
               <span className="pl-3 text-gray-400">🔒</span>
-              <input name="password" type={showPassword ? "text" : "password"} className={getInputClass("password")} placeholder="••••••••" onChange={handleChange} onFocus={() => setPasswordFocused(true)} onBlur={() => { setPasswordFocused(false); handleBlur("password"); }} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="pr-3 text-gray-400 hover:text-pink-600 transition outline-none text-sm">{showPassword ? <FaEyeSlash /> : <FaEye />}</button>
+              <input 
+                name="password" 
+                type={showPassword ? "text" : "password"} 
+                className={getInputClass("password")}
+                placeholder="••••••••" 
+                onChange={handleChange} 
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => { setPasswordFocused(false); handleBlur("password"); }}
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="pr-3 text-gray-400 hover:text-pink-600 transition outline-none text-sm">
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
 
-            {/* Şifre Kuralları (Popover) */}
-            {(passwordFocused || (touchedFields.password && !passwordValid)) && (
-              <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg absolute z-20 w-full text-[10px]">
-                <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider">Güvenlik Gereksinimleri:</p>
-                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-                  <RuleItem label="Min 8 karakter" valid={rules.length} />
-                  <RuleItem label="1 Büyük Harf" valid={rules.upper} />
-                  <RuleItem label="1 Küçük Harf" valid={rules.lower} />
-                  <RuleItem label="1 Rakam" valid={rules.number} />
-                  <RuleItem label="1 Özel (!@#$)" valid={rules.special} />
+            {/* --- AKILLI ŞİFRE KURALLARI LİSTESİ (DİNAMİK KAYBOLMA) --- */}
+            {/* Sadece odaklanınca VEYA şifre geçerli değilse ama doluysa göster */}
+            {(passwordFocused || (formData.password && !passwordValid)) && (
+              <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg transition-all duration-300 text-[11px]">
+                
+                <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">Eksik Kriterler:</p>
+                
+                <div className="flex flex-col">
+                  <RuleItem label="En az 8 karakter" valid={rules.length} />
+                  <RuleItem label="1 Büyük Harf (A-Z)" valid={rules.upper} />
+                  <RuleItem label="1 Küçük Harf (a-z)" valid={rules.lower} />
+                  <RuleItem label="1 Rakam (0-9)" valid={rules.number} />
+                  <RuleItem label="1 Özel Karakter (!@#$)" valid={rules.special} />
                 </div>
-                {passwordValid && <div className="mt-2 text-green-600 font-bold flex items-center gap-1 border-t pt-2"><span>✅</span> Mükemmel! Şifreniz çok güçlü.</div>}
+
+                {/* Hepsi Tamamlandığında Çıkan Mesaj */}
+                {passwordValid && (
+                  <div className="text-green-600 font-bold flex items-center gap-1 animate-bounce mt-1">
+                    <span>✅</span> Şifre Mükemmel!
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          {/* Sözleşme */}
           <div className="flex items-center gap-2 pt-1 px-1">
             <input type="checkbox" id="terms" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="w-4 h-4 accent-pink-600 cursor-pointer rounded" />
             <label htmlFor="terms" className="text-xs text-gray-600 select-none cursor-pointer">
@@ -175,9 +208,19 @@ const RegisterPage = () => {
   );
 };
 
+// --- GÜNCELLENMİŞ YARDIMCI BİLEŞEN: DİNAMİK KAYBOLAN KURAL ---
 const RuleItem = ({ label, valid }) => (
-  <div className={`flex items-center gap-1 transition-all ${valid ? "text-green-600 opacity-50" : "text-red-500 font-medium"}`}>
-    <span>{valid ? "✓" : "•"}</span> {label}
+  <div 
+    className={`
+      flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out
+      ${valid 
+        ? "max-h-0 opacity-0 -translate-y-2"  // Sağlandıysa: Yukarı kay, görünmez ol, yer kaplama
+        : "max-h-6 opacity-100 translate-y-0" // Sağlanmadıysa: Görünür ol
+      }
+    `}
+  >
+    <span className="text-red-500 font-bold text-xs">•</span> 
+    <span className="text-gray-600 font-medium">{label}</span>
   </div>
 );
 

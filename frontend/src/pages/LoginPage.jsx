@@ -17,26 +17,54 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
+      // Backend'e istek at
       const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
+        email, 
         password,
       });
 
+      // Başarılı ise kullanıcıyı kaydet
       localStorage.setItem("user", JSON.stringify(res.data));
+      
+      // Navbar'ı güncellemesi için sinyal gönder
       window.dispatchEvent(new Event("user-change")); 
 
       notify(`Hoşgeldin ${res.data.fullName}! 👋`, "success");
 
+      // ROL BAZLI YÖNLENDİRME
       setTimeout(() => {
-        if (res.data.role === "admin") window.location.href = "/admin";
-        else if (res.data.role === "courier") window.location.href = "/courier";
-        else if (res.data.role === "vendor") window.location.href = "/vendor";
-        else window.location.href = "/";
+        const u = res.data;
+        
+        // 1. Eğer Kurye veya Satıcı ise ve durumu 'approved' DEĞİLSE -> Başvuru sayfasına git
+        if ((u.role === "vendor" || u.role === "courier") && u.applicationStatus !== "approved") {
+           window.location.href = "/partner-application";
+        } 
+        // 2. Admin -> Admin Paneline
+        else if (u.role === "admin") {
+           window.location.href = "/admin";
+        }
+        // 3. Kurye -> Kurye Paneline
+        else if (u.role === "courier") {
+           window.location.href = "/courier";
+        }
+        // 4. Satıcı -> Satıcı Paneline
+        else if (u.role === "vendor") {
+           window.location.href = "/vendor";
+        }
+        // 5. Müşteri -> Ana Sayfaya
+        else {
+           window.location.href = "/";
+        }
       }, 1000);
 
     } catch (err) {
       setLoading(false);
-      const errorMessage = err.response?.data?.message || "Kullanıcı adı veya şifre yanlış!";
+      console.error("Giriş Hatası:", err);
+      
+      // Backend'den gelen hata mesajını yakala
+      const errorMessage = err.response?.data?.message || "E-posta veya şifre yanlış!";
+      
+      // Kırmızı Toast bildirimi göster
       notify(errorMessage, "error");
     }
   };
@@ -44,14 +72,14 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden pt-24">
       
-      {/* Arka Plan */}
+      {/* --- ARKA PLAN SÜSLEMELERİ --- */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
         <div className="absolute top-10 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Kart */}
+      {/* --- GİRİŞ KARTI --- */}
       <div className="bg-white/80 backdrop-blur-lg w-full max-w-md p-8 rounded-3xl shadow-2xl border border-white/20 relative z-10 animate-fade-in-up">
         
         <div className="text-center mb-6">
@@ -62,22 +90,22 @@ const LoginPage = () => {
 
         <form onSubmit={handleLogin} className="space-y-4">
           
-          {/* Kullanıcı Adı */}
+          {/* E-POSTA */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Kullanıcı Adı</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">E-Posta Adresi</label>
             <div className="flex items-center border-2 border-gray-200 rounded-xl bg-white focus-within:border-pink-500 focus-within:ring-4 focus-within:ring-pink-500/10 transition overflow-hidden">
-              <span className="pl-4 text-gray-400 text-base">👤</span>
+              <span className="pl-4 text-gray-400 text-base">✉️</span>
               <input 
-                type="text" 
+                type="email" 
                 className="w-full px-4 py-2.5 outline-none bg-transparent text-gray-700 font-medium placeholder-gray-400 text-sm" 
-                placeholder="E-posta adresiniz" 
+                placeholder="mail@site.com" 
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
               />
             </div>
           </div>
 
-          {/* Şifre */}
+          {/* ŞİFRE */}
           <div>
             <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Şifre</label>
             <div className="flex items-center border-2 border-gray-200 rounded-xl bg-white focus-within:border-pink-500 focus-within:ring-4 focus-within:ring-pink-500/10 transition overflow-hidden relative">
@@ -90,8 +118,8 @@ const LoginPage = () => {
                 required 
               />
               <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                type="button" 
+                onClick={() => setShowPassword(!showPassword)} 
                 className="absolute right-4 text-gray-400 hover:text-pink-600 transition outline-none text-sm"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -105,6 +133,7 @@ const LoginPage = () => {
             </Link>
           </div>
 
+          {/* BUTON */}
           <button
             type="submit"
             disabled={loading}
@@ -122,6 +151,7 @@ const LoginPage = () => {
           </button>
         </form>
 
+        {/* ALT LİNKLER */}
         <div className="mt-6 text-center border-t border-gray-200 pt-4">
           <p className="text-xs text-gray-500">
             Hesabınız yok mu?{" "}

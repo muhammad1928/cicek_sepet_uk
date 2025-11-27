@@ -39,6 +39,7 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    window.dispatchEvent(new Event("user-change"));
     navigate("/login");
     window.location.reload();
   };

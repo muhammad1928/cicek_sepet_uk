@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+  // Username BURADA OLMAMALI!
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -24,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   isBlocked: { type: Boolean, default: false },
 
   applicationStatus: { type: String, enum: ['none', 'pending', 'approved', 'rejected'], default: 'none' },
-  applicationData: Object, // Ehliyet, Vergi No vb.
+  applicationData: Object,
 
   storeSettings: {
     logo: String,

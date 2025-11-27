@@ -20,9 +20,9 @@ router.post('/', async (req, res) => {
 // 2. TÜM ÜRÜNLERİ GETİR (GÜNCELLENDİ)
 router.get('/', async (req, res) => {
   try {
-    // .populate ile satıcının 'username' ve 'isBlocked' bilgilerini çekiyoruz
+    // .populate ile satıcının 'fullName' ve 'isBlocked' bilgilerini çekiyoruz
     const products = await Product.find()
-      .populate('vendor', 'username isBlocked') 
+      .populate('vendor', 'fullName isBlocked') 
       .sort({ createdAt: -1 });
       
     res.status(200).json(products);
@@ -110,6 +110,21 @@ router.get('/vendor/:vendorId', async (req, res) => {
     // Sadece 'vendor' alanı bu ID olanları getir
     const products = await Product.find({ vendor: req.params.vendorId }).sort({ createdAt: -1 });
     res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 4. ÜRÜN GÜNCELLEME (PUT)
+router.put('/:id', async (req, res) => {
+  try {
+    // $set operatörü, sadece gönderilen alanları günceller, diğerlerini korur.
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body }, 
+      { new: true }
+    );
+    res.status(200).json(updatedProduct);
   } catch (err) {
     res.status(500).json(err);
   }

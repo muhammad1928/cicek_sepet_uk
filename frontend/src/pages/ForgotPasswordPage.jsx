@@ -13,12 +13,12 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Backend isteği
       await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
       setSubmitted(true);
       notify("E-posta gönderildi! 📩", "success");
     } catch (err) {
-      notify(err.response?.data || "Hata oluştu", "error");
+      // HATA BİLDİRİMİ EKLENDİ
+      notify(err.response?.data || "Kullanıcı bulunamadı", "error");
     } finally {
       setLoading(false);
     }

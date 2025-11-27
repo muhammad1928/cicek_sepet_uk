@@ -8,7 +8,7 @@ const CouponSchema = new mongoose.Schema({
   usedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   
   // --- YENİ: KARGO DAHİL Mİ? ---
-  includeDelivery: { type: Boolean, default: false } 
+  includeDelivery: { type: Boolean, default: true } 
   // -----------------------------
 
 }, { timestamps: true });

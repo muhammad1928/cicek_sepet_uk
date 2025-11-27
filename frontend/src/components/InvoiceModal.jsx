@@ -1,142 +1,145 @@
-import { useEffect } from "react";
+import { FiX, FiPrinter } from "react-icons/fi";
 
 const InvoiceModal = ({ order, onClose }) => {
   if (!order) return null;
 
-  // --- VERGİ VE ALT TOPLAM HESABI ---
-  // İngiltere KDV (VAT) oranı genelde %20'dir.
-  // Formül: Toplam Tutar = Ara Toplam + (Ara Toplam * 0.20)
-  // Tersen gidersek: Ara Toplam = Toplam Tutar / 1.20
+  // --- HESAPLAMALAR ---
+  // Backend'de kaydedilen değerleri kullanıyoruz.
+  const total = order.totalAmount || 0;
+  const deliveryFee = order.deliveryFee || 0;
+
+  // KDV Hesabı (İngiltere %20 VAT Dahil varsayımı)
+  // Formül: Net Tutar = (Toplam - Kargo) / 1.20
+  const productTotal = total - deliveryFee;
   const vatRate = 0.20;
-  const subTotal = order.totalAmount / (1 + vatRate);
-  const vatAmount = order.totalAmount - subTotal;
+  const netAmount = productTotal / (1 + vatRate);
+  const vatAmount = productTotal - netAmount;
 
   const handlePrint = () => {
     window.print();
   };
 
   return (
-    // DIŞ KAPSAYICI: Ekranı kaplar, ortalar
-    <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    // Dış Katman: Ekranı kaplar, arkası bulanık (Z-Index en üstte)
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
       
-      {/* MODAL KUTUSU: Max yükseklik ekranın %90'ı, taşarsa scroll olur */}
-      <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-xl shadow-2xl relative flex flex-col print:w-full print:h-full print:max-h-none print:fixed print:inset-0 print:rounded-none">
+      {/* Modal Kutusu: Yazıcıda tam sayfa, ekranda ortalı kutu */}
+      <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-xl shadow-2xl flex flex-col relative overflow-hidden print:fixed print:inset-0 print:w-full print:h-full print:max-h-none print:rounded-none print:z-[10000] print:overflow-visible">
         
-        {/* ÜST BAR (SABİT): Kapat butonu burada */}
-        <div className="flex justify-between items-center p-4 border-b bg-gray-50 rounded-t-xl print:hidden sticky top-0 z-10">
-          <h3 className="font-bold text-gray-700">Fatura Önizleme</h3>
+        {/* --- HEADER (Yazıcıda Gizli) --- */}
+        <div className="p-5 border-b bg-gray-50 flex justify-between items-center print:hidden shrink-0">
+          <h3 className="font-bold text-gray-700 text-lg">Sipariş Faturası</h3>
           <button 
             onClick={onClose} 
-            className="text-gray-500 hover:text-red-600 text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"
+            className="text-gray-400 hover:text-red-600 text-3xl font-bold transition leading-none p-1"
+            title="Kapat"
           >
-            ✕
+            <FiX />
           </button>
         </div>
 
-        {/* --- FATURA İÇERİĞİ (SCROLL EDİLEBİLİR ALAN) --- */}
-        <div id="invoice-content" className="p-8 overflow-y-auto">
+        {/* --- FATURA İÇERİĞİ (Scroll Edilebilir) --- */}
+        <div className="p-10 overflow-y-auto flex-1 bg-white text-gray-800 font-mono text-sm print:p-0 print:overflow-visible" id="invoice-content">
           
-          {/* Header */}
-          <div className="flex justify-between items-start border-b-2 border-gray-800 pb-6 mb-6">
+          {/* Şirket ve Fatura Bilgileri */}
+          <div className="flex justify-between items-start mb-10 border-b-2 border-gray-800 pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">ÇiçekSepeti UK</h1>
-              <p className="text-sm text-gray-500 mt-1">London's Fresh Flowers</p>
-              <p className="text-xs text-gray-400 mt-1">VAT No: GB123456789</p> {/* Örnek Vergi No */}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">ÇiçekSepeti UK</h1>
+              <p className="text-gray-600">123 Oxford Street</p>
+              <p className="text-gray-600">London, W1D 1BS</p>
+              <p className="text-gray-600">United Kingdom</p>
+              <p className="mt-2 text-xs text-gray-500 font-bold">VAT No: GB123456789</p>
             </div>
             <div className="text-right">
-              <h2 className="text-xl font-bold text-gray-400 uppercase tracking-widest">INVOICE</h2>
-              <p className="text-sm font-mono text-gray-600 mt-1">#{order._id.slice(-8).toUpperCase()}</p>
-              <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+              <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">INVOICE</h2>
+              <p className="mt-2 font-bold text-lg">#{order._id.slice(-8).toUpperCase()}</p>
+              <p className="text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
             </div>
           </div>
 
           {/* Adresler */}
-          <div className="grid grid-cols-2 gap-8 mb-8">
-            <div>
-              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Satıcı (From)</h3>
-              <p className="font-bold text-gray-800">ÇiçekSepeti UK Ltd.</p>
-              <p className="text-sm text-gray-600">123 Oxford Street</p>
-              <p className="text-sm text-gray-600">London, W1D 1BS</p>
-              <p className="text-sm text-gray-600">United Kingdom</p>
+          <div className="flex justify-between mb-10 gap-8">
+            <div className="w-1/2">
+              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Fatura Edilen (Bill To):</h3>
+              <p className="font-bold text-base">{order.sender.name}</p>
+              <p>{order.sender.email}</p>
+              <p>{order.sender.phone}</p>
             </div>
-            <div>
-              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Alıcı (To)</h3>
-              <p className="font-bold text-gray-800">{order.recipient.name}</p>
-              <p className="text-sm text-gray-600">{order.recipient.phone}</p>
-              <p className="text-sm text-gray-600">{order.recipient.address}</p>
-              <p className="text-sm text-gray-600">{order.recipient.postcode}, {order.recipient.city}</p>
+            <div className="w-1/2 text-right">
+              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Teslim Edilen (Ship To):</h3>
+              <p className="font-bold text-base">{order.recipient.name}</p>
+              <p>{order.recipient.address}</p>
+              <p>{order.recipient.city}, {order.recipient.postcode}</p>
+              <p>{order.recipient.phone}</p>
             </div>
           </div>
 
           {/* Ürün Tablosu */}
-          <table className="w-full text-left border-collapse mb-8">
+          <table className="w-full mb-8 border-collapse">
             <thead>
-              <tr className="bg-gray-100 text-gray-600 text-xs uppercase">
-                <th className="p-3 border-b">Ürün / Hizmet</th>
-                <th className="p-3 border-b text-center">Adet</th>
-                <th className="p-3 border-b text-right">Birim Fiyat</th>
-                <th className="p-3 border-b text-right">Toplam</th>
+              <tr className="bg-gray-100 text-gray-600 uppercase text-xs border-b border-gray-300">
+                <th className="py-3 px-2 text-left w-1/2">Ürün / Hizmet</th>
+                <th className="py-3 px-2 text-center">Adet</th>
+                <th className="py-3 px-2 text-right">Birim Fiyat</th>
+                <th className="py-3 px-2 text-right">Tutar</th>
               </tr>
             </thead>
             <tbody>
               {order.items.map((item, i) => (
-                <tr key={i} className="text-sm border-b border-gray-100">
-                  <td className="p-3 font-medium text-gray-800">{item.title}</td>
-                  <td className="p-3 text-center">{item.quantity}</td>
-                  <td className="p-3 text-right">£{item.price.toFixed(2)}</td>
-                  <td className="p-3 text-right font-bold">£{(item.price * item.quantity).toFixed(2)}</td>
+                <tr key={i} className="border-b border-gray-100 last:border-0">
+                  <td className="py-3 px-2 font-medium">{item.title}</td>
+                  <td className="py-3 px-2 text-center">{item.quantity}</td>
+                  <td className="py-3 px-2 text-right">£{item.price.toFixed(2)}</td>
+                  <td className="py-3 px-2 text-right font-bold">£{(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          {/* --- HESAP ÖZETİ (VERGİ DAHİL) --- */}
-          <div className="flex justify-end mb-12">
+          {/* Toplamlar */}
+          <div className="flex justify-end">
             <div className="w-64 space-y-2">
-              
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Ara Toplam (Subtotal):</span>
-                <span>£{subTotal.toFixed(2)}</span>
+              <div className="flex justify-between text-gray-600">
+                <span>Ara Toplam (Net):</span>
+                <span>£{netAmount.toFixed(2)}</span>
               </div>
-              
-              <div className="flex justify-between text-sm text-gray-600">
+              <div className="flex justify-between text-gray-600">
                 <span>KDV (%20 VAT):</span>
                 <span>£{vatAmount.toFixed(2)}</span>
               </div>
-              
-              <div className="flex justify-between text-sm text-gray-600 border-b pb-2">
+              <div className="flex justify-between text-blue-600 font-medium">
                 <span>Kargo:</span>
-                <span>£0.00</span>
+                <span>{deliveryFee === 0 ? "Ücretsiz" : `£${deliveryFee.toFixed(2)}`}</span>
               </div>
-
-              <div className="flex justify-between text-xl font-bold text-gray-900 pt-2">
+              <div className="flex justify-between text-xl font-bold border-t-2 border-gray-800 pt-3 mt-3 text-black">
                 <span>GENEL TOPLAM:</span>
-                <span>£{order.totalAmount.toFixed(2)}</span>
+                <span>£{total.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
-          {/* Notlar */}
+          {/* Alt Notlar */}
           {order.delivery.cardMessage && (
-            <div className="bg-gray-50 p-4 rounded border border-gray-200 mb-4 print:border-black">
-              <h4 className="text-xs font-bold text-gray-400 uppercase mb-1">Hediye Notu:</h4>
-              <p className="italic text-gray-700 font-serif">"{order.delivery.cardMessage}"</p>
-            </div>
+             <div className="mt-10 p-4 bg-gray-50 border border-gray-200 rounded italic text-center text-gray-600 print:border-gray-300">
+               <span className="block text-xs font-bold text-gray-400 uppercase mb-1">Kart Notu</span>
+               "{order.delivery.cardMessage}"
+             </div>
           )}
-
-          <div className="text-center text-xs text-gray-400 mt-12 pt-8 border-t">
-            Thank you for your business! • support@ciceksepeti.uk • +44 20 7946 0000
+          
+          <div className="mt-12 pt-8 border-t text-center text-xs text-gray-400">
+            <p>Thank you for your business!</p>
+            <p>support@ciceksepeti.uk • +44 20 7946 0000</p>
           </div>
 
         </div>
 
-        {/* ALT BAR (YAZDIR BUTONU) */}
-        <div className="p-4 border-t bg-gray-50 text-right rounded-b-xl print:hidden sticky bottom-0 z-10">
+        {/* --- FOOTER (Yazdır Butonu - Yazıcıda Gizli) --- */}
+        <div className="p-5 border-t bg-gray-50 flex justify-end print:hidden shrink-0">
           <button 
-            onClick={handlePrint}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg flex items-center gap-2 ml-auto"
+            onClick={handlePrint} 
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 flex items-center gap-2 shadow-lg hover:shadow-blue-500/30 transition transform active:scale-95"
           >
-            <span>🖨️</span> Yazdır / PDF Kaydet
+            <FiPrinter size={20} /> Yazdır / PDF Kaydet
           </button>
         </div>
 

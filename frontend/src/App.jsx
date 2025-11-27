@@ -1,90 +1,111 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
+import { HelmetProvider } from "react-helmet-async";
+
+// --- BİLEŞENLER ---
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import CartSidebar from "./components/CartSidebar";
 import Toast from "./components/Toast";
-import Navbar from "./components/Navbar";
 import Chatbot from "./components/Chatbot";
-import Footer from "./components/Footer"; // <--- 1. İMPORT
+import ScrollToTop from "./components/ScrollToTop";
 
-// ... Sayfa importları aynı ...
+// --- SAYFALAR (MÜŞTERİ) ---
 import HomePage from "./pages/HomePage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AdminPage from "./pages/AdminPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
-import CourierPage from "./pages/partner/CourierPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import SuccessPage from "./pages/SuccessPage";
 import ProfilePage from "./pages/ProfilePage";
-import FavoritesPage from "./pages/FavoritesPage";
-import VerifyPage from "./pages/VerifyPage";
+import VerificationPending from "./pages/VerificationPending";
+import StorePage from "./pages/StorePage";
+
+// --- SAYFALAR (AUTH & SİSTEM) ---
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import VendorPage from "./pages/partner/VendorPage";
-import AboutPage from "./pages/AboutPage";
-import RegisterVendorPage from "./pages/RegisterVendorPage"; 
+import ForgotPasswordPage from "./pages/ForgotPasswordPage"; // Varsa
+import NotFoundPage from "./pages/NotFoundPage";
+
+// --- SAYFALAR (KURUMSAL & YASAL) ---
+import ContactPage from "./pages/ContactPage";
+import FaqPage from "./pages/FaqPage";
+import LegalPage from "./pages/LegalPage";
+import AboutPage from "./pages/AboutPage"; 
+
+// --- SAYFALAR (İŞ ORTAKLIĞI & PANELLER) ---
+import RegisterVendorPage from "./pages/RegisterVendorPage";
 import RegisterCourierPage from "./pages/RegisterCourierPage";
 import PartnerApplicationPage from "./pages/partner/PartnerApplicationPage";
-import StorePage from "./pages/StorePage";
-import ContactPage from "./pages/ContactPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import VerificationPending from "./pages/VerificationPending";
-import FaqPage from "./pages/FaqPage";
-import BadgeDisplay from "./components/BadgeDisplay";
-import ScrollToTop from "./components/ScrollToTop";
-import LegalPage from "./pages/LegalPage";
+import VendorPage from "./pages/partner/VendorPage";
+import CourierPage from "./pages/partner/CourierPage";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <ScrollToTop /> 
-        {/* 2. FLEX YAPISI KURUYORUZ (Footer en alta yapışsın diye) */}
-        <div className="flex flex-col min-h-screen">
+    <HelmetProvider>
+      <CartProvider>
+        <Router>
+          <ScrollToTop /> 
           
-          <Navbar />
-          <CartSidebar />
-          <Toast />
-          <Chatbot />
-          
-          {/* 3. İÇERİK ALANI (Büyüyebildiği kadar büyüsün) */}
-          <div className="flex-1">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/my-orders" element={<MyOrdersPage />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
-              <Route path="/courier" element={<CourierPage />} />
-              <Route path="/success" element={<SuccessPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/verify/:token" element={<VerifyPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-              <Route path="/vendor" element={<VendorPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/become-seller" element={<RegisterVendorPage />} />
-              <Route path="/become-courier" element={<RegisterCourierPage />} />
-              <Route path="/partner-application" element={<PartnerApplicationPage />} />
-              <Route path="/store/:vendorId" element={<StorePage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-              <Route path="/verification-pending" element={<VerificationPending />} />
-              <Route path="/faq" element={<FaqPage />} />
-              <Route path="/badge-display" element={<BadgeDisplay />} />
-              <Route path="/legal" element={<LegalPage />} />
-            </Routes>
+          {/* DÜZELTME: 
+             Flex yapısı ve z-index yönetimi ile içeriğin tıklanabilir olmasını sağla.
+             relative ve z-0 içeriğin en altta kalmamasını sağlar.
+          */}
+          <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800 font-sans relative z-0">
+            
+            {/* Navbar en üstte (z-50) */}
+            <Navbar />
+            
+            {/* Sepet Sidebar ve Toast en en üstte (z-50 üzeri) */}
+            <CartSidebar />
+            <Toast />
+            
+            {/* Chatbot da üstte */}
+            <Chatbot />
+            
+            {/* İÇERİK ALANI */}
+            {/* pt-20: Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için) */}
+            <div className="flex-1 pt-20 relative z-0">
+              <Routes>
+                {/* MÜŞTERİ ROTALARI */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/product/:id" element={<ProductDetailPage />} />
+                <Route path="/store/:id" element={<StorePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/verification-pending" element={<VerificationPending />} />
+                
+                <Route path="/my-orders" element={<MyOrdersPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/success" element={<SuccessPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/faq" element={<FaqPage />} />
+                <Route path="/legal/:type" element={<LegalPage />} />
+                <Route path="/about" element={<AboutPage />} />
+
+                <Route path="/become-seller" element={<RegisterVendorPage />} />
+                <Route path="/become-courier" element={<RegisterCourierPage />} />
+                <Route path="/partner-application" element={<PartnerApplicationPage />} />
+                
+                <Route path="/vendor" element={<VendorPage />} />
+                <Route path="/courier" element={<CourierPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </div>
+            
+            <Footer />
           </div>
-
-          {/* 4. FOOTER EN ALTTA */}
-          <Footer />
-
-        </div>
-
-      </Router>
-    </CartProvider>
+        </Router>
+      </CartProvider>
+    </HelmetProvider>
   );
 }
 

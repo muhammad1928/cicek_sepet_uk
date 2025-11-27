@@ -17,7 +17,7 @@ const OrderSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
-    postcode: { type: String }
+    postcode: { type: String,required: true }
   },
 
   // --- 3. TESLİMAT DETAYLARI ---

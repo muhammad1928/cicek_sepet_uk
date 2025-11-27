@@ -2,7 +2,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiHeart, FiShoppingCart, FiSearch, FiX } from "react-icons/fi";
+import { FaStore, FaMotorcycle, FaUserShield } from "react-icons/fa";
 
 const Navbar = () => {
   const { cart, setIsCartOpen, searchTerm, setSearchTerm } = useCart();
@@ -58,8 +59,10 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const { clearCart } = useCart();
 
   const handleLogout = () => {
+    clearCart();
     localStorage.removeItem("user");
     setUser(null);
     window.dispatchEvent(new Event("user-change"));
@@ -67,19 +70,34 @@ const Navbar = () => {
     window.location.reload();
   };
 
+  // Kullanıcı Baş Harfi
+  const userInitial = user?.fullName ? user.fullName[0].toUpperCase() : user?.username ? user.username[0].toUpperCase() : "U";
+
   return (
     <nav 
-      className={`fixed w-full z-[50] top-0 transition-all duration-300 ${
+      className={`fixed w-full z-[50] top-0 transition-all duration-300 border-b ${
         isScrolled 
-          ? "bg-white/90 backdrop-blur-md shadow-md border-b border-white/20 py-2" 
-          : "bg-white shadow-sm py-4"
+          ? "bg-white/90 backdrop-blur-md shadow-md border-white/20 py-2" 
+          : "bg-white shadow-sm border-transparent py-2"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center gap-4">
         
-        {/* LOGO */}
-        <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition shrink-0">
-          🌸 ÇiçekSepeti UK
+        {/* --- LOGO (ANİMASYONLU) --- */}
+        {/* hover:hue-rotate-60 -> Rengi mor/maviye kaydırır */}
+        {/* duration-500 -> Renk değişimi yavaş olur */}
+        {/* active:scale-95 -> Tıklayınca küçülür */}
+        <Link 
+          to="/" 
+          className="
+            text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent 
+            cursor-pointer shrink-0 flex items-center gap-2 select-none
+            transition-all duration-500 ease-in-out
+            hover:scale-105 hover:hue-rotate-60 hover:drop-shadow-sm
+            active:scale-95 active:opacity-80
+          "
+        >
+          🌸 <span className="tracking-tight">ÇiçekSepeti UK</span>
         </Link>
 
         {/* ARAMA (ORTA) */}
@@ -88,14 +106,16 @@ const Navbar = () => {
             <input 
               type="text" 
               placeholder="Çiçek, Çikolata, Hediye ara..." 
-              className="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 bg-gray-50 focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 outline-none transition text-sm"
+              className="w-full pl-10 pr-10 py-2 rounded-full border border-gray-200 bg-gray-50 focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 outline-none transition text-sm"
               value={searchTerm}
               onChange={handleSearch}
               onFocus={() => searchTerm.length > 1 && setShowSuggestions(true)}
             />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"><FiSearch /></span>
             {searchTerm && (
-              <button onClick={() => { setSearchTerm(""); setShowSuggestions(false); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500">✕</button>
+              <button onClick={() => { setSearchTerm(""); setShowSuggestions(false); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition">
+                <FiX />
+              </button>
             )}
           </div>
           {showSuggestions && suggestions.length > 0 && (
@@ -113,40 +133,91 @@ const Navbar = () => {
 
         {/* SAĞ TARAF */}
         <div className="flex gap-3 items-center shrink-0">
-          <button className="md:hidden text-gray-600 text-xl">🔍</button>
+          <button className="md:hidden text-gray-600 text-xl"><FiSearch /></button>
 
           {user ? (
             <div className="flex items-center gap-2 sm:gap-3">
-              <Link to="/profile" className="hidden sm:flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-pink-600 transition border border-gray-200 px-3 py-1.5 rounded-full hover:bg-pink-50">
-                👤 <span className="max-w-[80px] truncate">{user.fullName}</span>
+              
+              {/* --- PROFİL BUTONU (YAVAŞ GEÇİŞLİ & TIKLAMA EFEKTLİ) --- */}
+              <Link 
+                to="/profile" 
+                className="
+                  group relative w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 border border-pink-200 text-pink-600 font-bold text-sm shadow-sm transition-all duration-500 ease-out hover:bg-pink-600 hover:text-white hover:border-pink-600 hover:shadow-md hover:scale-105 hover:brightness-110 active:scale-90 active:bg-pink-700
+
+                "
+                title="Hesabım"
+              >
+                {userInitial}
               </Link>
-              {user.role === "admin" && <Link to="/admin" title="Yönetim" className="text-lg">⚙️</Link>}
-              {user.role === "vendor" && <Link to="/vendor" title="Mağaza" className="text-lg">🏪</Link>}
-              {user.role === "courier" && <Link to="/courier" title="Kurye" className="text-lg">🛵</Link>}
-              <Link to="/favorites" className="relative p-2 hover:scale-110 transition text-2xl">❤️</Link>
-              <button onClick={handleLogout} className="flex items-center gap-2 text-sm font-bold text-red-500 hover:text-red-700 border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-50 transition" title="Çıkış Yap"><FiLogOut className="text-lg" /><span className="hidden sm:inline">Çıkış</span></button>
+              
+              {/* Rol Butonları */}
+              {user.role === "admin" && (
+                <Link to="/admin" className="text-purple-600 hover:text-purple-800 hover:bg-purple-50 p-2 rounded-full transition" title="Yönetim Paneli">
+                  <FaUserShield className="text-xl" />
+                </Link>
+              )}
+              {user.role === "vendor" && (
+                <Link to="/vendor" className="text-pink-600 hover:text-pink-800 hover:bg-pink-50 p-2 rounded-full transition" title="Mağaza Paneli">
+                  <FaStore className="text-xl" />
+                </Link>
+              )}
+              {user.role === "courier" && (
+                <Link to="/courier" className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-full transition" title="Kurye Paneli">
+                  <FaMotorcycle className="text-xl" />
+                </Link>
+              )}
+
+              {/* Favoriler */}
+            <Link 
+              to="/favorites" 
+              className="relative group p-2 flex items-center justify-center"
+              title="Favorilerim"
+              >
+              {/* Gri Heart (kaybolan) */}
+              <FiHeart 
+                className="text-2xl text-gray-400 absolute transition-all duration-300 
+                          group-hover:opacity-0 group-hover:scale-75 group-hover:blur-sm" 
+              />
+
+              {/* Gradient Heart (beliren) */}
+              <svg
+                stroke="url(#heart-gradient)"
+                fill="url(#heart-gradient)"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-2xl opacity-0 transition-all duration-300 
+                          group-hover:opacity-100 group-hover:scale-110 heart-anim"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="heart-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop stopColor="#db2777" offset="0%" />
+                    <stop stopColor="#9333ea" offset="100%" />
+                  </linearGradient>
+                </defs>
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              </Link>
+              
+              {/* Çıkış */}
+              <button onClick={handleLogout} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-600 border border-transparent hover:border-red-100 px-2 py-1.5 rounded-lg hover:bg-red-50 transition" title="Çıkış Yap"><FiLogOut className="text-xl" /></button>
             </div>
           ) : (
-            <div className="flex items-center">
-              {location.pathname === "/login" ? (
-                <Link to="/register" className="text-sm font-bold text-gray-600 hover:text-purple-600 transition px-3 py-2">Kayıt Ol</Link>
-              ) : location.pathname === "/register" ? (
-                <Link to="/login" className="text-sm font-bold text-gray-600 hover:text-pink-600 transition px-3 py-2">Giriş Yap</Link>
-              ) : (
-                <div className="flex gap-2 text-sm font-medium items-center">
-                  <Link to="/login" className="text-gray-600 hover:text-pink-600 transition px-2">Giriş</Link>
-                  <span className="text-gray-300">|</span>
-                  {/* DÜZELTİLDİ: Pembe arka plan kaldırıldı, sadece link oldu */}
-                  <Link to="/register" className="text-gray-600 hover:text-pink-600 transition px-2">Kayıt Ol</Link>
-                </div>
-              )}
+            <div className="flex items-center gap-2 text-sm font-medium">
+              <Link to="/login" className="text-gray-600 hover:text-pink-600 transition px-3 py-1 hover:bg-gray-50 rounded-lg">Giriş</Link>
+              <span className="text-gray-300">|</span>
+              <Link to="/register" className="text-gray-600 hover:text-pink-600 transition px-2">Kayıt Ol</Link>
             </div>
           )}
 
           {/* SEPET */}
-          <button onClick={() => setIsCartOpen(true)} className="bg-pink-600 text-white px-3 sm:px-4 py-2 rounded-full hover:bg-pink-700 transition shadow-md relative flex items-center gap-2 active:scale-95">
-            <span className="text-lg">🛒</span>
-            {cart.length > 0 && (<span className="bg-white text-pink-600 px-1.5 py-0.5 rounded-full text-xs font-extrabold shadow-sm min-w-[18px] text-center">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>)}
+          <button onClick={() => setIsCartOpen(true)} className="custom-btn group relative">
+            <FiShoppingCart className="text-lg group-hover:rotate-12 transition" />
+            {cart.length > 0 && (<span className="absolute -top-1 -right-1 bg-pink-600 text-white px-1.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-sm min-w-[18px] text-center border-2 border-white z-[22]">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>)}
           </button>
         </div>
       </div>
