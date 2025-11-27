@@ -9,7 +9,7 @@ const sendEmail = require('../utils/sendEmail');
 const DELIVERY_COST = 20;
 const DELIVERY_THRESHOLD = 200;
 
-// --- YARDIMCI FONKSİYON: SİPARİŞ MAİL ŞABLONU ---
+// --- YARDIMCI: MÜŞTERİ MAİL ŞABLONU ---
 const createOrderEmail = (order, title, message) => {
   const itemsHtml = order.items.map(item => `
     <tr>
@@ -30,7 +30,7 @@ const createOrderEmail = (order, title, message) => {
       <div style="padding: 20px; background-color: #ffffff;">
         <p style="font-size: 16px; color: #555;">${message}</p>
         
-        <h3 style="color: #333; border-bottom: 2px solid #db2777; padding-bottom: 5px; margin-top: 20px;">Sipariş Detayları (No: #${order._id.toString().slice(-6)})</h3>
+        <h3 style="color: #333; border-bottom: 2px solid #db2777; padding-bottom: 5px; margin-top: 20px;">Sipariş Özeti (No: #${order._id.toString().slice(-6).toUpperCase()})</h3>
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
           <thead>
             <tr style="background-color: #f8f8f8; color: #555;">
@@ -55,11 +55,41 @@ const createOrderEmail = (order, title, message) => {
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-          <a href="http://localhost:5173/my-orders" style="background-color: #db2777; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;">Siparişi Görüntüle</a>
+          <a href="http://localhost:5173/my-orders" style="background-color: #db2777; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;">Siparişi Takip Et</a>
         </div>
       </div>
-      <div style="background-color: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #888;">
-        &copy; 2024 ÇiçekSepeti UK. Tüm hakları saklıdır.
+    </div>
+  `;
+};
+
+// --- YARDIMCI: SATICI (VENDOR) MAİL ŞABLONU ---
+const createVendorEmail = (vendorData, orderId) => {
+  const itemsHtml = vendorData.items.map(item => `
+    <tr>
+      <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.title}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">£${item.price}</td>
+    </tr>
+  `).join('');
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+      <div style="background-color: #4f46e5; padding: 20px; text-align: center; color: white;">
+        <h2 style="margin: 0;">📦 Yeni Siparişiniz Var!</h2>
+      </div>
+      <div style="padding: 20px;">
+        <p>Merhaba <b>${vendorData.name}</b>,</p>
+        <p>Mağazanızdan yeni ürünler sipariş edildi (Sipariş No: #${orderId.toString().slice(-6).toUpperCase()}).</p>
+        <p>Lütfen siparişi panelinizden onaylayıp hazırlayınız.</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+          <thead><tr style="background-color: #f3f4f6;"><th style="text-align: left; padding: 8px;">Ürün</th><th style="text-align: center; padding: 8px;">Adet</th><th style="text-align: right; padding: 8px;">Tutar</th></tr></thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="http://localhost:5173/vendor" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Panele Git</a>
+        </div>
       </div>
     </div>
   `;
@@ -89,26 +119,27 @@ router.post('/', async (req, res) => {
     }
 
     // B) TESLİMAT ÜCRETİ HESAPLAMA (Backend Doğrulaması)
-    // Frontend'den gelen tutarı baz alıyoruz ama kargo ücretini burada da mantıksal olarak kontrol edip kaydediyoruz
+    // Frontend'den gelen 'totalAmount' içinde kargo olabilir. 
+    // Biz ürünlerin ham toplamına bakıp kargo gerekip gerekmediğini teyit ediyoruz.
     let calculatedDeliveryFee = 0;
-    
-    // Ürünlerin saf toplamını bul (item.price * quantity)
     const itemsTotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     
-    // Eğer ürün toplamı 200'den az ise kargo ücreti vardır
-    // Not: totalAmount içinde indirim olabilir, o yüzden itemsTotal'e bakmak daha sağlıklı olabilir 
-    // ama basitlik için Frontend mantığıyla uyumlu: Toplam ödeme < 220 ise kargo dahil demektir.
-    // Biz burada veritabanına "Kargo Ücreti: 20" diye not düşüyoruz sadece.
-    if (totalAmount < (DELIVERY_THRESHOLD + DELIVERY_COST)) {
-        // Eğer kupon indirimiyle 200 altına düştüyse veya zaten azsa
-        // Basit kural: 200 altıysa kargo var.
-         if (itemsTotal < DELIVERY_THRESHOLD) {
-            calculatedDeliveryFee = DELIVERY_COST;
-         }
+    // Eğer ürün toplamı 200'den az ise ve totalAmount (kargo dahil) da buna uygunsa
+    // Basit kural: Ham ürün toplamı 200 altındaysa kargo ücreti yazarız.
+    if (itemsTotal < DELIVERY_THRESHOLD) {
+        calculatedDeliveryFee = DELIVERY_COST;
     }
+    
+    // Not: Eğer kupon "kargo dahil" ise frontend bunu '0' olarak yansıtmıştır.
+    // Burada kupon kontrolü yapıp tekrar 0'a çekebiliriz ama basitlik adına
+    // frontend'den gelen `req.body.deliveryFee` varsa onu da kullanabilirsin.
+    // Şimdilik kendi hesabımızı kullanıyoruz:
+    if (req.body.deliveryFee === 0) calculatedDeliveryFee = 0; // Frontend 0 dediyse (Kupon) kabul et.
+
 
     // C) ADRESİ KULLANICIYA KAYDET
     if (userId) {
+      // Adresi sadece benzersizse eklemek daha iyi olur ama basit push yapıyoruz
       const newAddress = {
         title: `${recipient.name} - ${recipient.city}`,
         recipientName: recipient.name,
@@ -117,7 +148,6 @@ router.post('/', async (req, res) => {
         city: recipient.city,
         postcode: recipient.postcode
       };
-
       await User.findByIdAndUpdate(userId, {
         $push: { savedAddresses: newAddress }
       });
@@ -145,8 +175,39 @@ router.post('/', async (req, res) => {
     const savedOrder = await newOrder.save();
 
     // F) MÜŞTERİYE MAİL GÖNDER
-    const mailContent = createOrderEmail(savedOrder, "Siparişiniz Alındı! 🌸", `Merhaba ${sender.name}, siparişiniz başarıyla oluşturuldu.`);
-    sendEmail(sender.email, "Sipariş Onayı - ÇiçekSepeti UK", mailContent).catch(console.error);
+    const customerMail = createOrderEmail(savedOrder, "Siparişiniz Alındı! 🌸", `Merhaba ${sender.name}, siparişiniz başarıyla oluşturuldu.`);
+    sendEmail(sender.email, "Sipariş Onayı - ÇiçekSepeti UK", customerMail).catch(console.error);
+
+    // --- G) SATICILARA (VENDORS) BİLDİRİM GÖNDER ---
+    // Sepetteki ürünleri satıcılara göre ayır
+    const vendorMap = new Map(); // { vendorId: { email, name, items: [] } }
+
+    for (const item of items) {
+        const product = await Product.findById(item._id).populate('vendor');
+        if (product && product.vendor) {
+            const vId = product.vendor._id.toString();
+            
+            if (!vendorMap.has(vId)) {
+                vendorMap.set(vId, {
+                    email: product.vendor.email,
+                    name: product.vendor.fullName,
+                    items: []
+                });
+            }
+            vendorMap.get(vId).items.push({
+                title: item.title,
+                quantity: item.quantity,
+                price: item.price
+            });
+        }
+    }
+
+    // Her satıcıya kendi ürün listesini mail at
+    for (const [id, data] of vendorMap) {
+        const vendorMail = createVendorEmail(data, savedOrder._id);
+        sendEmail(data.email, "Yeni Sipariş Aldınız! 📦", vendorMail).catch(console.error);
+    }
+    // -----------------------------------------------
 
     res.status(200).json({ message: "Sipariş başarıyla oluşturuldu! 🌸", order: savedOrder });
 
@@ -168,14 +229,13 @@ router.get('/find/:userId', async (req, res) => {
   } catch (err) { res.status(500).json(err); }
 });
 
-// SATICININ SİPARİŞLERİ
+// SATICININ SİPARİŞLERİ (Sadece kendi ürünlerini içerenler)
 router.get('/vendor/:vendorId', async (req, res) => {
   try {
-    // 1. Satıcının ürünlerini bul
     const vendorProducts = await Product.find({ vendor: req.params.vendorId }).select('_id');
     const vendorProductIds = vendorProducts.map(p => p._id.toString());
 
-    // 2. İçinde bu ürünlerden EN AZ BİRİ olan siparişleri bul
+    // İçinde bu satıcının en az bir ürünü olan siparişleri bul
     const orders = await Order.find({
       "items._id": { $in: vendorProductIds } 
     }).sort({ createdAt: -1 });
@@ -193,13 +253,12 @@ router.get('/', async (req, res) => {
 });
 
 // =============================================================================
-// 3. DURUM GÜNCELLEME (PUT)
+// 3. DURUM GÜNCELLEME (PUT) & BİLDİRİM
 // =============================================================================
 router.put('/:id', async (req, res) => {
   try {
     const { status, courierId, courierRejectionReason } = req.body;
     
-    // Güncelleme verisini hazırla
     const updateData = { status };
     if (courierId !== undefined) updateData.courierId = courierId;
     if (courierRejectionReason) updateData.courierRejectionReason = courierRejectionReason;
@@ -212,18 +271,15 @@ router.put('/:id', async (req, res) => {
 
     if (!updatedOrder) return res.status(404).json("Sipariş bulunamadı");
 
-    // --- DURUM DEĞİŞİKLİĞİ BİLDİRİM MAİLİ ---
+    // --- DURUM BİLDİRİM MAİLİ (MÜŞTERİYE) ---
     let subject = "";
     let msg = "";
 
     switch (status) {
       case "Hazırlanıyor":
         subject = "Siparişiniz Hazırlanıyor! 🎁";
-        msg = `Siparişiniz satıcı tarafından onaylandı ve hazırlanıyor.`;
+        msg = `Siparişiniz onaylandı ve hazırlanıyor.`;
         break;
-      case "Hazır":
-        // Hazır olunca müşteriye değil, Kurye havuzuna düşüyor.
-        break; 
       case "Yola Çıktı":
         subject = "Siparişiniz Yola Çıktı! 🛵";
         msg = `Siparişiniz kuryemize teslim edildi. Adresinize doğru yola çıktı.`;
@@ -238,7 +294,6 @@ router.put('/:id', async (req, res) => {
         break;
     }
 
-    // Eğer konu başlığı varsa (yani müşteriye haber verilecek bir durumsa) mail at
     if (subject && updatedOrder.sender.email) {
       const mailContent = createOrderEmail(updatedOrder, subject, msg);
       sendEmail(updatedOrder.sender.email, subject, mailContent).catch(console.error);

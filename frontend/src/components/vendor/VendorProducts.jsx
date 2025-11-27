@@ -77,12 +77,28 @@ const VendorProducts = ({ user }) => {
 
       notify("İşlem Başarılı! 🌸", "success"); 
       setShowForm(false); setEditMode(null); setFormData(initialForm); fetchProducts();
+      setFormData(initialForm);
     } catch (err) { notify("Hata oluştu", "error"); }
   };
 
   const handleEditClick = (p) => { 
     setFormData({ ...p, category: p.category || "Doğum Günü" }); 
     setEditMode(p._id); setShowForm(true); window.scrollTo(0,0); 
+  };
+
+  // Yeni Ekle / İptal Butonu
+  const handleAddNewClick = () => {
+    if (showForm) {
+      // Formu kapatıyorsa temizle
+      setShowForm(false);
+      setEditMode(null);
+      setFormData(initialForm);
+    } else {
+      // Formu açıyorsa temizle (Garanti olsun)
+      setFormData(initialForm); 
+      setEditMode(null);
+      setShowForm(true);
+    }
   };
 
   // SİLME (MODAL İLE)
@@ -120,8 +136,9 @@ const VendorProducts = ({ user }) => {
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
           
+          {/* DÜZELTİLEN BUTON FONKSİYONU */}
           <button 
-            onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} 
+            onClick={handleAddNewClick} 
             className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-2 transition ${showForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-pink-600 hover:bg-pink-700'}`}
           >
             {showForm ? <><FiX /> İptal</> : <><FiPlus /> Yeni Ekle</>}

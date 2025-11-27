@@ -2,47 +2,52 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
-import Confetti from "react-confetti"; // <-- EKLENDİ
+import Confetti from "react-confetti";
 
 const SuccessPage = () => {
   const [orderId, setOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { clearCart, notify } = useCart();
+  const { clearCart, notify } = useCart(); // Context'ten sepeti boşaltma fonksiyonunu al
   const navigate = useNavigate();
   
-  // Çift işlem olmasın diye ref kullanıyoruz (React 18+ Strict Mode için)
+  // Çift işlem olmasın diye ref kullanıyoruz (React 18 Strict Mode koruması)
   const processedRef = useRef(false);
 
   useEffect(() => {
     const createOrder = async () => {
-      if (processedRef.current) return; // Zaten işlendiyse dur
-      
-      // 1. Geçici veriyi al
+      // Eğer bu işlem daha önce yapıldıysa dur (Çifte siparişi önle)
+      if (processedRef.current) return;
+
+      // 1. LocalStorage'dan geçici sipariş verisini al
       const data = localStorage.getItem("tempOrderData");
       
+      // Veri yoksa (kullanıcı direkt linke tıkladıysa veya işlem bittiyse) dur
       if (!data) {
         setLoading(false);
-        return; // Veri yoksa (belki kullanıcı direkt linke tıkladı) işlem yapma
+        return;
       }
 
-      processedRef.current = true; // İşlendi olarak işaretle
+      // İşlemi "yapılıyor" olarak işaretle
+      processedRef.current = true;
 
       try {
         const orderData = JSON.parse(data);
         
-        // 2. Backend'e kaydet
+        // 2. Backend'e siparişi kaydet
         const res = await axios.post("http://localhost:5000/api/orders", orderData);
         
         if (res.status === 200) {
           setOrderId(res.data.order._id);
           
-          // 3. Temizlik
-          clearCart(); // Context'teki sepeti boşalt
-          localStorage.removeItem("tempOrderData"); // Geçici veriyi sil
+          // 3. TEMİZLİK: Sepeti ve geçici verileri sil
+          clearCart(); // Context state'ini sıfırla
+          localStorage.setItem("cart", "[]"); // LocalStorage sepetini sıfırla (Garanti)
+          localStorage.removeItem("tempOrderData"); // Geçici sipariş verisini sil
+          
           notify("Siparişiniz başarıyla alındı! 🎉", "success");
         }
       } catch (err) {
-        console.error(err);
+        console.error("Sipariş Kayıt Hatası:", err);
         notify("Sipariş kaydedilirken bir sorun oluştu. Lütfen destek ile iletişime geçin.", "error");
       } finally {
         setLoading(false);
@@ -55,7 +60,7 @@ const SuccessPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50 font-sans p-4 pt-20 relative overflow-hidden">
       
-      {/* Konfeti Efekti (Başarılıysa) */}
+      {/* Konfeti Efekti (Sadece Başarılıysa) */}
       {!loading && orderId && (
         <Confetti 
           width={window.innerWidth} 
@@ -107,7 +112,12 @@ const SuccessPage = () => {
             <div className="text-6xl mb-4">⚠️</div>
             <h2 className="text-2xl font-bold text-gray-800">Bir Sorun Oluştu</h2>
             <p className="text-gray-600 mt-2 mb-6">Sipariş verisi bulunamadı veya ödeme tamamlanamadı.</p>
-            <button onClick={() => navigate("/")} className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-pink-700 transition">Alışverişe Dön</button>
+            <button 
+              onClick={() => navigate("/")} 
+              className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-pink-700 transition"
+            >
+              Alışverişe Dön
+            </button>
           </div>
         )}
 

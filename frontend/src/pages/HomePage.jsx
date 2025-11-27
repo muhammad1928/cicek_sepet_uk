@@ -1,10 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import { ProductSkeleton } from "../components/Loading";
+import ConfirmModal from "../components/ConfirmModal"; // <--- YENİ MODAL İMPORTU
 
+// KATEGORİLER VE İKONLARI
 const CATEGORIES = ["Tümü", "Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
 const getCategoryIcon = (category) => {
@@ -20,37 +22,14 @@ const HomePage = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Tümü");
   const [loading, setLoading] = useState(true);
-  
-  // Context'ten Arama Terimini (searchTerm) alıyoruz
+
   const { 
     cart, addToCart, increaseQuantity, decreaseQuantity, updateItemQuantity, 
-    removeFromCart, setIsCartOpen, favorites, toggleFavorite, searchTerm 
+    removeFromCart, favorites, toggleFavorite, searchTerm 
   } = useCart();
 
+  // Silinecek ürün state'i (Modalı tetikler)
   const [itemToDelete, setItemToDelete] = useState(null);
-  
-  // --- FİLTRE MENÜSÜ GİZLEME MANTIĞI ---
-  const [showFilters, setShowFilters] = useState(true);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    const controlNavbar = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        // Aşağı iniyorsa GİZLE (Yukarı kaydır)
-        setShowFilters(false);
-      } else {
-        // Yukarı çıkıyorsa GÖSTER (Aşağı indir)
-        setShowFilters(true);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", controlNavbar);
-    return () => window.removeEventListener("scroll", controlNavbar);
-  }, []);
-  // -------------------------------------
 
   const handleImageError = (e) => { e.target.src = "https://placehold.co/400x300?text=Resim+Yok"; };
 
@@ -82,8 +61,23 @@ const HomePage = () => {
   }, [selectedCategory, searchTerm, products]);
 
   const getCartItem = (id) => cart.find(item => item._id === id);
-  const handleDecrease = (product, currentQty) => { if (currentQty === 1) setItemToDelete(product); else decreaseQuantity(product._id, product.title); };
-  const confirmDelete = () => { if (itemToDelete) { removeFromCart(itemToDelete._id, itemToDelete.title); setItemToDelete(null); } };
+  
+  // Miktar azaltma (1 ise silme onayı iste)
+  const handleDecrease = (product, currentQty) => { 
+    if (currentQty === 1) {
+      setItemToDelete(product); // Modalı açar
+    } else {
+      decreaseQuantity(product._id, product.title); 
+    }
+  };
+
+  // Onaylanırsa sil
+  const confirmDelete = () => { 
+    if (itemToDelete) { 
+      removeFromCart(itemToDelete._id, itemToDelete.title); 
+      setItemToDelete(null); 
+    } 
+  };
   
   const handleInputChange = (e, product) => {
     const val = e.target.value;
@@ -96,46 +90,8 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 relative">
       <Seo title="Ana Sayfa - En Taze Çiçekler" description="Londra'nın çiçekçisi." keywords="çiçek" />
 
-      {/* --- KATEGORİ MENÜSÜ (AKILLI SCROLL) --- */}
-      <div 
-        className={`
-          fixed left-0 right-0 z-30 
-          bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm
-          py-3 overflow-x-auto no-scrollbar
-          transition-all duration-500 ease-in-out
-        `}
-        // Top değeri Navbar yüksekliğine (yaklaşık 72px) ayarlı
-        // Gizlenince -100px yukarı kayar, gösterilince yerine gelir
-        style={{ 
-          top: "72px", 
-          transform: showFilters ? "translateY(0)" : "translateY(-150%)",
-          opacity: showFilters ? 1 : 0
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 flex gap-3">
-          {CATEGORIES.map((cat, index) => (
-            <button 
-              key={cat} 
-              onClick={() => {
-                setSelectedCategory(cat);
-                window.scrollTo({ top: 0, behavior: 'smooth' }); // Tıklayınca en başa dön
-              }} 
-              className={`
-                px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex items-center gap-2
-                ${selectedCategory === cat 
-                  ? "bg-pink-600 text-white shadow-lg transform scale-105" 
-                  : "bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600"}
-              `}
-            >
-              <span>{getCategoryIcon(cat)}</span> {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-      {/* --------------------------------------- */}
-
-      {/* HERO (Padding arttırıldı çünkü üstte sabit menüler var) */}
-      <div className="pt-48 pb-10 text-center bg-gradient-to-b from-pink-50 to-white px-4">
+      {/* HERO */}
+      <div className="pt-16 pb-10 text-center bg-gradient-to-b from-pink-50 to-white px-4">
         <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight animate-fade-in">
           Sevdiklerinizi <span className="text-pink-600">Mutlu Edin</span>
         </h1>
@@ -144,10 +100,18 @@ const HomePage = () => {
         </p>
       </div>
 
+      {/* KATEGORİ */}
+      <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 mb-10 py-4 overflow-x-auto no-scrollbar transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 flex gap-3">
+          {CATEGORIES.map((cat) => (
+            <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex items-center gap-2 ${selectedCategory === cat ? "bg-pink-600 text-white shadow-lg transform scale-105" : "bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600"}`}><span>{getCategoryIcon(cat)}</span> {cat}</button>
+          ))}
+        </div>
+      </div>
+
       {/* LİSTE ALANI */}
       <div className="max-w-7xl mx-auto px-4 pb-20">
         
-        {/* LOADING KONTROLÜ */}
         {loading ? (
           <ProductSkeleton />
         ) : filteredProducts.length === 0 ? (
@@ -203,7 +167,17 @@ const HomePage = () => {
         )}
       </div>
 
-      {itemToDelete && (<div className="fixed inset-0 z-[1001] flex items-center justify-center p-4 animate-fade-in"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div className="bg-white p-6 rounded-2xl text-center w-full max-w-xs relative z-10"><h3 className="text-lg font-bold text-gray-800 mb-2">Silinsin mi?</h3><div className="flex gap-3 justify-center"><button onClick={() => setItemToDelete(null)} className="px-4 py-2 border rounded-lg">Vazgeç</button><button onClick={confirmDelete} className="px-4 py-2 bg-red-600 text-white rounded-lg">Sil</button></div></div></div>)}
+      {/* --- MODERN ONAY MODALI (ESKİSİ SİLİNDİ, YENİSİ EKLENDİ) --- */}
+      {itemToDelete && (
+        <ConfirmModal 
+          title={`"${itemToDelete.title}" Çıkar?`} 
+          message={`"${itemToDelete.title}" sepetten silinecek.`}
+          isDanger={true}
+          onConfirm={confirmDelete}
+          onCancel={() => setItemToDelete(null)}
+        />
+      )}
+
     </div>
   );
 };

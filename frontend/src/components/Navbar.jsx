@@ -215,10 +215,33 @@ const Navbar = () => {
           )}
 
           {/* SEPET */}
-          <button onClick={() => setIsCartOpen(true)} className="custom-btn group relative">
-            <FiShoppingCart className="text-lg group-hover:rotate-12 transition" />
-            {cart.length > 0 && (<span className="absolute -top-1 -right-1 bg-pink-600 text-white px-1.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-sm min-w-[18px] text-center border-2 border-white z-[22]">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>)}
-          </button>
+          <div className="group relative">
+            {/* 1. Sepet Butonu (Sadece İkon) */}
+            <button 
+              onClick={() => setIsCartOpen(true)} 
+              className="custom-btn p-2 flex items-center justify-center"
+              title="Sepeti Görüntüle"
+            >
+              <FiShoppingCart className="text-lg group-hover:rotate-12 transition" />
+            </button>
+            {/* 2. Sayaç (Badge) - Butonun Dışında, Sağ Üst Köşeye Yapışık */}
+            {cart.length > 0 && (
+              <span 
+                className="
+                  absolute -top-1 -right-1 
+                  bg-pink-600 text-white text-[10px] font-bold 
+                  h-5 min-w-[20px] px-1
+                  flex items-center justify-center 
+                  rounded-full border-2 border-white shadow-sm 
+                  z-20 pointer-events-none
+                  animate-bounce-short
+                "
+              >
+                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+              </span>
+            )}
+          
+          </div>
         </div>
       </div>
     </nav>
