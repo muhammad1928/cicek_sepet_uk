@@ -40,33 +40,37 @@ const MyOrdersPage = () => {
     fetchMyOrders();
   }, [navigate]);
 
-  // 2. İptal İsteği (Modal ile)
+  // İPTAL TALEBİ FONKSİYONU
   const requestCancelOrder = (e, id) => {
-    e.stopPropagation(); // Kartın kapanmasını engelle
+    e.stopPropagation();
     setConfirmData({
       isOpen: true,
-      title: "Siparişi İptal Et?",
-      message: "Siparişiniz iptal edilecek. Bu işlem geri alınamaz. Emin misiniz?",
+      title: "İptal Talebi Oluştur",
+      message: "Siparişinizin iptali için talep oluşturulacaktır. Müşteri temsilcimiz inceleyip onaylayacaktır. Devam edilsin mi?",
       isDanger: true,
       action: async () => {
         try {
-          await axios.put(`http://localhost:5000/api/orders/${id}`, { status: "İptal" });
-          notify("Sipariş iptal edildi.", "success");
-          // Listeyi yerel güncelle
-          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: "İptal" } : o));
+          // Durumu 'İptal' değil 'İptal Talebi' yapıyoruz
+          await axios.put(`http://localhost:5000/api/orders/${id}`, { status: "İptal Talebi" });
+          
+          notify("İptal talebiniz alındı. İnceleniyor.", "info");
+          
+          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: "İptal Talebi" } : o));
         } catch (err) {
-          notify("İptal edilemedi veya hata oluştu.", "error");
+          notify("Hata oluştu.", "error");
         }
         setConfirmData(null);
       }
     });
   };
-
-  // Durum Rengi Helper
+  
+  // Renkler (Yeni Durum İçin)
   const getStatusColor = (status) => {
     switch(status) {
       case "Teslim Edildi": return "bg-green-100 text-green-700 border-green-200";
       case "İptal": return "bg-red-100 text-red-700 border-red-200";
+      // İptal Talebi Rengi (Turuncu/Kırmızı arası)
+      case "İptal Talebi": return "bg-orange-100 text-orange-700 border-orange-200 animate-pulse"; 
       case "Yola Çıktı": return "bg-purple-100 text-purple-700 border-purple-200";
       case "Hazırlanıyor": return "bg-yellow-100 text-yellow-700 border-yellow-200";
       default: return "bg-blue-100 text-blue-700 border-blue-200";
@@ -175,12 +179,11 @@ const MyOrdersPage = () => {
                        <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-gray-200">
                           {/* Sadece 'Sipariş Alındı' ise iptal edilebilir */}
                           {order.status === "Sipariş Alındı" && (
-                            <button 
-                              onClick={(e) => requestCancelOrder(e, order._id)}
-                              className="text-sm text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-lg font-bold transition border border-transparent hover:border-red-100"
-                            >
-                              Siparişi İptal Et
-                            </button>
+                        <button 
+                            onClick={(e) => requestCancelOrder(e, order._id)}
+                            className="text-sm text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-lg font-bold transition border border-transparent hover:border-red-100">
+                            İptal Talebi Oluştur
+                        </button>
                           )}
                           
                           <button 

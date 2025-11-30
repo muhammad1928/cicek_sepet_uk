@@ -70,7 +70,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden pt-24">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden">
       
       {/* --- ARKA PLAN SÜSLEMELERİ --- */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">

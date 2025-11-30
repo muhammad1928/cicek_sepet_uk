@@ -1,17 +1,32 @@
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom"; // Portal için gerekli
 import { FiX, FiPrinter } from "react-icons/fi";
 
 const InvoiceModal = ({ order, onClose }) => {
-  if (!order) return null;
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Portal hedefi (index.html içinde 'modal-root' veya body)
+  const modalRoot = document.getElementById("modal-root") || document.body;
+
+  useEffect(() => {
+    setIsMounted(true);
+    
+    // Sayfa kaydırmayı kilitle
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+      setIsMounted(false);
+    };
+  }, []);
+
+  if (!isMounted || !order) return null;
 
   // --- HESAPLAMALAR ---
-  // Backend'de kaydedilen değerleri kullanıyoruz.
   const total = order.totalAmount || 0;
   const deliveryFee = order.deliveryFee || 0;
-
-  // KDV Hesabı (İngiltere %20 VAT Dahil varsayımı)
-  // Formül: Net Tutar = (Toplam - Kargo) / 1.20
   const productTotal = total - deliveryFee;
-  const vatRate = 0.20;
+  const vatRate = 0.20; // %20 KDV Dahil
   const netAmount = productTotal / (1 + vatRate);
   const vatAmount = productTotal - netAmount;
 
@@ -19,19 +34,20 @@ const InvoiceModal = ({ order, onClose }) => {
     window.print();
   };
 
-  return (
-    // Dış Katman: Ekranı kaplar, arkası bulanık (Z-Index en üstte)
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+  // --- MODAL İÇERİĞİ ---
+  const modalContent = (
+    // z-[99999] ile en üst katmanda olmasını garanti ediyoruz
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in print:p-0 print:bg-white print:static">
       
       {/* Modal Kutusu: Yazıcıda tam sayfa, ekranda ortalı kutu */}
-      <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-xl shadow-2xl flex flex-col relative overflow-hidden print:fixed print:inset-0 print:w-full print:h-full print:max-h-none print:rounded-none print:z-[10000] print:overflow-visible">
+      <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-xl shadow-2xl flex flex-col relative overflow-hidden print:fixed print:inset-0 print:w-full print:h-full print:max-h-none print:rounded-none print:z-[10000] print:overflow-visible border border-gray-200">
         
         {/* --- HEADER (Yazıcıda Gizli) --- */}
         <div className="p-5 border-b bg-gray-50 flex justify-between items-center print:hidden shrink-0">
           <h3 className="font-bold text-gray-700 text-lg">Sipariş Faturası</h3>
           <button 
             onClick={onClose} 
-            className="text-gray-400 hover:text-red-600 text-3xl font-bold transition leading-none p-1"
+            className="text-gray-400 hover:text-red-600 text-3xl font-bold transition leading-none p-1 rounded-full hover:bg-red-50"
             title="Kapat"
           >
             <FiX />
@@ -61,13 +77,13 @@ const InvoiceModal = ({ order, onClose }) => {
           <div className="flex justify-between mb-10 gap-8">
             <div className="w-1/2">
               <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Fatura Edilen (Bill To):</h3>
-              <p className="font-bold text-base">{order.sender.name}</p>
+              <p className="font-bold text-base text-gray-900">{order.sender.name}</p>
               <p>{order.sender.email}</p>
               <p>{order.sender.phone}</p>
             </div>
             <div className="w-1/2 text-right">
               <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Teslim Edilen (Ship To):</h3>
-              <p className="font-bold text-base">{order.recipient.name}</p>
+              <p className="font-bold text-base text-gray-900">{order.recipient.name}</p>
               <p>{order.recipient.address}</p>
               <p>{order.recipient.city}, {order.recipient.postcode}</p>
               <p>{order.recipient.phone}</p>
@@ -146,6 +162,9 @@ const InvoiceModal = ({ order, onClose }) => {
       </div>
     </div>
   );
+
+  // React Portal ile modalı 'modal-root' div'ine taşıyoruz (Root'a değil)
+  return createPortal(modalContent, modalRoot);
 };
 
 export default InvoiceModal;

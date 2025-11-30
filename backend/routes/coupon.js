@@ -1,43 +1,25 @@
 const router = require('express').Router();
 const Coupon = require('../models/Coupon');
+const { verifyTokenAndAdmin } = require('./verifyToken');
 
-// 1. KUPON SORGULA (GÜNCELLENDİ)
-// Artık userId'yi de query olarak alacağız: /validate/KOD?userId=123
-router.get('/validate/:code', async (req, res) => {
-  const { userId } = req.query; // URL'den userId al
-
+// =============================================================================
+// 1. KUPON OLUŞTUR (SADECE ADMIN)
+// =============================================================================
+router.post('/', verifyTokenAndAdmin, async (req, res) => {
   try {
-    const coupon = await Coupon.findOne({ code: req.params.code.toUpperCase() });
-    
-    if (!coupon) return res.status(404).json({ message: "Geçersiz kupon kodu." });
-    if (!coupon.isActive) return res.status(400).json({ message: "Bu kupon pasif." });
+    const { code, discountRate, expiryDate, includeDelivery } = req.body;
 
-    // Tarih Kontrolü
-    if (coupon.expiryDate && new Date() > coupon.expiryDate) {
-      return res.status(400).json({ message: "Bu kuponun süresi dolmuş." });
+    // Kodun benzersiz olup olmadığını kontrol et (Opsiyonel, MongoDB unique index zaten hata verir ama temiz mesaj için)
+    const existingCoupon = await Coupon.findOne({ code });
+    if (existingCoupon) {
+      return res.status(400).json({ message: "Bu kupon kodu zaten var." });
     }
-
-    // Kullanım Kontrolü (Eğer giriş yapmışsa)
-    if (userId && coupon.usedBy.includes(userId)) {
-      return res.status(400).json({ message: "Bu kuponu zaten kullandınız." });
-    }
-
-    res.status(200).json(coupon); 
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// 2. KUPON OLUŞTUR
-router.post('/', async (req, res) => {
-  try {
-    const { code, discountRate, expiryDate, includeDelivery } = req.body; // includeDelivery eklendi
 
     const newCoupon = new Coupon({
       code,
       discountRate,
       expiryDate,
-      includeDelivery // Veritabanına kaydet
+      includeDelivery // Kargo ücretini kapsıyor mu?
     });
 
     const savedCoupon = await newCoupon.save();
@@ -47,21 +29,72 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 3. TÜM KUPONLARI GETİR (Admin İçin)
-router.get('/', async (req, res) => {
-  try {
-    const coupons = await Coupon.find();
-    res.status(200).json(coupons);
-  } catch (err) { res.status(500).json(err); }
-});
-
-// 4. KUPON SİL (YENİ)
-router.delete('/:id', async (req, res) => {
+// =============================================================================
+// 2. KUPON SİL (SADECE ADMIN)
+// =============================================================================
+router.delete('/:id', verifyTokenAndAdmin, async (req, res) => {
   try {
     await Coupon.findByIdAndDelete(req.params.id);
-    res.status(200).json("Kupon silindi.");
+    res.status(200).json("Kupon başarıyla silindi.");
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+// =============================================================================
+// 3. TÜM KUPONLARI GETİR (SADECE ADMIN)
+// =============================================================================
+router.get('/', async (req, res) => {
+  try {
+    const coupons = await Coupon.find().sort({ createdAt: -1 });
+    res.status(200).json(coupons);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// =============================================================================
+// 4. KUPON DOĞRULA (HERKES KULLANABİLİR)
+// =============================================================================
+router.get('/validate/:code', async (req, res) => {
+  try {
+    const { userId } = req.query; // Kullanıcı ID'si (Daha önce kullanmış mı diye bakmak için)
+    const coupon = await Coupon.findOne({ code: req.params.code });
+
+    // 1. Kupon var mı?
+    if (!coupon) {
+      return res.status(404).json({ message: "Geçersiz kupon kodu." });
+    }
+
+    // 2. Kupon aktif mi?
+    if (!coupon.isActive) {
+      return res.status(400).json({ message: "Bu kupon şu an pasif durumda." });
+    }
+
+    // 3. Tarih Kontrolü (Gün sonuna kadar geçerli olması için)
+    if (coupon.expiryDate) {
+        const now = new Date();
+        const expiry = new Date(coupon.expiryDate);
+        
+        // Son kullanma tarihini o günün bitimine (23:59:59.999) ayarla
+        expiry.setHours(23, 59, 59, 999);
+
+        if (now > expiry) {
+            return res.status(400).json({ message: "Bu kuponun süresi dolmuş." });
+        }
+    }
+
+    // 4. Kullanım Hakkı Kontrolü (Eğer üye girişi yapılmışsa)
+    if (userId && coupon.usedBy.includes(userId)) {
+        return res.status(400).json({ message: "Bu kuponu daha önce kullandınız." });
+    }
+
+    // Her şey yolunda, kupon verisini döndür
+    res.status(200).json(coupon);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

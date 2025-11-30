@@ -10,7 +10,7 @@ const ProductSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   favoritesCount: { type: Number, default: 0 },
-
+  productCode: { type: String, unique: true }, 
   reviews: [
     {
       user: { type: String, required: true },

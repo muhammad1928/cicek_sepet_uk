@@ -3,6 +3,8 @@ import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import SecureImage from "../SecureImage";
+import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
+
 // Zoom ve Pan Kütüphanesi
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { FiZoomIn, FiZoomOut, FiRotateCw, FiX, FiMaximize, FiArrowLeft, FiCheck, FiXCircle } from "react-icons/fi";
@@ -77,17 +79,20 @@ const AdminApplications = () => {
   const getImageUrl = (appData) => appData?.licenseImage || appData?.documentImage;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in">
+    <div className="space-y-6 max-w-7xl pt-2 mx-auto animate-fade-in">
       
       {/* --- ÜST KISIM --- */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <AdminPanelHeader title="Bekleyen Başvurular"
+        count={applicants.length}
+        onRefresh={fetchApplicants}/>
+      {/* <div className="flex  justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h2 className="text-2xl font-bold text-gray-800">
           Bekleyen Başvurular <span className="ml-2 text-sm bg-orange-100 text-orange-600 px-2 py-1 rounded-full">{applicants.length}</span>
         </h2>
         <button onClick={fetchApplicants} className="text-blue-600 hover:underline text-sm font-bold flex items-center gap-1">
           <span>🔄</span> Yenile
         </button>
-      </div>
+      </div> */}
 
       {/* --- LİSTE --- */}
       {applicants.length === 0 ? (

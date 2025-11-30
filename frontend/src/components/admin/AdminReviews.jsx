@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "../../context/CartContext";
+import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 
 const AdminReviews = () => {
   const [allReviews, setAllReviews] = useState([]);
@@ -43,13 +44,17 @@ const AdminReviews = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center">
+    <div className="space-y-6 pt-2 max-w-5xl mx-auto animate-fade-in">
+            <AdminPanelHeader title="Yorumlar"
+        count={allReviews.length}
+        onRefresh={fetchReviews}
+      />
+      {/* <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h2 className="text-2xl font-bold text-gray-800">
-          Yorumlar <span className="text-sm bg-gray-100 px-2 py-1 rounded-full ml-2">{allReviews.length}</span>
+          Yorumlar <span className="ml-2 text-sm bg-orange-100 text-orange-600 px-2 py-1 rounded-full">{allReviews.length}</span>
         </h2>
         <button onClick={fetchReviews} className="text-blue-600 hover:underline text-sm font-bold">🔄 Yenile</button>
-      </div>
+      </div> */}
 
       <div className="grid gap-4">
         {allReviews.length === 0 ? <div className="text-center py-10 text-gray-400">Henüz hiç yorum yok.</div> : 

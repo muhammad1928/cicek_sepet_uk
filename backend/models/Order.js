@@ -50,12 +50,33 @@ const OrderSchema = new mongoose.Schema({
     type: String, 
     default: 'Sipariş Alındı',
     // 'Hazır' durumu Satıcı -> Kurye geçişi için eklendi
-    enum: ['Sipariş Alındı', 'Hazırlanıyor', 'Hazır', 'Yola Çıktı', 'Teslim Edildi', 'İptal']
+    enum: ['Sipariş Alındı', 'Hazırlanıyor', 'Hazır', 'Yola Çıktı', 'Teslim Edildi', 'İptal', 'İptal Talebi']
   },
 
   // --- 7. KURYE DETAYLARI ---
   courierId: { type: String }, // Hangi kurye taşıyor?
-  courierRejectionReason: { type: String } // Kurye işi neden bıraktı? (YENİ)
+  courierRejectionReason: { type: String },// Kurye işi neden bıraktı? (YENİ)
+
+  // --- YENİ: MÜŞTERİ METADATASI ---
+  metaData: {
+    ip: String,           // IP Adresi (Güvenlik için şart)
+    // Cihaz Bilgileri
+    userAgent: String,         // Tarayıcı Kimliği (Raw)
+    browserName: String,       // Chrome, Firefox vb.
+    osName: String,            // Windows, iOS, Android
+    deviceType: String,        // Mobile / Desktop / Tablet
+    
+    // Ekran ve Dil
+    screenResolution: String,  // Örn: 1920x1080
+    language: String,          // Tarayıcı Dili (tr-TR)
+    timeZone: String,          // Zaman Dilimi (Europe/Istanbul)
+    
+    // Bağlantı (Varsa)
+    connectionType: String,    // 4G, WiFi (Destekleyen tarayıcılarda)
+    
+    // Çerez/Referans
+    referrer: String           // Hangi siteden geldi? (Google, Instagram vb.)
+  }
 
 }, { timestamps: true });
 

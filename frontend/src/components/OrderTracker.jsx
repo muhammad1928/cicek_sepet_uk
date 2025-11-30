@@ -1,84 +1,131 @@
-import { FaCheck, FaBoxOpen, FaMotorcycle, FaHome, FaTimes } from "react-icons/fa";
+import { 
+  FaClipboardList, // Sipariş Alındı
+  FaCogs,          // Hazırlanıyor
+  FaBoxOpen,       // Hazır
+  FaMotorcycle,    // Kurye Yolda (Mağazaya)
+  FaMapMarkedAlt,  // Dağıtımda (Müşteriye)
+  FaHome,          // Teslim Edildi
+  FaTimes,         // İptal
+  FaShippingFast   // Genel Yolda
+} from "react-icons/fa";
 
 const OrderTracker = ({ status }) => {
-  // Adımlar ve İkonları
+  
+  // 1. HANGİ ADIMDAYIZ? (0-3 Arası)
+  const getStepIndex = (s) => {
+    switch(s) {
+      case "Sipariş Alındı": return 0;
+      
+      case "Hazırlanıyor": 
+      case "Hazır":           
+        return 1;
+
+      case "Kurye Yolda":     
+      case "Dağıtımda":       
+      case "Yola Çıktı":
+        return 2;
+
+      case "Teslim Edildi": return 3;
+      default: return 0;
+    }
+  };
+
+  const currentStep = getStepIndex(status);
+
+  // 2. DİNAMİK ADIMLAR (Duruma göre ikon ve yazı değişir)
   const steps = [
-    { label: "Sipariş Alındı", icon: <FaCheck /> },
-    { label: "Hazırlanıyor", icon: <FaBoxOpen /> },
-    { label: "Yola Çıktı", icon: <FaMotorcycle /> },
-    { label: "Teslim Edildi", icon: <FaHome /> },
+    { 
+      label: "Sipariş Alındı", 
+      icon: <FaClipboardList /> 
+    },
+    { 
+      // Durum "Hazır" ise Kutu İkonu, değilse Çark İkonu
+      label: status === "Hazır" ? "Hazır (Kurye Bekleniyor)" : "Hazırlanıyor", 
+      icon: status === "Hazır" ? <FaBoxOpen /> : <FaCogs className={status === 'Hazırlanıyor' ? "animate-spin-slow" : ""} /> 
+    },
+    { 
+      // Kurye durumuna göre detaylı bilgi
+      label: status === "Kurye Yolda" ? "Kurye Mağazaya Gidiyor" : (status === "Dağıtımda" ? "Kurye Size Geliyor" : "Yola Çıktı"), 
+      icon: status === "Kurye Yolda" ? <FaMotorcycle /> : (status === "Dağıtımda" ? <FaMapMarkedAlt /> : <FaShippingFast />)
+    },
+    { 
+      label: "Teslim Edildi", 
+      icon: <FaHome /> 
+    }
   ];
 
-  // İptal Durumu Özel
-  if (status === "İptal") {
+  // 3. İPTAL DURUMU (ÖZEL GÖSTERİM)
+  if (status === "İptal" || status === "İptal Talebi") {
     return (
-      <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center gap-3 animate-fade-in">
-        <div className="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl">
-          <FaTimes />
+      <div className={`border-l-4 p-4 rounded-r-lg flex items-center gap-4 animate-fade-in shadow-sm ${status === "İptal" ? "bg-red-50 border-red-500" : "bg-orange-50 border-orange-500"}`}>
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shrink-0 ${status === "İptal" ? "bg-red-100 text-red-600" : "bg-orange-100 text-orange-600"}`}>
+          {status === "İptal" ? <FaTimes /> : <FaClipboardList />}
         </div>
         <div>
-          <h4 className="font-bold text-red-700">Sipariş İptal Edildi</h4>
-          <p className="text-sm text-red-600">Bu sipariş iptal edilmiştir. Detaylar için bizimle iletişime geçebilirsiniz.</p>
+          <h4 className={`font-bold ${status === "İptal" ? "text-red-800" : "text-orange-800"}`}>
+            {status === "İptal Talebi" ? "İptal Talebiniz Alındı" : "Sipariş İptal Edildi"}
+          </h4>
+          <p className={`text-sm ${status === "İptal" ? "text-red-600" : "text-orange-600"}`}>
+            {status === "İptal Talebi" ? "Talebiniz müşteri hizmetleri tarafından inceleniyor." : "Bu sipariş iptal edilmiştir."}
+          </p>
         </div>
       </div>
     );
   }
 
-  // Aktif adımın indeksini bul
-  const activeIndex = steps.findIndex((s) => s.label === status);
-  // Eğer durum listede yoksa (örn: "Hazır" gibi ara durumlar), Hazırlanıyor'u baz al
-  const currentStep = activeIndex === -1 ? 1 : activeIndex;
-
   return (
-    <div className="w-full py-6 px-2 animate-fade-in">
+    <div className="w-full py-8 px-2 animate-fade-in select-none">
       <div className="relative flex justify-between items-center">
         
         {/* Gri Arka Plan Çizgisi */}
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-10 rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-full h-1.5 bg-gray-100 -z-10 rounded-full -translate-y-1/2"></div>
         
-        {/* Yeşil İlerleme Çizgisi */}
+        {/* Yeşil İlerleme Çizgisi (Animasyonlu) */}
         <div 
-          className="absolute top-1/2 left-0 h-1 bg-green-500 -z-10 rounded-full transition-all duration-1000 ease-out"
+          className="absolute top-1/2 left-0 h-1.5 bg-gradient-to-r from-green-400 to-green-600 -z-10 rounded-full transition-all duration-1000 ease-out -translate-y-1/2 shadow-sm"
           style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
         ></div>
 
         {/* Adımlar */}
         {steps.map((step, i) => {
-          const isActive = i <= currentStep;
-          const isCurrent = i === currentStep;
+          const isActive = i <= currentStep; // Geçilen adımlar
+          const isCurrent = i === currentStep; // Şu anki adım
 
           return (
-            <div key={i} className="flex flex-col items-center gap-2 bg-white px-2">
-              {/* Daire */}
+            <div key={i} className="relative flex flex-col items-center group">
+              
+              {/* 1. İkon Dairesi */}
               <div 
                 className={`
-                  w-10 h-10 rounded-full flex items-center justify-center text-lg border-4 transition-all duration-500
+                  w-12 h-12 rounded-full flex items-center justify-center text-xl border-4 transition-all duration-500 bg-white z-10
                   ${isActive 
-                    ? "bg-green-500 border-green-500 text-white scale-110" 
-                    : "bg-white border-gray-200 text-gray-300"}
+                    ? "border-green-500 text-green-600 shadow-lg scale-110" 
+                    : "border-gray-200 text-gray-300 scale-100"}
                   ${isCurrent ? "ring-4 ring-green-100 animate-pulse" : ""}
                 `}
               >
                 {step.icon}
               </div>
               
-              {/* Yazı */}
-              <span 
+              {/* 2. Yazı Etiketi (Hizalı ve Dinamik) */}
+              <div 
                 className={`
-                  text-xs font-bold transition-colors duration-300 absolute -bottom-8 w-24 text-center
-                  ${isActive ? "text-gray-800" : "text-gray-400"}
+                  absolute top-14 left-1/2 -translate-x-1/2 w-40 text-center
+                  text-xs font-bold transition-all duration-500 leading-tight
+                  ${isActive ? "text-gray-800 translate-y-0 opacity-100" : "text-gray-400 translate-y-1 opacity-80"}
+                  ${isCurrent ? "text-green-700 scale-105" : ""}
                 `}
-                style={{ left: `${(i / (steps.length - 1)) * 100}%`, transform: "translateX(-50%)" }} // Yazıyı ortala
               >
                 {step.label}
-              </span>
+              </div>
+
             </div>
           );
         })}
       </div>
       
-      {/* Boşluk (Yazılar için) */}
-      <div className="h-6"></div> 
+      {/* Alt boşluk (Yazıların sığması için) */}
+      <div className="h-8"></div>
     </div>
   );
 };

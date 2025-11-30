@@ -21,6 +21,7 @@ import SuccessPage from "./pages/SuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import VerificationPending from "./pages/VerificationPending";
 import StorePage from "./pages/StorePage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 // --- SAYFALAR (AUTH & SİSTEM) ---
 import ResetPasswordPage from "./pages/ResetPasswordPage";
@@ -66,7 +67,7 @@ function App() {
             
             {/* İÇERİK ALANI */}
             {/* pt-20: Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için) */}
-            <div className="flex-1 pt-20 relative z-0">
+            <div className="flex-1 pt-10 relative z-0">
               <Routes>
                 {/* MÜŞTERİ ROTALARI */}
                 <Route path="/" element={<HomePage />} />
@@ -92,12 +93,13 @@ function App() {
                 <Route path="/become-seller" element={<RegisterVendorPage />} />
                 <Route path="/become-courier" element={<RegisterCourierPage />} />
                 <Route path="/partner-application" element={<PartnerApplicationPage />} />
-                
+                <Route path="/verify/:token" element={<VerifyEmailPage />} />
                 <Route path="/vendor" element={<VendorPage />} />
                 <Route path="/courier" element={<CourierPage />} />
                 <Route path="/admin" element={<AdminPage />} />
 
                 <Route path="*" element={<NotFoundPage />} />
+                
               </Routes>
             </div>
             

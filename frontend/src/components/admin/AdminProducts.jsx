@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
+import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
 import { FaStore } from "react-icons/fa"; // Vendor adı için
 
@@ -104,18 +105,25 @@ const AdminProducts = () => {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in">
-      
+    <div className="space-y-6 pt-2 max-w-7xl mx-auto animate-fade-in">
       {/* Üst Bar */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 sticky top-20 z-20 flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 className="text-2xl font-bold text-gray-800 whitespace-nowrap">Ürünler ({products.length})</h2>
+      <AdminPanelHeader title="Ürünler" count={products.length}>
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-          <input type="text" placeholder="Ürün veya Satıcı Ara..." className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" onChange={(e) => setSearchTerm(e.target.value)} />
-          <button onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}>
+          <input 
+            type="text" 
+            placeholder="Ürün veya Satıcı Ara..." 
+            className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" 
+            onChange={(e) => setSearchTerm(e.target.value)} 
+          />
+          <button 
+            onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} 
+            className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}
+          >
             {showForm ? <><FiX /> Kapat</> : <><FiPlus /> Ekle</>}
           </button>
         </div>
-      </div>
+      </AdminPanelHeader>
+      
 
       {/* Form */}
       {showForm && (

@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   stats.orderStatusStats.forEach(item => { statusCounts[item._id] = item.count; });
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 pt-2 animate-fade-in">
       <h2 className="text-3xl font-bold text-gray-800">Genel Bakış</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard icon="💷" title="Toplam Ciro" value={`£${stats.totalRevenue.toLocaleString()}`} color="green" />
