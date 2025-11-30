@@ -109,7 +109,7 @@ const Footer = () => {
                 <div className="text-pink-500 group-hover:text-white transition"><FaPhone /></div>
                 <span className="text-gray-400 group-hover:text-gray-300">+44 20 7946 0000</span>
               </li>
-              <li><Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-1">› İletişim</Link></li>
+              <li><Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-1"> İletişim</Link></li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaEnvelope /></div>
                 <a href="mailto:destek@ciceksepeti.uk" className="text-gray-400 hover:text-white transition">destek@ciceksepeti.uk</a>

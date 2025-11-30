@@ -20,6 +20,14 @@ const VendorProducts = ({ user }) => {
   const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, category: "Doğum Günü", isActive: true };
   const [formData, setFormData] = useState(initialForm);
 
+  // RENK KONTROLÜ (STOK)
+  const getCardStyle = (stock, isActive) => {
+    if (!isActive) return "border-gray-200 opacity-60 grayscale"; // Pasif
+    if (stock <= 0) return "border-red-500 bg-red-50"; // Tükenmiş
+    if (stock < 5) return "border-yellow-400 bg-yellow-50"; // Kritik
+    return "border-gray-200 hover:border-pink-300"; // Normal
+  };
+
   // Ürünleri Çek
   const fetchProducts = async () => {
     try { 
@@ -70,7 +78,7 @@ const VendorProducts = ({ user }) => {
     if (!formData.title || !formData.price) return notify("Eksik bilgi", "warning");
     try {
       // Vendor ID'sini ekle
-      const payload = { ...formData, vendor: user._id };
+      const payload = { ...formData, vendor: user._id, isActive: true};
       
       if(editMode) await axios.put(`http://localhost:5000/api/products/${editMode}`, payload);
       else await axios.post("http://localhost:5000/api/products", payload);
@@ -78,7 +86,11 @@ const VendorProducts = ({ user }) => {
       notify("İşlem Başarılı! 🌸", "success"); 
       setShowForm(false); setEditMode(null); setFormData(initialForm); fetchProducts();
       setFormData(initialForm);
-    } catch (err) { notify("Hata oluştu", "error"); }
+    } catch (err) {
+      // Hata detayını göster
+      const msg = err.response?.data?.message || "Ürün eklenirken hata oluştu.";
+      notify(msg, "error");
+     }
   };
 
   const handleEditClick = (p) => { 
@@ -188,51 +200,90 @@ const VendorProducts = ({ user }) => {
 
       {/* --- ÜRÜN LİSTESİ --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map(p => (
-          <div key={p._id} className={`bg-white border rounded-xl overflow-hidden group hover:shadow-md transition flex flex-col relative ${p.stock<=0 ? 'opacity-80 border-red-300' : 'border-gray-200'}`}>
-            
-            {/* Hızlı Durum Değiştirme (Toggle) */}
-            <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1">
-               <button 
-                  onClick={() => handleToggleStatus(p)}
-                  className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-sm transition transform active:scale-95 ${p.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-800 text-white hover:bg-gray-900"}`}
-               >
-                  {p.isActive ? "🟢 Yayında" : "⚫ Gizli"}
-               </button>
-               {p.stock<=0 && <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold shadow">TÜKENDİ</span>}
-            </div>
+        {filteredProducts.map(p => {
+          // Kart Rengi Mantığı (Stok Durumuna Göre)
+          let cardBorderClass = "border-gray-200 hover:border-pink-300"; // Varsayılan
+          if (!p.isActive) cardBorderClass = "border-gray-200 opacity-75 grayscale bg-gray-50"; // Pasif
+          else if (p.stock <= 0) cardBorderClass = "border-red-500 bg-red-50 ring-2 ring-red-100"; // Tükenmiş (Kırmızı)
+          else if (p.stock < 5) cardBorderClass = "border-yellow-400 bg-yellow-50 ring-2 ring-yellow-100"; // Kritik (Sarı)
 
-            {/* Resim */}
-            <div className="h-48 relative bg-gray-100 overflow-hidden">
-               <img src={p.img} className={`w-full h-full object-cover transition duration-500 ${!p.isActive ? "grayscale" : "group-hover:scale-105"}`} alt={p.title} />
-               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-2 pt-6">
-                 <span className="text-white text-xs font-bold">{p.category}</span>
-               </div>
-            </div>
+          return (
+            <div key={p._id} className={`rounded-2xl border shadow-sm overflow-hidden transition-all duration-300 group relative flex flex-col ${cardBorderClass}`}>
+              
+              {/* --- DURUM ROZETLERİ (SAĞ ÜST) --- */}
+              <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
+                {/* Yayında / Gizli Butonu */}
+                <button 
+                  onClick={() => handleToggleStatus(p)} 
+                  className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-md transition transform active:scale-95 flex items-center gap-1 ${p.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-800 text-white hover:bg-black"}`}
+                >
+                   {p.isActive ? "🟢 Yayında" : "⚫ Gizli"}
+                </button>
+                
+                {/* Stok Uyarıları */}
+                {p.stock <= 0 && (
+                  <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-md animate-pulse">
+                    ⛔ TÜKENDİ
+                  </span>
+                )}
+                {p.stock > 0 && p.stock < 5 && (
+                  <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
+                    ⚠️ SON {p.stock}
+                  </span>
+                )}
+              </div>
 
-            {/* İçerik */}
-            <div className="p-4 flex-1 flex flex-col">
-              <div className="font-bold truncate text-gray-800 mb-1" title={p.title}>{p.title}</div>
-              <div className="font-extrabold text-pink-600 text-lg mb-3">£{p.price}</div>
-              
-              {/* Hızlı Stok */}
-              <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center mb-3">
-                <span className="text-[10px] font-bold text-gray-400 uppercase">Stok Adedi</span>
-                <QuickStockUpdate product={p} refresh={fetchProducts} />
+              {/* --- RESİM ALANI --- */}
+              <div className="h-48 relative bg-gray-200 overflow-hidden">
+                <img 
+                  src={p.img || "https://placehold.co/400"} 
+                  className={`w-full h-full object-cover transition duration-700 ${!p.isActive ? "grayscale" : "group-hover:scale-110"}`} 
+                  alt={p.title}
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3 pt-8">
+                   <span className="text-white text-[10px] font-bold bg-black/30 backdrop-blur-md px-2 py-1 rounded border border-white/20">
+                     {p.category}
+                   </span>
+                </div>
               </div>
-              
-              {/* Butonlar */}
-              <div className="grid grid-cols-2 gap-2">
-                 <button onClick={() => handleEditClick(p)} className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2 rounded-lg font-bold hover:bg-blue-100 transition">
-                   <FiEdit /> Düzenle
-                 </button>
-                 <button onClick={() => handleDeleteRequest(p._id)} className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2 rounded-lg font-bold hover:bg-red-100 transition">
-                   <FiTrash2 /> Sil
-                 </button>
+
+              {/* --- İÇERİK ALANI --- */}
+              <div className="p-5 flex-1 flex flex-col">
+                <h4 className="font-bold text-gray-800 mb-1 truncate text-lg" title={p.title}>
+                  {p.title}
+                </h4>
+                
+                <div className="flex justify-between items-end mb-4">
+                   <span className="text-xl font-extrabold text-pink-600">£{p.price}</span>
+                   <span className="text-xs text-gray-400 font-mono">ID: {p._id.slice(-4)}</span>
+                </div>
+
+                {/* Hızlı Stok Güncelleme */}
+                <div className="mt-auto pt-3 border-t border-gray-200/60 flex justify-between items-center mb-4">
+                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Hızlı Stok</span>
+                   <QuickStockUpdate product={p} refresh={fetchProducts} />
+                </div>
+
+                {/* Aksiyon Butonları */}
+                <div className="grid grid-cols-2 gap-3">
+                   <button 
+                     onClick={() => handleEditClick(p)} 
+                     className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2.5 rounded-xl font-bold hover:bg-blue-100 transition border border-blue-100"
+                   >
+                     <FiEdit /> Düzenle
+                   </button>
+                   <button 
+                     onClick={() => handleDeleteRequest(p._id)} 
+                     className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2.5 rounded-xl font-bold hover:bg-red-100 transition border border-red-100"
+                   >
+                     <FiTrash2 /> Sil
+                   </button>
+                </div>
               </div>
+
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* ONAY MODALI */}

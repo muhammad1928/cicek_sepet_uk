@@ -26,6 +26,14 @@ const LoginPage = () => {
       // Başarılı ise kullanıcıyı kaydet
       localStorage.setItem("user", JSON.stringify(res.data));
       
+      // --- YENİ: FAVORİ SENKRONİZASYONU ---
+      const localFavs = JSON.parse(localStorage.getItem("favorites")) || [];
+      if (localFavs.length > 0) {
+         // Backend'e gönder ve birleştir
+         await axios.post(`http://localhost:5000/api/users/${res.data._id}/sync-favorites`, { localFavorites: localFavs });
+      }
+      // -----------------------------------
+
       // Navbar'ı güncellemesi için sinyal gönder
       window.dispatchEvent(new Event("user-change")); 
 

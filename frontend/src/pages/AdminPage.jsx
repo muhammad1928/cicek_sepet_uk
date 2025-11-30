@@ -37,10 +37,10 @@ const AdminPage = () => {
       {/* fixed: Sayfa kaydırılsa bile yerinde durur */}
       {/* top-20: Navbar'ın hemen altından başlar */}
       {/* h-[calc(100vh-80px)]: Ekranın kalanını tam kaplar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col shadow-xl z-30 fixed h-full top-20 left-0 overflow-y-auto pb-20 scrollbar-thin scrollbar-thumb-slate-700">
+      <aside className="w-64 bg-slate-900 pt-4 text-white flex flex-col shadow-xl z-30 fixed h-full left-0 overflow-y-auto pb-20 scrollbar-thin scrollbar-thumb-slate-700">
         
         <div className="p-6 border-b border-slate-800">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent" >
             Admin Panel
           </h2>
           <p className="text-xs text-gray-500 mt-1">Yönetim Merkezi</p>

@@ -2,28 +2,28 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Product = require('../models/Product');
 const bcrypt = require('bcryptjs');
-const sendEmail = require('../utils/sendEmail'); 
+const sendEmail = require('../utils/sendEmail');
 const cloudinary = require('cloudinary').v2;
+const logActivity = require('../utils/logActivity');
 
-// --- CLOUDINARY AYARLARI (Resim Silme İçin) ---
+// =============================================================================
+// CLOUDINARY AYARLARI
+// =============================================================================
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// --- YARDIMCI FONKSİYON: Cloudinary'den Resim Silme ---
+// Cloudinary'den resim silme yardımcı fonksiyonu
 const deleteFromCloudinary = async (url) => {
   if (!url) return;
   try {
-    // URL'den public_id'yi ayıkla
-    // Örn: .../upload/v123456/ciceksepeti_belgeler/resim.jpg -> ciceksepeti_belgeler/resim
     const regex = /\/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/;
     const match = url.match(regex);
-    
+
     if (match) {
       const publicId = match[1];
-      // 'authenticated' modunda yüklenenleri silmek için type belirtmek gerekir
       await cloudinary.uploader.destroy(publicId, { type: 'authenticated' });
       console.log("Cloudinary'den silindi:", publicId);
     }
@@ -51,6 +51,18 @@ router.put('/:id', async (req, res) => {
       { $set: req.body },
       { new: true }
     );
+
+    await logActivity(req.params.id, 'profile_update', req, {
+      updatedFields: Object.keys(req.body)
+    });
+
+    // Bildirim maili
+    sendEmail(updatedUser.email, "Profiliniz Güncellendi 📝", `
+      <p>Merhaba ${updatedUser.fullName},</p>
+      <p>Profil bilgilerinizde değişiklik yapıldı (Telefon, İsim vb.).</p>
+      <p>Bu işlem size ait değilse şifrenizi değiştirin.</p>
+    `).catch(console.error);
+
     const { password, ...others } = updatedUser._doc;
     res.status(200).json(others);
   } catch (err) {
@@ -59,13 +71,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // =============================================================================
-// 2. TEK KULLANICIYI GETİR (SENKRONİZASYON İÇİN)
+// 2. TEK KULLANICIYI GETİR
 // =============================================================================
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
-    
+
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
@@ -74,12 +86,111 @@ router.get('/:id', async (req, res) => {
 });
 
 // =============================================================================
-// 3. ADRES SİLME
+// 3. FAVORİLERİ SENKRONİZE ET
 // =============================================================================
+router.post('/:id/sync-favorites', async (req, res) => {
+  try {
+    const { localFavorites } = req.body;
+    if (!localFavorites || localFavorites.length === 0) {
+      return res.status(200).json("Senkronize edilecek veri yok.");
+    }
+
+    await User.findByIdAndUpdate(req.params.id, {
+      $addToSet: { favorites: { $each: localFavorites } }
+    });
+
+    await logActivity(req.params.id, 'sync_favorites', req, { count: localFavorites.length });
+    res.status(200).json("Favoriler eşitlendi.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// =============================================================================
+// 4. ADRES YÖNETİMİ
+// =============================================================================
+
+// 4.1 ADRESLERİ GETİR
+router.get('/:id/addresses', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('savedAddresses');
+    res.status(200).json(user?.savedAddresses || []);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 4.2 ADRES EKLE
+router.post('/:id/addresses', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const newAddress = req.body;
+
+    // Aynı adres var mı kontrol et
+    const userWithAddress = await User.findOne({
+      _id: userId,
+      savedAddresses: {
+        $elemMatch: {
+          address: newAddress.address,
+          city: newAddress.city,
+          postcode: newAddress.postcode
+        }
+      }
+    });
+
+    if (userWithAddress) {
+      return res.status(200).json({ message: "Adres zaten kayıtlı, tekrar eklenmedi." });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $push: { savedAddresses: newAddress }
+    });
+
+    await logActivity(userId, 'add_address', req, {
+      city: newAddress.city,
+      title: newAddress.title
+    });
+
+    res.status(200).json("Adres başarıyla eklendi");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 4.3 ADRES GÜNCELLE
+router.put('/:id/addresses/:addressId', async (req, res) => {
+  try {
+    const { title, recipientName, recipientPhone, address, city, postcode } = req.body;
+
+    await User.updateOne(
+      { _id: req.params.id, "savedAddresses._id": req.params.addressId },
+      {
+        $set: {
+          "savedAddresses.$.title": title,
+          "savedAddresses.$.recipientName": recipientName,
+          "savedAddresses.$.recipientPhone": recipientPhone,
+          "savedAddresses.$.address": address,
+          "savedAddresses.$.city": city,
+          "savedAddresses.$.postcode": postcode
+        }
+      }
+    );
+
+    await logActivity(req.params.id, 'update_address', req, { addressId: req.params.addressId });
+    res.status(200).json("Adres güncellendi.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 4.4 ADRES SİL
 router.delete('/:id/addresses/:addressId', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    await user.updateOne({ $pull: { savedAddresses: { _id: req.params.addressId } } });
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { savedAddresses: { _id: req.params.addressId } }
+    });
+
+    await logActivity(req.params.id, 'delete_address', req, { addressId: req.params.addressId });
     res.status(200).json("Adres silindi.");
   } catch (err) {
     res.status(500).json(err);
@@ -87,44 +198,26 @@ router.delete('/:id/addresses/:addressId', async (req, res) => {
 });
 
 // =============================================================================
-// 4. ADRES EKLEME
+// 5. FAVORİ YÖNETİMİ
 // =============================================================================
-router.post('/:id/addresses', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    await user.updateOne({ $push: { savedAddresses: req.body } });
-    res.status(200).json("Adres eklendi");
-  } catch (err) { res.status(500).json(err); }
-});
 
-// =============================================================================
-// 5. ADRESLERİ GETİR
-// =============================================================================
-router.get('/:id/addresses', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    res.status(200).json(user.savedAddresses || []);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// =============================================================================
-// 6. FAVORİ EKLE / ÇIKAR
-// =============================================================================
+// 5.1 FAVORİ EKLE / ÇIKAR
 router.put('/:id/favorites', async (req, res) => {
   const { productId } = req.body;
+
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select('favorites');
     const isFavorited = user.favorites.includes(productId);
 
     if (isFavorited) {
-      await user.updateOne({ $pull: { favorites: productId } });
+      await User.findByIdAndUpdate(req.params.id, { $pull: { favorites: productId } });
       await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: -1 } });
+      await logActivity(req.params.id, 'remove_favorite', req, { productId });
       res.status(200).json("Çıkarıldı");
     } else {
-      await user.updateOne({ $push: { favorites: productId } });
+      await User.findByIdAndUpdate(req.params.id, { $push: { favorites: productId } });
       await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: 1 } });
+      await logActivity(req.params.id, 'add_favorite', req, { productId });
       res.status(200).json("Eklendi");
     }
   } catch (err) {
@@ -132,9 +225,7 @@ router.put('/:id/favorites', async (req, res) => {
   }
 });
 
-// =============================================================================
-// 7. FAVORİLERİ LİSTELE
-// =============================================================================
+// 5.2 FAVORİLERİ LİSTELE
 router.get('/:id/favorites', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate('favorites');
@@ -145,62 +236,7 @@ router.get('/:id/favorites', async (req, res) => {
 });
 
 // =============================================================================
-// 8. TÜM KULLANICILARI GETİR (ADMİN)
-// =============================================================================
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// =============================================================================
-// 9. ROL DEĞİŞTİR (ADMİN)
-// =============================================================================
-router.put('/:id/role', async (req, res) => {
-  try {
-    const { role } = req.body; 
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, { role: role }, { new: true }).select('-password');
-    res.status(200).json(updatedUser);
-  } catch (err) { res.status(500).json(err); }
-});
-
-// =============================================================================
-// 10. ENGELLE / AÇ (ADMİN)
-// =============================================================================
-router.put('/:id/block', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
-    if (user.role === 'admin') return res.status(400).json("Yönetici engellenemez!");
-
-    user.isBlocked = !user.isBlocked;
-    await user.save();
-    
-    res.status(200).json({ 
-      message: user.isBlocked ? "Kullanıcı engellendi." : "Kullanıcı engeli kaldırıldı.", 
-      isBlocked: user.isBlocked 
-    });
-  } catch (err) { res.status(500).json(err); }
-});
-
-// =============================================================================
-// 11. ADMİN TARAFINDAN ŞİFRE SIFIRLAMA
-// =============================================================================
-router.put('/:id/admin-reset-password', async (req, res) => {
-  try {
-    const { newPassword } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    await User.findByIdAndUpdate(req.params.id, { password: hashedPassword });
-    res.status(200).json("Şifre güncellendi.");
-  } catch (err) { res.status(500).json(err); }
-});
-
-// =============================================================================
-// 12. KULLANICI KENDİ ŞİFRESİNİ DEĞİŞTİRİR (MAİL BİLDİRİMLİ)
+// 6. ŞİFRE DEĞİŞTİRME
 // =============================================================================
 router.put('/:id/change-password', async (req, res) => {
   try {
@@ -214,11 +250,13 @@ router.put('/:id/change-password', async (req, res) => {
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
 
-    const resetLink = "http://localhost:5173/forgot-password";
+    await logActivity(req.params.id, 'password_change', req, { method: 'profile_settings' });
+
+    const resetLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/forgot-password`;
     const emailContent = `
       <div style="font-family: Arial, sans-serif; padding: 30px; border: 1px solid #eee; background-color: #fff5f5; border-radius: 10px;">
         <h2 style="color: #d32f2f; text-align: center;">⚠️ Şifreniz Değiştirildi</h2>
-        <p>Merhaba <b>${user.fullName}</b>,</p> 
+        <p>Merhaba <b>${user.fullName}</b>,</p>
         <p>Hesabınızın şifresi az önce başarıyla değiştirildi.</p>
         <p>Siz yapmadıysanız: <a href="${resetLink}">Şifremi Acil Sıfırla</a></p>
       </div>
@@ -231,76 +269,154 @@ router.put('/:id/change-password', async (req, res) => {
   }
 });
 
-// 13. BAŞVURU FORMU GÖNDER (GÜNCELLENDİ: UNIK KONTROLÜ)
+// =============================================================================
+// 7. BAŞVURU FORMU GÖNDER (PERFORMANS OPTİMİZE EDİLDİ)
+// =============================================================================
 router.post('/:id/apply', async (req, res) => {
   try {
     const { requestedRole, ...applicationData } = req.body;
-    
-    // UNIKLİK KONTROLÜ
-    // Tüm kullanıcıları tarayıp applicationData içindeki vergi/ehliyet no eşleşiyor mu bakarız
-    const users = await User.find();
-    
-    for (let user of users) {
-        if (user._id.toString() === req.params.id) continue; // Kendini atla
-        
-        const data = user.applicationData || {};
-        
-        // Satıcı ise Vergi No Kontrolü
-        if (requestedRole === 'vendor' && data.taxNumber === applicationData.taxNumber) {
-            return res.status(400).json("Bu Vergi Numarası ile zaten bir başvuru var!");
-        }
-        // Kurye ise Ehliyet No Kontrolü
-        if (requestedRole === 'courier' && data.licenseNumber === applicationData.licenseNumber) {
-            return res.status(400).json("Bu Ehliyet Numarası ile zaten bir başvuru var!");
-        }
+
+    // Satıcı başvurusu - Vergi No kontrolü (findOne ile optimize)
+    if (requestedRole === 'vendor' && applicationData.taxNumber) {
+      const existingVendor = await User.findOne({
+        _id: { $ne: req.params.id },
+        'applicationData.taxNumber': applicationData.taxNumber
+      });
+
+      if (existingVendor) {
+        return res.status(400).json("Bu Vergi Numarası ile zaten bir başvuru var!");
+      }
+    }
+
+    // Kurye başvurusu - Ehliyet No kontrolü (findOne ile optimize)
+    if (requestedRole === 'courier' && applicationData.licenseNumber) {
+      const existingCourier = await User.findOne({
+        _id: { $ne: req.params.id },
+        'applicationData.licenseNumber': applicationData.licenseNumber
+      });
+
+      if (existingCourier) {
+        return res.status(400).json("Bu Ehliyet Numarası ile zaten bir başvuru var!");
+      }
     }
 
     await User.findByIdAndUpdate(req.params.id, {
       applicationStatus: 'pending',
-      applicationData: { ...applicationData, requestedRole } 
+      applicationData: { ...applicationData, requestedRole }
     });
+
+    await logActivity(req.params.id, 'application_submit', req, { requestedRole });
     res.status(200).json("Başvurunuz alındı.");
-  } catch (err) { res.status(500).json(err); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
+
 // =============================================================================
-// 14. BAŞVURU ONAYLA / REDDET (RESİM SİLME & MAİL BİLDİRİMİ)
+// 8. SATICI PROFİLİ GETİR (PUBLIC)
 // =============================================================================
+router.get('/vendor-profile/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .select('fullName email createdAt storeSettings role');
+
+    if (!user || user.role !== 'vendor') {
+      return res.status(404).json("Satıcı bulunamadı.");
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// =============================================================================
+// ======================= ADMİN ROTALARI ======================================
+// =============================================================================
+
+// 9. TÜM KULLANICILARI GETİR (ADMİN)
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 10. ROL DEĞİŞTİR (ADMİN)
+router.put('/:id/role', async (req, res) => {
+  try {
+    const { role } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { role },
+      { new: true }
+    ).select('-password');
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 11. ENGELLE / AÇ (ADMİN)
+router.put('/:id/block', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
+    if (user.role === 'admin') return res.status(400).json("Yönetici engellenemez!");
+
+    user.isBlocked = !user.isBlocked;
+    await user.save();
+
+    res.status(200).json({
+      message: user.isBlocked ? "Kullanıcı engellendi." : "Kullanıcı engeli kaldırıldı.",
+      isBlocked: user.isBlocked
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 12. BAŞVURU ONAYLA / REDDET (ADMİN)
 router.put('/:id/application-status', async (req, res) => {
   try {
     const { status, reason } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
 
-    // A) ONAYLANDIYSA
+    // Onaylandıysa rol değiştir
     if (status === 'approved' && user.applicationData?.requestedRole) {
-        user.role = user.applicationData.requestedRole; 
+      user.role = user.applicationData.requestedRole;
     }
-    
-    // B) REDDEDİLDİYSE (Resimleri Sil)
-    if (status === 'rejected') {
-        // Cloudinary'den sil
-        if (user.applicationData?.licenseImage) {
-            await deleteFromCloudinary(user.applicationData.licenseImage);
-        }
-        if (user.applicationData?.documentImage) {
-            await deleteFromCloudinary(user.applicationData.documentImage);
-        }
 
-        // Veritabanından sil ve sebep ekle
-        user.applicationData = { 
-            ...user.applicationData, 
-            rejectionReason: reason,
-            licenseImage: null,    
-            documentImage: null    
-        };
+    // Reddedildiyse resimleri sil
+    if (status === 'rejected') {
+      if (user.applicationData?.licenseImage) {
+        await deleteFromCloudinary(user.applicationData.licenseImage);
+      }
+      if (user.applicationData?.documentImage) {
+        await deleteFromCloudinary(user.applicationData.documentImage);
+      }
+
+      user.applicationData = {
+        ...user.applicationData,
+        rejectionReason: reason,
+        licenseImage: null,
+        documentImage: null
+      };
     }
-    
+
     user.applicationStatus = status;
     await user.save();
 
-    // Bildirim Maili
-    const reApplyLink = "http://localhost:5173/partner-application";
-    const loginLink = "http://localhost:5173/login";
+    // Bildirim maili
+    const reApplyLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/partner-application`;
+    const loginLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/login`;
     const boxStyle = "background-color: #f9f9f9; padding: 20px; border-radius: 10px; font-family: Arial;";
     const btnStyle = "display:inline-block; padding:10px 20px; color:white; text-decoration:none; border-radius:5px; font-weight:bold;";
 
@@ -337,32 +453,21 @@ router.put('/:id/application-status', async (req, res) => {
     sendEmail(user.email, subject, htmlContent).catch(console.error);
 
     res.status(200).json(`Kullanıcı durumu: ${status}`);
-  } catch (err) { 
-    console.log(err);
-    res.status(500).json(err); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
   }
 });
 
-// =============================================================================
-// 15. SATICI PROFİLİ GETİR (PUBLIC)
-// =============================================================================
-router.get('/vendor-profile/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('fullName email createdAt storeSettings role');
-    if (!user || user.role !== 'vendor') return res.status(404).json("Satıcı bulunamadı.");
-    res.status(200).json(user);
-  } catch (err) { res.status(500).json(err); }
-});
-
-// =============================================================================
-// 16. EHLİYET KONTROL (CRON JOB)
-// =============================================================================
+// 13. EHLİYET KONTROL (CRON JOB)
 router.get('/check-licenses', async (req, res) => {
   try {
     const users = await User.find({ role: 'courier' });
     // Kontrol mantığı buraya eklenebilir
     res.send("Kontrol tamamlandı.");
-  } catch (err) { res.status(500).json(err); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

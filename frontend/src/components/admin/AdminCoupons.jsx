@@ -2,24 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
-import { FiTrash2, FiPlus, FiTag, FiCalendar, FiPercent, FiTruck } from "react-icons/fi";
+import { FiTrash2, FiPlus, FiTag, FiCalendar, FiPercent, FiTruck, FiSearch, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 
 const AdminCoupons = () => {
   const [coupons, setCoupons] = useState([]);
-  
-  // Form State
-  const [formData, setFormData] = useState({ 
-    code: "", 
-    discountRate: "", 
-    expiryDate: "", 
-    includeDelivery: false 
-  });
-  
+  const [formData, setFormData] = useState({ code: "", discountRate: "", expiryDate: "", includeDelivery: false });
   const [confirmData, setConfirmData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  
   const { notify } = useCart();
-
-  // BUGÜNÜN TARİHİ (YYYY-MM-DD) - Geçmiş tarih seçimi engellemek için
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toISOString().split("T")[0]; 
 
   // 1. Kuponları Çek
   const fetchCoupons = useCallback(async () => {
@@ -34,17 +26,13 @@ const AdminCoupons = () => {
   // 2. Kupon Oluştur
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.code || !formData.discountRate) return notify("Lütfen kod ve indirim oranını girin.", "warning");
-    
-    // Ekstra güvenlik kontrolü (Input zaten engelliyor ama yine de kalsın)
-    if (Number(formData.discountRate) > 100) return notify("İndirim %100'den fazla olamaz!", "warning");
+    if (!formData.code || !formData.discountRate) return notify("Kod ve İndirim oranı zorunludur.", "warning");
+    if (Number(formData.discountRate) > 100) return notify("İndirim %100'den fazla olamaz.", "warning");
 
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.accessToken;
 
-      // Tarih Ayarı (Gün Sonu: 23:59:59)
       let finalDate = null;
       if (formData.expiryDate) {
           const dateObj = new Date(formData.expiryDate);
@@ -59,190 +47,171 @@ const AdminCoupons = () => {
         includeDelivery: formData.includeDelivery
       };
 
-      await axios.post("http://localhost:5000/api/coupons", payload, {
-        headers: { token: `Bearer ${token}` }
-      });
+      await axios.post("http://localhost:5000/api/coupons", payload, { headers: { token: `Bearer ${token}` } });
       
-      notify("Kupon başarıyla oluşturuldu! 🎉", "success");
+      notify("Kupon oluşturuldu! 🎉", "success");
       setFormData({ code: "", discountRate: "", expiryDate: "", includeDelivery: false });
       fetchCoupons();
-
     } catch (err) { 
-      const msg = err.response?.data?.message || "Hata oluştu (Kod zaten var olabilir)";
-      notify(msg, "error"); 
+      notify(err.response?.data?.message || "Hata oluştu", "error"); 
     }
   };
 
   // 3. Kupon Sil
   const handleDeleteRequest = (id) => {
     setConfirmData({
-      isOpen: true,
-      title: "Kuponu Sil?",
-      message: "Bu işlem geri alınamaz. Kupon kalıcı olarak silinecek.",
-      isDanger: true,
+      isOpen: true, title: "Kuponu Sil?", message: "Bu işlem geri alınamaz.", isDanger: true,
       action: async () => {
         try {
           const user = JSON.parse(localStorage.getItem("user"));
           const token = user?.accessToken;
-          
-          await axios.delete(`http://localhost:5000/api/coupons/${id}`, { 
-            headers: { token: `Bearer ${token}` } 
-          });
-          
+          await axios.delete(`http://localhost:5000/api/coupons/${id}`, { headers: { token: `Bearer ${token}` } });
           notify("Kupon silindi.", "success");
           fetchCoupons();
-        } catch (err) { notify("Silinemedi (Yetki hatası olabilir)", "error"); }
+        } catch (err) { notify("Silinemedi", "error"); }
         setConfirmData(null);
       }
     });
   };
 
+  // --- SIRALAMA VE FİLTRELEME ---
+  const getProcessedCoupons = () => {
+    const now = new Date();
+    return coupons
+      .filter(c => c.code.toLowerCase().includes(searchTerm.toLowerCase()))
+      .sort((a, b) => {
+        const dateA = a.expiryDate ? new Date(a.expiryDate) : new Date(9999, 11, 31);
+        const dateB = b.expiryDate ? new Date(b.expiryDate) : new Date(9999, 11, 31);
+        const isExpiredA = dateA < now;
+        const isExpiredB = dateB < now;
+        if (isExpiredA && !isExpiredB) return 1;
+        if (!isExpiredA && isExpiredB) return -1;
+        return dateA - dateB;
+      });
+  };
+
+  const processedCoupons = getProcessedCoupons();
+
   return (
-    <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
+    <div className="space-y-8 max-w-6xl mx-auto animate-fade-in pb-20">
       
-      {/* BAŞLIK */}
-      <div className="flex items-center gap-3 border-b border-gray-200 pb-4">
-        <div className="p-3 bg-green-100 text-green-600 rounded-xl">
-          <FiTag size={24} />
-        </div>
+      {/* --- HEADER --- */}
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b pt-4 border-gray-200  pb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">İndirim Kuponları</h2>
-          <p className="text-sm text-gray-500">Müşteriler için kampanya kodları oluşturun ve yönetin.</p>
+          <h2 className="text-3xl font-extrabold text-gray-800 flex items-center gap-3">
+            <span className="bg-gradient-to-br from-emerald-400 to-green-600 text-white p-2 rounded-xl shadow-lg shadow-green-200"><FiTag /></span>
+            Kupon Yönetimi
+          </h2>
+          <p className="text-gray-500 mt-2 font-medium">Kampanya kodlarını oluşturun ve yönetin.</p>
+        </div>
+        
+        <div className="relative w-full md:w-72">
+           <input type="text" placeholder="Kupon ara..." className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm focus:shadow-md focus:border-emerald-500 outline-none transition" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
         </div>
       </div>
 
-      {/* --- FORM ALANI --- */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
-          <FiPlus className="text-green-600" /> Yeni Kupon Oluştur
-        </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-          
-          {/* 1. Kod Input */}
-          <div className="md:col-span-3">
-            <label className="text-xs font-bold text-gray-500 uppercase mb-1 flex items-center gap-1"><FiTag /> Kupon Kodu</label>
-            <input 
-              value={formData.code} 
-              onChange={(e) => setFormData({...formData, code: e.target.value.toUpperCase()})} 
-              className="w-full p-3 border rounded-lg outline-none focus:border-green-500 font-mono uppercase tracking-wide font-bold text-gray-900 placeholder-gray-400" 
-              placeholder="YAZ2024" 
-            />
-          </div>
-          
-          {/* 2. Yüzde Input (OTOMATİK DÜZELTME EKLENDİ) */}
-          <div className="md:col-span-2">
-            <label className="text-xs font-bold text-gray-500 uppercase mb-1 flex items-center gap-1"><FiPercent /> İndirim</label>
-            <input 
-              type="number" 
-              min="1" 
-              max="100" 
-              value={formData.discountRate} 
-              onChange={(e) => {
-                let val = Number(e.target.value);
-                if (val > 100) val = 100; // 100'den büyükse 100 yap
-                if (val < 0) val = 0;     // 0'dan küçükse 0 yap
-                setFormData({...formData, discountRate: val});
-              }} 
-              className="w-full p-3 border rounded-lg outline-none focus:border-green-500 text-center font-bold text-gray-900" 
-              placeholder="10" 
-            />
-          </div>
-          
-          {/* 3. Tarih Input (GEÇMİŞ TARİH ENGELLENDİ) */}
-          <div className="md:col-span-3">
-            <label className="text-xs font-bold text-gray-500 uppercase mb-1 flex items-center gap-1"><FiCalendar /> Son Tarih</label>
-            <input 
-              type="date" 
-              min={todayStr} // <--- GEÇMİŞ TARİHLERİ KAPATIR
-              value={formData.expiryDate} 
-              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})} 
-              className="w-full p-3 border rounded-lg outline-none focus:border-green-500 text-sm text-gray-900 cursor-pointer" 
-            />
-          </div>
-
-          {/* 4. Kargo Dahil Checkbox */}
-          <div 
-            className="md:col-span-2 flex items-center justify-center gap-2 h-[46px] bg-gray-50 px-2 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition" 
-            onClick={() => setFormData({...formData, includeDelivery: !formData.includeDelivery})}
-          >
-             <input 
-               type="checkbox" 
-               id="delivery" 
-               checked={formData.includeDelivery} 
-               onChange={(e) => setFormData({...formData, includeDelivery: e.target.checked})}
-               className="w-4 h-4 accent-green-600 cursor-pointer pointer-events-none" 
-             />
-             <label htmlFor="delivery" className="text-xs font-bold text-gray-700 cursor-pointer select-none leading-tight pointer-events-none">
-               Kargo Dahil
-             </label>
-          </div>
-
-          {/* 5. Oluştur Butonu */}
-          <div className="md:col-span-2">
-            <button 
-              type="submit" 
-              className="w-full bg-green-600 text-white h-[46px] rounded-lg font-bold hover:bg-green-700 transition shadow-lg active:scale-95"
-            >
-              Oluştur
-            </button>
-          </div>
-
-        </form>
-      </div>
-
-      {/* LİSTE ALANI */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {coupons.map(coupon => (
-          <div key={coupon._id} className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center group hover:shadow-md transition relative overflow-hidden">
-            
-            <div className="absolute left-0 top-0 bottom-0 w-2 bg-green-500"></div>
-            
-            <div>
-              <div className="text-xl font-bold text-gray-800 font-mono tracking-wider">{coupon.code}</div>
-              <div className="text-sm font-bold text-green-600 flex items-center gap-1 mt-1">
-                <FiPercent /> {coupon.discountRate} İndirim 
-                {coupon.includeDelivery && (
-                  <span className="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 ml-2 border border-blue-200">
-                    <FiTruck /> Kargo
-                  </span>
-                )}
-              </div>
-              <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-                <FiCalendar size={10} /> 
-                {coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : "Süresiz"}
-              </div>
+        {/* --- SOL: KUPON OLUŞTURMA FORMU --- */}
+        <div className="lg:col-span-1">
+          <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 sticky top-24">
+            <div className="flex items-center gap-2 mb-6 text-gray-800 font-bold text-lg">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><FiPlus /></div>
+              Yeni Kupon
             </div>
 
-            <button 
-              onClick={() => handleDeleteRequest(coupon._id)} 
-              className="text-gray-300 hover:text-red-500 hover:bg-red-50 p-3 rounded-full transition"
-              title="Kuponu Sil"
-            >
-              <FiTrash2 size={20} />
-            </button>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="text-xs font-bold text-gray-400 uppercase ml-1 block mb-1">Kupon Kodu</label>
+                <input value={formData.code} onChange={(e) => setFormData({...formData, code: e.target.value.toUpperCase()})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition font-mono font-bold text-lg text-gray-800 placeholder-gray-300" placeholder="YAZ2024" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className="text-xs font-bold text-gray-400 uppercase ml-1 block mb-1">İndirim %</label><div className="relative"><FiPercent className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/><input type="number" min="1" max="100" value={formData.discountRate} onChange={(e) => { let v=Number(e.target.value); if(v>100)v=100; if(v<0)v=0; setFormData({...formData, discountRate: v}) }} className="w-full pl-9 p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 font-bold text-gray-800" placeholder="10" /></div></div>
+                <div><label className="text-xs font-bold text-gray-400 uppercase ml-1 block mb-1">Son Tarih</label><input type="date" min={todayStr} value={formData.expiryDate} onChange={(e) => setFormData({...formData, expiryDate: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-emerald-500 text-xs font-bold text-gray-600 cursor-pointer" /></div>
+              </div>
+              <div onClick={() => setFormData({...formData, includeDelivery: !formData.includeDelivery})} className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${formData.includeDelivery ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 bg-gray-50 hover:border-emerald-200'}`}><span className="text-sm font-bold text-gray-700 flex items-center gap-2"><FiTruck /> Kargo Dahil Olsun</span><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.includeDelivery ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300'}`}>{formData.includeDelivery && <FiCheckCircle className="text-white text-sm" />}</div></div>
+              <button type="submit" className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-black hover:shadow-xl transition transform active:scale-95">Oluştur</button>
+            </form>
           </div>
-        ))}
-        
-        {coupons.length === 0 && (
-          <div className="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-gray-400">
-            <FiTag className="mx-auto text-4xl mb-2 opacity-20" />
-            <p>Henüz aktif bir kupon yok.</p>
+        </div>
+
+        {/* --- SAĞ: KUPON LİSTESİ (ÇİFTER ÇİFTER) --- */}
+        <div className="lg:col-span-2">
+          {/* --- BURADAKİ DEĞİŞİKLİK: md:grid-cols-2 eklendi --- */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {processedCoupons.length === 0 ? (
+              <div className="col-span-full text-center py-20 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50">
+                <FiTag className="mx-auto text-4xl text-gray-300 mb-3" />
+                <p className="text-gray-500 font-medium">Kupon bulunamadı.</p>
+              </div>
+            ) : (
+              processedCoupons.map(coupon => {
+                const isExpired = coupon.expiryDate && new Date(coupon.expiryDate) < new Date();
+
+                return (
+                  <div 
+                    key={coupon._id} 
+                    className={`
+                      relative p-5 rounded-2xl border transition-all duration-300 group
+                      flex flex-col justify-between
+                      ${isExpired 
+                        ? 'bg-gray-50 border-gray-200 opacity-60 hover:opacity-100' 
+                        : 'bg-white border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200'
+                      }
+                    `}
+                  >
+                    {/* Sol Şerit */}
+                    <div className={`absolute left-0 top-4 bottom-4 w-1.5 rounded-r-full ${isExpired ? 'bg-red-400' : 'bg-emerald-400'}`}></div>
+
+                    <div className="pl-4 mb-4">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <h3 className="text-xl font-mono font-black text-gray-800 tracking-wider">{coupon.code}</h3>
+                        {isExpired ? (
+                           <span className="bg-red-100 text-red-600 text-[9px] font-bold px-2 py-1 rounded-full border border-red-200 flex items-center gap-1">
+                             <FiAlertCircle /> SÜRE DOLDU
+                           </span>
+                        ) : (
+                           <span className="bg-emerald-100 text-emerald-700 text-[9px] font-bold px-2 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                             <FiCheckCircle /> AKTİF
+                           </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 text-xs mt-2">
+                         <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded flex items-center gap-1"><FiPercent/> {coupon.discountRate} İndirim</span>
+                         {coupon.includeDelivery && <span className="font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded flex items-center gap-1"><FiTruck/> Kargo Bedava</span>}
+                      </div>
+                      
+                      <div className="text-xs text-gray-400 mt-3 flex items-center gap-1 font-medium border-t pt-2 border-dashed">
+                        <FiCalendar /> 
+                        {coupon.expiryDate 
+                          ? `Son: ${new Date(coupon.expiryDate).toLocaleDateString('tr-TR')}` 
+                          : "Süresiz"
+                        }
+                      </div>
+                    </div>
+
+                    <div className="w-full flex justify-end">
+                      <button 
+                        onClick={() => handleDeleteRequest(coupon._id)} 
+                        className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-100 w-full flex items-center justify-center gap-2 text-xs font-bold"
+                        title="Kuponu Sil"
+                      >
+                        <FiTrash2 size={16} /> Sil
+                      </button>
+                    </div>
+
+                  </div>
+                );
+              })
+            )}
           </div>
-        )}
+        </div>
+
       </div>
       
-      {/* Onay Modalı */}
-      {confirmData && (
-        <ConfirmModal 
-          title={confirmData.title} 
-          message={confirmData.message} 
-          isDanger={confirmData.isDanger} 
-          onConfirm={confirmData.action} 
-          onCancel={() => setConfirmData(null)} 
-        />
-      )}
-
+      {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };

@@ -35,6 +35,7 @@ const Navbar = () => {
     const value = e.target.value;
     setSearchTerm(value);
 
+    // 1. Öneri Mantığı
     if (value.length > 1) {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
@@ -47,7 +48,28 @@ const Navbar = () => {
     } else {
       setShowSuggestions(false);
     }
+    
+    // Ana sayfaya yönlendirme (Dikkat: Bu input odağını kaybettirebilir)
     if (location.pathname !== "/") navigate("/");
+
+    // --- ANALİTİK GÖNDERİMİ (DÜZELTİLDİ) ---
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    // DÜZELTME: 'searchTerm' yerine 'value' kullanıyoruz. 
+    // Çünkü setSearchTerm asenkron çalışır, değer hemen güncellenmez.
+    if (user && value.length > 2) {
+        try {
+             // Her harfte istek atmamak için basit bir kontrol eklenebilir ama şimdilik böyle:
+             // İleride burayı useEffect ile 'debounce' yapmak daha sağlıklı olur.
+             await axios.post("http://localhost:5000/api/users/log-activity", { 
+                action: 'search', 
+                details: { query: value } // <--- DÜZELTME BURADA
+             }, { headers: { token: `Bearer ${user.accessToken}` } });
+        } catch(e) {
+            // Loglama hatası kullanıcıyı etkilemesin
+            console.error("Log hatası:", e); 
+        }
+    }
   };
 
   useEffect(() => {

@@ -1,226 +1,261 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import InvoiceModal from "../components/InvoiceModal";
-import ConfirmModal from "../components/ConfirmModal";
-import OrderTracker from "../components/OrderTracker"; // <--- YENİ TAKİP BİLEŞENİ
 import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
+import OrderTracker from "../components/OrderTracker";
+import InvoiceModal from "../components/InvoiceModal"; 
+// --- YENİ İPTAL MODALI ---
+import CancelModal from "../components/CancelModal"; 
+import { FiPackage, FiClock, FiMapPin, FiChevronDown, FiChevronUp, FiX, FiPrinter, FiAlertTriangle } from "react-icons/fi";
+
 
 const MyOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Görsel State'ler
-  const [expandedId, setExpandedId] = useState(null); // Hangi kart açık?
-  const [selectedInvoice, setSelectedInvoice] = useState(null); // Fatura
-  const [confirmData, setConfirmData] = useState(null); // Onay Modalı
+  // --- MODAL STATE'LERİ ---
+  const [showCancelModal, setShowCancelModal] = useState(false); // Yeni Modal için
+  const [selectedOrderId, setSelectedOrderId] = useState(null);  // İptal edilecek ID
+  
+  const [selectedInvoice, setSelectedInvoice] = useState(null);  // Fatura
+  const [expandedOrderId, setExpandedOrderId] = useState(null);  // Akordeon
 
-  const navigate = useNavigate();
   const { notify } = useCart();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // 1. Siparişleri Çek
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    const fetchMyOrders = async () => {
+    const fetchOrders = async () => {
+      if (!user) return;
       try {
         const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
-        setOrders(res.data);
+        // En yeni sipariş en üstte
+        const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setOrders(sortedOrders);
       } catch (err) {
         console.log(err);
       } finally {
         setLoading(false);
       }
     };
-    fetchMyOrders();
-  }, [navigate]);
+    fetchOrders();
+  }, [user?._id]);
 
-  // İPTAL TALEBİ FONKSİYONU
-  const requestCancelOrder = (e, id) => {
-    e.stopPropagation();
-    setConfirmData({
-      isOpen: true,
-      title: "İptal Talebi Oluştur",
-      message: "Siparişinizin iptali için talep oluşturulacaktır. Müşteri temsilcimiz inceleyip onaylayacaktır. Devam edilsin mi?",
-      isDanger: true,
-      action: async () => {
-        try {
-          // Durumu 'İptal' değil 'İptal Talebi' yapıyoruz
-          await axios.put(`http://localhost:5000/api/orders/${id}`, { status: "İptal Talebi" });
-          
-          notify("İptal talebiniz alındı. İnceleniyor.", "info");
-          
-          setOrders(prev => prev.map(o => o._id === id ? { ...o, status: "İptal Talebi" } : o));
-        } catch (err) {
-          notify("Hata oluştu.", "error");
-        }
-        setConfirmData(null);
-      }
-    });
+  // --- AKSİYONLAR ---
+
+  // 1. İptal Butonuna Tıklanınca (ESKİ MODALI AÇMAZ, YENİYİ AÇAR)
+  const handleCancelClick = (e, id) => {
+    e.stopPropagation(); // Akordeonun kapanmasını önle
+    setSelectedOrderId(id);
+    setShowCancelModal(true); // <--- SADECE YENİ MODAL
   };
-  
-  // Renkler (Yeni Durum İçin)
-  const getStatusColor = (status) => {
-    switch(status) {
-      case "Teslim Edildi": return "bg-green-100 text-green-700 border-green-200";
-      case "İptal": return "bg-red-100 text-red-700 border-red-200";
-      // İptal Talebi Rengi (Turuncu/Kırmızı arası)
-      case "İptal Talebi": return "bg-orange-100 text-orange-700 border-orange-200 animate-pulse"; 
-      case "Yola Çıktı": return "bg-purple-100 text-purple-700 border-purple-200";
-      case "Hazırlanıyor": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      default: return "bg-blue-100 text-blue-700 border-blue-200";
+
+  // 2. İptal Talebini Gönder
+  const submitCancelRequest = async (reason) => {
+    try {
+      await axios.put(`http://localhost:5000/api/orders/${selectedOrderId}`, {
+        status: "İptal Talebi",
+        cancellationReason: reason
+      });
+
+      notify("İptal talebiniz başarıyla alındı.", "info");
+      
+      // Listeyi güncelle
+      setOrders(prev => prev.map(o => o._id === selectedOrderId ? { ...o, status: "İptal Talebi" } : o));
+      
+      setShowCancelModal(false);
+    } catch (err) {
+      notify("Bir hata oluştu.", "error");
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-pink-600 font-bold bg-gray-50">Yükleniyor...</div>;
+  const toggleOrder = (id) => {
+    if (expandedOrderId === id) setExpandedOrderId(null);
+    else setExpandedOrderId(id);
+  };
+
+  // Durum Renkleri
+  const getStatusStyle = (status) => {
+    switch(status) {
+      case "Sipariş Alındı": return { border: "border-blue-500", badge: "bg-blue-100 text-blue-700" };
+      case "Hazırlanıyor": return { border: "border-yellow-500", badge: "bg-yellow-100 text-yellow-700" };
+      case "Hazır": return { border: "border-teal-500", badge: "bg-teal-100 text-teal-700" };
+      case "Yola Çıktı": 
+      case "Dağıtımda": 
+      case "Kurye Yolda": return { border: "border-purple-500", badge: "bg-purple-100 text-purple-700" };
+      case "Teslim Edildi": return { border: "border-green-500", badge: "bg-green-100 text-green-700" };
+      case "İptal": return { border: "border-red-500", badge: "bg-red-100 text-red-700 opacity-70" };
+      case "İptal Talebi": return { border: "border-orange-500", badge: "bg-orange-100 text-orange-700 animate-pulse border border-orange-200" };
+      default: return { border: "border-gray-200", badge: "bg-gray-100 text-gray-600" };
+    }
+  };
+
+  if (loading) return (
+    <div className="min-h-screen pt-32 text-center">
+        <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-500">Siparişleriniz yükleniyor...</p>
+    </div>
+  );
+
+  if (orders.length === 0) return (
+    <div className="min-h-screen pt-32 pb-10 px-4 text-center">
+        <div className="bg-white max-w-md mx-auto p-10 rounded-3xl shadow-xl border border-gray-100">
+            <div className="text-6xl mb-4 opacity-50">🛍️</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Henüz Siparişiniz Yok</h2>
+            <p className="text-gray-500 mb-6">Hemen alışverişe başlayıp sevdiklerinizi mutlu edin.</p>
+            <Link to="/" className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg">Alışverişe Başla</Link>
+        </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pt-24 pb-10 px-4">
+    <div className="rounded-2xl border min-h-screen bg-gray-50 font-sans pt-4 pb-20 px-4">
+      <Seo title="Siparişlerim" description="Geçmiş siparişlerinizi görüntüleyin." />
+      
       <div className="max-w-4xl mx-auto">
-        
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Siparişlerim 📦</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+          <span className="bg-pink-100 text-pink-600 p-2 rounded-xl"><FiPackage /></span> Siparişlerim
+        </h1>
 
-        {orders.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl text-center shadow-sm border border-gray-100 animate-fade-in">
-            <div className="text-5xl mb-4">🥀</div>
-            <h3 className="text-xl font-bold text-gray-700">Henüz bir siparişiniz yok.</h3>
-            <p className="text-gray-400 mt-2 text-sm">Sevdiklerinizi mutlu etmek için hemen alışverişe başlayın.</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {orders.map((order) => {
-              const isExpanded = expandedId === order._id;
+        <div className="space-y-6">
+          {orders.map((order) => {
+            const isExpanded = expandedOrderId === order._id;
+            const styles = getStatusStyle(order.status);
 
-              return (
+            return (
+              <div 
+                key={order._id} 
+                className={`bg-white rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-pink-50 border-pink-200' : 'border-gray-200 hover:border-pink-200'}`}
+              >
+                {/* --- ÜST KISIM (ÖZET KART) --- */}
                 <div 
-                  key={order._id} 
-                  className={`bg-white rounded-2xl shadow-sm border transition-all cursor-pointer overflow-hidden animate-fade-in-up ${isExpanded ? 'border-pink-400 ring-2 ring-pink-50' : 'border-gray-200 hover:border-pink-300'}`}
-                  onClick={() => setExpandedId(isExpanded ? null : order._id)}
+                  className={`p-6 flex flex-col md:flex-row justify-between items-center gap-4 cursor-pointer border-l-8 ${styles.border}`}
+                  onClick={() => toggleOrder(order._id)}
                 >
-                  
-                  {/* --- ÖZET KISMI (HEP GÖRÜNÜR) --- */}
-                  <div className="p-5 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    
-                    <div className="flex items-center gap-4 w-full sm:w-auto">
-                      {/* Durum Çubuğu (Dikey) */}
-                      <div className={`w-1.5 h-12 rounded-full ${order.status === 'Teslim Edildi' ? 'bg-green-500' : order.status === 'İptal' ? 'bg-red-500' : 'bg-blue-500'}`}></div>
-                      <div>
-                        <div className="text-sm font-bold text-gray-800">
-                          {new Date(order.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        </div>
-                        <div className="text-xs text-gray-400 font-mono">#{order._id.slice(-8).toUpperCase()}</div>
-                      </div>
+                  {/* Sol: İkon ve No */}
+                  <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl shadow-inner">
+                       {order.status === 'Teslim Edildi' ? '🎁' : '📦'}
                     </div>
-
-                    <div className="text-center">
-                      <div className="text-lg font-extrabold text-pink-600">£{order.totalAmount}</div>
-                      <div className="text-xs text-gray-500">{order.items.length} Ürün</div>
-                    </div>
-
-                    <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
-                      <span className={`text-gray-400 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    <div>
+                       <div className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-0.5">Sipariş No</div>
+                       <div className="text-lg font-bold text-gray-800 font-mono">#{order._id.slice(-8).toUpperCase()}</div>
+                       <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                         <FiClock /> {new Date(order.createdAt).toLocaleDateString()}
+                       </div>
                     </div>
                   </div>
 
-                  {/* --- DETAY KISMI (AÇILIR PENCERE) --- */}
-                  {isExpanded && (
-                    <div className="border-t border-gray-100 bg-gray-50/50 p-6 cursor-default" onClick={e => e.stopPropagation()}>
-                       
-                       {/* 1. KARGO TAKİP ÇUBUĞU */}
-                       <div className="mb-8 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                         <OrderTracker status={order.status} />
+                  {/* Orta: Tutar */}
+                  <div className="text-center md:text-right w-full md:w-auto">
+                     <div className="text-sm font-bold text-gray-400 uppercase tracking-wide">Tutar</div>
+                     <div className="text-xl font-extrabold text-pink-600">£{order.totalAmount.toFixed(2)}</div>
+                  </div>
+
+                  {/* Sağ: Durum ve Ok */}
+                  <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                     <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${styles.badge}`}>
+                        {order.status}
+                     </span>
+                     <span className={`text-gray-400 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                        {isExpanded ? <FiChevronUp size={24} /> : <FiChevronDown size={24} />}
+                     </span>
+                  </div>
+                </div>
+
+                {/* --- ALT KISIM (DETAY & TRACKER) --- */}
+                {isExpanded && (
+                  <div className="border-t border-gray-100 bg-gray-50/50 p-6 cursor-default animate-fade-in">
+                    
+                    {/* Sipariş Takip Çubuğu */}
+                    <div className="mb-8 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                       <OrderTracker status={order.status} />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                       {/* Ürün Listesi */}
+                       <div>
+                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiPackage /> Ürünler</h4>
+                          <div className="space-y-3">
+                            {order.items.map((item, i) => (
+                              <div key={i} className="flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-200">
+                                <img src={item.img} className="w-14 h-14 rounded-lg object-cover border" alt={item.title} />
+                                <div className="flex-1">
+                                  <div className="font-bold text-gray-800 text-sm">{item.title}</div>
+                                  <div className="text-xs text-gray-500">Adet: {item.quantity}</div>
+                                </div>
+                                <div className="font-bold text-gray-700">£{item.price.toFixed(2)}</div>
+                              </div>
+                            ))}
+                          </div>
                        </div>
 
-                       {/* 2. ADRES VE DETAYLAR */}
-                       <div className="grid md:grid-cols-2 gap-6 mb-6">
-                          <div className="bg-white p-4 rounded-xl border border-gray-100">
-                             <h4 className="text-xs font-bold text-gray-400 uppercase mb-2">Alıcı Bilgileri</h4>
-                             <p className="font-bold text-gray-800">{order.recipient.name}</p>
-                             <p className="text-sm text-gray-600">{order.recipient.phone}</p>
-                             <p className="text-sm text-gray-600 mt-1 leading-snug">{order.recipient.address}, {order.recipient.city}</p>
-                          </div>
-                          <div className="bg-white p-4 rounded-xl border border-gray-100">
-                             <h4 className="text-xs font-bold text-gray-400 uppercase mb-2">Teslimat & Not</h4>
-                             <p className="text-sm text-gray-600">📅 {new Date(order.delivery.date).toLocaleDateString()} • ⏰ {order.delivery.timeSlot}</p>
-                             {order.delivery.cardMessage ? (
-                               <div className="mt-3 text-xs text-pink-600 italic bg-pink-50 p-2 rounded border border-pink-100">
-                                 💌 "{order.delivery.cardMessage}"
+                       {/* Teslimat Bilgileri */}
+                       <div>
+                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiMapPin /> Teslimat</h4>
+                          <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-2 text-sm text-gray-700 shadow-sm">
+                             <p><span className="font-bold">Alıcı:</span> {order.recipient.name}</p>
+                             <p className="text-xs text-gray-500">{order.recipient.phone}</p>
+                             <p className="bg-gray-50 p-2 rounded border border-gray-100 mt-2 leading-relaxed">
+                                {order.recipient.address}<br/>
+                                {order.recipient.city}, {order.recipient.postcode}
+                             </p>
+                             {order.delivery.cardMessage && (
+                               <div className="mt-2 text-pink-600 italic bg-pink-50 p-2 rounded border border-pink-100 text-xs">
+                                  💌 "{order.delivery.cardMessage}"
                                </div>
-                             ) : (
-                               <span className="text-xs text-gray-400 mt-2 block">Kart notu yok.</span>
                              )}
                           </div>
                        </div>
-
-                       {/* 3. ÜRÜN LİSTESİ */}
-                       <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 ml-1">Sipariş İçeriği</h4>
-                       <div className="space-y-3">
-                          {order.items.map((item, i) => (
-                            <div key={i} className="flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
-                               <img src={item.img} className="w-14 h-14 rounded-lg object-cover border border-gray-100" alt={item.title} />
-                               <div className="flex-1">
-                                  <div className="font-bold text-sm text-gray-800">{item.title}</div>
-                                  <div className="text-xs text-gray-500">Adet: {item.quantity}</div>
-                               </div>
-                               <div className="font-bold text-gray-700">£{item.price}</div>
-                            </div>
-                          ))}
-                       </div>
-                       
-                       {/* 4. AKSİYON BUTONLARI */}
-                       <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-gray-200">
-                          {/* Sadece 'Sipariş Alındı' ise iptal edilebilir */}
-                          {order.status === "Sipariş Alındı" && (
-                        <button 
-                            onClick={(e) => requestCancelOrder(e, order._id)}
-                            className="text-sm text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-lg font-bold transition border border-transparent hover:border-red-100">
-                            İptal Talebi Oluştur
-                        </button>
-                          )}
-                          
-                          <button 
-                            onClick={() => setSelectedInvoice(order)}
-                            className="flex items-center gap-2 bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-black transition shadow-md hover:shadow-lg"
-                          >
-                            <span>🖨️</span> Faturayı Görüntüle
-                          </button>
-                       </div>
-
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
+                    
+                    {/* BUTONLAR */}
+                    <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap justify-end gap-3">
+                       {/* FATURA BUTONU */}
+                       <button 
+                          onClick={() => setSelectedInvoice(order)} 
+                          className="flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition shadow-md"
+                       >
+                          <FiPrinter /> Fatura
+                       </button>
 
-        {/* MODALLAR */}
-        {selectedInvoice && (
-          <InvoiceModal 
-            order={selectedInvoice} 
-            onClose={() => setSelectedInvoice(null)} 
-          />
-        )}
+                       {/* İPTAL TALEBİ BUTONU (Sadece Sipariş Alındı ise ve İptal Talebi yoksa) */}
+                       {order.status === "Sipariş Alındı" && (
+                         <button 
+                           onClick={(e) => handleCancelClick(e, order._id)} 
+                           className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-xl font-bold text-sm transition border border-transparent hover:border-red-100"
+                         >
+                           <FiX /> İptal Talebi Oluştur
+                         </button>
+                       )}
+                       
+                       {order.status === "İptal Talebi" && (
+                          <span className="flex items-center gap-2 text-orange-600 bg-orange-50 px-4 py-2 rounded-xl font-bold text-sm border border-orange-100 animate-pulse">
+                            <FiAlertTriangle /> Talep İnceleniyor...
+                          </span>
+                       )}
+                    </div>
 
-        {confirmData && (
-          <ConfirmModal 
-            title={confirmData.title} 
-            message={confirmData.message} 
-            isDanger={confirmData.isDanger} 
-            onConfirm={confirmData.action} 
-            onCancel={() => setConfirmData(null)} 
-          />
-        )}
-
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
+
+      {/* --- YENİ İPTAL MODALI (CancelModal) --- */}
+      {showCancelModal && (
+        <CancelModal 
+          onClose={() => setShowCancelModal(false)} 
+          onConfirm={submitCancelRequest} 
+        />
+      )}
+
+      {/* Fatura Modalı */}
+      {selectedInvoice && <InvoiceModal order={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
+
     </div>
   );
 };

@@ -105,7 +105,7 @@ const ConfirmModal = ({ title, message, onConfirm, onCancel, isDanger = false })
                 : "bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-500/30"}
             `}
           >
-            {isDanger ? "Evet, Sil" : "Onayla"}
+            {isDanger ? "Evet" : "Onayla"}
           </button>
         </div>
 

@@ -4,23 +4,27 @@ const Product = require('../models/Product');
 const User = require('../models/User');
 const Coupon = require('../models/Coupon');
 const sendEmail = require('../utils/sendEmail');
+const logActivity = require('../utils/logActivity');
 
-// --- SABİTLER ---
-const DELIVERY_COST = 20;
-const DELIVERY_THRESHOLD = 200;
 
+// --- FİYATLANDIRMA SABİTLERİ (GÜNCELLENDİ) ---
+const PRICING = {
+    standart: 5.99,   // 2-3 Gün
+    nextDay: 9.99,    // Ertesi Gün
+    sameDay: 24.99,   // Aynı Gün
+    freeThreshold: 200 // Ücretsiz Kargo Limiti (Sadece Standart için)
+};
 // =============================================================================
-// YARDIMCI: MÜŞTERİ MAİL ŞABLONU (Detaylı)
+// YARDIMCI: MÜŞTERİ MAİL ŞABLONU (Detaylı Fatura Görünümü)
 // =============================================================================
 const createOrderEmail = (order, title, message) => {
-  // Mailde göstermek için hesaplamalar
   const subTotal = order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const discountAmount = (subTotal + order.deliveryFee) - order.totalAmount;
 
   const itemsHtml = order.items.map(item => `
     <tr>
       <td style="padding: 12px; border-bottom: 1px solid #eee;">
-        ${item.img ? `<img src="${item.img}" width="50" style="border-radius:4px; vertical-align: middle; margin-right: 10px;">` : ''}
+        ${item.img ? `<img src="${item.img}" width="40" style="border-radius:4px; vertical-align: middle; margin-right: 10px;">` : ''}
         <strong>${item.title}</strong>
       </td>
       <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
@@ -53,7 +57,7 @@ const createOrderEmail = (order, title, message) => {
           ${discountAmount > 0.01 ? `<p style="margin: 5px 0; color: #16a34a;">İndirim: <strong>-£${discountAmount.toFixed(2)}</strong></p>` : ''}
           <p style="margin: 5px 0; color: #666;">Kargo: <strong>${order.deliveryFee === 0 ? 'Ücretsiz' : '£' + order.deliveryFee.toFixed(2)}</strong></p>
           <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
-            <p style="margin: 0; font-size: 22px; color: #db2777;"><strong>Toplam: £${order.totalAmount.toFixed(2)}</strong></p>
+            <p style="margin: 0; font-size: 22px; color: #db2777;"><strong>Ödenen Tutar: £${order.totalAmount.toFixed(2)}</strong></p>
           </div>
         </div>
 
@@ -75,9 +79,23 @@ const createOrderEmail = (order, title, message) => {
   `;
 };
 
-// --- YARDIMCI: SATICI (VENDOR) MAİL ŞABLONU ---
+// --- KURYE İPTAL MAİL ŞABLONU (YENİ) ---
+const createCourierCancelEmail = (courierName, orderId) => {
+  return `
+    <div style="font-family: Arial; padding: 20px; border: 2px solid #dc2626; border-radius: 8px; background-color: #fef2f2;">
+      <h2 style="color: #dc2626; margin-top: 0;">🛑 DUR! SİPARİŞ İPTAL EDİLDİ</h2>
+      <p>Merhaba <b>${courierName}</b>,</p>
+      <p>Üzerine aldığın <strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> numaralı sipariş iptal edilmiştir.</p>
+      <p style="font-weight: bold;">Lütfen teslimat adresine veya mağazaya GİTMEYİNİZ.</p>
+      <p>Bu görev üzerinizden düşürülmüştür.</p>
+    </div>
+  `;
+};
+// =============================================================================
+// YARDIMCI: SATICI (VENDOR) MAİL ŞABLONU
+// =============================================================================
 const createVendorEmail = (vendorData, orderId) => {
-  // Satıcı kazancı = Orijinal Fiyat * Adet (İndirim yansımaz)
+  // Satıcıya indirim yansıtılmaz, orijinal fiyatı görür.
   const vendorTotal = vendorData.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   const itemsHtml = vendorData.items.map(item => `
@@ -126,6 +144,20 @@ const createVendorEmail = (vendorData, orderId) => {
   `;
 };
 
+// --- SATICI İPTAL BİLDİRİM MAİLİ ---
+const createVendorCancelEmail = (vendorName, orderId) => {
+  return `
+    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #fee2e2; border-radius: 8px; background-color: #fff5f5;">
+      <h2 style="color: #991b1b; margin-top: 0;">❌ Sipariş İptal Edildi</h2>
+      <p>Merhaba <b>${vendorName}</b>,</p>
+      <p><strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> numaralı sipariş iptal edilmiştir.</p>
+      <p>Lütfen bu sipariş için ürün hazırlamayın veya gönderim yapmayın.</p>
+      <hr style="border: 0; border-top: 1px solid #fecaca; margin: 20px 0;">
+      <p style="font-size: 12px; color: #7f1d1d;">ÇiçekSepeti UK Satıcı Ekibi</p>
+    </div>
+  `;
+};
+
 // =============================================================================
 // 1. SİPARİŞ OLUŞTURMA (POST) - GÜVENLİ SERVER-SIDE HESAPLAMA
 // =============================================================================
@@ -136,12 +168,16 @@ router.post('/', async (req, res) => {
     let calculatedTotal = 0;
     let finalItems = [];
 
-    // A) ÜRÜNLERİ DOĞRULA, FİYATI DB'DEN AL VE STOK DÜŞ
+    // --- A) ÜRÜNLERİ DOĞRULA, FİYATI DB'DEN ÇEK VE STOK DÜŞ ---
     for (const item of items) {
       const product = await Product.findById(item._id);
       
-      if (!product) return res.status(404).json({ message: `Ürün bulunamadı: ${item.title}` });
-      if (product.stock < item.quantity) return res.status(400).json({ message: `Stok yetersiz: ${item.title}. Kalan: ${product.stock}` });
+      if (!product) {
+        return res.status(404).json({ message: `Ürün bulunamadı: ${item.title}` });
+      }
+      if (product.stock < item.quantity) {
+        return res.status(400).json({ message: `Stok yetersiz: ${item.title}. Kalan: ${product.stock}` });
+      }
       
       // Fiyatı veritabanından al (Güvenlik: Frontend fiyatına güvenilmez)
       const price = product.price;
@@ -161,7 +197,7 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // B) KUPON VE KARGO HESAPLAMA
+    // --- B) KUPON VE KARGO HESAPLAMA ---
     let discountAmount = 0;
     let isFreeDelivery = false;
 
@@ -171,7 +207,7 @@ router.post('/', async (req, res) => {
       if (coupon && coupon.isActive) {
         let isExpired = false;
         
-        // Tarih Kontrolü (Gün sonuna kadar geçerli)
+        // Tarih Kontrolü (Gün Sonuna Kadar)
         if (coupon.expiryDate) {
              const now = new Date();
              const expiry = new Date(coupon.expiryDate);
@@ -179,7 +215,7 @@ router.post('/', async (req, res) => {
              if (now > expiry) isExpired = true;
         }
 
-        // Kullanım Kontrolü (Daha önce kullanmış mı?)
+        // Kullanım Kontrolü
         const isUsed = userId && coupon.usedBy.includes(userId);
 
         if (!isExpired && !isUsed) {
@@ -187,7 +223,7 @@ router.post('/', async (req, res) => {
           discountAmount = (calculatedTotal * coupon.discountRate) / 100;
           if (coupon.includeDelivery) isFreeDelivery = true;
           
-          // Kuponu kullanıldı olarak işaretle (Sadece kayıtlı kullanıcı için)
+          // Kuponu kullanıldı işaretle (Sadece kayıtlı kullanıcı için)
           if (userId) {
             coupon.usedBy.push(userId);
             await coupon.save();
@@ -199,30 +235,47 @@ router.post('/', async (req, res) => {
     // İndirimli Ara Toplam
     let priceAfterDiscount = calculatedTotal - discountAmount;
 
-    // Kargo Ücreti Hesabı
+    // C) TESLİMAT ÜCRETİ HESAPLAMA (YENİ MANTIK) 🚚
     let deliveryFee = 0;
-    // Eğer kupon kargoyu kapsamıyorsa VE tutar 200 altındaysa kargo ekle
-    if (!isFreeDelivery && priceAfterDiscount < DELIVERY_THRESHOLD) {
-        deliveryFee = DELIVERY_COST;
+    const selectedType = delivery.deliveryType || 'standart'; // Varsayılan Standart
+
+    if (!isFreeDelivery) { // Kuponla bedava olmadıysa hesapla
+        switch (selectedType) {
+            case 'same-day':
+                deliveryFee = PRICING.sameDay; // £24.99 (Sabit)
+                break;
+            case 'next-day':
+                deliveryFee = PRICING.nextDay; // £9.99 (Sabit)
+                break;
+            case 'standart':
+            default:
+                // Standart kargo, 200£ altındaysa ücretli, üstündeyse bedava
+                if ((calculatedTotal - discountAmount) < PRICING.freeThreshold) {
+                    deliveryFee = PRICING.standart; // £5.99
+                } else {
+                    deliveryFee = 0; // Ücretsiz
+                }
+                break;
+        }
     }
 
     // Genel Toplam
     const finalTotalAmount = priceAfterDiscount + deliveryFee;
 
-    // C) METADATA VE IP YAKALAMA
+    // --- C) METADATA VE IP ---
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const finalMetaData = {
-        ...metaData, // Frontend'den gelen (Browser, OS vb.)
-        ip: clientIp // Backend'den gelen (IP)
+        ...metaData, 
+        ip: clientIp
     };
 
-    // D) KULLANICI BİLGİLERİNİ GÜNCELLE (Adres Kaydetme İsteği Varsa)
+    // --- D) KULLANICI BİLGİLERİNİ GÜNCELLE ---
     if (userId) {
       try {
          // Telefon numarasını her zaman güncelle/ekle
          await User.findByIdAndUpdate(userId, { $set: { phone: sender.phone } });
-
-         // Eğer 'saveAddress' true ise adresi de ekle
+         
+         // Eğer müşteri "Adresi Kaydet" dediyse
          if (saveAddress) {
              await User.findByIdAndUpdate(userId, { 
                  $addToSet: { savedAddresses: {
@@ -235,11 +288,11 @@ router.post('/', async (req, res) => {
       } catch(e) { console.log("Kullanıcı bilgileri güncellenemedi:", e); }
     }
 
-    // E) SİPARİŞİ KAYDET
+    // --- E) SİPARİŞİ KAYDET ---
     const newOrder = new Order({
       userId,
-      items: finalItems, // Güvenli liste
-      totalAmount: finalTotalAmount, // Server hesaplaması
+      items: finalItems,
+      totalAmount: finalTotalAmount,
       deliveryFee: deliveryFee,
       sender,
       recipient,
@@ -250,34 +303,44 @@ router.post('/', async (req, res) => {
 
     const savedOrder = await newOrder.save();
 
-    // F) MÜŞTERİYE MAİL GÖNDER
+    // --- 2. LOGLAMA: SİPARİŞ VERİLDİ ---
+    if (userId) {
+        await logActivity(userId, 'order_placed', req, { 
+            orderId: savedOrder._id, 
+            amount: finalTotalAmount,
+            itemCount: finalItems.length
+        });
+    }
+
+    // --- F) MÜŞTERİYE MAİL GÖNDER ---
     const customerMailContent = createOrderEmail(savedOrder, "Siparişiniz Alındı! 🌸", `Merhaba ${sender.name}, siparişiniz başarıyla oluşturuldu.`);
     sendEmail(sender.email, "Sipariş Onayı - ÇiçekSepeti UK", customerMailContent).catch(console.error);
 
-    // G) SATICILARA (VENDORS) BİLDİRİM GÖNDER (Gruplama)
-    const vendorMap = new Map(); // { vendorId: { email, name, items: [] } }
+    // --- G) SATICILARA BİLDİRİM GÖNDER ---
+    const vendorMap = new Map(); 
 
     for (const item of finalItems) {
-        const product = await Product.findById(item._id).populate('vendor');
-        if (product && product.vendor) {
-            const vId = product.vendor._id.toString();
+        // Değişken adı 'prod' yapıldı (Çakışma önlendi)
+        const prod = await Product.findById(item._id).populate('vendor');
+        if (prod && prod.vendor) {
+            const vId = prod.vendor._id.toString();
             
             if (!vendorMap.has(vId)) {
                 vendorMap.set(vId, {
-                    email: product.vendor.email,
-                    name: product.vendor.fullName,
+                    email: prod.vendor.email,
+                    name: prod.vendor.fullName,
                     items: []
                 });
             }
             vendorMap.get(vId).items.push({
                 title: item.title,
                 quantity: item.quantity,
-                price: item.price // Orijinal fiyat (Satıcı indirimi görmez)
+                price: item.price 
             });
         }
     }
 
-    // Her satıcıya kendi ürün listesini mail at
+    // Her satıcıya mail at
     for (const [id, data] of vendorMap) {
         const vendorMail = createVendorEmail(data, savedOrder._id);
         sendEmail(data.email, "Yeni Sipariş Aldınız! 📦", vendorMail).catch(console.error);
@@ -309,7 +372,6 @@ router.get('/vendor/:vendorId', async (req, res) => {
     const vendorProducts = await Product.find({ vendor: req.params.vendorId }).select('_id');
     const vendorProductIds = vendorProducts.map(p => p._id.toString());
 
-    // İçinde bu satıcının en az bir ürünü olan siparişleri bul
     const orders = await Order.find({
       "items._id": { $in: vendorProductIds } 
     }).sort({ createdAt: -1 });
@@ -327,15 +389,18 @@ router.get('/', async (req, res) => {
 });
 
 // =============================================================================
-// 3. DURUM GÜNCELLEME (PUT) & İPTAL TALEBİ
+// 3. DURUM GÜNCELLEME (PUT) & İPTAL YÖNETİMİ
 // =============================================================================
 router.put('/:id', async (req, res) => {
   try {
-    const { status, courierId, courierRejectionReason } = req.body;
+    const { status, courierId, courierRejectionReason, cancellationReason } = req.body;
     
     const updateData = { status };
     if (courierId !== undefined) updateData.courierId = courierId;
     if (courierRejectionReason) updateData.courierRejectionReason = courierRejectionReason;
+    
+    // İptal sebebi varsa kaydet
+    if (cancellationReason) updateData.cancellationReason = cancellationReason;
 
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
@@ -343,9 +408,43 @@ router.put('/:id', async (req, res) => {
       { new: true }
     );
 
+    // --- 3. LOGLAMA: İPTAL TALEBİ ---
+    if (status === "İptal Talebi" && updatedOrder.userId) {
+        await logActivity(updatedOrder.userId, 'order_cancel_request', req, { 
+            orderId: updatedOrder._id, 
+            reason: cancellationReason 
+        });
+    }
+
     if (!updatedOrder) return res.status(404).json("Sipariş bulunamadı");
 
-    // --- DURUM BİLDİRİM MAİLİ (MÜŞTERİYE) ---
+    // --- MAİL BİLDİRİMLERİ ---
+    
+    // --- A) İPTAL DURUMU YÖNETİMİ ---
+    if (status === "İptal") {
+        
+        // 1. SATICILARA BİLDİRİM
+        const vendorSet = new Set(); 
+        for (const item of updatedOrder.items) {
+            const product = await Product.findById(item._id).populate('vendor');
+            if (product && product.vendor && !vendorSet.has(product.vendor._id.toString())) {
+                vendorSet.add(product.vendor._id.toString());
+                const mailContent = createVendorCancelEmail(product.vendor.fullName, updatedOrder._id);
+                sendEmail(product.vendor.email, "Sipariş İptali ❌", mailContent).catch(console.error);
+            }
+        }
+
+        // 2. KURYEYE BİLDİRİM (EĞER VARSA) - YENİ EKLENDİ 🛵
+        if (oldOrder.courierId) {
+            const courier = await User.findById(oldOrder.courierId);
+            if (courier) {
+                const courierMail = createCourierCancelEmail(courier.fullName, updatedOrder._id);
+                sendEmail(courier.email, "GÖREV İPTAL EDİLDİ 🛑", courierMail).catch(console.error);
+            }
+        }
+    }
+
+    // B) MÜŞTERİYE DURUM BİLDİRİMİ
     let subject = "";
     let msg = "";
 
@@ -368,7 +467,7 @@ router.put('/:id', async (req, res) => {
         break;
       case "İptal Talebi":
         subject = "İptal Talebiniz Alındı 📩";
-        msg = `Sipariş iptal talebiniz bize ulaştı. Müşteri temsilcimiz inceleyip size dönüş yapacaktır.`;
+        msg = `Sipariş iptal talebiniz tarafımıza ulaştı.<br/><br/><b>Sebep:</b> ${cancellationReason || 'Belirtilmedi'}<br/><br/>Müşteri temsilcimiz inceleyip size dönüş yapacaktır.`;
         break;
     }
 

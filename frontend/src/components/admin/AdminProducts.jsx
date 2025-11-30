@@ -176,7 +176,7 @@ const AdminProducts = () => {
               </div>
 
               <div className="h-40 bg-gray-100 relative">
-                <img src={product.img || "https://placehold.co/400"} className={`w-full h-full object-cover transition duration-500 ${!product.isActive ? "grayscale" : "group-hover:scale-105"}`} />
+                <img src={product.img || "https://placehold.co/400"} className={`w-full h-full object-cover object-top transition duration-500 ${!product.isActive ? "grayscale" : "group-hover:scale-105"}`} />
                 <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded shadow">{product.category}</span>
               </div>
 

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 const Joi = require('joi'); // Veri Doğrulama
+const logActivity = require('../utils/logActivity');
 
 // =============================================================================
 // GÜVENLİK KURALLARI (REGEX)
@@ -87,6 +88,7 @@ router.post('/register', async (req, res) => {
     });
 
     const savedUser = await newUser.save();
+    await logActivity(savedUser._id, 'register', req, { method: 'email' }); // LOG
 
     // F) Mail Gönderimi
     const frontendUrl = "http://localhost:5173"; 
@@ -177,6 +179,7 @@ router.post('/login', async (req, res) => {
     );
 
     const { password, ...others } = user._doc;
+    await logActivity(user._id, 'login', req);
     res.status(200).json({ ...others, accessToken });
 
   } catch (err) {
@@ -243,7 +246,7 @@ router.post('/reset-password', async (req, res) => {
     user.resetPasswordExpires = undefined;
     
     await user.save();
-    
+    await logActivity(user._id, 'password_change', req, { method: 'reset_link' }); // LOG
     // --- YENİ: BİLGİLENDİRME MAİLİ ---
     sendEmail(user.email, "Şifreniz Değiştirildi 🔒", `
       <h3>Merhaba ${user.fullName},</h3>

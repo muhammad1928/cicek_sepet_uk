@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom"; // Portal için gerekli
+import { createPortal } from "react-dom"; 
 import { FiX, FiPrinter } from "react-icons/fi";
 
 const InvoiceModal = ({ order, onClose }) => {
   const [isMounted, setIsMounted] = useState(false);
   
-  // Portal hedefi (index.html içinde 'modal-root' veya body)
   const modalRoot = document.getElementById("modal-root") || document.body;
 
   useEffect(() => {
     setIsMounted(true);
-    
-    // Sayfa kaydırmayı kilitle
     document.body.style.overflow = 'hidden';
-    
     return () => {
       document.body.style.overflow = 'unset';
       setIsMounted(false);
@@ -26,7 +22,7 @@ const InvoiceModal = ({ order, onClose }) => {
   const total = order.totalAmount || 0;
   const deliveryFee = order.deliveryFee || 0;
   const productTotal = total - deliveryFee;
-  const vatRate = 0.20; // %20 KDV Dahil
+  const vatRate = 0.20; 
   const netAmount = productTotal / (1 + vatRate);
   const vatAmount = productTotal - netAmount;
 
@@ -34,15 +30,24 @@ const InvoiceModal = ({ order, onClose }) => {
     window.print();
   };
 
-  // --- MODAL İÇERİĞİ ---
+  // --- TARİH FORMATLAYICI ---
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString('tr-TR');
+  };
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString('tr-TR')} ${date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+  };
+
   const modalContent = (
-    // z-[99999] ile en üst katmanda olmasını garanti ediyoruz
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in print:p-0 print:bg-white print:static">
       
-      {/* Modal Kutusu: Yazıcıda tam sayfa, ekranda ortalı kutu */}
       <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-xl shadow-2xl flex flex-col relative overflow-hidden print:fixed print:inset-0 print:w-full print:h-full print:max-h-none print:rounded-none print:z-[10000] print:overflow-visible border border-gray-200">
         
-        {/* --- HEADER (Yazıcıda Gizli) --- */}
+        {/* HEADER (Yazıcıda Gizli) */}
         <div className="p-5 border-b bg-gray-50 flex justify-between items-center print:hidden shrink-0">
           <h3 className="font-bold text-gray-700 text-lg">Sipariş Faturası</h3>
           <button 
@@ -54,7 +59,7 @@ const InvoiceModal = ({ order, onClose }) => {
           </button>
         </div>
 
-        {/* --- FATURA İÇERİĞİ (Scroll Edilebilir) --- */}
+        {/* FATURA İÇERİĞİ */}
         <div className="p-10 overflow-y-auto flex-1 bg-white text-gray-800 font-mono text-sm print:p-0 print:overflow-visible" id="invoice-content">
           
           {/* Şirket ve Fatura Bilgileri */}
@@ -69,7 +74,19 @@ const InvoiceModal = ({ order, onClose }) => {
             <div className="text-right">
               <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">INVOICE</h2>
               <p className="mt-2 font-bold text-lg">#{order._id.slice(-8).toUpperCase()}</p>
-              <p className="text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+              
+              {/* --- TARİH BİLGİLERİ (GÜNCELLENDİ) --- */}
+              <div className="mt-2 text-gray-600 text-xs space-y-1">
+                <p>
+                  <span className="font-bold">Sipariş Tarihi:</span> <br/>
+                  {formatDateTime(order.createdAt)}
+                </p>
+                <p>
+                  <span className="font-bold">Teslimat Tarihi:</span> <br/>
+                  {formatDate(order.delivery.date)}
+                </p>
+              </div>
+              {/* --------------------------------------- */}
             </div>
           </div>
 
@@ -149,7 +166,7 @@ const InvoiceModal = ({ order, onClose }) => {
 
         </div>
 
-        {/* --- FOOTER (Yazdır Butonu - Yazıcıda Gizli) --- */}
+        {/* FOOTER */}
         <div className="p-5 border-t bg-gray-50 flex justify-end print:hidden shrink-0">
           <button 
             onClick={handlePrint} 
@@ -163,7 +180,6 @@ const InvoiceModal = ({ order, onClose }) => {
     </div>
   );
 
-  // React Portal ile modalı 'modal-root' div'ine taşıyoruz (Root'a değil)
   return createPortal(modalContent, modalRoot);
 };
 
