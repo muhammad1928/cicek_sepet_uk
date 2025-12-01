@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+
+import { publicRequest, userRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext"; // Bildirim için
 
@@ -13,7 +14,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      await publicRequest.post("/auth/forgot-password", { email });
       setSubmitted(true);
       notify("E-posta gönderildi! 📩", "success");
     } catch (err) {

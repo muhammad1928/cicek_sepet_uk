@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useNavigate, Link } from "react-router-dom";
 import TermsModal from "../components/TermsModal";
 import { useCart } from "../context/CartContext";
@@ -81,7 +82,7 @@ const RegisterVendorPage = () => {
     data.append("file", file);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/upload", data);
+      const res = await publicRequest.post("/upload", data);
       setDocFile(res.data);
       notify("Belge başarıyla yüklendi ✅", "success");
     } catch (err) {
@@ -106,7 +107,7 @@ const RegisterVendorPage = () => {
         // SENARYO A: Zaten üye -> Başvuru Yap (Upgrade)
         if (!docFile) { setLoading(false); return notify("Lütfen Vergi Levhası/Belge yükleyin.", "warning"); }
         
-        await axios.post(`http://localhost:5000/api/users/${user._id}/apply`, {
+        await userRequest.post(`/users/${user._id}/apply`, {
           ...appData,
           documentImage: docFile,
           requestedRole: "vendor"
@@ -121,7 +122,7 @@ const RegisterVendorPage = () => {
 
       } else {
         // SENARYO B: Yeni Kayıt -> Hesap Oluştur
-        await axios.post("http://localhost:5000/api/auth/register", { 
+        await publicRequest.post("/auth/register", { 
             fullName: regData.fullName,
             email: regData.email,
             password: regData.password,

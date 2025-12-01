@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const CartContext = createContext();
-
+import { userRequest } from "../../requestMethods";
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
@@ -153,7 +153,7 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/users/${user._id}/favorites`, { productId });
+      await userRequest.put(`/users/${user._id}/favorites`, { productId });
       
       if (favorites.includes(productId)) {
         setFavorites(prev => prev.filter(id => id !== productId));

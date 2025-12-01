@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { userRequest } from "../requestMethods";
 // Bileşenler
 import BadgeDisplay from "../components/BadgeDisplay";
 import Sidebar from "../components/profilePage/Sidebar";
@@ -29,7 +29,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (user) {
       const fetchCount = async () => {
-        try { const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`); setOrderCount(res.data.length); } catch (e) {}
+        try { const res = await userRequest.get(`/orders/find/${user._id}`); setOrderCount(res.data.length); } catch (e) {}
       };
       fetchCount();
     }

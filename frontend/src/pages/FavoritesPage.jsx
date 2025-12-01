@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
@@ -19,7 +19,7 @@ const FavoritesPage = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await publicRequest.get("/products");
         const filtered = res.data.filter(p => favorites.includes(p._id));
         setFavProducts(filtered);
       } catch (err) {

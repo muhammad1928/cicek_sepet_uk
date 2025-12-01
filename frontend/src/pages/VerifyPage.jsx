@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
-
+import { publicRequest } from "../requestMethods";
 const VerifyPage = () => {
   const { token } = useParams(); // URL'deki kodu yakala
   const [status, setStatus] = useState("loading"); // loading, success, error
@@ -11,7 +10,7 @@ const VerifyPage = () => {
     const verifyAccount = async () => {
       try {
         // Backend'e kodu gönder
-        const res = await axios.post("http://localhost:5000/api/auth/verify", { token });
+        const res = await publicRequest.post("/auth/verify", { token });
         
         setStatus("success");
         setMessage(res.data); // "Hesap başarıyla onaylandı"

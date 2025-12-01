@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import SecureImage from "../SecureImage";
@@ -27,7 +27,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try { 
-      const res = await axios.get("http://localhost:5000/api/users"); 
+      const res = await userRequest.get("/users"); 
       setUsers(res.data); 
     } catch (err) { 
       console.log(err); 
@@ -48,20 +48,20 @@ const AdminUsers = () => {
       
       // Müşteri İstatistikleri
       if (user.role === 'customer') {
-         const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
+         const res = await userRequest.get(`/orders/find/${user._id}`);
          const totalSpent = res.data.reduce((acc, o) => acc + o.totalAmount, 0);
          statsData = { label: "Toplam Harcama", value: `£${totalSpent.toFixed(2)}`, countLabel: "Sipariş Sayısı", count: res.data.length };
       } 
       // Satıcı İstatistikleri
       else if (user.role === 'vendor') {
-         const res = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
+         const res = await userRequest.get(`/orders/vendor/${user._id}`);
          const totalSales = res.data.reduce((acc, o) => acc + o.totalAmount, 0);
          statsData = { label: "Toplam Ciro", value: `£${totalSales.toFixed(2)}`, countLabel: "Alınan Sipariş", count: res.data.length };
       }
       // Kurye İstatistikleri
       else if (user.role === 'courier') {
          // (Basitlik için tüm siparişleri çekip filtreliyoruz, performans için backend rotası yazılabilir)
-         const res = await axios.get("http://localhost:5000/api/orders");
+         const res = await userRequest.get("/orders");
          const myDeliveries = res.data.filter(o => o.courierId === user._id && o.status === "Teslim Edildi");
          const earnings = myDeliveries.reduce((acc, o) => acc + (o.totalAmount * 0.10), 0); // %10 Pay
          statsData = { label: "Toplam Kazanç", value: `£${earnings.toFixed(2)}`, countLabel: "Teslimat Sayısı", count: myDeliveries.length };
@@ -76,7 +76,7 @@ const AdminUsers = () => {
     try {
       // Rol Değiştirme
       if (modalUser) { 
-          await axios.put(`http://localhost:5000/api/users/${modalUser._id}/role`, { role: newRole }); 
+          await userRequest.put(`/users/${modalUser._id}/role`, { role: newRole }); 
           notify("Kullanıcı rolü güncellendi", "success"); 
       } 
       // Bloke Etme (ConfirmData üzerinden gelir)
@@ -185,7 +185,7 @@ const AdminUsers = () => {
                             message: u.isBlocked ? "Kullanıcının erişimi tekrar açılacak." : "Kullanıcı sisteme giriş yapamayacak.", 
                             isDanger: !u.isBlocked, 
                             action: async () => { 
-                                try { await axios.put(`http://localhost:5000/api/users/${u._id}/block`); notify("Durum güncellendi", "success"); fetchUsers(); } 
+                                try { await userRequest.put(`/users/${u._id}/block`); notify("Durum güncellendi", "success"); fetchUsers(); } 
                                 catch { notify("Hata", "error"); } 
                                 setConfirmData(null); 
                             } 

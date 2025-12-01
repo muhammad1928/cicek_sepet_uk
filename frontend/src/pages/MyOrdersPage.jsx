@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
@@ -29,7 +29,7 @@ const MyOrdersPage = () => {
     const fetchOrders = async () => {
       if (!user) return;
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
+        const res = await userRequest.get(`/orders/find/${user._id}`);
         // En yeni sipariş en üstte
         const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setOrders(sortedOrders);
@@ -54,7 +54,7 @@ const MyOrdersPage = () => {
   // 2. İptal Talebini Gönder
   const submitCancelRequest = async (reason) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${selectedOrderId}`, {
+      await userRequest.put(`/orders/${selectedOrderId}`, {
         status: "İptal Talebi",
         cancellationReason: reason
       });

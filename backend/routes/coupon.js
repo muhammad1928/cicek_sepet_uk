@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const Coupon = require('../models/Coupon');
-const { verifyTokenAndAdmin } = require('./verifyToken');
-
+const { 
+  verifyTokenAndAdmin,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 // =============================================================================
 // 1. KUPON OLUŞTUR (SADECE ADMIN)
 // =============================================================================
@@ -44,7 +45,7 @@ router.delete('/:id', verifyTokenAndAdmin, async (req, res) => {
 // =============================================================================
 // 3. TÜM KUPONLARI GETİR (SADECE ADMIN)
 // =============================================================================
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     const coupons = await Coupon.find().sort({ createdAt: -1 });
     res.status(200).json(coupons);
@@ -56,7 +57,7 @@ router.get('/', async (req, res) => {
 // =============================================================================
 // 4. KUPON DOĞRULA (HERKES KULLANABİLİR)
 // =============================================================================
-router.get('/validate/:code', async (req, res) => {
+router.get('/validate/:code',  async (req, res) => {
   try {
     const { userId } = req.query; // Kullanıcı ID'si (Daha önce kullanmış mı diye bakmak için)
     const coupon = await Coupon.findOne({ code: req.params.code });

@@ -5,7 +5,10 @@ const bcrypt = require('bcryptjs');
 const sendEmail = require('../utils/sendEmail');
 const cloudinary = require('cloudinary').v2;
 const logActivity = require('../utils/logActivity');
-
+const { 
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 // =============================================================================
 // CLOUDINARY AYARLARI
 // =============================================================================
@@ -35,7 +38,7 @@ const deleteFromCloudinary = async (url) => {
 // =============================================================================
 // 1. KULLANICI GÜNCELLEME (GENEL PROFİL)
 // =============================================================================
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
   if (req.body.password) {
     try {
       const salt = await bcrypt.genSalt(10);
@@ -73,7 +76,7 @@ router.put('/:id', async (req, res) => {
 // =============================================================================
 // 2. TEK KULLANICIYI GETİR
 // =============================================================================
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
@@ -88,7 +91,7 @@ router.get('/:id', async (req, res) => {
 // =============================================================================
 // 3. FAVORİLERİ SENKRONİZE ET
 // =============================================================================
-router.post('/:id/sync-favorites', async (req, res) => {
+router.post('/:id/sync-favorites', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { localFavorites } = req.body;
     if (!localFavorites || localFavorites.length === 0) {
@@ -111,7 +114,7 @@ router.post('/:id/sync-favorites', async (req, res) => {
 // =============================================================================
 
 // 4.1 ADRESLERİ GETİR
-router.get('/:id/addresses', async (req, res) => {
+router.get('/:id/addresses', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('savedAddresses');
     res.status(200).json(user?.savedAddresses || []);
@@ -121,7 +124,7 @@ router.get('/:id/addresses', async (req, res) => {
 });
 
 // 4.2 ADRES EKLE
-router.post('/:id/addresses', async (req, res) => {
+router.post('/:id/addresses', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const userId = req.params.id;
     const newAddress = req.body;
@@ -158,7 +161,7 @@ router.post('/:id/addresses', async (req, res) => {
 });
 
 // 4.3 ADRES GÜNCELLE
-router.put('/:id/addresses/:addressId', async (req, res) => {
+router.put('/:id/addresses/:addressId', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { title, recipientName, recipientPhone, address, city, postcode } = req.body;
 
@@ -184,7 +187,7 @@ router.put('/:id/addresses/:addressId', async (req, res) => {
 });
 
 // 4.4 ADRES SİL
-router.delete('/:id/addresses/:addressId', async (req, res) => {
+router.delete('/:id/addresses/:addressId', verifyTokenAndAuthorization, async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
       $pull: { savedAddresses: { _id: req.params.addressId } }
@@ -202,7 +205,7 @@ router.delete('/:id/addresses/:addressId', async (req, res) => {
 // =============================================================================
 
 // 5.1 FAVORİ EKLE / ÇIKAR
-router.put('/:id/favorites', async (req, res) => {
+router.put('/:id/favorites', verifyTokenAndAuthorization, async (req, res) => {
   const { productId } = req.body;
 
   try {
@@ -226,7 +229,7 @@ router.put('/:id/favorites', async (req, res) => {
 });
 
 // 5.2 FAVORİLERİ LİSTELE
-router.get('/:id/favorites', async (req, res) => {
+router.get('/:id/favorites', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate('favorites');
     res.status(200).json(user.favorites);
@@ -238,7 +241,7 @@ router.get('/:id/favorites', async (req, res) => {
 // =============================================================================
 // 6. ŞİFRE DEĞİŞTİRME
 // =============================================================================
-router.put('/:id/change-password', async (req, res) => {
+router.put('/:id/change-password', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findById(req.params.id);
@@ -272,7 +275,7 @@ router.put('/:id/change-password', async (req, res) => {
 // =============================================================================
 // 7. BAŞVURU FORMU GÖNDER (PERFORMANS OPTİMİZE EDİLDİ)
 // =============================================================================
-router.post('/:id/apply', async (req, res) => {
+router.post('/:id/apply', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { requestedRole, ...applicationData } = req.body;
 
@@ -315,7 +318,7 @@ router.post('/:id/apply', async (req, res) => {
 // =============================================================================
 // 8. SATICI PROFİLİ GETİR (PUBLIC)
 // =============================================================================
-router.get('/vendor-profile/:id', async (req, res) => {
+router.get('/vendor-profile/:id',  async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
       .select('fullName email createdAt storeSettings role');
@@ -335,7 +338,7 @@ router.get('/vendor-profile/:id', async (req, res) => {
 // =============================================================================
 
 // 9. TÜM KULLANICILARI GETİR (ADMİN)
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     const users = await User.find()
       .select('-password')
@@ -348,7 +351,7 @@ router.get('/', async (req, res) => {
 });
 
 // 10. ROL DEĞİŞTİR (ADMİN)
-router.put('/:id/role', async (req, res) => {
+router.put('/:id/role', verifyTokenAndAdmin, async (req, res) => {
   try {
     const { role } = req.body;
     const updatedUser = await User.findByIdAndUpdate(
@@ -364,7 +367,7 @@ router.put('/:id/role', async (req, res) => {
 });
 
 // 11. ENGELLE / AÇ (ADMİN)
-router.put('/:id/block', async (req, res) => {
+router.put('/:id/block', verifyTokenAndAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
@@ -383,7 +386,7 @@ router.put('/:id/block', async (req, res) => {
 });
 
 // 12. BAŞVURU ONAYLA / REDDET (ADMİN)
-router.put('/:id/application-status', async (req, res) => {
+router.put('/:id/application-status', verifyTokenAndAdmin, async (req, res) => {
   try {
     const { status, reason } = req.body;
     const user = await User.findById(req.params.id);
@@ -460,7 +463,7 @@ router.put('/:id/application-status', async (req, res) => {
 });
 
 // 13. EHLİYET KONTROL (CRON JOB)
-router.get('/check-licenses', async (req, res) => {
+router.get('/check-licenses', verifyTokenAndAdmin, async (req, res) => {
   try {
     const users = await User.find({ role: 'courier' });
     // Kontrol mantığı buraya eklenebilir

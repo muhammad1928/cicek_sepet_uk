@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
-
+import {  userRequest } from "../requestMethods";
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
@@ -96,11 +95,11 @@ export const CartProvider = ({ children }) => {
     if (favorites.includes(productId)) {
       setFavorites(prev => prev.filter(id => id !== productId));
       notify("Favorilerden çıkarıldı", "warning");
-      if(user) await axios.put(`http://localhost:5000/api/users/${user._id}/favorites`, { productId });
+      if(user) await userRequest.put(`/users/${user._id}/favorites`, { productId });
     } else {
       setFavorites(prev => [...prev, productId]);
       notify("Favorilere eklendi", "success");
-      if(user) await axios.put(`http://localhost:5000/api/users/${user._id}/favorites`, { productId });
+      if(user) await userRequest.put(`/users/${user._id}/favorites`, { productId });
     }
   };
 

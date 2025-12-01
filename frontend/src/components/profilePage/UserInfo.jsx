@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { userRequest, publicRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import { FiUser, FiMail, FiPhone, FiShield, FiEdit2, FiSave, FiX, FiLock } from "react-icons/fi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -34,7 +34,7 @@ const UserInfo = ({ user }) => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://localhost:5000/api/users/${user._id}`, profileData);
+      const res = await userRequest.put(`/users/${user._id}`, profileData);
       
       // LocalStorage ve UI'ı Güncelle
       const updatedUser = { ...user, ...res.data }; 
@@ -79,7 +79,7 @@ const UserInfo = ({ user }) => {
     if (!isMatch) return notify("Şifreler eşleşmiyor.", "error");
 
     try {
-      await axios.put(`http://localhost:5000/api/users/${user._id}/change-password`, {
+      await userRequest.put(`/users/${user._id}/change-password`, {
         oldPassword: passwords.oldPass,
         newPassword: passwords.newPass
       });

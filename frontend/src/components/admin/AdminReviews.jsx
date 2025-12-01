@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useCart } from "../../context/CartContext";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 
@@ -9,7 +9,7 @@ const AdminReviews = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await userRequest.get("/products");
       let gatheredReviews = [];
       
       res.data.forEach(product => {
@@ -35,7 +35,7 @@ const AdminReviews = () => {
     if(!confirm("Bu yorumu silmek istediğine emin misin?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${productId}/reviews/${reviewId}`);
+      await userRequest.delete(`/products/${productId}/reviews/${reviewId}`);
       notify("Yorum silindi 🗑️", "success");
       fetchReviews();
     } catch (err) {

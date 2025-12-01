@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
+import { userRequest } from "../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../../components/ConfirmModal";
@@ -28,7 +29,7 @@ const CourierPage = () => {
   // --- VERİLERİ ÇEK (POLLING İLE) ---
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/orders");
+      const res = await userRequest.get("/orders");
       
       if (isMounted.current) {
         const allOrders = res.data;
@@ -83,7 +84,7 @@ const CourierPage = () => {
       isDanger: false,
       action: async () => {
         try {
-          await axios.put(`http://localhost:5000/api/orders/${orderId}`, { 
+          await userRequest.put(`/orders/${orderId}`, { 
             status: "Kurye Yolda", 
             courierId: user._id 
           });
@@ -105,7 +106,7 @@ const CourierPage = () => {
       isOpen: true, title: "Ürünleri Aldın mı?", message: "Mağazadan ürünleri teslim aldığını onayla.", isDanger: false,
       action: async () => {
         try {
-          await axios.put(`http://localhost:5000/api/orders/${myActiveJob._id}`, { status: "Dağıtımda" });
+          await userRequest.put(`/orders/${myActiveJob._id}`, { status: "Dağıtımda" });
           notify("Ürün Alındı! Müşteriye doğru yola çıkın. 🏁", "success");
           fetchOrders();
         } catch (err) { notify("Hata oluştu", "error"); }
@@ -120,7 +121,7 @@ const CourierPage = () => {
       isOpen: true, title: "Teslim Edildi?", message: "Siparişi müşteriye teslim ettiğini onayla.", isDanger: false,
       action: async () => {
         try {
-          await axios.put(`http://localhost:5000/api/orders/${myActiveJob._id}`, { status: "Teslim Edildi" });
+          await userRequest.put(`/orders/${myActiveJob._id}`, { status: "Teslim Edildi" });
           notify("Tebrikler! Teslimat tamamlandı. Kazancın eklendi. 🎉", "success");
           setMyActiveJob(null);
           setActiveTab("history");

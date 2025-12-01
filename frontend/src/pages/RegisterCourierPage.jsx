@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useNavigate, Link } from "react-router-dom";
 import TermsModal from "../components/TermsModal";
 import { useCart } from "../context/CartContext";
@@ -72,7 +72,7 @@ const RegisterCourierPage = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await axios.post("http://localhost:5000/api/upload", data); setLicenseFile(res.data); notify("Ehliyet yüklendi ✅", "success"); } 
+    try { const res = await publicRequest.post("/upload", data); setLicenseFile(res.data); notify("Ehliyet yüklendi ✅", "success"); } 
     catch { notify("Yükleme hatası", "error"); } finally { setUploading(false); }
   };
 
@@ -86,7 +86,7 @@ const RegisterCourierPage = () => {
       if (user) {
         if (!licenseFile) { setLoading(false); return notify("Lütfen ehliyet fotoğrafı yükleyin.", "warning"); }
         
-        await axios.post(`http://localhost:5000/api/users/${user._id}/apply`, {
+        await userRequest.post(`/users/${user._id}/apply`, {
           ...appData,
           licenseImage: licenseFile,
           requestedRole: "courier"
@@ -98,7 +98,7 @@ const RegisterCourierPage = () => {
         notify("Başvuru Alındı! 🎉 Onay bekleniyor.", "success");
         setTimeout(() => navigate("/partner-application"), 1500);
       } else {
-        await axios.post("http://localhost:5000/api/auth/register", { 
+        await publicRequest.post("/auth/register", { 
             fullName: regData.fullName,
             email: regData.email,
             password: regData.password,

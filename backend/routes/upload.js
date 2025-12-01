@@ -3,7 +3,9 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const axios = require('axios');
 
-const { verifyTokenAndAuthorization } = require('./verifyToken'); // Güvenlik Middleware
+const { 
+  verifyTokenAndAuthorization,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 
 // Cloudinary Ayarları
 cloudinary.config({
@@ -16,7 +18,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // 1. RESİM YÜKLEME (Tam Güvenli Mod)
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', verifyTokenAndAuthorization, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json("Dosya yok!");
 

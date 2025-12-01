@@ -1,5 +1,6 @@
 import { useCart } from "../../context/CartContext";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../ConfirmModal";
@@ -18,11 +19,14 @@ const CartSidebar = () => {
   
   const navigate = useNavigate();
 
+  
+
   // --- STATE ---
   const [itemToDelete, setItemToDelete] = useState(null); 
   const [showClearConfirm, setShowClearConfirm] = useState(false); 
   const [view, setView] = useState("cart"); 
   
+
   // Güvenlik
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCheckoutReady, setIsCheckoutReady] = useState(false);
@@ -130,7 +134,7 @@ const CartSidebar = () => {
       const timer = setTimeout(() => setIsCheckoutReady(true), 1000);
       
       if (user?._id) {
-        const fetchAddresses = async () => { try { const res = await axios.get(`http://localhost:5000/api/users/${user._id}/addresses`); setSavedAddresses(res.data); } catch {} };
+        const fetchAddresses = async () => { try { const res = await userRequest.get(`/users/${user._id}/addresses`); setSavedAddresses(res.data); } catch {} };
         fetchAddresses();
         setFormData(prev => ({ ...prev, senderName: user.fullName || "", senderEmail: user.email || "", senderPhone: user.phone || "" }));
       }
@@ -167,7 +171,7 @@ const CartSidebar = () => {
   
   const handleApplyCoupon = async () => {
       if(!couponCode) return notify("Kod giriniz","warning");
-      try { const res = await axios.get(`http://localhost:5000/api/coupons/validate/${couponCode}?userId=${user?._id||''}`); setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify("Kupon uygulandı!","success"); } 
+      try { const res = await userRequest.get(`/coupons/validate/${couponCode}?userId=${user?._id||''}`); setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify("Kupon uygulandı!","success"); } 
       catch(e) { setDiscount(0); setCouponApplied(false); notify(e.response?.data?.message||"Geçersiz","error"); }
   };
   
@@ -188,10 +192,10 @@ const CartSidebar = () => {
     const orderData = { userId: user?user._id:null, items: cart, totalAmount: finalPrice, couponCode: couponApplied?couponCode:null, deliveryFee, sender: {name:formData.senderName, phone:formData.senderPhone, email:formData.senderEmail}, recipient: {name:formData.recipientName, phone:formData.recipientPhone, address:formData.address, city:formData.city, postcode:formData.postcode}, delivery: {date:formData.deliveryDate, timeSlot:formData.timeSlot, cardMessage:formData.cardMessage, courierNote:formData.courierNote, isAnonymous:formData.isAnonymous, deliveryType:formData.deliveryType}, metaData: metaDataInfo, saveAddress };
 
     if (finalPrice <= 0) {
-        try { const res = await axios.post("http://localhost:5000/api/orders", orderData); notify("Sipariş alındı!","success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } }); } catch { notify("Hata","error"); setIsProcessing(false); } return;
+        try { const res = await userRequest.post("/orders", orderData); notify("Sipariş alındı!","success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } }); } catch { notify("Hata","error"); setIsProcessing(false); } return;
     }
     localStorage.setItem("tempOrderData", JSON.stringify(orderData));
-    try { notify("Ödeme sayfasına gidiliyor...","success"); const res = await axios.post("http://localhost:5000/api/payment/create-checkout-session", { items: cart, couponCode: couponApplied?couponCode:null, userEmail: formData.senderEmail, userId: user?user._id:null, deliveryFee }); window.location.href = res.data.url; } catch { notify("Ödeme hatası","error"); setIsProcessing(false); }
+    try { notify("Ödeme sayfasına gidiliyor...","success"); const res = await userRequest.post("/payment/create-checkout-session", { items: cart, couponCode: couponApplied?couponCode:null, userEmail: formData.senderEmail, userId: user?user._id:null, deliveryFee }); window.location.href = res.data.url; } catch { notify("Ödeme hatası","error"); setIsProcessing(false); }
   };
 
   const handleDeleteClick = (item) => setItemToDelete(item);

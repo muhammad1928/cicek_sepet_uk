@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // useLocation EKLENDİ
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import Confetti from "react-confetti";
 import { FiCheckCircle, FiPackage, FiMapPin, FiHome, FiCalendar, FiClock } from "react-icons/fi";
@@ -42,7 +42,7 @@ const SuccessPage = () => {
         const orderData = JSON.parse(data);
         
         // Backend'e siparişi kaydet
-        const res = await axios.post("http://localhost:5000/api/orders", orderData);
+        const res = await publicRequest.post("/orders", orderData);
         
         if (res.status === 200) {
           setOrder(res.data.order);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom"; 
 import Seo from "../components/Seo";
@@ -7,6 +7,7 @@ import { ProductSkeleton } from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
 import { FaStar, FaRegHeart, FaHeart, FaStore } from "react-icons/fa";
 import { FiShoppingCart, FiMinus, FiPlus } from "react-icons/fi";
+import { publicRequest } from "../requestMethods";
 
 // KATEGORİ LİSTESİ
 const CATEGORIES = ["Tümü", "Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
@@ -38,7 +39,7 @@ const HomePage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await publicRequest.get("/products");
         const active = res.data.filter(p => p.stock > 0 && p.isActive === true);
         setProducts(active);
         setFilteredProducts(active);

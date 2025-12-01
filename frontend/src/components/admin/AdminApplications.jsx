@@ -1,27 +1,27 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import axios from "axios";
+import { userRequest } from "../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
-import ApplicationDetailsModal from "./ApplicationDetailsModal"; // <--- YENİ BİLEŞEN
-import { FiRefreshCw } from "react-icons/fi";
+import ApplicationDetailsModal from "./ApplicationDetailsModal";
+import { FiRefreshCw, FiFileText } from "react-icons/fi";
 
 const AdminApplications = () => {
   const [applicants, setApplicants] = useState([]);
   
-  // --- MODAL STATE'LERİ ---
-  const [selectedApp, setSelectedApp] = useState(null); // Detay modalı için seçilen başvuru
-  const [confirmData, setConfirmData] = useState(null); // Onay/Emin misin modalı
+  // Modal State'leri
+  const [selectedApp, setSelectedApp] = useState(null); // Detay modalı
+  const [confirmData, setConfirmData] = useState(null); // Onay modalı
   const [rejectModal, setRejectModal] = useState({ isOpen: false, userId: null }); // Red modalı
-  const [rejectReason, setRejectReason] = useState(""); 
+  const [rejectReason, setRejectReason] = useState("");
 
   const { notify } = useCart();
   const isMounted = useRef(false);
   const timerRef = useRef(null);
 
-  // 1. Başvuruları Çek
+  // Başvuruları Çek
   const fetchApplicants = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users");
+      const res = await userRequest.get("/users");
       if (isMounted.current) {
         const pendingUsers = res.data.filter(u => u.applicationStatus === 'pending');
         setApplicants(pendingUsers);
@@ -45,24 +45,24 @@ const AdminApplications = () => {
     };
   }, [fetchApplicants]);
 
-  // 2. Onaylama İşlemi (KİŞİSELLEŞTİRİLMİŞ MESAJ)
+  // Onaylama
   const handleApproveRequest = (user) => {
-    // Detay modalını kapatabiliriz veya açık bırakabiliriz, kapatmak daha temiz görünür
-    setSelectedApp(null); 
+    // Detay modalını kapat (isteğe bağlı)
+    // setSelectedApp(null);
     
-    const roleName = user.applicationData?.requestedRole === 'vendor' ? 'Satıcı Paneline' : 'Kurye Paneline';
+    const roleName = user.applicationData?.requestedRole === 'vendor' ? 'Satıcı' : 'Kurye';
 
     setConfirmData({
       isOpen: true,
       title: `Başvuruyu Onayla: ${user.fullName}`,
-      // --- İSTEDİĞİN KİŞİSELLEŞTİRİLMİŞ MESAJ ---
-      message: `"${user.fullName}" adlı kullanıcı ${roleName} erişim sağlayabilecek. Bu işlemi onaylıyor musunuz?`,
-      // ------------------------------------------
+      // --- DİNAMİK MESAJ BURADA ---
+      message: `"${user.fullName}" adlı kullanıcı, ${roleName} olarak sisteme tam erişim sağlayabilecek. Bu işlemi onaylıyor musunuz?`,
       isDanger: false,
       action: async () => {
         try {
-          await axios.put(`http://localhost:5000/api/users/${user._id}/application-status`, { status: 'approved' });
+          await userRequest.put(`/users/${user._id}/application-status`, { status: 'approved' });
           notify(`${user.fullName} onaylandı! ✅`, "success");
+          setSelectedApp(null); // İşlem bitince detayı kapat
           fetchApplicants();
         } catch (err) { notify("Hata oluştu", "error"); }
         setConfirmData(null);
@@ -70,18 +70,20 @@ const AdminApplications = () => {
     });
   };
 
-  // 3. Reddetme Başlatma
+  // Reddetme Başlat
   const handleRejectClick = (userId) => {
+    // Detayı kapatıp red modalını açabiliriz veya üst üste açabiliriz
+    // Temiz görünüm için kapatalım:
     setSelectedApp(null);
     setRejectModal({ isOpen: true, userId });
     setRejectReason("");
   };
 
-  // 4. Reddetme Gönderme
+  // Reddetme İşlemi
   const submitReject = async () => {
     if (!rejectReason.trim()) return notify("Lütfen bir sebep yazın!", "warning");
     try {
-      await axios.put(`http://localhost:5000/api/users/${rejectModal.userId}/application-status`, { 
+      await userRequest.put(`/users/${rejectModal.userId}/application-status`, { 
         status: 'rejected',
         reason: rejectReason 
       });
@@ -92,9 +94,9 @@ const AdminApplications = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in">
+    <div className="space-y-6">
       
-      {/* Üst Kısım */}
+      {/* Başlık */}
       <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h2 className="text-2xl font-bold text-gray-800">
           Bekleyen Başvurular <span className="ml-2 text-sm bg-orange-100 text-orange-600 px-2 py-1 rounded-full">{applicants.length}</span>
@@ -107,27 +109,28 @@ const AdminApplications = () => {
       {/* Liste */}
       {applicants.length === 0 ? (
         <div className="text-center py-20 text-gray-400 bg-white rounded-xl border border-dashed border-gray-300">
-          <div className="text-4xl mb-2">📭</div>
+          <div className="text-4xl mb-2 opacity-30">📭</div>
           <p>Şu an onay bekleyen başvuru yok.</p>
         </div>
       ) : (
         <div className="grid gap-4">
           {applicants.map(app => (
-            <div key={app._id} className="bg-white rounded-xl shadow-sm border-l-4 border-l-orange-400 overflow-hidden p-6 hover:shadow-md transition flex flex-col md:flex-row justify-between items-center gap-4">
+            <div key={app._id} className="bg-white rounded-xl shadow-sm border-l-4 border-l-orange-400 overflow-hidden p-6 hover:shadow-md transition flex flex-col md:flex-row justify-between items-center gap-4 group">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-xl font-bold text-gray-800">{app.fullName}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-orange-600 transition">{app.fullName}</h3>
                   <span className={`px-3 py-0.5 rounded-full text-[10px] font-bold uppercase text-white tracking-wider ${app.applicationData?.requestedRole === 'vendor' ? 'bg-purple-500' : 'bg-blue-500'}`}>
                     {app.applicationData?.requestedRole === 'vendor' ? 'Mağaza' : 'Kurye'}
                   </span>
                 </div>
                 <p className="text-sm text-gray-500">{app.email}</p>
               </div>
+              
               <button 
                 onClick={() => setSelectedApp(app)} 
-                className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-black transition shadow-lg flex items-center gap-2"
+                className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-black transition shadow-lg flex items-center gap-2 transform active:scale-95"
               >
-                <span>📄</span> İncele & Karar Ver
+                <FiFileText /> İncele & Karar Ver
               </button>
             </div>
           ))}
@@ -139,23 +142,23 @@ const AdminApplications = () => {
         <ApplicationDetailsModal 
           application={selectedApp} 
           onClose={() => setSelectedApp(null)}
-          onApprove={handleApproveRequest} // Onay fonksiyonunu gönderiyoruz
-          onReject={handleRejectClick}     // Red fonksiyonunu gönderiyoruz
+          onApprove={handleApproveRequest} 
+          onReject={handleRejectClick}     
         />
       )}
 
-      {/* Reddetme Modalı (Portal'a taşınabilir ama şimdilik burada kalsın, z-index'i yüksek) */}
+      {/* Reddetme Modalı (Basit) */}
       {rejectModal.isOpen && (
         <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative animate-slide-in-up">
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-gray-800">Başvuru Reddi</h3>
               <p className="text-gray-500 text-sm">Lütfen red sebebini belirtin.</p>
             </div>
-            <textarea value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} className="w-full p-4 border-2 border-red-100 rounded-xl h-32 resize-none outline-none focus:border-red-500" placeholder="Sebep..." />
+            <textarea value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} className="w-full p-4 border-2 border-red-100 rounded-xl h-32 resize-none outline-none focus:border-red-500 transition" placeholder="Sebep..." />
             <div className="flex gap-4 mt-4">
-              <button onClick={() => setRejectModal({ isOpen: false, userId: null })} className="flex-1 py-3 border rounded-xl font-bold text-gray-600 hover:bg-gray-100">İptal</button>
-              <button onClick={submitReject} className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg">Gönder</button>
+              <button onClick={() => setRejectModal({ isOpen: false, userId: null })} className="flex-1 py-3 border rounded-xl font-bold text-gray-600 hover:bg-gray-100 transition">İptal</button>
+              <button onClick={submitReject} className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg transition transform active:scale-95">Gönder</button>
             </div>
           </div>
         </div>

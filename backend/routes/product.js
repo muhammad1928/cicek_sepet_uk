@@ -2,7 +2,10 @@ const router = require('express').Router();
 const Product = require('../models/Product');
 const jwt = require('jsonwebtoken'); // Token okumak için
 const logActivity = require('../utils/logActivity'); // Loglama Fonksiyonu
-
+const { 
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 // --- KÜFÜR LİSTESİ ---
 const BAD_WORDS = ["aptal", "salak", "gerizekali", "dolandirici", "sahtekar", "scam", "fraud", "idiot"];
 
@@ -25,7 +28,7 @@ const getUserId = (req) => {
 // =============================================================================
 // 1. YENİ ÜRÜN OLUŞTUR (POST)
 // =============================================================================
-router.post('/', async (req, res) => {
+router.post('/', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const productData = req.body;
 
@@ -47,7 +50,7 @@ router.post('/', async (req, res) => {
 // =============================================================================
 // 2. ÜRÜN GÜNCELLE (PUT)
 // =============================================================================
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -63,7 +66,7 @@ router.put('/:id', async (req, res) => {
 // =============================================================================
 // 3. ÜRÜN SİL (DELETE)
 // =============================================================================
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.status(200).json("Ürün silindi.");
@@ -75,7 +78,7 @@ router.delete('/:id', async (req, res) => {
 // =============================================================================
 // 4. TEK ÜRÜN GETİR (GET) + LOGLAMA (View Product)
 // =============================================================================
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate('vendor');
     
@@ -100,7 +103,7 @@ router.get('/:id', async (req, res) => {
 // =============================================================================
 // 5. TÜM ÜRÜNLERİ GETİR (GET ALL) + LOGLAMA (Search)
 // =============================================================================
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAuthorization, async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
   const qSearch = req.query.search;
@@ -136,7 +139,7 @@ router.get('/', async (req, res) => {
 // =============================================================================
 // 6. SATICININ ÜRÜNLERİNİ GETİR
 // =============================================================================
-router.get('/vendor/:vendorId', async (req, res) => {
+router.get('/vendor/:vendorId', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const products = await Product.find({ vendor: req.params.vendorId }).sort({ createdAt: -1 });
     res.status(200).json(products);
@@ -148,7 +151,7 @@ router.get('/vendor/:vendorId', async (req, res) => {
 // =============================================================================
 // 7. YORUM EKLEME (POST REVIEW)
 // =============================================================================
-router.post('/:id/reviews', async (req, res) => {
+router.post('/:id/reviews', verifyTokenAndAuthorization, async (req, res) => {
   const { user, rating, comment } = req.body;
 
   const isBad = BAD_WORDS.some(word => comment.toLowerCase().includes(word));
@@ -182,7 +185,7 @@ router.post('/:id/reviews', async (req, res) => {
 // =============================================================================
 // 8. YORUM SİLME (DELETE REVIEW)
 // =============================================================================
-router.delete('/:id/reviews/:reviewId', async (req, res) => {
+router.delete('/:id/reviews/:reviewId', verifyTokenAndAdmin, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Ürün bulunamadı" });

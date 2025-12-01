@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { useNavigate, Link } from "react-router-dom";
 import TermsModal from "../components/TermsModal";
 import { useCart } from "../context/CartContext";
@@ -62,7 +62,7 @@ const RegisterPage = () => {
     
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await publicRequest.post("/auth/register", formData);
       notify("Kayıt Başarılı! 🎉 Lütfen mailinizi onaylayın.", "success");
       
       // --- GÜNCELLEME: Navigate ile mail verisini gönderiyoruz ---

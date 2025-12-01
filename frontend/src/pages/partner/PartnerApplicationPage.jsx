@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest } from "../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
@@ -20,7 +20,7 @@ const PartnerApplicationPage = () => {
 
       try {
         // 1. Backend'den EN GÜNCEL kullanıcı verisini çek
-        const res = await axios.get(`http://localhost:5000/api/users/${localUser._id}`);
+        const res = await userRequest.get(`/users/${localUser._id}`);
         const currentUser = res.data;
 
         // 2. State'i ve LocalStorage'ı güncelle (Senkronize et)
@@ -52,14 +52,14 @@ const PartnerApplicationPage = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await axios.post("http://localhost:5000/api/upload", data); setFormData({ ...formData, licenseImage: res.data, documentImage: res.data }); notify("Dosya yüklendi ✅", "success"); } 
+    try { const res = await userRequest.post("/upload", data); setFormData({ ...formData, licenseImage: res.data, documentImage: res.data }); notify("Dosya yüklendi ✅", "success"); } 
     catch { notify("Hata!", "error"); } finally { setUploading(false); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:5000/api/users/${user._id}/apply`, formData);
+      await userRequest.post(`/users/${user._id}/apply`, formData);
       
       // LocalStorage Güncelle
       const updatedUser = { ...user, applicationStatus: 'pending' };

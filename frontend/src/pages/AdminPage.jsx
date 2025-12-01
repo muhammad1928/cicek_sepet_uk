@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiLogOut, FiGrid, FiFileText, FiPackage, FiTruck, FiUsers, FiTag, FiMessageSquare } from "react-icons/fi";
+import { FiLogOut, FiGrid, FiFileText, FiPackage, FiTruck, FiUsers, FiTag, FiMessageSquare, FiMenu, FiX } from "react-icons/fi";
 
-// --- MODÜLLERİ ÇAĞIRIYORUZ ---
+// --- MODÜLLERİ ÇAĞIRIYORUZ (İsimlere Dikkat) ---
 import AdminDashboard from "../components/admin/AdminDashboard";
 import AdminProducts from "../components/admin/AdminProducts";
 import AdminOrders from "../components/admin/AdminOrders";
 import AdminUsers from "../components/admin/AdminUsers";
 import AdminCoupons from "../components/admin/AdminCoupons";
-import AdminReviews from "../components/admin/AdminReviews";
-import AdminApplications from "../components/admin/AdminApplications";
+// AdminReviews ve AdminApplications dosyalarının var olduğundan emin ol
+import AdminApplications from "../components/admin/AdminApplications"; 
+// import AdminReviews from "../components/admin/AdminReviews"; // Eğer dosya yoksa bunu yorum satırı yap
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Mobil uyumluluk için
   const navigate = useNavigate();
 
   // Güvenlik Kontrolü
@@ -30,7 +32,7 @@ const AdminPage = () => {
   };
 
   return (
-    // pt-20: Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için)
+ // pt-20: Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için)
     <div className="min-h-screen flex bg-gray-100 font-sans ">
       
       {/* --- SIDEBAR (SOL MENÜ) --- */}

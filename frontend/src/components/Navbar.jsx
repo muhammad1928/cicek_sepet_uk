@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { FiLogOut, FiHeart, FiShoppingCart, FiSearch, FiX } from "react-icons/fi";
 import { FaStore, FaMotorcycle, FaUserShield } from "react-icons/fa";
+import { userRequest, publicRequest } from "../../requestMethods";
 
 const Navbar = () => {
   const { cart, setIsCartOpen, searchTerm, setSearchTerm } = useCart();
@@ -38,7 +39,7 @@ const Navbar = () => {
     // 1. Öneri Mantığı
     if (value.length > 1) {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await publicRequest.get("/products");
         const filtered = res.data.filter(p => 
           p.title.toLowerCase().includes(value.toLowerCase()) && p.isActive && p.stock > 0
         ).slice(0, 5);
@@ -61,10 +62,10 @@ const Navbar = () => {
         try {
              // Her harfte istek atmamak için basit bir kontrol eklenebilir ama şimdilik böyle:
              // İleride burayı useEffect ile 'debounce' yapmak daha sağlıklı olur.
-             await axios.post("http://localhost:5000/api/users/log-activity", { 
+             await userRequest.post("/users/log-activity", { 
                 action: 'search', 
                 details: { query: value } // <--- DÜZELTME BURADA
-             }, { headers: { token: `Bearer ${user.accessToken}` } });
+             });
         } catch(e) {
             // Loglama hatası kullanıcıyı etkilemesin
             console.error("Log hatası:", e); 

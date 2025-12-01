@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiTrash2, FiPlus, FiTag, FiCalendar, FiPercent, FiTruck, FiSearch, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
@@ -16,7 +17,7 @@ const AdminCoupons = () => {
   // 1. Kuponları Çek
   const fetchCoupons = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/coupons");
+      const res = await publicRequest.get("/coupons");
       setCoupons(res.data);
     } catch (err) { console.log(err); }
   }, []);
@@ -47,7 +48,7 @@ const AdminCoupons = () => {
         includeDelivery: formData.includeDelivery
       };
 
-      await axios.post("http://localhost:5000/api/coupons", payload, { headers: { token: `Bearer ${token}` } });
+      await userRequest.post("/coupons", payload);
       
       notify("Kupon oluşturuldu! 🎉", "success");
       setFormData({ code: "", discountRate: "", expiryDate: "", includeDelivery: false });
@@ -65,7 +66,7 @@ const AdminCoupons = () => {
         try {
           const user = JSON.parse(localStorage.getItem("user"));
           const token = user?.accessToken;
-          await axios.delete(`http://localhost:5000/api/coupons/${id}`, { headers: { token: `Bearer ${token}` } });
+          await userRequest.delete(`/coupons/${id}`, { headers: { token: `Bearer ${token}` } });
           notify("Kupon silindi.", "success");
           fetchCoupons();
         } catch (err) { notify("Silinemedi", "error"); }

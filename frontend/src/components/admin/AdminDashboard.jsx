@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { FiUsers, FiShoppingBag, FiBox, FiActivity } from "react-icons/fi";
 
 // --- GRAFİK KÜTÜPHANELERİ ---
@@ -40,18 +41,28 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   // --- GRAFİK STATE'LERİ ---
-  const [statusChartData, setStatusChartData] = useState(null); // Sipariş Durumu (Pasta)
-  const [revenueChartData, setRevenueChartData] = useState(null); // Ciro (Çizgi)
-  const [userRoleChartData, setUserRoleChartData] = useState(null); // Kullanıcı Rolleri (Pasta)
-  const [userGrowthChartData, setUserGrowthChartData] = useState(null); // Yeni Üyeler (Bar)
+  const [statusChartData, setStatusChartData] = useState(null);
+  const [revenueChartData, setRevenueChartData] = useState(null);
+  const [userRoleChartData, setUserRoleChartData] = useState(null);
+  const [userGrowthChartData, setUserGrowthChartData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 1. TOKEN'I AL (LocalStorage'dan)
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = user?.accessToken;
+
+        // 2. HEADER AYARLA (Backend'e "Ben Adminim" demek için)
+        const config = {
+          headers: { token: `Bearer ${token}` }
+        };
+
+        // 3. İSTEKLERİ AT (Config ile birlikte)
         const [usersRes, ordersRes, productsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/users"),
-          axios.get("http://localhost:5000/api/orders"),
-          axios.get("http://localhost:5000/api/products")
+          userRequest.get("/users"),   // <--- TOKEN EKLENDİ
+          userRequest.get("/orders"),  // <--- TOKEN EKLENDİ
+          publicRequest.get("/products")         // (Public olabilir ama token zarar vermez)
         ]);
 
         const users = usersRes.data;
@@ -65,11 +76,9 @@ const AdminDashboard = () => {
           totalProducts: productsRes.data.length
         });
 
-        // =================================================
-        // 1. SİPARİŞ GRAFİKLERİ (MEVCUT)
-        // =================================================
-        
-        // A) Durum Dağılımı
+        // --- GRAFİK HESAPLAMALARI ---
+
+        // A) Sipariş Durumu (Pasta)
         const statusCounts = { "Sipariş Alındı": 0, "Hazırlanıyor": 0, "Yola Çıktı": 0, "Teslim Edildi": 0, "İptal": 0 };
         orders.forEach(order => {
            if (order.status === "Sipariş Alındı") statusCounts["Sipariş Alındı"]++;
@@ -116,26 +125,22 @@ const AdminDashboard = () => {
             }]
         });
 
-        // =================================================
-        // 2. KULLANICI GRAFİKLERİ (YENİ EKLENDİ) 🚀
-        // =================================================
-
-        // C) Rol Dağılımı (Müşteri vs Satıcı vs Kurye)
+        // C) Kullanıcı Rolleri
         const roleCounts = { customer: 0, vendor: 0, courier: 0, admin: 0 };
         users.forEach(u => {
             if (roleCounts[u.role] !== undefined) roleCounts[u.role]++;
         });
 
         setUserRoleChartData({
-            labels: ['Müşteri', 'Satıcı (Mağaza)', 'Kurye', 'Yönetici'],
+            labels: ['Müşteri', 'Satıcı', 'Kurye', 'Yönetici'],
             datasets: [{
                 data: [roleCounts.customer, roleCounts.vendor, roleCounts.courier, roleCounts.admin],
-                backgroundColor: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981'], // Mavi, Pembe, Turuncu, Yeşil
+                backgroundColor: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981'],
                 borderWidth: 0,
             }]
         });
 
-        // D) Yeni Üye Katılımı (Son 7 Gün - Bar Grafik)
+        // D) Yeni Üye Katılımı
         const dailyNewUsers = last7Days.map(date => {
             return users.filter(u => new Date(u.createdAt).toLocaleDateString('tr-TR') === date).length;
         });
@@ -145,11 +150,10 @@ const AdminDashboard = () => {
             datasets: [{
                 label: 'Yeni Kayıt',
                 data: dailyNewUsers,
-                backgroundColor: '#8b5cf6', // Mor Çubuklar
+                backgroundColor: '#8b5cf6',
                 borderRadius: 6,
             }]
         });
-
 
       } catch (err) {
         console.error("Dashboard hatası:", err);
@@ -168,10 +172,9 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-8 animate-fade-in pb-20">
       
-      {/* BAŞLIK */}
       <div className="mb-6 border-b border-gray-100 pb-4">
         <h2 className="text-3xl font-black text-gray-800 tracking-tight">Genel Bakış</h2>
-        <p className="text-gray-500 text-sm">Platformun anlık performans özeti ve analizleri.</p>
+        <p className="text-gray-500 text-sm">Platformun anlık performans özeti.</p>
       </div>
 
       {/* İSTATİSTİK KARTLARI */}
@@ -186,7 +189,6 @@ const AdminDashboard = () => {
       <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-pink-500 pl-3">Sipariş Analizi</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* Sipariş Durumu (Pasta) */}
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Sipariş Durum Dağılımı</h3>
           <div className="w-full h-full flex justify-center items-center relative">
@@ -199,7 +201,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Ciro Grafiği (Çizgi) */}
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
            <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Son 7 Günlük Kazanç</h3>
            <div className="w-full h-full relative">
@@ -211,14 +212,12 @@ const AdminDashboard = () => {
              ) : <p className="text-gray-400 text-center mt-20">Veri yok.</p>}
            </div>
         </div>
-
       </div>
 
       {/* --- 2. SATIR: KULLANICI ANALİZİ --- */}
       <h3 className="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-blue-500 pl-3">Kullanıcı Analizi</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* Kullanıcı Rolleri (Pasta) */}
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Kullanıcı Rol Dağılımı</h3>
           <div className="w-full h-full flex justify-center items-center relative">
@@ -231,7 +230,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Büyüme Grafiği (Bar) */}
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
            <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Yeni Üye Katılımı (Son 7 Gün)</h3>
            <div className="w-full h-full relative">
@@ -248,7 +246,6 @@ const AdminDashboard = () => {
              ) : <p className="text-gray-400 text-center mt-20">Veri yok.</p>}
            </div>
         </div>
-
       </div>
 
     </div>
@@ -256,11 +253,22 @@ const AdminDashboard = () => {
 };
 
 const StatCard = ({ title, value, icon, color }) => {
-  const colors = { blue: "bg-blue-50 text-blue-600", purple: "bg-purple-50 text-purple-600", yellow: "bg-yellow-50 text-yellow-600", green: "bg-green-50 text-green-600" };
+  const colors = {
+    blue: "bg-blue-50 text-blue-600",
+    purple: "bg-purple-50 text-purple-600",
+    yellow: "bg-yellow-50 text-yellow-600",
+    green: "bg-green-50 text-green-600"
+  };
+
   return (
     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-lg transition-all duration-300 group">
-      <div className={`p-4 rounded-2xl text-2xl ${colors[color]} group-hover:scale-110 transition`}>{icon}</div>
-      <div><p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{title}</p><h4 className="text-2xl font-black text-gray-800">{value}</h4></div>
+      <div className={`p-4 rounded-2xl text-2xl ${colors[color]} group-hover:scale-110 transition`}>
+        {icon}
+      </div>
+      <div>
+        <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{title}</p>
+        <h4 className="text-2xl font-black text-gray-800">{value}</h4>
+      </div>
     </div>
   );
 };

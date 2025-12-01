@@ -6,7 +6,9 @@ const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 const Joi = require('joi'); // Veri Doğrulama
 const logActivity = require('../utils/logActivity');
-
+const { 
+  verifyTokenAndAuthorization,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 // =============================================================================
 // GÜVENLİK KURALLARI (REGEX)
 // =============================================================================
@@ -53,7 +55,7 @@ const loginSchema = Joi.object({
 // =============================================================================
 // 1. KAYIT OL (REGISTER)
 // =============================================================================
-router.post('/register', async (req, res) => {
+router.post('/register', verifyTokenAndAuthorization, async (req, res) => {
   try {
     // A) Backend Validasyonu
     const { error } = registerSchema.validate(req.body);
@@ -119,7 +121,7 @@ router.post('/register', async (req, res) => {
 // =============================================================================
 // 2. HESAP ONAYLA (VERIFY) + KUPON HEDİYESİ
 // =============================================================================
-router.post('/verify', async (req, res) => {
+router.post('/verify', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { token } = req.body;
     const user = await User.findOne({ verificationToken: token });
@@ -157,7 +159,7 @@ router.post('/verify', async (req, res) => {
 // =============================================================================
 // 3. GİRİŞ YAP (LOGIN)
 // =============================================================================
-router.post('/login', async (req, res) => {
+router.post('/login',  async (req, res) => {
   // Joi Doğrulama
   const { error } = loginSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
@@ -190,7 +192,7 @@ router.post('/login', async (req, res) => {
 // =============================================================================
 // 4. ŞİFREMİ UNUTTUM (FORGOT PASSWORD)
 // =============================================================================
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password',  async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(404).json("Kullanıcı bulunamadı.");
@@ -220,7 +222,7 @@ router.post('/forgot-password', async (req, res) => {
 // =============================================================================
 // 5. ŞİFREYİ SIFIRLA (RESET PASSWORD)
 // =============================================================================
-router.post('/reset-password', async (req, res) => {
+router.post('/reset-password',  async (req, res) => {
   try {
     const { token, newPassword } = req.body;
     

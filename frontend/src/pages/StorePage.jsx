@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
 import { ProductSkeleton } from "../components/Loading";
@@ -20,11 +20,11 @@ const StorePage = () => {
     const fetchData = async () => {
       try {
         // 1. Satıcı Profilini Çek
-        const vendorRes = await axios.get(`http://localhost:5000/api/users/vendor-profile/${id}`);
+        const vendorRes = await publicRequest.get(`/users/vendor-profile/${id}`);
         setVendor(vendorRes.data);
 
         // 2. Satıcının Ürünlerini Çek
-        const productsRes = await axios.get(`http://localhost:5000/api/products/vendor/${id}`);
+        const productsRes = await publicRequest.get(`/products/vendor/${id}`);
         setProducts(productsRes.data.filter(p => p.isActive && p.stock > 0));
       } catch (err) {
         console.log(err);

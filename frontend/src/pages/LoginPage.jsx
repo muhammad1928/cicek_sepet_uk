@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -18,7 +19,7 @@ const LoginPage = () => {
 
     try {
       // Backend'e istek at
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const res = await publicRequest.post("/auth/login", {
         email, 
         password,
       });
@@ -30,7 +31,7 @@ const LoginPage = () => {
       const localFavs = JSON.parse(localStorage.getItem("favorites")) || [];
       if (localFavs.length > 0) {
          // Backend'e gönder ve birleştir
-         await axios.post(`http://localhost:5000/api/users/${res.data._id}/sync-favorites`, { localFavorites: localFavs });
+         await publicRequest.post(`/users/${res.data._id}/sync-favorites`, { localFavorites: localFavs });
       }
       // -----------------------------------
 

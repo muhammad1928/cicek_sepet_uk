@@ -1,11 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Router burada
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import { CartProvider } from "./context/CartContext";
 import { HelmetProvider } from "react-helmet-async";
+import axios from "axios"; // Axios importu gerekli
 
 // --- BİLEŞENLER ---
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import CartSidebar from "./components/cartSidebar";
+import CartSidebar from "./components/cartSidebar"; // index.jsx'i otomatik alır
 import Toast from "./components/Toast";
 import Chatbot from "./components/Chatbot";
 import ScrollToTop from "./components/ScrollToTop";
@@ -35,24 +37,51 @@ import PartnerApplicationPage from "./pages/partner/PartnerApplicationPage";
 import VendorPage from "./pages/partner/VendorPage";
 import CourierPage from "./pages/partner/CourierPage";
 import AdminPage from "./pages/AdminPage";
-// VerifyEmailPage sayfasını da eklemeyi unutmayalım (Önceki adımlarda yapmıştık)
 import VerifyEmailPage from "./pages/VerifyEmailPage"; 
 
 function App() {
+
+  // --- YENİ: AXIOS INTERCEPTOR (GÜVENLİK BEKÇİSİ) ---
+  useEffect(() => {
+    // Her gelen yanıtı (response) dinle
+    const interceptor = axios.interceptors.response.use(
+      (response) => response, // Başarılıysa devam et
+      (error) => {
+        // Eğer hata 401 (Unauthorized) veya 403 (Forbidden) ise
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          
+          // 1. Mevcut oturumu sil
+          localStorage.removeItem("user");
+          
+          // 2. Navbar'ı güncelle (Olay tetikle)
+          window.dispatchEvent(new Event("user-change"));
+
+          // 3. Eğer kullanıcı zaten Login sayfasında değilse, Login'e at
+          if (window.location.pathname !== "/login") {
+             window.location.href = "/login";
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Temizlik (Unmount)
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
+  // ---------------------------------------------------
+
   return (
     <HelmetProvider>
       <CartProvider>
-        {/* TEK VE ANA ROUTER BURADA BAŞLAR */}
         <Router>
-          <ScrollToTop /> {/* Sayfa değişince yukarı kaydırır */}
+          <ScrollToTop />
           
-          <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800 font-sans">
+          <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800 font-sans relative z-0">
             <Navbar />
             <CartSidebar />
             <Toast />
             <Chatbot />
             
-            {/* Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için) */}
             <div className="flex-1 pt-10 relative z-0">
               <Routes>
                 {/* Müşteri Rotaları */}
@@ -96,11 +125,10 @@ function App() {
             </div>
             
             <Footer />
-
             <CookieBanner />
+            
           </div>
         </Router>
-        {/* ROUTER BURADA BİTER */}
       </CartProvider>
     </HelmetProvider>
   );

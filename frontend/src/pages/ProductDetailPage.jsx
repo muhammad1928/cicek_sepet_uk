@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
 import { FiMinus, FiPlus, FiShoppingCart, FiHeart, FiShare2, FiArrowLeft } from "react-icons/fi";
@@ -29,7 +29,7 @@ const ProductDetailPage = () => {
   const fetchProduct = async () => {
     try {
       // Backend'den ürünü ve vendor bilgisini çekiyoruz (populate yapılmış olmalı)
-      const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+      const res = await publicRequest.get(`/products/${id}`);
       setProduct(res.data);
     } catch (err) { console.log(err); } 
     finally { setLoading(false); }
@@ -41,7 +41,7 @@ const ProductDetailPage = () => {
     if (!reviewText.trim()) return notify("Lütfen bir yorum yazın.", "warning");
 
     try {
-      await axios.post(`http://localhost:5000/api/products/${id}/reviews`, {
+      await publicRequest.post(`/products/${id}/reviews`, {
         user: user.fullName || user.username, // Kullanıcı adı
         rating, 
         comment: reviewText
@@ -247,7 +247,7 @@ const RelatedProducts = ({ currentProduct }) => {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await publicRequest.get("/products");
         // Aynı kategoride ama kendisi olmayan ürünleri al (İlk 4 tane)
         const filtered = res.data.filter(p => p.category === currentProduct.category && p._id !== currentProduct._id).slice(0, 4);
         setRelated(filtered);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -43,7 +43,7 @@ const ResetPasswordPage = () => {
 
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/reset-password", { token, newPassword: password });
+      await publicRequest.post("/auth/reset-password", { token, newPassword: password });
       notify("Şifreniz başarıyla değişti! Giriş yapabilirsiniz.", "success");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {

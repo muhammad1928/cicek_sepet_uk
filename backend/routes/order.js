@@ -5,6 +5,13 @@ const User = require('../models/User');
 const Coupon = require('../models/Coupon');
 const sendEmail = require('../utils/sendEmail');
 const logActivity = require('../utils/logActivity');
+const { 
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+  verifyTokenAndSeller,
+  verifyTokenAndWorker
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
+
 
 
 // --- FİYATLANDIRMA SABİTLERİ (GÜNCELLENDİ) ---
@@ -161,7 +168,7 @@ const createVendorCancelEmail = (vendorName, orderId) => {
 // =============================================================================
 // 1. SİPARİŞ OLUŞTURMA (POST) - GÜVENLİ SERVER-SIDE HESAPLAMA
 // =============================================================================
-router.post('/', async (req, res) => {
+router.post('/',  async (req, res) => {
   const { items, sender, recipient, delivery, userId, couponCode, metaData, saveAddress } = req.body;
 
   try {
@@ -359,7 +366,7 @@ router.post('/', async (req, res) => {
 // =============================================================================
 
 // KULLANICININ SİPARİŞLERİ
-router.get('/find/:userId', async (req, res) => {
+router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
     res.status(200).json(orders);
@@ -367,7 +374,7 @@ router.get('/find/:userId', async (req, res) => {
 });
 
 // SATICININ SİPARİŞLERİ (Sadece kendi ürünlerini içerenler)
-router.get('/vendor/:vendorId', async (req, res) => {
+router.get('/vendor/:vendorId', verifyTokenAndSeller, async (req, res) => {
   try {
     const vendorProducts = await Product.find({ vendor: req.params.vendorId }).select('_id');
     const vendorProductIds = vendorProducts.map(p => p._id.toString());
@@ -381,7 +388,7 @@ router.get('/vendor/:vendorId', async (req, res) => {
 });
 
 // TÜM SİPARİŞLER (Admin & Kurye Havuzu)
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.status(200).json(orders);
@@ -391,7 +398,7 @@ router.get('/', async (req, res) => {
 // =============================================================================
 // 3. DURUM GÜNCELLEME (PUT) & İPTAL YÖNETİMİ
 // =============================================================================
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyTokenAndWorker, async (req, res) => {
   try {
     const { status, courierId, courierRejectionReason, cancellationReason } = req.body;
     

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import { userRequest } from "../../requestMethods";
 
 const SecureImage = ({ src, alt, className, ...props }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -11,13 +12,12 @@ const SecureImage = ({ src, alt, className, ...props }) => {
       if (!src) return;
       
       // Kullanıcı Token'ını Al
-      const user = JSON.parse(localStorage.getItem("user"));
-      const token = user?.accessToken;
+      // const user = JSON.parse(localStorage.getItem("user"));
+      // const token = user?.accessToken;
 
       try {
         // Backend Proxy'sine İstek At (Token Header'da gidiyor)
-        const response = await axios.get(`http://localhost:5000/api/upload/secure-image?url=${encodeURIComponent(src)}`, {
-          headers: { token: `Bearer ${token}` },
+        const response = await userRequest.get(`/upload/secure-image?url=${encodeURIComponent(src)}`, {
           responseType: 'blob' // Resim verisi olarak al
         });
 

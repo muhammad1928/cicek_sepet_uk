@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiEdit, FiTrash2, FiPlus, FiMapPin, FiX } from "react-icons/fi";
@@ -18,7 +18,7 @@ const AddressBook = ({ user }) => {
 
   const fetchAddresses = async () => { 
     try { 
-      const res = await axios.get(`http://localhost:5000/api/users/${user._id}/addresses`); 
+      const res = await userRequest.get(`/users/${user._id}/addresses`); 
       setAddresses(res.data); 
     } catch(e){} 
   };
@@ -49,10 +49,10 @@ const AddressBook = ({ user }) => {
     if (!addressData.title || !addressData.address) return notify("Eksik bilgi!", "warning");
     try {
       if (editingId) { 
-        await axios.put(`http://localhost:5000/api/users/${user._id}/addresses/${editingId}`, addressData); 
+        await userRequest.put(`/users/${user._id}/addresses/${editingId}`, addressData); 
         notify("Adres güncellendi ✅", "success"); 
       } else { 
-        await axios.post(`http://localhost:5000/api/users/${user._id}/addresses`, addressData); 
+        await userRequest.post(`/users/${user._id}/addresses`, addressData); 
         notify("Adres eklendi ✅", "success"); 
       }
       handleCancel(); // İşlem bitince kapat
@@ -68,7 +68,7 @@ const AddressBook = ({ user }) => {
       isDanger: true,
       action: async () => {
         try {
-          await axios.delete(`http://localhost:5000/api/users/${user._id}/addresses/${id}`);
+          await userRequest.delete(`/users/${user._id}/addresses/${id}`);
           notify("Adres silindi.", "success");
           fetchAddresses();
         } catch { notify("Silinemedi", "error"); }

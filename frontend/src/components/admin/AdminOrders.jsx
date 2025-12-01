@@ -3,6 +3,7 @@ import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import InvoiceModal from "../InvoiceModal";
 import { FiRefreshCw } from "react-icons/fi";
+import { publicRequest, userRequest } from "../requestMethods";
 
 // YENİ BİLEŞENLERİN IMPORTU
 import OrderStats from "./adminOrderComponents/OrderStats";
@@ -22,17 +23,27 @@ const AdminOrders = () => {
   const isMounted = useRef(false);
   const timerRef = useRef(null);
 
-  // 1. Veri Çekme
+  // --- 1. SİPARİŞLERİ ÇEK (TOKEN KORUMALI) ---
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/orders");
+      // Token'ı al
+      // const user = JSON.parse(localStorage.getItem("user"));
+      // const token = user?.accessToken;
+
+      // İsteğe ekle
+      const res = await userRequest.get("/orders");
+        // headers: { token: `Bearer ${token}` }
+      // });
+      
       if (isMounted.current) {
-        const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setOrders(sorted);
+        const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setOrders(sortedOrders);
         setLoading(false);
       }
-    } catch (err) { console.log(err); } 
-    finally {
+    } catch (err) {
+      console.log("Sipariş çekme hatası:", err);
+      // Eğer 401 ise kullanıcıyı login'e atabilirsin (isteğe bağlı)
+    } finally {
       if (isMounted.current) {
         timerRef.current = setTimeout(() => {
           if (document.visibilityState === 'visible') fetchOrders();
@@ -89,7 +100,7 @@ const AdminOrders = () => {
     e.stopPropagation();
     const st = e.target.value;
     try {
-      await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st });
+      await userRequest.put(`/orders/${id}`, { status: st });
       notify(`Sipariş güncellendi: ${st}`, "success");
       setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o));
     } catch (err) { notify("Hata", "error"); }

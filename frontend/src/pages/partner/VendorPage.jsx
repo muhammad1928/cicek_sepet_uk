@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+
+import { userRequest } from "../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import InvoiceModal from "../../components/InvoiceModal";
 import ConfirmModal from "../../components/ConfirmModal";
+
 
 const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
@@ -61,8 +63,8 @@ const VendorDashboard = ({ user }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const prodRes = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`);
-        const ordRes = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`);
+        const prodRes = await userRequest.get(`/products/vendor/${user._id}`);
+        const ordRes = await userRequest.get(`/orders/vendor/${user._id}`);
         
         // Ciro: Sadece kendi ürünleri üzerinden hesaplama (Basitleştirilmiş)
         const totalSales = ordRes.data.reduce((acc, o) => acc + o.totalAmount, 0);
@@ -117,7 +119,7 @@ const VendorProductManager = ({ user }) => {
   const [formData, setFormData] = useState(initialForm);
 
   const fetchProducts = async () => {
-    try { const res = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`); setProducts(res.data); } 
+    try { const res = await userRequest.get(`/products/vendor/${user._id}`); setProducts(res.data); } 
     catch (err) { console.log(err); }
   };
   useEffect(() => { fetchProducts(); }, [user]);
@@ -127,14 +129,14 @@ const VendorProductManager = ({ user }) => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await axios.post("http://localhost:5000/api/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi! 🖼️", "success"); } 
+    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi! 🖼️", "success"); } 
     catch (err) { notify("Yüklenemedi", "error"); } finally { setUploading(false); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/products", { ...formData, vendor: user._id, isActive: true });
+      await userRequest.post("/products", { ...formData, vendor: user._id, isActive: true });
       notify("Ürün eklendi! 🌸", "success"); setShowForm(false); fetchProducts();
     } catch (err) { notify("Hata oluştu", "error"); }
   };
@@ -144,7 +146,7 @@ const VendorProductManager = ({ user }) => {
     setConfirmData({
       isOpen: true, title: "Ürünü Sil?", message: "Bu işlem geri alınamaz. Ürünü silmek istiyor musunuz?", isDanger: true,
       action: async () => {
-        try { await axios.delete(`http://localhost:5000/api/products/${id}`); notify("Ürün silindi.", "success"); fetchProducts(); }
+        try { await userRequest.delete(`/products/${id}`); notify("Ürün silindi.", "success"); fetchProducts(); }
         catch { notify("Hata oluştu.", "error"); }
         setConfirmData(null);
       }
@@ -209,14 +211,14 @@ const VendorOrderManager = ({ user }) => {
   
   useEffect(() => {
     const fetchOrders = async () => {
-      try { const res = await axios.get(`http://localhost:5000/api/orders/vendor/${user._id}`); setOrders(res.data); } 
+      try { const res = await userRequest.get(`/orders/vendor/${user._id}`); setOrders(res.data); } 
       catch (err) { console.log(err); }
     };
     fetchOrders();
   }, [user]);
 
   const handleStatusChange = async (id, st) => {
-    try { await axios.put(`http://localhost:5000/api/orders/${id}`, { status: st }); notify("Güncellendi", "success"); setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } 
+    try { await userRequest.put(`/orders/${id}`, { status: st }); notify("Güncellendi", "success"); setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o)); } 
     catch { notify("Hata", "error"); }
   };
 
@@ -297,7 +299,7 @@ const QuickStockUpdate = ({ product, refresh }) => {
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
-    try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
+    try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
     catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
   };
 

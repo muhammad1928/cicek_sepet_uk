@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { publicRequest, userRequest } from "../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
@@ -26,7 +27,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       // Vendor ve isBlocked bilgisini çekiyoruz (Admin Products)
-      const res = await axios.get("http://localhost:5000/api/products"); 
+      const res = await userRequest.get("/products"); 
       setProducts(res.data);
     } catch (err) { console.log(err); }
   };
@@ -38,7 +39,7 @@ const AdminProducts = () => {
       const newStatus = !product.isActive; // Mevcut durumun tersi
       
       // Backend'e gönder
-      await axios.put(`http://localhost:5000/api/products/${product._id}`, { 
+      await userRequest.put(`/products/${product._id}`, { 
         isActive: newStatus 
       });
 
@@ -65,7 +66,7 @@ const AdminProducts = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await axios.post("http://localhost:5000/api/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi!", "success"); } 
+    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi!", "success"); } 
     catch { notify("Hata", "error"); } finally { setUploading(false); }
   };
 
@@ -76,8 +77,8 @@ const AdminProducts = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const payload = { ...formData, vendor: user._id }; 
 
-      if (editMode) await axios.put(`http://localhost:5000/api/products/${editMode}`, payload);
-      else await axios.post("http://localhost:5000/api/products", payload);
+      if (editMode) await userRequest.put(`/products/${editMode}`, payload);
+      else await userRequest.post("/products", payload);
       
       notify("İşlem Başarılı!", "success"); 
       setFormData(initialForm); setShowForm(false); setEditMode(null); fetchProducts();
@@ -93,7 +94,7 @@ const AdminProducts = () => {
   const handleDeleteRequest = (id) => {
     setConfirmData({
       isOpen: true, title: "Ürünü Sil?", message: "Bu işlem geri alınamaz.", isDanger: true,
-      action: async () => { try { await axios.delete(`http://localhost:5000/api/products/${id}`); notify("Silindi", "success"); fetchProducts(); } catch { notify("Hata", "error"); } setConfirmData(null); }
+      action: async () => { try { await userRequest.delete(`/products/${id}`); notify("Silindi", "success"); fetchProducts(); } catch { notify("Hata", "error"); } setConfirmData(null); }
     });
   };
 
@@ -213,7 +214,7 @@ const QuickStockUpdate = ({ product, refresh }) => {
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
-    try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
+    try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
     catch { notify("Hata", "error"); } finally { setLoading(false); }
   };
   return (

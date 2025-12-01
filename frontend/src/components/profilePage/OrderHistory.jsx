@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest, publicRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import OrderTracker from "../OrderTracker";
 import InvoiceModal from "../InvoiceModal";
@@ -20,7 +20,7 @@ const OrderHistory = ({ user }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders/find/${user._id}`);
+        const res = await userRequest.get(`/orders/find/${user._id}`);
         setOrders(res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } catch (err) { console.log(err); } 
       finally { setLoading(false); }
@@ -36,7 +36,7 @@ const OrderHistory = ({ user }) => {
 
   const submitCancelRequest = async (reason) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${selectedOrderId}`, {
+      await userRequest.put(`/orders/${selectedOrderId}`, {
         status: "İptal Talebi",
         cancellationReason: reason
       });

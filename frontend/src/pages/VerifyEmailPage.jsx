@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { publicRequest } from "../requestMethods";
 import { FiCheckCircle, FiXCircle, FiLoader } from "react-icons/fi";
 import Confetti from "react-confetti";
 
@@ -15,7 +15,7 @@ const VerifyEmailPage = () => {
     const verifyAccount = async () => {
       try {
         // Backend'e token'ı gönder
-        await axios.post("http://localhost:5000/api/auth/verify", { token });
+        await publicRequest.post("/auth/verify", { token });
         
         setStatus("success");
         setMessage("Hesabınız başarıyla doğrulandı! Giriş yapabilirsiniz.");

@@ -2,9 +2,11 @@ const router = require('express').Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
-
+const { 
+  verifyTokenAndAdmin,
+} = require('./verifyToken'); // GÜVENLİK İMPORTU
 // GENEL İSTATİSTİKLERİ GETİR
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     // 1. Toplam Ciro Hesapla
     const orders = await Order.find();
