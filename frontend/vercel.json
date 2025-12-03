@@ -2,8 +2,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html",
-      "comment":" Serve all routes through index.html for SPA routing "
+      "destination": "/index.html"
     }
   ]
 }
