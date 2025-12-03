@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 
 const VendorProducts = ({ user }) => {
+  const { t } = useTranslation();
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -31,7 +33,7 @@ const VendorProducts = ({ user }) => {
   // Ürünleri Çek
   const fetchProducts = async () => {
     try { 
-      const res = await axios.get(`http://localhost:5000/api/products/vendor/${user._id}`); 
+      const res = await userRequest.get(`/products/vendor/${user._id}`); 
       setProducts(res.data); 
     } catch (err) { console.log(err); }
   };
@@ -44,11 +46,11 @@ const VendorProducts = ({ user }) => {
       const newStatus = !product.isActive; // Mevcut durumun tersi
       
       // Backend'e gönder
-      await axios.put(`http://localhost:5000/api/products/${product._id}`, { 
+      await userRequest.put(`/products/${product._id}`, { 
         isActive: newStatus 
       });
 
-      notify(`Ürün ${newStatus ? 'Aktif' : 'Pasif'} yapıldı`, "success");
+      notify(`${t('vendorProducts.product')} ${newStatus ? t('vendorProducts.active') : t('vendorProducts.inactive')}`, "success");
       
       // Listeyi anında güncelle (Sayfa yenilemeden görmek için)
       setProducts(prev => prev.map(p => 
@@ -56,7 +58,7 @@ const VendorProducts = ({ user }) => {
       ));
 
     } catch (err) {
-      notify("Durum değiştirilemedi!", "error");
+      notify(t('vendorProducts.statusNotChanged'), "error");
     }
   };
 
@@ -69,26 +71,26 @@ const VendorProducts = ({ user }) => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await axios.post("http://localhost:5000/api/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi! 🖼️", "success"); } 
-    catch { notify("Yüklenemedi", "error"); } finally { setUploading(false); }
+    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify(t('vendorProducts.pictureLoaded') + " 🖼️", "success"); } 
+    catch { notify(t('vendorProducts.pictureNotLoaded'), "error"); } finally { setUploading(false); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.price) return notify("Eksik bilgi", "warning");
+    if (!formData.title || !formData.price) return notify(t('vendorProducts.missingInfo'), "warning");
     try {
       // Vendor ID'sini ekle
       const payload = { ...formData, vendor: user._id, isActive: true};
       
-      if(editMode) await axios.put(`http://localhost:5000/api/products/${editMode}`, payload);
-      else await axios.post("http://localhost:5000/api/products", payload);
+      if(editMode) await userRequest.put(`/products/${editMode}`, payload);
+      else await userRequest.post("/products", payload);
 
-      notify("İşlem Başarılı! 🌸", "success"); 
+      notify(t('vendorProducts.reqSuccess') + " 🌸", "success"); 
       setShowForm(false); setEditMode(null); setFormData(initialForm); fetchProducts();
       setFormData(initialForm);
     } catch (err) {
       // Hata detayını göster
-      const msg = err.response?.data?.message || "Ürün eklenirken hata oluştu.";
+      const msg = err.response?.data?.message || t('vendorProducts.errorOccurredWhileAdding');
       notify(msg, "error");
      }
   };
@@ -116,10 +118,10 @@ const VendorProducts = ({ user }) => {
   // SİLME (MODAL İLE)
   const handleDeleteRequest = (id) => {
     setConfirmData({
-      isOpen: true, title: "Ürünü Sil?", message: "Bu işlem geri alınamaz. Emin misiniz?", isDanger: true,
+      isOpen: true, title: "{t('vendorProducts.deleteProduct')}", message: "{t('vendorProducts.cannotBeUndone')}", isDanger: true,
       action: async () => {
-        try { await axios.delete(`http://localhost:5000/api/products/${id}`); notify("Silindi", "success"); fetchProducts(); }
-        catch { notify("Hata", "error"); }
+        try { await userRequest.delete(`/products/${id}`); notify(t('vendorProducts.deleted'), "success"); fetchProducts(); }
+        catch { notify(t('common.error'), "error"); }
         setConfirmData(null);
       }
     });
@@ -134,14 +136,14 @@ const VendorProducts = ({ user }) => {
       {/* --- ÜST BAR --- */}
       <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 sticky top-20 z-20 gap-4">
         <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-          Ürünlerim <span className="text-sm bg-pink-100 text-pink-600 px-2 py-1 rounded-full">{filteredProducts.length}</span>
+          {t('vendorProducts.myProducts')} <span className="text-sm bg-pink-100 text-pink-600 px-2 py-1 rounded-full">{filteredProducts.length}</span>
         </h2>
         
         <div className="flex gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:flex-none">
             <input 
               type="text" 
-              placeholder="Ürün Ara..." 
+              placeholder={t('vendorProducts.searchPlaceholder')} 
               className="pl-9 pr-4 py-2 border rounded-lg w-full outline-none focus:border-pink-500 transition"
               onChange={(e) => setSearchTerm(e.target.value)} 
             />
@@ -153,7 +155,7 @@ const VendorProducts = ({ user }) => {
             onClick={handleAddNewClick} 
             className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-2 transition ${showForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-pink-600 hover:bg-pink-700'}`}
           >
-            {showForm ? <><FiX /> İptal</> : <><FiPlus /> Yeni Ekle</>}
+            {showForm ? <><FiX /> {t('vendorProducts.cancel')}</> : <><FiPlus /> {t('vendorProducts.addNew')}</>}
           </button>
         </div>
       </div>
@@ -162,37 +164,37 @@ const VendorProducts = ({ user }) => {
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 animate-fade-in-down mb-6">
           <div className="flex justify-between items-center mb-4 border-b pb-2">
-             <h3 className="font-bold text-lg text-gray-700">{editMode ? "Ürünü Düzenle" : "Yeni Ürün Ekle"}</h3>
+             <h3 className="font-bold text-lg text-gray-700">{editMode ? `${t('vendorProducts.editProduct')}` : `${t('vendorProducts.addNew')}`}</h3>
           </div>
           
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">Ürün Adı</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
+             <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.productName')}</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
              <div className="flex gap-2">
-               <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Fiyat (£)</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
-               <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Stok</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
+               <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.price')} (£)</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
+               <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.stock')}</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
              </div>
-             <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
+             <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.category')}</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
              <div>
-               <label className="text-xs font-bold text-gray-500 uppercase mb-1">Görsel</label>
+               <label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.image')}</label>
                <div className="flex items-center gap-2 border p-2 rounded bg-gray-50 border-dashed border-gray-300 hover:border-pink-400 transition">
                   <label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 shadow-sm hover:bg-gray-100">
-                    <FiCamera /> {uploading?"...":"Yükle"}
+                    <FiCamera /> {uploading?"...":t('vendorProducts.upload')}
                     <input type="file" className="hidden" onChange={handleUpload} accept="image/*" disabled={uploading} />
                   </label>
-                  <input name="img" value={formData.img} onChange={handleChange} placeholder="veya URL yapıştır" className="flex-1 bg-transparent outline-none text-xs" />
-                  {formData.img && <img src={formData.img} className="w-8 h-8 rounded object-cover border" alt="önizleme" />}
+                  <input name="img" value={formData.img} onChange={handleChange} placeholder={t('vendorProducts.uploadPlaceholder')} className="flex-1 bg-transparent outline-none text-xs" />
+                  {formData.img && <img src={formData.img} className="w-8 h-8 rounded object-cover border" alt={t('vendorProducts.preview')} />}
                </div>
              </div>
-             <div className="md:col-span-2"><label className="text-xs font-bold text-gray-500 uppercase mb-1">Açıklama</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-24 outline-none focus:border-pink-500" /></div>
+             <div className="md:col-span-2"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.description')}</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-24 outline-none focus:border-pink-500" /></div>
              
              {/* Durum Checkbox */}
              <div className="md:col-span-2 flex items-center gap-2 bg-gray-50 p-3 rounded border border-gray-200">
                  <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} id="active" className="w-5 h-5 accent-pink-600 cursor-pointer" />
-                 <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Bu ürün satışa açık olsun</label>
+                 <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">{t('vendorProducts.isActive')}</label>
              </div>
 
              <button type="submit" disabled={uploading} className="bg-green-600 text-white py-3 rounded-lg font-bold md:col-span-2 hover:bg-green-700 shadow-lg transition disabled:opacity-50">
-               {editMode ? "Değişiklikleri Kaydet" : "Ürünü Yayınla"}
+               {editMode ? t('vendorProducts.updateProduct') : t('vendorProducts.publishProduct')}
              </button>
           </form>
         </div>
@@ -217,18 +219,18 @@ const VendorProducts = ({ user }) => {
                   onClick={() => handleToggleStatus(p)} 
                   className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-md transition transform active:scale-95 flex items-center gap-1 ${p.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-800 text-white hover:bg-black"}`}
                 >
-                   {p.isActive ? "🟢 Yayında" : "⚫ Gizli"}
+                   {p.isActive ? `🟢 ${t('vendorProducts.live')}` : `⚫ ${t('vendorProducts.hidden')}`}
                 </button>
                 
                 {/* Stok Uyarıları */}
                 {p.stock <= 0 && (
                   <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-md animate-pulse">
-                    ⛔ TÜKENDİ
+                    ⛔ {t('vendorProducts.soldOut')}
                   </span>
                 )}
                 {p.stock > 0 && p.stock < 5 && (
                   <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
-                    ⚠️ SON {p.stock}
+                    ⚠️ {t('vendorProducts.last')} {p.stock}
                   </span>
                 )}
               </div>
@@ -260,7 +262,7 @@ const VendorProducts = ({ user }) => {
 
                 {/* Hızlı Stok Güncelleme */}
                 <div className="mt-auto pt-3 border-t border-gray-200/60 flex justify-between items-center mb-4">
-                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Hızlı Stok</span>
+                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('vendorProducts.quickStock')}</span>
                    <QuickStockUpdate product={p} refresh={fetchProducts} />
                 </div>
 
@@ -270,13 +272,13 @@ const VendorProducts = ({ user }) => {
                      onClick={() => handleEditClick(p)} 
                      className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2.5 rounded-xl font-bold hover:bg-blue-100 transition border border-blue-100"
                    >
-                     <FiEdit /> Düzenle
+                     <FiEdit /> {t('vendorProducts.edit')}
                    </button>
                    <button 
                      onClick={() => handleDeleteRequest(p._id)} 
                      className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2.5 rounded-xl font-bold hover:bg-red-100 transition border border-red-100"
                    >
-                     <FiTrash2 /> Sil
+                     <FiTrash2 /> {t('vendorProducts.delete')}
                    </button>
                 </div>
               </div>
@@ -299,10 +301,11 @@ const QuickStockUpdate = ({ product, refresh }) => {
   const { notify } = useCart();
 
   const handleUpdate = async () => {
+    const { t } = useTranslation();
     if (Number(stock) === product.stock) return;
     setLoading(true);
-    try { await axios.put(`http://localhost:5000/api/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
-    catch (err) { notify("Hata", "error"); } finally { setLoading(false); }
+    try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify(t('vendorProducts.stockUpdated'), "success"); refresh(); } 
+    catch (err) { notify(t('vendorProducts.error'), "error"); } finally { setLoading(false); }
   };
 
   return (

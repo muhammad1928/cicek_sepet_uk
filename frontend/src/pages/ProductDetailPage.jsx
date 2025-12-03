@@ -5,8 +5,10 @@ import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
 import { FiMinus, FiPlus, FiShoppingCart, FiHeart, FiShare2, FiArrowLeft } from "react-icons/fi";
 import { FaStore, FaCheckCircle, FaTruck } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const ProductDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, toggleFavorite, favorites, notify } = useCart();
@@ -37,8 +39,8 @@ const ProductDetailPage = () => {
 
   const submitReview = async (e) => {
     e.preventDefault();
-    if (!user) return notify("Yorum yapmak için giriş yapmalısınız!", "warning");
-    if (!reviewText.trim()) return notify("Lütfen bir yorum yazın.", "warning");
+    if (!user) return notify(t("productDetail.loginBeforeComment"), "warning");
+    if (!reviewText.trim()) return notify(t("productDetail.commentEmpty"), "warning");
 
     try {
       await publicRequest.post(`/products/${id}/reviews`, {
@@ -46,22 +48,22 @@ const ProductDetailPage = () => {
         rating, 
         comment: reviewText
       });
-      notify("Yorumunuz başarıyla eklendi! 🌸", "success");
+      notify(t("productDetail.commentSubmitSuccess") + " 🌸", "success");
       setReviewText("");
       fetchProduct(); // Yorumları güncellemek için ürünü tekrar çek
     } catch (err) {
-      const message = err.response?.data?.message || "Hata oluştu.";
+      const message = err.response?.data?.message || t("common.error");
       notify(message, "error");
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center font-bold text-pink-600 text-xl animate-pulse">Yükleniyor...</div>;
-  if (!product) return <div className="min-h-screen flex flex-col items-center justify-center gap-4"><h2 className="text-2xl font-bold text-gray-800">Ürün Bulunamadı</h2><button onClick={() => navigate("/")} className="text-blue-600 underline">Ana Sayfaya Dön</button></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center font-bold text-pink-600 text-xl animate-pulse">{t("common.loading")}</div>;
+  if (!product) return <div className="min-h-screen flex flex-col items-center justify-center gap-4"><h2 className="text-2xl font-bold text-gray-800">{t("home.notFound")}</h2><button onClick={() => navigate("/")} className="text-blue-600 underline">{t("common.backToHome")}</button></div>;
 
   const isFav = favorites.includes(product._id);
   
   // Satıcı İsmi Kontrolü
-  const vendorName = product.vendor?.fullName || product.vendor?.username || "ÇiçekSepeti UK";
+  const vendorName = product.vendor?.fullName || product.vendor?.username || "ÇiçekSepeti UK"; // add your own page name
 
   // Sepete Ekleme Fonksiyonu
   const handleAddToCart = () => {
@@ -72,7 +74,7 @@ const ProductDetailPage = () => {
     <div className="min-h-screen bg-gray-50 font-sans pt-28 pb-20 px-4 relative overflow-hidden">
       
       <Seo 
-        title={`${product.title} | ÇiçekSepeti UK`}
+        title={`${product.title} | ÇiçekSepeti UK`} // page name
         description={`${product.title} sadece £${product.price}. ${product.desc.substring(0, 100)}...`} 
         image={product.img}
       />
@@ -84,7 +86,7 @@ const ProductDetailPage = () => {
         
         {/* Geri Dön */}
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-pink-600 mb-6 font-bold transition group w-fit">
-           <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Geri Dön
+           <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" /> {t("common.goBack")}
         </button>
 
         {/* --- ÜRÜN KARTI --- */}
@@ -95,7 +97,7 @@ const ProductDetailPage = () => {
             <img src={product.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={product.title} />
             
             {product.stock <= 0 && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-3xl font-bold backdrop-blur-sm">TÜKENDİ</div>
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-3xl font-bold backdrop-blur-sm">{t("common.finished")}</div>
             )}
             
             {/* Favori Butonu */}
@@ -125,16 +127,16 @@ const ProductDetailPage = () => {
                <div className="flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-lg border border-purple-100 font-bold">
                   <FaStore /> 
                   {product.vendor ? (
-                      <Link to={`/store/${product.vendor._id}`} className="hover:underline">Satıcı: {vendorName}</Link>
+                      <Link to={`/store/${product.vendor._id}`} className="hover:underline">{t("common.vendor")}: {vendorName}</Link>
                   ) : (
-                      <span>Satıcı: {vendorName}</span>
+                      <span>{t("common.vendor")}: {vendorName}</span>
                   )}
                </div>
                <div className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg border border-green-100 font-bold">
-                  <FaCheckCircle /> <span>Stok: {product.stock}</span>
+                  <FaCheckCircle /> <span>{t("common.stock")}: {product.stock}</span>
                </div>
                <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100 font-bold">
-                  <FaTruck /> <span>Hızlı Teslimat</span>
+                  <FaTruck /> <span>{t("common.fastDelivery")}</span>
                </div>
             </div>
 
@@ -160,7 +162,7 @@ const ProductDetailPage = () => {
                             onClick={handleAddToCart}
                             className="bg-gray-900 text-white px-8 py-3 rounded-2xl font-bold text-lg shadow-xl hover:bg-black transition transform active:scale-95 flex items-center gap-3"
                         >
-                            <FiShoppingCart /> Sepete Ekle
+                            <FiShoppingCart /> {t("common.addToCart")}
                         </button>
                     </>
                   )}
@@ -175,11 +177,11 @@ const ProductDetailPage = () => {
           
           {/* Yorum Formu */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 inline-block border-pink-500">Değerlendirme Yap</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 inline-block border-pink-500">{t("productDetail.submitReviewAlt")}</h3>
             {user ? (
               <form onSubmit={submitReview} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                 <div className="mb-6">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Puanınız</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t("productDetail.yourRating")}</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map(star => (
                       <button key={star} type="button" onClick={() => setRating(star)} className={`text-4xl transition transform hover:scale-110 ${star <= rating ? "text-yellow-400 drop-shadow-sm" : "text-gray-200"}`}>★</button>
@@ -187,28 +189,28 @@ const ProductDetailPage = () => {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Yorumunuz</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t("productDetail.yourReview")}</label>
                   <textarea 
                     value={reviewText} 
                     onChange={(e) => setReviewText(e.target.value)} 
                     className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-pink-400 focus:bg-white bg-gray-50 outline-none h-32 resize-none transition text-gray-700" 
-                    placeholder="Ürün hakkında ne düşünüyorsunuz?" 
+                    placeholder={t("productDetail.placeholder")} 
                   />
                 </div>
-                <button type="submit" className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg w-full transform active:scale-95">Yorumu Gönder</button>
+                <button type="submit" className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg w-full transform active:scale-95">{t("productDetail.submitReview")}</button>
               </form>
             ) : (
               <div className="bg-blue-50 p-8 rounded-3xl text-blue-800 border border-blue-100 text-center">
-                <p className="text-lg">Yorum yapmak için <span className="font-bold cursor-pointer underline hover:text-blue-900" onClick={() => navigate("/login")}>Giriş Yapmalısınız</span>.</p>
+                <p className="text-lg">{t("productDetail.loginTocomment1")} <span className="font-bold cursor-pointer underline hover:text-blue-900" onClick={() => navigate("/login")}>{t("productDetail.loginTocomment2")}</span>.</p>
               </div>
             )}
           </div>
 
           {/* Yorum Listesi */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">Yorumlar <span className="text-gray-400 text-lg font-normal">({product.reviews.length})</span></h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">{t("common.reviews")} <span className="text-gray-400 text-lg font-normal">({product.reviews.length})</span></h3>
             <div className="space-y-4 h-[500px] overflow-y-auto pr-2 custom-scroll">
-              {product.reviews.length === 0 ? <div className="text-gray-400 italic p-4 border-2 border-dashed rounded-2xl text-center">Henüz yorum yapılmamış. İlk yorumu sen yap!</div> : 
+              {product.reviews.length === 0 ? <div className="text-gray-400 italic p-4 border-2 border-dashed rounded-2xl text-center">{t("productDetail.firstComment")}</div> : 
                 product.reviews.slice().reverse().map((review, index) => (
                   <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div className="flex justify-between items-start mb-2">
@@ -241,6 +243,7 @@ const ProductDetailPage = () => {
 
 // Benzer Ürünler Bileşeni
 const RelatedProducts = ({ currentProduct }) => {
+  const { t } = useTranslation();
   const [related, setRelated] = useState([]);
   const navigate = useNavigate();
 
@@ -260,7 +263,7 @@ const RelatedProducts = ({ currentProduct }) => {
 
   return (
     <div className="mt-20 pt-10 border-t border-gray-200 mb-10">
-      <h3 className="text-2xl font-bold text-gray-800 mb-8">Bunları da Beğenebilirsiniz</h3>
+      <h3 className="text-2xl font-bold text-gray-800 mb-8">{t("productDetail.similarProducts")}</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {related.map((item) => (
           <div 

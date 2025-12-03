@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Seo from "../components/Seo";
+import { useTranslation } from "react-i18next";
 
 const FAQS = [
   { q: "Siparişimi nasıl takip edebilirim?", a: "Üye girişi yaptıktan sonra 'Siparişlerim' menüsünden anlık durumunu görebilirsiniz." },
@@ -10,13 +11,14 @@ const FAQS = [
 ];
 
 const FaqPage = () => {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-10 px-4 font-sans">
-      <Seo title="Sıkça Sorulan Sorular" description="Merak ettikleriniz." />
+      <Seo title={t("seo.faqPage.faqTitle")} description={t("seo.faqPage.faqDescription")} />
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Sıkça Sorulan Sorular</h1>
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">{t("FAQ.faqTitle")}</h1>
         
         <div className="space-y-4">
           {FAQS.map((faq, i) => (

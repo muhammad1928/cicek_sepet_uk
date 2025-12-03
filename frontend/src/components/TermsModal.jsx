@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { FiX, FiCheck, FiFileText } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const TermsModal = ({ onClose, type, onAccept }) => {
+  const { t } = useTranslation(); 
   const [isMounted, setIsMounted] = useState(false);
   const modalRoot = document.getElementById("modal-root") || document.body;
 
@@ -22,32 +24,27 @@ const TermsModal = ({ onClose, type, onAccept }) => {
     
     // 1. MÜŞTERİ (ALICI) SÖZLEŞMESİ
     customer: {
-      title: "Mesafeli Satış ve Hizmet Sözleşmesi",
+      title: t("termsModal.customers.title"),
       body: (
         <div className="space-y-6 text-gray-800 font-sans text-sm leading-relaxed">
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">1. TARAFLAR</h4>
-            <p>İşbu sözleşme, ÇiçekSepeti UK (Platform) ile siteye üye olan veya sipariş veren ALICI arasında akdedilmiştir.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.customers.first.title")}</h4>
+            <p>{t("termsModal.customers.first.desc")}</p>
           </div>
           
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">2. KONU</h4>
-            <p>İşbu sözleşmenin konusu, ALICI'nın Platform üzerinden sipariş verdiği ürünlerin satışı ve teslimi ile ilgili hak ve yükümlülüklerin belirlenmesidir.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.customers.second.title")}</h4>
+            <p>{t("termsModal.customers.second.desc")}</p>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">3. CAYMA HAKKI VE İADE</h4>
-            <p>6502 sayılı Tüketicinin Korunması Kanunu uyarınca;</p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>"Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmelerde" cayma hakkı kullanılamaz. (Canlı Çiçek, Çikolata vb.)</li>
-              <li>Ürün teslimat anında hasarlı, solmuş veya kusurlu ise, ALICI teslimatı kabul etmeyip iade talep edebilir.</li>
-              <li>Teslim alındıktan sonraki şikayetlerde görsel ile başvuru zorunludur.</li>
-            </ul>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.customers.third.title")}</h4>
+            <p>{t("termsModal.customers.third.desc")}</p>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">4. KİŞİSEL VERİLER</h4>
-            <p>Ad, soyad, telefon ve adres bilgileriniz; siparişin ifası amacıyla ilgili Satıcı ve Kurye ile paylaşılacaktır.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.customers.fifth.title")}</h4>
+            <p>{t("termsModal.customers.fifth.desc")}</p>
           </div>
         </div>
       )
@@ -55,25 +52,24 @@ const TermsModal = ({ onClose, type, onAccept }) => {
 
     // 2. KURYE (TESLİMATÇI) SÖZLEŞMESİ
     courier: {
-      title: "Bağımsız Kurye Hizmet Sözleşmesi",
+      title: t("termsModal.courierAgreement.title"),
       body: (
         <div className="space-y-6 text-gray-800 font-sans text-sm leading-relaxed">
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">1. HİZMETİN TANIMI</h4>
-            <p>Kurye, Platform üzerinden kendisine yönlendirilen paketleri, Mağaza'dan eksiksiz teslim alıp, belirtilen sürede Müşteri'ye ulaştırmayı kabul eder.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.courierAgreement.first.title")}</h4>
+            <p>{t("termsModal.courierAgreement.first.desc")}</p>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">2. ÖDEME VE HAKEDİŞ</h4>
-            <p>Kurye, tamamladığı her başarılı teslimat başına belirlenen ücreti hak eder. Ödemeler haftalık periyotlarla IBAN adresine yapılır.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.courierAgreement.second.title")}</h4>
+            <p>{t("termsModal.courierAgreement.second.desc")}</p>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">3. SORUMLULUKLAR</h4>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.courierAgreement.third.title")}</h4>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Kurye, taşıma sırasında ürünün formunu korumakla yükümlüdür.</li>
-              <li>Müşteri ile iletişimde profesyonel dil kullanılmalıdır.</li>
-              <li>Müşteri adres ve telefon bilgileri, teslimat harici hiçbir amaçla kullanılamaz.</li>
+              <li>{t("termsModal.courierAgreement.third.titleSub")}</li>
+              <li>{t("termsModal.courierAgreement.third.desc")}</li>
             </ul>
           </div>
         </div>
@@ -82,25 +78,24 @@ const TermsModal = ({ onClose, type, onAccept }) => {
 
     // 3. SATICI (VENDOR) SÖZLEŞMESİ
     vendor: {
-      title: "Satıcı İş Ortaklığı Sözleşmesi",
+      title: t("termsModal.vendorAgreement.title"),
       body: (
         <div className="space-y-6 text-gray-800 font-sans text-sm leading-relaxed">
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">1. TARAFLAR VE AMAÇ</h4>
-            <p>Bu sözleşme, ürünlerini ÇiçekSepeti UK üzerinde listelemek isteyen Satıcı ile Platform arasındadır.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.vendorAgreement.first.title")}</h4>
+            <p>{t("termsModal.vendorAgreement.first.desc")}</p>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">2. KOMİSYON VE ÖDEME</h4>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.vendorAgreement.second.title")}</h4>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Platform, gerçekleşen her satıştan %10 Komisyon bedeli tahsil eder.</li>
-              <li>Ödemeler, sipariş tamamlandıktan 7 gün sonra Satıcı hesabına aktarılır.</li>
+              <li>{t("termsModal.vendorAgreement.second.desc")}</li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-black uppercase mb-2">3. ÜRÜN STANDARTLARI</h4>
-            <p>Satıcı, platforma yüklediği görsel ile birebir aynı kalitede ve tazelikte ürün hazırlamakla yükümlüdür. Ayıplı ürünlerde ücret iadesi Satıcı'dan kesilir.</p>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.vendorAgreement.third.title")}</h4>
+            <p>{t("termsModal.vendorAgreement.third.desc")}</p>
           </div>
         </div>
       )
@@ -129,7 +124,7 @@ const TermsModal = ({ onClose, type, onAccept }) => {
         <div className="p-8 overflow-y-auto flex-1 bg-white">
           {activeContent.body}
           <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-400 text-center">
-            <p>Son Güncelleme: {new Date().toLocaleDateString()}</p>
+            <p>{t("common.lastUpdated")}: {new Date().toLocaleDateString()}</p>
           </div>
         </div>
 
@@ -141,7 +136,7 @@ const TermsModal = ({ onClose, type, onAccept }) => {
               onClick={handleAccept} 
               className="px-8 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-pink-500/30 transition transform active:scale-95 flex items-center gap-2"
             >
-              <FiCheck /> Okudum, Kabul Ediyorum
+              <FiCheck /> {t("termsModal.agree")}
             </button>
           )}
         </div>

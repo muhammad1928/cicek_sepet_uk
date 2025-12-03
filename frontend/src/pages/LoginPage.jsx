@@ -137,7 +137,7 @@ const LoginPage = () => {
           </div>
 
           <div className="text-right">
-            <Link to="/forgot-password" class="text-[10px] text-gray-500 hover:text-pink-600 font-bold transition underline decoration-transparent hover:decoration-pink-600 underline-offset-2">
+            <Link to="/forgot-password" className="text-[10px] text-gray-500 hover:text-pink-600 font-bold transition underline decoration-transparent hover:decoration-pink-600 underline-offset-2">
               Şifremi unuttum?
             </Link>
           </div>

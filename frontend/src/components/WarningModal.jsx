@@ -1,6 +1,9 @@
 import { useCart } from "../context/CartContext";
+import { useTranslation } from "react-i18next";
+
 
 const WarningModal = () => {
+  const { t } = useTranslation(); 
   const { notification, notificationType, closeNotification } = useCart();
 
   if (!notification) return null;
@@ -50,7 +53,7 @@ const WarningModal = () => {
           onClick={closeNotification}
           className={`w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none transition ${current.btnColor}`}
         >
-          Tamam
+          {t("common.okay")}
         </button>
       </div>
     </div>

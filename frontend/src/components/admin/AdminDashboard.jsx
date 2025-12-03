@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { FiUsers, FiShoppingBag, FiBox, FiActivity } from "react-icons/fi";
 
 // --- GRAFİK KÜTÜPHANELERİ ---

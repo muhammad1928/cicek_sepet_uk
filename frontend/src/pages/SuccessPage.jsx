@@ -4,8 +4,10 @@ import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import Confetti from "react-confetti";
 import { FiCheckCircle, FiPackage, FiMapPin, FiHome, FiCalendar, FiClock } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const SuccessPage = () => {
+  const { t } = useTranslation();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   
@@ -52,11 +54,11 @@ const SuccessPage = () => {
           localStorage.setItem("cart", "[]"); 
           localStorage.removeItem("tempOrderData"); 
           
-          notify("Siparişiniz başarıyla alındı! 🎉", "success");
+          notify(`${t("success.orderSuccess")} 🎉`, "success");
         }
       } catch (err) {
         console.error("Sipariş Kayıt Hatası:", err);
-        notify("Sipariş kaydedilirken bir sorun oluştu. Lütfen destek ile iletişime geçin.", "error");
+        notify(t("success.errorWhileOrder"), "error");
       } finally {
         setLoading(false);
       }
@@ -82,8 +84,8 @@ const SuccessPage = () => {
       {loading && (
         <div className="text-center pt-20 animate-pulse">
           <div className="w-20 h-20 border-4 border-green-200 border-t-green-600 rounded-full animate-spin mx-auto mb-6"></div>
-          <h2 className="text-2xl font-bold text-gray-600">Siparişiniz İşleniyor...</h2>
-          <p className="text-gray-400 mt-2">Lütfen bekleyin.</p>
+          <h2 className="text-2xl font-bold text-gray-600">{t("success.processingOrder")}</h2>
+          <p className="text-gray-400 mt-2">{t("success.wait")}</p>
         </div>
       )}
 
@@ -91,13 +93,13 @@ const SuccessPage = () => {
       {!loading && !order && (
         <div className="bg-white p-10 rounded-3xl shadow-xl text-center max-w-md border-t-8 border-red-500">
           <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800">Sipariş Görüntülenemedi</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{t("success.orderNotVisible1")}</h2>
           <p className="text-gray-500 mt-2 mb-6 text-sm">
-            Siparişiniz oluşturulmuş olabilir ancak şu an gösterilemiyor. Lütfen "Siparişlerim" sayfasını kontrol edin.
+            {t("success.orderNotVisible2")}
           </p>
           <div className="flex flex-col gap-2">
-            <button onClick={() => navigate("/my-orders")} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Siparişlerime Git</button>
-            <button onClick={() => navigate("/")} className="text-gray-500 font-bold hover:underline py-2">Ana Sayfa</button>
+            <button onClick={() => navigate("/my-orders")} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">{t("success.navigateToOrders")}</button>
+            <button onClick={() => navigate("/")} className="text-gray-500 font-bold hover:underline py-2">{t("common.backToHome")}</button>
           </div>
         </div>
       )}
@@ -111,11 +113,11 @@ const SuccessPage = () => {
             <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-5xl mx-auto mb-4 shadow-inner animate-bounce">
               <FiCheckCircle />
             </div>
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Teşekkürler!</h1>
-            <p className="text-gray-600 text-lg">Siparişiniz başarıyla alındı.</p>
+            <h1 className="text-3xl font-extrabold text-gray-900 mb-2">{t("success.thankYou")}</h1>
+            <p className="text-gray-600 text-lg">{t("success.orderReceived")}</p>
             
             <div className="mt-6 inline-block bg-gray-50 px-6 py-3 rounded-xl border border-gray-200">
-              <p className="text-xs text-gray-500 uppercase font-bold mb-1 tracking-widest">Sipariş Numarası</p>
+              <p className="text-xs text-gray-500 uppercase font-bold mb-1 tracking-widest">{t("success.orderNumber")}</p>
               <p className="text-2xl font-mono font-bold text-pink-600 tracking-widest">#{order._id.slice(-8).toUpperCase()}</p>
             </div>
           </div>
@@ -126,7 +128,7 @@ const SuccessPage = () => {
             {/* Ürünler */}
             <div className="p-8 border-b border-gray-100">
               <h3 className="text-sm font-bold text-gray-400 uppercase mb-6 flex items-center gap-2">
-                <FiPackage /> Sipariş Özeti
+                <FiPackage /> {t("success.orderSummary")}
               </h3>
               <div className="space-y-6">
                 {order.items.map((item, i) => (
@@ -137,7 +139,7 @@ const SuccessPage = () => {
                       </div>
                       <div>
                         <p className="font-bold text-gray-800 text-lg">{item.title}</p>
-                        <p className="text-sm text-gray-500 font-medium">Adet: {item.quantity}</p>
+                        <p className="text-sm text-gray-500 font-medium">{t("myOrders.orderPieces")}: {item.quantity}</p>
                       </div>
                     </div>
                     <p className="font-bold text-gray-900 text-lg">£{(item.price * item.quantity).toFixed(2)}</p>
@@ -148,15 +150,15 @@ const SuccessPage = () => {
               {/* Toplamlar */}
               <div className="mt-8 pt-6 border-t border-dashed border-gray-200">
                  <div className="flex justify-between text-sm text-gray-500 mb-2">
-                    <span>Ara Toplam</span>
+                    <span>{t("success.totalAmount")}</span>
                     <span>£{(order.totalAmount - order.deliveryFee).toFixed(2)}</span>
                  </div>
                  <div className="flex justify-between text-sm text-blue-600 mb-4 font-medium">
-                    <span>Teslimat Ücreti</span>
+                    <span>{t("success.deliveryFee")}</span>
                     <span>{order.deliveryFee === 0 ? "Ücretsiz" : `£${order.deliveryFee.toFixed(2)}`}</span>
                  </div>
                  <div className="flex justify-between items-center text-2xl font-extrabold text-gray-900 border-t border-gray-100 pt-4">
-                    <span>Genel Toplam</span>
+                    <span>{t("success.generalTotal")}</span>
                     <span className="text-pink-600">£{order.totalAmount.toFixed(2)}</span>
                  </div>
               </div>
@@ -166,7 +168,7 @@ const SuccessPage = () => {
             <div className="p-8 bg-gray-50 grid md:grid-cols-2 gap-8">
               <div>
                 <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2">
-                  <FiMapPin /> Teslimat Adresi
+                  <FiMapPin /> {t("success.deliveryAddress")}
                 </h4>
                 <div className="bg-white p-4 rounded-xl border border-gray-200 text-sm text-gray-700 shadow-sm">
                   <p className="font-bold text-gray-900 mb-1">{order.recipient.name}</p>
@@ -180,15 +182,15 @@ const SuccessPage = () => {
               
               <div>
                 <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2">
-                   <FiCalendar /> Teslimat Zamanı
+                   <FiCalendar /> {t("success.deliveryTime")}
                 </h4>
                 <div className="bg-white p-4 rounded-xl border border-gray-200 text-sm text-gray-700 shadow-sm flex flex-col gap-2">
                   <div className="flex justify-between border-b border-gray-100 pb-2">
-                    <span className="text-gray-500">Tarih:</span>
+                    <span className="text-gray-500">{t("common.date")}:</span>
                     <span className="font-bold">{new Date(order.delivery.date).toLocaleDateString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500">Saat:</span>
+                    <span className="text-gray-500">{t("common.time")}:</span>
                     <span className="font-bold text-blue-600 flex items-center gap-1"><FiClock /> {order.delivery.timeSlot}</span>
                   </div>
                 </div>
@@ -201,13 +203,13 @@ const SuccessPage = () => {
                 onClick={() => navigate("/my-orders")} 
                 className="px-8 py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition shadow-lg flex items-center justify-center gap-2 transform active:scale-95"
               >
-                <FiPackage /> Tüm Siparişlerimi Gör
+                <FiPackage /> {t("success.allOrders")}
               </button>
               <button 
                 onClick={() => navigate("/")} 
                 className="px-8 py-3.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2 transform active:scale-95"
               >
-                <FiHome /> Ana Sayfa
+                <FiHome /> {t("common.backToHome")}
               </button>
             </div>
 

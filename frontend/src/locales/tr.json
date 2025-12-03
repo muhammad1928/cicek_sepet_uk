@@ -1,0 +1,870 @@
+{
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Bir hata oluştu.",
+    "success": "Başarılı!",
+    "logout": "Çıkış Yap",
+    "backToHome": "Ana Sayfaya Dön",
+    "goBack": "Geri Dön",
+    "finished": "TÜKENDİ",
+    "vendor": "Satıcı",
+    "stock": "Stok",
+    "fastDelivery": "Hızlı Teslimat",
+    "addToCart": "Sepete Ekle",
+    "price": "Fiyat",
+    "reviews": "Yorumlar",
+    "fullName": "Adınız Soyadınız",
+    "email": "E-posta",
+    "emailPlaceholder": "E-posta adresinizi girin",
+    "password": "Şifre",
+    "strongPassword": "Şifre Güçlü!",
+    "date": "Tarih",
+    "time": "Saat",
+    "accept":"Kabul Ediyorum",
+    "decline": "Reddet",
+    "passwordRules": {
+      "rule1": "En az 8 karakter",
+      "rule2": "En az 1 büyük harf",
+      "rule3": "En az 1 küçük harf",
+      "rule4": "En az 1 rakam",
+      "rule5": "En az 1 özel karakter (!@#$)"
+    },
+    "phoneNumber": "Telefon Numarası",
+    "phoneNumberPlaceholder": "İletişim numaranızı girin",
+    "dropdownOpt": "Seçiniz...",
+    "accountCreated": "Hesap Oluşturuldu!",
+    "pleaseVerifyEmail": "Lütfen mailinizi onaylayın.",
+    "ibanNumber": "IBAN Numarası",
+    "okay": "Tamam",
+    "lastUpdated": "Son Güncelleme",
+    "print": "Yazdır / PDF Kaydet"
+  },
+
+  "home": {
+    "heroTitle": "Sevdiklerinizi Mutlu Edin",
+    "heroSubtitle": "Londra'nın en taze çiçekleri ve en özel hediyelerini aynı gün kapınıza getiriyoruz.",
+    "categories": "Kategoriler",
+    "featured": "Öne Çıkanlar",
+    "categories_sticky": "Kategoriler",
+    "notFound": "Aradığınız kriterde ürün bulunamadı.",
+    "showAll": "Tüm Ürünleri Göster",
+    "homeAddToCart": "Ekle",
+    "categories1": {
+      "all":"Tümü",
+      "birthday":"Doğum Günü",
+      "anniversary":"Yıldönümü",
+      "indoor":"İç Mekan Çiçekleri",
+      "eadible":"Yenilebilir Hediyeler",
+      "rose":"Güller",
+      "orchid":"Orkideler",
+      "daisy":"Papatyalar",
+      "tulip": "Laleler",
+      "unique": "Eşsiz",
+      "designFlowers":"Tasarım Çiçekleri"
+    }
+  },
+
+  "seo": {
+    "aboutUsPage": {
+      "aboutTitle": "Hakkımızda - ÇiçekSepeti | En Taze Çiçekler ve Hediyeler",
+      "aboutDescription": "ÇiçekSepeti'nin hikayesini, misyonunu ve değerlerini keşfedin. Müşterilerimize en kaliteli çiçek ve hediye deneyimini sunmaya kendimizi adadık. Hızlı teslimat ve mükemmel müşteri hizmeti ile fark yaratıyoruz."
+    },
+    "homePage": {
+      "homeTitle": "Taze Çiçekler ve Özel Hediyeler - ÇiçekSepeti Londra",
+      "locationTitle": "Londra - En Taze Çiçekler ve Özel Hediyeler | ÇiçekSepeti",
+      "homeDescription": "Londra'nın en taze çiçekleri ve özel hediyelerini aynı gün kapınıza teslim ediyoruz. Doğum günü, yıldönümü, evlilik teklifleri ve diğer özel anlar için mükemmel hediye seçeneklerini keşfedin."
+    },
+    "contactPage": {
+      "contactTitle": "İletişim - ÇiçekSepeti | Bize Ulaşın",
+      "contactDescription": "Sorularınız, önerileriniz veya şikayetleriniz için bizimle iletişime geçin. ÇiçekSepeti olarak her zaman yardımcı olmaktan memnuniyet duyarız. Bize ulaşmak için farklı iletişim kanallarını kullanabilirsiniz."
+    },
+    "faqPage": {
+      "faqTitle": "Sıkça Sorulan Sorular - ÇiçekSepeti",
+      "faqDescription": "ÇiçekSepeti hakkında sıkça sorulan soruları keşfedin. Sipariş verme, teslimat, iade politikası ve diğer önemli konularda bilgi edinin. Sorularınıza hızlı ve kolay cevaplar bulun."
+    },
+    "favouritesPage": {
+      "title": "Favorilerim - ÇiçekSepeti | Beğendiğiniz Ürünler",
+      "description": "Favorilerinizi saklayın ve en beğendiğiniz çiçekler, hediyeler ve diğer ürünleri kolayca erişin. ÇiçekSepeti ile en sevdiğiniz ürünleri tek tıkla satın alabilirsiniz."
+    },
+    "legalPage": {
+      "title": "Hukuki Bilgiler - ÇiçekSepeti | Gizlilik Politikası ve Kullanım Şartları",
+      "description": "ÇiçekSepeti'nin gizlilik politikası, kullanım şartları ve çerez politikası hakkında detaylı bilgi edinin. Kişisel verilerinizin nasıl korunduğunu ve platformumuzu kullanırken haklarınızı öğrenin.",
+      "hakkindaDetayliBilgi": "hakkında detaylı bilgi."
+    },
+    "myOrdersPage": {
+      "title": "Siparişlerim - ÇiçekSepeti | Sipariş Takibi ve Geçmişi",
+      "description": "Geçmiş siparişlerinizi görüntüleyin, sipariş detaylarını inceleyin ve siparişlerinizin durumunu takip edin. ÇiçekSepeti ile tüm siparişlerinizi kolayca yönetin."
+    },
+    "registerCourierPage": {
+      "title": "Kurye Başvurusu - ÇiçekSepeti | Kurye Olun",
+      "description": "ÇiçekSepeti'nin kurye programına katılın ve esnek çalışma saatleri ile ek gelir elde edin. Kurye başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+    },
+    "registerPage": {
+      "title": "Kayıt Ol - ÇiçekSepeti | Yeni Hesap Oluştur",
+      "description": "ÇiçekSepeti'ne kayıt olun ve en taze çiçekler ile özel hediyelere erişim sağlayın. Hızlı ve kolay kayıt süreci ile hemen alışverişe başlayın."
+    },
+    "vendorRegistrationPage": {
+      "title": "Satıcı Başvurusu - ÇiçekSepeti | Mağazanızı Açın",
+      "description": "ÇiçekSepeti platformunda mağazanızı açın ve geniş müşteri kitlesine ulaşın. Satıcı başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+    }
+  },
+
+  "admin": {
+    "dashboard": "Gösterge Paneli",
+    "yonetimMerkezi": "Yönetim Merkezi",
+    "genelBakis": "Genel Bakış",
+    "applications": "Başvurular",
+    "users": "Kullanıcılar",
+    "products": "Ürün Yönetimi",
+    "orders": "Siparişler",
+    "coupons": "Kuponlar"
+
+  },
+
+  "contact": {
+    "contactUs": "Bize Ulaşın",
+    "infoTest": "Sorularınız, önerileriniz veya şikayetleriniz için buradayız.",
+    "hqAddress": "Merkez Ofis",
+    "contactTxt": "İletişim",
+    "workingHours": "Çalışma Saatleri",
+    "subject": "Konu",
+    "dropdownOpt1": "Siparişim Hakkında",
+    "dropdownOpt2": "İade / Değişim",
+    "dropdownOpt3": "Diğer",
+    "message": "Mesajınız",
+    "sendMessage": "Mesaj Gönder",
+    "successMessage": "Mesajınız Alındı!",
+    "successSubMessage": "En kısa sürede size dönüş yapacağız.",
+    "newMessage": "Yeni Mesaj Gönder",
+    "errorMessage": "Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
+  },
+
+  "about": {
+    "ourStory": "Bizim Hikayemiz",
+    "ourMission": "Mutluluk Dağıtıyoruz",
+    "ourHistory": "2024 yılında Londra'da kurulan ÇiçekSepeti UK, sevdiklerinize en taze çiçekleri ve en özel hediyeleri ulaştırmak için yola çıktı. Amacımız sadece bir ürün teslim etmek değil, mesafeleri kısaltıp duygularınızı en güzel haliyle ifade etmenize yardımcı olmaktır.",
+    "sameDayDelivery": "Aynı Gün Teslimat",
+    "sameDayDeliverySub": "Londra içi 18:00'a kadar verilen siparişlerde.",
+    "freshnessGuarantee": "Tazelik Garantisi",
+    "freshnessGuaranteeSub": "Her sabah mezattan seçilen en taze çiçekler.",
+    "securePayment": "Güvenli Ödeme",
+    "securePaymentSub": "Stripe altyapısı ile %100 güvenli alışveriş.",
+    "whyChooseUs": "Neden Bizi Seçmelisiniz?",
+    "whyChooseUsSub": "Global tecrübemizi yerel dokunuşlarla birleştiriyoruz. Hem yerel çiçekçileri destekliyor hem de kurumsal bir hizmet kalitesi sunuyoruz. Kurye ekibimiz, çiçeklerinizi sarsmadan, özenle ve güler yüzle teslim eder.",
+    "comment": "buraya daha sonra kuryeler ve dukkanlar hakkinda bilger ekle ve about us page i guncelle"
+  },
+
+  "FAQ": {
+    "faqTitle": "Sıkça Sorulan Sorular",
+    "faqDescription": "Merak ettikleriniz."
+  },
+  "favorites": {
+    "favoritesTitle": "Favorilerim",
+    "favoritesDescription": "Beğendiğiniz ürünleri burada saklıyoruz.",
+    "favoritesEmpty": "Henüz favori eklemediniz.",
+    "favoritesEmptyDesc": "Henüz favori listenize bir ürün eklemediniz. En taze çiçekleri ve hediyeleri keşfetmeye ne dersiniz?",
+    "favoritesExploreProducts": "Ürünleri Keşfet"
+  },
+  "forgotPassword": {
+    "notifyMessageSent": "E-posta gönderildi! 📩",
+    "notifyUserNotFound": "Kullanıcı bulunamadı",
+    "passwordForgotten": "Şifrenizi mi unuttunuz?",
+    "passwordForgottenDesc": "E-posta adresinizi girin, size sıfırlama linki gönderelim.",
+    "emailPlaceholder": "E-posta adresinizi girin",
+    "sending": "Gönderiliyor...",
+    "sendResetLink": "Sıfırlama Linki Gönder",
+    "emailSentTitle": "E-posta Gönderildi!",
+    "emailSentDescription1": "Lütfen",
+    "emailSentDescription2": "email",
+    "emailSentDescription3": "adresini (ve spam klasörünü) kontrol edin.",
+    "tryAgain": "Tekrar Dene",
+    "returnToLogin": "← Giriş Sayfasına Dön"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "legalPageContentTitle": "Gizlilik Politikası",
+      "first": "1. Veri Sorumlusu",
+      "firstDesc": "ÇiçekSepeti UK olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin güvenliğine maksimum önem veriyoruz.",
+      "second": "2. Toplanan Veriler ve Amaçları",
+      "secondDesc": {
+        "part1": "Kimlik ve İletişim: Ad, soyad, e-posta ve telefon numaranız; sipariş onayı ve fatura işlemleri için işlenir.",
+        "part2": "Teslimat Bilgisi: Alıcının adresi ve iletişim bilgileri, siparişin teslimi amacıyla Kurye ve ilgili Mağaza (Satıcı) ile paylaşılır.",
+        "part3": "İşlem Güvenliği: IP adresi ve cihaz bilgileri, dolandırıcılık tespiti ve yasal yükümlülükler için saklanır."
+      },
+      "third": "3. Ödeme Güvenliği",
+      "thirdDesc": "Kredi kartı bilgileriniz sunucularımızda asla saklanmaz. Ödeme işlemleri, SSL sertifikalı şifreli bağlantı üzerinden doğrudan global ödeme altyapısı Stripe tarafından gerçekleştirilir."
+    },
+    "termsOfUse": {
+      "title": "Mesafeli Satış Sözleşmesi",
+      "first": "1. Taraflar",
+      "firstDesc": "İşbu sözleşme, platform üzerinden sipariş veren ALICI ile ürünü tedarik eden SATICI (Mağaza) arasında, ÇiçekSepeti UK arabuluculuğunda akdedilmiştir.",
+      "second": "2. Cayma Hakkı İstisnası (Önemli)",
+      "secondDesc": "DİKKAT: Yönetmelik gereği; \"Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmelerde\" (Canlı Çiçek, Çikolata, Pasta vb.) CAYMA HAKKI KULLANILAMAZ.",
+      "secondDesc_part2": "Ancak ürün; teslimat anında hasarlı, solmuş veya görselden tamamen farklı ise, alıcı teslimatı kabul etmeyerek iade talep edebilir.",
+      "third": "3. Teslimat Süreci",
+      "thirdDesc": "Siparişler, alıcının seçtiği tarih ve saat aralığında teslim edilir. Mücbir sebepler (hava muhalefeti, trafik kazası vb.) dışında gecikmelerden platform sorumludur."
+    },
+    "termsOfCookies": {
+      "title": "Çerez Politikası",
+      "firstTerm": "1. Çerez Nedir?",
+      "firstTermDesc": "Çerezler, ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen ve sizi hatırlamamıza yarayan küçük metin dosyalarıdır. Sitemizin çalışması için bazı çerezler zorunludur.",
+      "secondTerm": "2. Hangi Çerezleri Kullanıyoruz?",
+      "secondTermDesc": {
+        "first": "Zorunlu Çerezler",
+        "firstDesc": "Sepetinizdeki ürünleri hatırlamak, hesabınıza giriş yapabilmeniz ve ödeme güvenliği için gereklidir. Bunlar kapatılamaz.",
+        "second": "İşlevsel Çerezler",
+        "secondDesc": "Dil tercihleriniz, adres kayıtlarınız ve \"Beni Hatırla\" gibi özellikler için kullanılır.",
+        "third": "Analitik Çerezler",
+        "thirdDesc": "Sitemizi nasıl kullandığınızı (hangi sayfalara baktığınızı) anonim olarak analiz ederek hizmetimizi geliştirmemize yardımcı olur."
+      },
+      "thirdTerm": "3. Çerezleri Nasıl Yönetirim?",
+      "thirdTermDesc": "Tarayıcınızın ayarlar menüsünden çerezleri dilediğiniz zaman silebilir veya engelleyebilirsiniz. Ancak zorunlu çerezleri engellemek, sepet ve ödeme fonksiyonlarının çalışmasını bozabilir."
+    },
+    "pageNotFound": "Sayfa Bulunamadı",
+    "pageNotFoundDesc": "Aradığınız içerik mevcut değil.",
+    "backToHome": "← Ana Sayfaya Dön",
+    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+  },
+  "myOrders": {
+    "notifyCancelRequestSent": "İptal talebiniz başarıyla alındı.",
+    "caseOrderLoading": "Siparişleriniz yükleniyor...",
+    "caseNoOrders": "Henüz Siparişiniz Yok",
+    "caseNoOrders2": "Hemen alışverişe başlayıp sevdiklerinizi mutlu edin.",
+    "caseNoOrdersLink": "Alışverişe Başla",
+    "myOrdersPageTitle": "Siparişlerim",
+    "myOrdersDelivered": "Teslim Edildi",
+    "orderNumber": "Sipariş No",
+    "orderAmount": "Tutar",
+    "orderProducts": "Ürünler",
+    "orderPieces": "Adet",
+    "delivery": "Teslimat",
+    "recipient": "Alıcı",
+    "invoice": "Fatura",
+    "cancelOrderRequest": "İptal Talebi Oluştur",
+    "cancelOrderRequestPending": "İptal talebiniz inceleniyor."
+  },
+  "notFound": {
+    "title": "Aradığınız Sayfa Bulunamadı",
+    "description": "Gitmeye çalıştığınız sayfa kaldırılmış, adı değiştirilmiş veya geçici olarak kullanım dışı olabilir."
+  },
+  "productDetail": {
+    "loginBeforeComment": "Yorum yapmak için giriş yapmalısınız!",
+    "commentEmpty": "Lütfen bir yorum yazın.",
+    "commentSubmitSuccess": "Yorumunuz başarıyla eklendi!",
+    "placeholder": "Ürün hakkında ne düşünüyorsunuz?",
+    "submitReview": "Yorumu Gönder",
+    "submitReviewAlt": "Değerlendirme Yap",
+    "yourRating": "Puanınız",
+    "yourReview": "Yorumunuz",
+    "loginTocomment1": "Yorum yapmak için ",
+    "loginTocomment2": "giriş yapın",
+    "firstComment": "Henüz yorum yapılmamış. İlk yorumu sen yap!",
+    "similarProducts": "Bunları da Beğenebilirsiniz"
+  },
+  "profile": {
+    "title": "Hesabım",
+    "profileGreetings": "Hoşgeldiniz, profilinizi ve siparişlerinizi buradan yönetebilirsiniz."
+  },
+  "registerCourier": {
+    "driverLicenseSuccess": "Ehliyet belgeniz başarıyla yüklendi!",
+    "uploadError": "Yükleme hatası.",
+    "acceptTermsWarning": "Kurye sözleşmesini onaylamalısınız!",
+    "driverLicencePhoto": "Lütfen ehliyet fotoğrafı yükleyin.",
+    "applicationReceived": "Başvuru Alındı! Onay bekleniyor. ",
+    "uploadDocuments": "Lütfen giriş yapıp belgelerinizi yükleyin.",
+    "becomeACourier": "Kuryemiz Olun",
+    "yourOwnBoss": "Kendi işinin patronu ol, teslim ettikçe kazan.",
+    "courierApplication": "Kurye Başvurusu",
+    "information": "Önce hesabınızı oluşturacağız. Giriş yaptıktan sonra araç bilgilerini gireceksiniz.",
+    "vehicleInfo": "Araç Bilgileri",
+    "vehicleType": "Araç Tipi",
+    "vehicleOpt": {
+      "car": "Araba",
+      "motorcycle": "Motosiklet",
+      "van": "Ticari Araç (Van)",
+      "bicycle": "Bisiklet"
+    },
+    "vehicleLicensePlate": "Plaka Numarası",
+    "licenseNumber": "Ehliyet numarası",
+    "taxNumber": "Vergi Numarası (Varsa)",
+    "uploadLicense": "Ehliyet Yükle",
+    "courierAddress": "İkamet Adresi",
+    "fileReady": "Dosya Hazır",
+    "policy1": "Kurye Sözleşmesini Okudum",
+    "policy2": "Kabul Ediyorum ve Bağlı Kalıyorum",
+    "btn1": "İşleniyor...",
+    "btn2": "Hesap Oluştur",
+    "btn3": "Başvuruyu Gönder",
+    "alreadyHaveAccount": "Zaten hesabınız var mı? Giriş Yapın"
+  },
+  "register": {
+    "passwordWeak": "Şifreniz yeterince güçlü değil!",
+    "notifyPasswordRequirements": "Lütfen şifre gereksinimlerini karşılayın.",
+    "acceptTerms": "Lütfen sözleşmeyi onaylayın!",
+    "registrationFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin.",
+    "joinUs": "Aramıza Katılın",
+    "createAccount": "Hızlıca hesap oluşturun",
+    "securityMeasures": "Güvenlik Gereksinimleri",
+    "userAgrement1": "Kullanıcı Sözleşmesini ",
+    "userAgrement2": "okudum ve kabul ediyorum.",
+    "btn1": "Kaydediliyor...",
+    "btn2": "Hesap Oluştur",
+    "alreadyAccount1": "Zaten hesabınız var mı?",
+    "alreadyAccount2": "Giriş Yapın"
+  },
+  "vendor": {
+    "receivedOrders": "Gelen Siparişler",
+    "notifyAdressSaved": "Konum adrese işlendi ",
+    "documentLoaded": "Belge başarıyla yüklendi",
+    "documentLoadError": "Yükleme hatası oluştu!",
+    "policyWarning": "Satıcı sözleşmesini onaylamalısınız!",
+    "uploadYourDocument": "Lütfen Vergi Levhası/Belge yükleyin.",
+    "accountCreated:": "Hesap Oluşturuldu! ",
+    "accountCreated2": "Lütfen giriş yapıp mağaza detaylarını girin.",
+    "title1": "Mağaza Başvurusu",
+    "title2": "Mağazanızı Açın",
+    "titleDesc": "Binlerce müşteriye ulaşın, satışlarınızı artırın.",
+    "fullName": "Yetkili Ad Soyad",
+    "fullNamePlaceholder": "Yetkili kişinin tam adı",
+    "vendorInfo": "Önce hesap oluşturacağız. Giriş yaptıktan sonra mağaza detaylarını gireceksiniz.",
+    "storeDetails": "Mağaza Detayları",
+    "companyName": "Şirket Adı",
+    "companyNamePlaceholder": "Resmi Şirket Adı",
+    "taxNumber": "Vergi Numarası",
+    "taxNumberPlaceholder": "Vergi Numarası",
+    "adress": "Mağaza Adresi",
+    "adressPlaceholder": "Mağaza Adresi (Haritadan seçin veya elle yazın)",
+    "uploadDocumentSuccess": "Dosya Başarıyla Yüklendi",
+    "policy1": "Satıcı Sözleşmesini Okudum",
+    "policy2": "Kabul Ediyorum ve Bağlı Kalıyorum",
+    "btn1": "İşleniyor...",
+    "btn2": "Hesap Oluştur",
+    "btn3": "Başvuruyu Gönder"
+  },
+  "resetPassword": {
+    "passwordInvalid": "Şifre gereksinimleri karşılanmadı.",
+    "resetPasswordSuccess": "Şifreniz başarıyla değişti! Giriş yapabilirsiniz.",
+    "invalidLink": "Link geçersiz veya süresi dolmuş.",
+    "invalidLinkTitle": "Bağlantı Geçersiz ",
+    "linkTimeLimit": "Bu şifre sıfırlama linki kullanılmış veya süresi dolmuş.",
+    "resend": "Tekrar Gönder",
+    "setNewPassword": "Yeni Şifre Belirle",
+    "newPassword": "Yeni Şifre",
+    "resettingPassword": "Güncelleniyor...",
+    "resetPassword": "Şifreyi Güncelle"
+  },
+  "store": {
+    "storeNotFound": "Mağaza Bulunamadı",
+    "storeNotFoundDesc": "Aradığınız mağaza mevcut değil veya kaldırılmış olabilir.",
+    "storeDescNotFound": "Bu mağaza için henüz bir açıklama girilmemiş.",
+    "registration": "Üyelik Tarihi",
+    "products": "Ürünler",
+    "reviews": "Değerlendirmeler",
+    "about": "Hakkında",
+    "noProducts": "Bu mağazada henüz ürün bulunmuyor.",
+    "storeRating": "Mağaza Puanı",
+    "storeRatingCount": "Toplam değerlendirme",
+    "noReviews": "Bu mağaza için henüz yorum yapılmamış.",
+    "storeAbout": "Mağaza Hakkında",
+    "secureShopping1": "Güvenli Alışveriş",
+    "secureShopping2": "Bu mağazadan yapacağınız tüm alışverişler ÇiçekSepeti UK güvencesi altındadır."
+  },
+  "success": {
+    "orderSuccess": "Siparişiniz başarıyla alındı!",
+    "errorWhileOrder": "Sipariş kaydedilirken bir sorun oluştu. Lütfen destek ile iletişime geçin.",
+    "processingOrder": "Siparişiniz işleniyor...",
+    "wait": "Lütfen bekleyin.",
+    "orderNotVisible1": "Sipariş Görüntülenemedi",
+    "orderNotVisible2": "Siparişiniz oluşturulmuş olabilir ancak şu an gösterilemiyor. Lütfen \"Siparişlerim\" sayfasını kontrol edin.",
+    "navigateToOrders": "Siparişlerime Git",
+    "thankYou": "Teşekkürler!",
+    "orderReceived": "Siparişiniz başarıyla alındı.",
+    "orderNumber": "Sipariş Numarası",
+    "orderSummary": "Sipariş Özeti",
+    "totalAmount": "Sipariş Tutarı",
+    "deliveryFee": "Teslimat Ücreti",
+    "generalTotal": "Genel Toplam",
+    "adressDetails": "Teslimat Adresi",
+    "deliveryTime": "Teslimat Zamanı",
+    "allOrders": "Tüm Siparişlerimi Gör"
+  },
+  "verificationPending": {
+    "header2": "E-Postanızı Kontrol Edin",
+    "message1": "Hesap güvenliğiniz için doğrulama bağlantısını gönderdik. Aramıza katılmanıza çok az kaldı!",
+    "emailTo": "Gönderilen Adres",
+    "notReceived": "Mail gelmedi mi?",
+    "checkSpam": "Lütfen \"Spam\" veya \"Gereksiz\" klasörünü kontrol etmeyi unutmayın.",
+    "goToLogin": "Giriş Sayfasına Git",
+    "loginWithAnother": "Farklı Bir Hesapla Giriş Yap (Çıkış)"
+  },
+  "verifyEmail": {
+    "messageVerified": "Hesabınız başarıyla doğrulandı! Giriş yapabilirsiniz.",
+    "verifying": "Doğrulanıyor...",
+    "errorOccurred": "Geçersiz veya süresi dolmuş bağlantı.",
+    "pleaseWait": "Lütfen bekleyin, hesabınız aktifleştiriliyor.",
+    "great": "Harika!",
+    "login": "Giriş Yap"
+  },
+  "verify": {
+    "verifying": "Hesabınız doğrulanıyor...",
+    "unsucessfull": "Doğrulama başarısız. Link geçersiz veya süresi dolmuş.",
+    "waitingMessage": "Lütfen bekleyin, işleminiz yapılıyor.",
+    "success": "Tebrikler!"
+  },
+  "cartContext": {
+    "maxStockReached": "Stok yetersiz! Maksimum",
+    "added": "sepete eklendi!",
+    "removed": "silindi.",
+    "cartEmpty": "Sepet temizlendi",
+    "maxLimitReached": "Maksimum stok limitine ulaşıldı!",
+    "increased": "+1 eklendi",
+    "decreased": "-1 azaltıldı",
+    "updated": "güncellendi",
+    "deletedFromFavorites": "favorilerden çıkarıldı",
+    "addedToFavorites": "favorilere eklendi",
+    "favoritesNotUpdated": "Favori güncellenemedi. Lütfen tekrar giriş yapın."
+  },
+  "termsModal": {
+    "agree": "Okudum, Kabul Ediyorum",
+    "customers": {
+      "title": "Mesafeli Satış ve Hizmet Sözleşmesi",
+      "first": {
+        "title": "1. GİRİŞ VE TARAFLAR",
+        "desc": "Bu Hüküm ve Koşullar, Satıcı tarafından Platform aracılığıyla size (\"Alıcı\") yapılan mal satışını düzenler. Sipariş vererek, 2015 Tüketici Hakları Yasası uyarınca bu şartlara bağlı kalmayı kabul edersiniz."
+      },
+      "second": {
+        "title": "2. TESLİMAT POLİTİKASI",
+        "desc": " Ürünleri ödeme sırasında seçilen zaman aralığında teslim etmeyi hedefliyoruz. Alıcı adreste değilse, bozulabilir ürünlerin (çiçek/gıda) doğası gereği kurye paketi \"güvenli bir yere\" veya komşuya bırakabilir (İngiltere standart uygulamasıdır)."
+      },
+      "third": {
+        "title": "3. İPTAL VE İADE POLİTİKASI",
+        "desc": "Consumer Contracts Regulations 2013 uyarınca tüketicilerin genelde 14 günlük cayma hakkı vardır. ANCAK: Bozulabilir Ürün İstisnası: Çabuk bozulabilen veya son kullanma tarihi hızla geçen mallar (taze çiçekler, bitkiler, gıda ürünleri) için <strong>İPTAL/CAYMA HAKKI YOKTUR. Consumer Rights Act 2015 kapsamında, ürünler teslimat anında tarif edildiği gibi değilse veya kalitesi yetersizse (örn. ezilmiş çiçekler), para iadesi veya değişim hakkınız vardır. Teslimattan sonraki 24 saat içinde fotoğraflı kanıtla bize bildirmeniz gerekir."
+      },
+      "fifth": {
+        "title": "5. GİZLİLİK VE VERİ KORUMA",
+        "desc": "Kişisel verileriniz (Ad, Adres, Telefon), UK GDPR ve Data Protection Act 2018 ile tam uyumlu olarak işlenir. Veriler, yalnızca siparişinizi tamamlamak amacıyla Satıcı ve Kurye ile paylaşılır."
+      }
+    },
+    "courierAgreement": {
+      "title": "Bağımsız Kurye Hizmet Sözleşmesi",
+      "first": {
+        "title": "1. ÇALIŞMA ŞEKLİ",
+        "desc": "Kurye, hizmetleri \"Serbest Meslek Sahibi\" (Self-Employed) statüsünde, Bağımsız Yüklenici (Independent Contractor) olarak sunmayı kabul eder. Bu sözleşme Kurye'yi Platformun çalışanı, işçisi veya ortağı yapmaz. Kendi vergilerinizden ve Ulusal Sigorta (NI) ödemelerinizden siz sorumlusunuz."
+      },
+      "second": {
+        "title": "2. HİZMET STANDARTLARI",
+        "desc": "Kurye, bozulabilir ürünlerin (çiçek, pasta) estetik bütünlüğünü korumak için azami özeni göstermelidir. Teslimatlar belirtilen zaman dilimlerinde tamamlanmalıdır."
+      },
+      "third": {
+        "title": "3. VERİ KORUMA (GDPR - SUÇ TEŞKİLİ)",
+        "titlesub": "KESİN GİZLİLİK BİLDİRİMİ",
+        "desc": "Size iletilen müşteri verileri (adres, telefon) SADECE teslimat amaçlıdır. Data Protection Act 2018 uyarınca; bu verileri kaydetmek, teslimat harici bir sebeple müşteriyi aramak/mesaj atmak veya başkasıyla paylaşmak SUÇTUR. Tespiti halinde sözleşme feshedilir ve yasal işlem başlatılır."
+      }
+    },
+    "vendorAgreement": {
+      "title": "Satıcı İş Ortaklığı Sözleşmesi",
+      "first": {
+        "title": "1. TARAFLAR VE AMAÇ",
+        "desc": "Bu Sözleşme, Platform ile Satıcı (Tedarikçi) arasındadır. Satıcı, Platforma ürünlerini listeleme ve satma hakkı verir. Ürünlerin yasal mülkiyeti satış gerçekleşene kadar Satıcı'ya aittir."
+      },
+      "second": {
+        "title": "2. KOMİSYON VE ÖDEMELER",
+        "desc": "Platform, her siparişin brüt değeri üzerinden %10 + KDV (VAT) oranında komisyon alır.Ödemeler haftalık olarak yapılır. Platform, şüpheli işlem veya yüksek iade oranları durumunda ödemeyi bekletme hakkını saklı tutar."
+      },
+      "third": {
+        "title": "3. ÜRÜN SORUMLULUĞU VE UYUMLULUK",
+        "desc": "Satıcı, satılan tüm malların Sale of Goods Act 1979 (Mal Satış Yasası) ve (gıda satıyorsa) Birleşik Krallık Gıda Güvenliği standartlarına uygun olduğunu garanti eder. Kalitesiz ürün, yanlış paketleme veya görselle uyuşmazlıktan kaynaklanan iadelerin maliyeti Satıcı'ya aittir."
+      },
+      "fourth": {
+        "title": "4. VERİ KORUMA (GDPR)",
+        "desc": "Satıcı, müşteri verilerini UK GDPR ve Data Protection Act 2018 ile uyumlu olarak işleyecektir. Veriler yalnızca siparişlerin işlenmesi amacıyla kullanılacaktır."
+      }
+    }
+  },
+  "secureImage":{
+    "uploading":"Yükleniyor...",
+    "uploadSuccess":"Başarıyla Yüklendi!",
+    "wasNotVisible":"Görüntülenemedi"
+  },
+  "orderTracker":{
+    "ready":"Hazır (Kurye Bekleniyor)",
+    "preparing":"Hazırlanıyor",
+    "courierToStore":"Kurye Mağazaya Gidiyor",
+    "deliveryOnTheWay":"Teslimat Yolda",
+    "onTheWay":"Yola Çıktı",
+    "delivered":"Teslim Edildi",
+    "cancelled":"İptal Edildi",
+    "cancellRequested":"İptal Talebi Alındı",
+    "cancelReqUnderReview":"Talebiniz müşteri hizmetleri tarafından inceleniyor.",
+    "orderCancelled":"Bu sipariş iptal edilmiştir."
+  },
+  "locationPicker":{
+    "locationOnMap":"Konum Seçmek İçin Haritaya Tıklayın"
+  },
+  "cookieBanner":{
+    "detailedInfo":"Detaylı Bilgi",
+    "cookiesAgreement":"Sizlere daha iyi bir alışveriş deneyimi sunabilmek için çerezleri (cookies) kullanıyoruz. Siteye devam ederek çerez kullanımını kabul etmiş sayılırsınız."
+  },
+  "footer":{
+    "col1":"Londra'nın en taze çiçeklerini ve en özel hediyelerini sevdiklerinize aynı gün ulaştırıyoruz. Mutluluk dağıtıyoruz.",
+    "col21":"Kurumsal",
+    "col22":"Hakkımızda",
+    "col23":"Sıkça Sorulan Sorular",
+    "col24":"İletişim / Destek",
+    "col25":"Kariyer",
+    "col26":"Blog & Haberler",
+    "col27":"KVKK ve Gizlilik Politikası",
+    "col3":"İş Ortaklığı",
+    "col31":"Satıcı Ol",
+    "col32":"Kurye Ol",
+    "col33":"Ekibimize katılın, kendi işinizin patronu olun.",
+    "col4":"Bize Ulaşın",
+    "col41":"İletişim",
+    "allRightsReserved":"Tüm hakları saklıdır.",
+    "col51":"Gizlilik Politikası",
+    "col52":"Mesafeli Satış Sözleşmesi",
+    "col53":"Çerez Politikası"
+  },
+  "confirmModal":{
+    "cancel":"Vazgeç",
+    "yes":"Evet,",
+    "confirm":"Onayla"
+  },
+  "chatBot":{
+    "greeting":"Merhaba! Ben ÇiçekSepeti Asistanı 🌸 Size nasıl yardımcı olabilirim?",
+    "greetingResponse":"Merhaba! 🌸 Size siparişler, çiçek bakımı veya satıcı işlemleri hakkında bilgi verebilirim.",
+    "askQuestion":"Sorunuzu buraya yazın...",
+    "send":"Gönder",
+    "welcomeBack":"Tekrar hoş geldiniz! Size nasıl yardımcı olabilirim?"
+  },
+  "cartSidebar":{
+    "applyCode":"Kod giriniz",
+    "appliedSuccess":"Kupon başarıyla uygulandı!",
+    "invalid":"Geçersiz kupon kodu.",
+    "cartEmpty":"Sepet Boş.",
+    "fillEmptyBox":"Kırmızı alanları doldurun",
+    "orderSuccess":"Sipariş başarıyla oluşturuldu!",
+    "directingToPayment":"Ödeme sayfasına gidiliyor...",
+    "paymentError":"Ödeme hatası oluştu. Lütfen tekrar deneyin.",
+    "wantToDelete":"Silmek istiyor musunuz?",
+    "removedFromCart":"sepetten çıkarılacaktır.",
+    "emptyCart":"Sepeti Boşalt?",
+    "allWillBeRemoved":"tüm ürünler sepetten çıkarılacaktır."
+  },
+  "cancelModal":{
+    "inputReason":"Lütfen geçerli bir sebep belirtin.",
+    "cancelRequest":"İptal Talebi",
+    "explainReason":"Siparişinizi iptal etmek üzeresiniz. Lütfen bize sebebini kısaca açıklayın.",
+    "explainReasonPlaceholder":"Sebebinizi buraya yazın...",
+    "cancel":"Vazgeç",
+    "submitRequest":"Talebi Gönder"
+  },
+  "badgeDisplay":{
+    "admin":"Yönetici",
+    "vendor":"Onaylı Mağaza",
+    "courier":"Kurye",
+    "verified":"Doğrulanmış",
+    "newUser":"Yeni Üye",
+    "firstOrder":"İlk Sipariş",
+    "year1User":"Efsane Üye (1+ Yıl)",
+    "loyalUser":"Sadık Üye (3+ Yıl)",
+    "gigachad":"Giga Chad (5+ Yıl)",
+    "firstOrder":"İlk Sipariş",
+    "fifthOrder":"Bronz Müşteri (5+)",
+    "tenthOrder":"Gümüş Müşteri (10+)",
+    "twentyfifthOrder":"Altın Müşteri (25+)",
+    "fiftythOrder":"Platin Müşteri (50+)",
+    "100thOrder":"Elmas Müşteri (100+)",
+    "bestSeller":"Çok Satan",
+    "starStore":"Yıldız Mağaza"
+  },
+  "vendorSettings":{
+    "logo":"Logo",
+    "banner":"Banner",
+    "loaded":"yüklendi",
+    "errorLoading":"Yükleme hatası",
+    "storeSettingsSaved":"Mağaza ayarları kaydedildi!",
+    "error":"Bir hata oluştu.",
+    "storeAppearance":"Mağaza Görünümü",
+    "storeDetails":"Mağaza Detayları",
+    "bannerFoto":"Kapak Fotoğrafı",
+    "noBannerFoto":"Görsel Yok",
+    "loading":"Yükleniyor...",
+    "change":"Değiştir",
+    "storeDesc":"Mağaza Açıklaması",
+    "storeDescPlaceholder":"Müşterilerinize mağazanızı anlatın...",
+    "phone":"İletişim Telefonu",
+    "saveSettings": "Ayarları Kaydet"
+  },
+  "vendorProducts":{
+    "birthday":"Doğum Günü",
+    "product":"Ürün",
+    "active":"Aktif edildi",
+    "inactive":"Pasif edildi",
+    "statusNotChanged":"Durum değiştirilmedi",
+    "pictureLoaded":"Resim yüklendi!",
+    "pictureNotLoaded":"Yüklenemedi",
+    "missingInfo":"Eksik bilgi var.",
+    "reqSuccess":"İşlem Başarılı!",
+    "errorOccurredWhileAdding":"Ürün eklenirken hata oluştu",
+    "deleteProduct":"Ürünü Sil?",
+    "cannotBeUndone":"Bu işlem geri alınamaz.",
+    "deleted":"silindi.",
+    "myProducts":"Ürünlerim",
+    "searchPlaceholder":"Ürün Ara...",
+    "cancel":"İptal",
+    "addNew":"Yeni Ürün Ekle",
+    "editProduct":"Ürünü Düzenle",
+    "productName":"Ürün Adı",
+    "price":"Fiyat",
+    "stock":"Stok",
+    "category":"Kategori",
+    "description":"Açıklama",
+    "image":"Görsel",
+    "upload":"Yükle",
+    "uploadPlaceholder":"veya URL yapıştır",
+    "preview":"önizleme",
+    "isActive":"Bu ürün satışa açık olsun",
+    "publishProduct":"Ürünü Yayınla",
+    "updateProduct":"Değişiklikleri Kaydet",
+    "live":"Yayında",
+    "hidden":"Gizli",
+    "soldOut":"TÜKENDİ",
+    "last":"SON",
+    "quickStock":"Hızlı Stok",
+    "edit":"Düzenle",
+    "delete":"Sil",
+    "stockUpdated":"Stok güncellendi!"
+  },
+  "vendorOrders":{
+    "updated":"Güncellendi",
+    "orders":"Gelen Siparişler",
+    "empty":"Henüz sipariş yok",
+    "content":"İçerik",
+    "invoice":"Fatura",
+    "orderReceived":"Sipariş Alındı",
+    "orderPreparing":"Sipariş Hazırlanıyor",
+    "ready":"Hazır",
+    "courierToStore":"Kurye Mağazaya Gidiyor",
+    "deliveryOnTheWay":"Teslimat Yolda"
+  },
+  "vendorDashboard":{
+    "store":"Mağaza Özeti",
+    "totalSales":"Toplam Satış",
+    "totalOrders":"Toplam Sipariş",
+    "totalProducts":"Toplam Ürün",
+    "welcome":"Hosgeldin,",
+    "welcome2":"Mağazan şu an aktif. Siparişlerini 'Siparişler' sekmesinden takip edebilir, faturasını yazdırabilir ve kuryeye teslim edebilirsin."
+  },
+  "profilePage":{
+    "userInfo":{
+      "profileUpdated":"Profil bilgileri güncellendi!",
+      "updateUnsucessfull":"Profil güncellenemedi. Lütfen tekrar deneyin.",
+      "oldPassword":"Eski şifrenizi girin.",
+      "passwordInvalid":"Şifre kurallara uymuyor.",
+      "passwordsNotMatch":"Şifreler eşleşmiyor.",
+      "passwordChanged":"Şifreniz başarıyla değişti. Lütfen tekrar giriş yapın.",
+      "passwordChangeFailed":"Şifre değiştirilemedi.",
+      "personalInfo":"Kişisel Bilgiler",
+      "personalContactInfo":"Kimlik ve iletişim bilgileriniz",
+      "edit":"Düzenle",
+      "cancel":"İptal",
+      "fullName":"Ad Soyad",
+      "email":"E-Posta Adresi",
+      "verified":"ONAYLI",
+      "phone":"Cep Telefonu",
+      "accountType":"Hesap Türü",
+      "saveChanges":"Değişiklikleri Kaydet",
+      "passwordSecurity":"Şifre & Güvenlik",
+      "protectAccount":"Hesabınızı koruyun",
+      "changePassword":"Şifre Değiştir",
+      "createNewPassword":"Yeni şifre oluşturun",
+      "currentPassword":"Mevcut Şifre",
+      "newPassword":"Yeni Şifre",
+      "repeatNewPassword":"Yeni Şifreyi Tekrarla",
+      "updatePassword":"Şifreyi Güncelle"
+    },
+    "userSidebar":{
+      "adressBook":"Adres Defterim",
+      "informationPassword":"Bilgilerim & Şifre",
+      "myOrders":"Siparişlerim",
+      "logout":"Çıkış Yap"
+    },
+    "orderHistory":{
+      "cancelRequestReceived":"İptal talebiniz alındı",
+      "caseNoOrders":"Henüz Siparişiniz Yok",
+      "information":"Verdiğiniz siparişler burada listelenecek.",
+      "deliverTo":"Alıcı Bilgileri",
+      "deliverNote":"Teslimat & Not",
+      "noteNotAdded":"Kart notu eklenmemiş.",
+      "quantity":"Adet",
+      "cancelRequest":"İptal Talebi Oluştur",
+      "invoice":"Fatura"
+    },
+    "adressBook":{
+      "adressUpdated":"Adres güncellendi",
+      "adressAdded":"Adres eklendi",
+      "qDeteleAdress":"Adresi Sil?",
+      "deleteAdressLabel":"başlıklı adres kalıcı olarak silinecek.",
+      "adressDeleted":"Adres silindi",
+      "myAdresses":"Kayıtlı Adresler",
+      "cancel":"İptal",
+      "addNewAdress":"Yeni Adres Ekle",
+      "editAdress":"Adresi Düzenle",
+      "newAdressInfo":"Yeni Adres Bilgileri",
+      "adressTitle":"Adres Başlığı",
+      "adressTitlePlaceholder":"Ev, İş, Arkadaşım",
+      "receipentName":"Alıcı Adı",
+      "receipentNamePlaceholder":"Ad Soyad",
+      "receipentPhone":"Alıcı Telefon Numarası",
+      "openAdress":"Alıcı Adresi",
+      "city":"Şehir",
+      "postCode":"Posta Kodu",
+      "saveChanges":"Değişiklikleri Kaydet",
+      "addAdress":"Adresi Kaydet",
+      "noSavedAdresses":"Henüz kayıtlı bir adresiniz bulunmuyor.",
+      "edit":"Düzenle",
+      "delete":"Sil"
+    }
+  },
+  "cartSidebarComponents":{
+    "cartItemsList":{
+      "empty":"Sepetiniz henüz boş."
+    },
+    "CheckoutForm":{
+      "contact":"İletişim",
+      "nameSurname":"Adınız Soyadınız",
+      "phoneNumber":"Telefon Numaranız",
+      "emailAddress":"E-Posta Adresiniz",
+      "recipientAddress":"Alıcı & Adres",
+      "savedAddressSelect":"Kayıtlı Adres Seç",
+      "recipientName":"Alıcı Adı",
+      "recipientPhone":"Alıcı Telefonu",
+      "deliveryAddress":"Tam Adres (Sokak, Bina, Daire)",
+      "deliveryCity":"Şehir",
+      "deliveryPostcode":"Posta Kodu",
+      "saveAdress":"Bu adresi defterime kaydet",
+      "deliveryOptions":"Teslimat Seçenekleri",
+      "opt1":"Standart (2-3 Gün)",
+      "free":"ÜCRETSİZ",
+      "opt2":"Ertesi Gün",
+      "opt3":"Aynı Gün (Premium)",
+      "deliveryTime":"Tarih & Saat",
+      "selectDateFirst":"Önce Tarih Seçin",
+      "noAvailableTime":"Saat kalmadı",
+      "deliveryNote":"Hediye Notunuz...",
+      "noteToCourier":"Kuryeye Notunuz...",
+      "sendWithoutName":"İsimsiz Gönder"
+    },
+    "index":{
+      "adressSelected":"Adres Seçildi",
+      "enterCode":"Kod giriniz",
+      "couponApplied":"Kupon uygulandı!",
+      "couponInvalid":"Geçersiz kupon kodu.",
+      "cartEmpty":"Sepet boş",
+      "fillRedFields":"Kırmızı alanları doldurun",
+      "orderSuccess":"Sipariş alındı!",
+      "redirectingToPayment":"Ödeme sayfasına yönlendiriliyorsunuz...",
+      "paymentError":"Ödeme hatası. ",
+      "quantity":"Adet",
+      "confirmRemove":"sepetten silinsin mi?",
+      "comfirmRemoveTitle":"Sepeti Boşalt?",
+      "allItemsRemoved":"tüm ürünler sepetten silinecek."
+    },
+    "sideBarFooter":{
+      "discountCode":"İndirim Kodu",
+      "apply":"Uygula",
+      "freeDelivery":"Kargo Bedava",
+      "remove":"Kaldır",
+      "subtotal":"Ara Toplam",
+      "discount":"İndirim",
+      "delivery":"Teslimat",
+      "fast":"Hızlı",
+      "standard":"Standart",
+      "premium":"Premium",
+      "free":"Ücretsiz",
+      "total":"Genel Toplam",
+      "confirm":"Sepeti Onayla",
+      "processing":"İşleniyor...",
+      "pleaseWait":"Lütfen Bekleyin...",
+      "payAndFinish":"Öde ve Bitir"
+    },
+    "sidebarHeader":{
+      "myCart":"Sepetim",
+      "clear":"Temizle",
+      "deliveryInfo":"Teslimat Bilgileri"
+    }
+  },
+  "adminComponents":{
+    "adminOrderComp":{
+      "orderCard":{
+        "request":"TALEP",
+        "loss":"ZARAR",
+        "vendor":"Mağaza",
+        "cost":"Maliyet",
+        "total":"Toplam",
+        "orderReceived":"Sipariş Alındı",
+        "orderPreparing":"Sipariş Hazırlanıyor",
+        "ready":"Hazır",
+        "onTheWay":"Yola Çıktı",
+        "delivered":"Teslim Edildi",
+        "cancelRequest":"İptal Talebi",
+        "cancel":"İptal Edildi",
+        "senderReceiver":"Alıcı & Gönderen",
+        "sender":"Gönderen",
+        "delivery":"Teslimat",
+        "notesAndFinance":"Notlar & Finans",
+        "cardNoteNotAvailable":"Kart notu yok",
+        "realCost":"Gerçek Maliyet",
+        "netLoss":"NET ZARAR",
+        "cancelReason":"İPTAL SEBEBİ",
+        "products":"Ürünler",
+        "hideTechnicalDetails":"Teknik Verileri Gizle",
+        "showTechnicalDetails":"Güvenlik & Metadata Göster",
+        "courierFound":"Kurye Atandı",
+        "printInvoice":"Fatura Yazdır",
+        "searchPlaceholder":"Sipariş No veya Alıcı Ara...",
+        "allCases":"Tüm Durumlar",
+        "discounted":"Zarar Edenler (İndirimli)",
+        "cancelRequested":"İptal Talepleri"
+      },
+      "orderMetadata":{
+        "metaDataNotAvailable":"Metadata verisi yok.",
+        "securityAnalysis":"Güvenlik Analizi"
+      },
+      "orderStats":{
+        "revenue":"Ciro",
+        "waiting":"Bekleyen",
+        "promoCost":"Promosyon Maliyeti",
+        "cancelRequest":"İptal Talebi",
+        "completed":"Tamamlanan"
+      }
+    },
+    "adminApplication":{
+      "namedApplicant":"adlı kullanıcı,",
+      "namedApplicant2":"olarak sisteme tam erişim sağlayabilecek. Bu işlemi onaylıyor musunuz?",
+      "onaylandi":"onaylandı!",
+      "provideReason":"Lütfen bir sebep yazın!",
+      "rejected":"Başvuru Reddedildi",
+      "pendingApplications":"Bekleyen Başvurular",
+      "noPendingApplications":"Şu an onay bekleyen başvuru yok.",
+      "vendor":"Mağaza",
+      "courier":"Kurye",
+      "reviewAndDecide":"İncele & Karar Ver",
+      "rejection":"Başvuru Reddi",
+      "reasonToReject":"Lütfen red sebebini belirtin.",
+      "reasonToRejectPlaceholder":"Red sebebinizi buraya yazın...",
+      "cancel":"İptal",
+      "send":"Gönder"
+    },
+    "comment":"Admin NOT FINISHED"
+  },
+  "navbar":{
+    "searchPlaceholder":"Çiçek, Çikolata, Hediye ara...",
+    "myAccount":"Hesabım",
+    "login":"Giriş Yap",
+    "register":"Kayıt Ol",
+    "viewCart":"Sepeti Görüntüle",
+    "language":"Dil"
+  }
+}

@@ -9,8 +9,10 @@ import OrderHistory from "../components/profilePage/OrderHistory";
 import AddressBook from "../components/profilePage/AddressBook";
 import UserInfo from "../components/profilePage/UserInfo";
 import MyOrdersPage from "./MyOrdersPage"; // Gömülü Sipariş Sayfası
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("orders");
   const [user, setUser] = useState(null);
   const [orderCount, setOrderCount] = useState(0);
@@ -56,8 +58,8 @@ const ProfilePage = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         
         <div className="mb-8">
-           <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">Hesabım</h1>
-           <p className="text-gray-500 text-sm mt-2">Hoşgeldiniz, profilinizi ve siparişlerinizi buradan yönetebilirsiniz.</p>
+           <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">{t("profile.title")}</h1>
+           <p className="text-gray-500 text-sm mt-2">{t("profile.profileGreetings")}</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 items-start">

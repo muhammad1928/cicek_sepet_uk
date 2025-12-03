@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { publicRequest } from "../requestMethods";
+import { useTranslation } from "react-i18next";
+
 const VerifyPage = () => {
+  const { t } = useTranslation();
   const { token } = useParams(); // URL'deki kodu yakala
   const [status, setStatus] = useState("loading"); // loading, success, error
-  const [message, setMessage] = useState("Hesabınız doğrulanıyor...");
+  const [message, setMessage] = useState(t('verify.verifying'));
 
   useEffect(() => {
     const verifyAccount = async () => {
@@ -16,7 +19,7 @@ const VerifyPage = () => {
         setMessage(res.data); // "Hesap başarıyla onaylandı"
       } catch (err) {
         setStatus("error");
-        setMessage(err.response?.data || "Doğrulama başarısız. Link geçersiz veya süresi dolmuş.");
+        setMessage(err.response?.data || "{t('verify.unsucessfull')}"); // "Doğrulama başarısız. Link geçersiz veya süresi dolmuş." 
       }
     };
 
@@ -33,8 +36,8 @@ const VerifyPage = () => {
         {status === "loading" && (
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin"></div>
-            <h2 className="text-xl font-bold text-gray-700">Doğrulanıyor...</h2>
-            <p className="text-gray-500 text-sm">Lütfen bekleyin, işleminiz yapılıyor.</p>
+            <h2 className="text-xl font-bold text-gray-700">{t('verify.verifying')}</h2>
+            <p className="text-gray-500 text-sm">{t('verify.waitingMessage')}</p>
           </div>
         )}
 
@@ -44,14 +47,14 @@ const VerifyPage = () => {
             <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl shadow-sm animate-bounce-slow">
               ✓
             </div>
-            <h2 className="text-2xl font-extrabold text-gray-800">Tebrikler! 🎉</h2>
+            <h2 className="text-2xl font-extrabold text-gray-800">{t('verify.success')} 🎉</h2>
             <p className="text-gray-600 font-medium">{message}</p>
             
             <Link 
               to="/login" 
               className="mt-4 bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition shadow-lg hover:shadow-green-500/30 active:scale-95"
             >
-              Giriş Yap
+              {t('verifyEmail.login')}
             </Link>
           </div>
         )}
@@ -62,7 +65,7 @@ const VerifyPage = () => {
             <div className="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-4xl shadow-sm">
               ✕
             </div>
-            <h2 className="text-2xl font-extrabold text-gray-800">Hata!</h2>
+            <h2 className="text-2xl font-extrabold text-gray-800">{t('common.error')}</h2>
             <p className="text-red-500 font-medium bg-red-50 p-3 rounded-lg border border-red-100 w-full">
               {message}
             </p>
@@ -71,7 +74,7 @@ const VerifyPage = () => {
               to="/" 
               className="mt-4 text-gray-500 hover:text-gray-800 font-bold underline"
             >
-              Ana Sayfaya Dön
+              {t('common.backToHome')}
             </Link>
           </div>
         )}

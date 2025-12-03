@@ -6,8 +6,10 @@ import Seo from "../components/Seo";
 import { ProductSkeleton } from "../components/Loading";
 import { FaCalendarAlt, FaStar, FaStore, FaQuoteRight } from "react-icons/fa";
 import { FiShoppingBag, FiInfo, FiMapPin, FiMessageSquare } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const StorePage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [vendor, setVendor] = useState(null);
   const [products, setProducts] = useState([]);
@@ -54,7 +56,7 @@ const StorePage = () => {
 
 
   if (loading) return <div className="pt-32 text-center"><ProductSkeleton /></div>;
-  if (!vendor) return <div className="pt-32 text-center text-gray-500 text-xl">Mağaza bulunamadı.</div>;
+  if (!vendor) return <div className="pt-32 text-center text-gray-500 text-xl">{t("store.storeNotFound")}</div>;
 
   const settings = vendor.storeSettings || {};
   const bannerUrl = settings.banner || "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=1500&q=80";
@@ -62,7 +64,7 @@ const StorePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <Seo 
-        title={`${vendor.fullName || vendor.username} - ÇiçekSepeti UK`} 
+        title={`${vendor.fullName || vendor.username} - ÇiçekSepeti UK`} //page name
         description={`${vendor.fullName} mağazasının en özel ürünlerini keşfedin.`} 
       />
 
@@ -90,14 +92,14 @@ const StorePage = () => {
           {/* Bilgiler */}
           <div className="flex-1 pb-2">
             <h1 className="text-4xl font-black text-gray-900 mb-2 tracking-tight">{vendor.fullName || vendor.username}</h1>
-            <p className="text-gray-500 text-sm mb-4 max-w-2xl mx-auto md:mx-0 line-clamp-2">{settings.description || "Bu mağaza için henüz bir açıklama girilmemiş."}</p>
+            <p className="text-gray-500 text-sm mb-4 max-w-2xl mx-auto md:mx-0 line-clamp-2">{settings.description || t("store.storeDescNotFound")}</p>
             
             <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs font-bold text-gray-600">
               <span className="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-lg border border-yellow-100">
                  <FaStar className="text-yellow-500" /> {averageRating} ({allReviews.length} Değerlendirme)
               </span>
               <span className="flex items-center gap-1 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100"><FiShoppingBag /> {products.length} Ürün</span>
-              <span className="flex items-center gap-1 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200"><FaCalendarAlt /> Üyelik: {new Date(vendor.createdAt).getFullYear()}</span>
+              <span className="flex items-center gap-1 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200"><FaCalendarAlt /> {t("store.registration")}: {new Date(vendor.createdAt).getFullYear()}</span>
             </div>
           </div>
         </div>
@@ -105,13 +107,13 @@ const StorePage = () => {
         {/* --- 3. SEKME MENÜSÜ --- */}
         <div className="flex justify-center md:justify-start gap-8 border-b border-gray-200 mb-10 overflow-x-auto">
           <button onClick={() => setActiveTab("products")} className={`pb-3 text-lg font-bold transition flex items-center gap-2 whitespace-nowrap ${activeTab === "products" ? "text-pink-600 border-b-4 border-pink-600" : "text-gray-400 hover:text-gray-600"}`}>
-            <FiShoppingBag /> Ürünler
+            <FiShoppingBag /> {t("store.products")}
           </button>
           <button onClick={() => setActiveTab("reviews")} className={`pb-3 text-lg font-bold transition flex items-center gap-2 whitespace-nowrap ${activeTab === "reviews" ? "text-pink-600 border-b-4 border-pink-600" : "text-gray-400 hover:text-gray-600"}`}>
-            <FiMessageSquare /> Değerlendirmeler <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full ml-1">{allReviews.length}</span>
+            <FiMessageSquare /> {t("store.reviews")} <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full ml-1">{allReviews.length}</span>
           </button>
           <button onClick={() => setActiveTab("about")} className={`pb-3 text-lg font-bold transition flex items-center gap-2 whitespace-nowrap ${activeTab === "about" ? "text-pink-600 border-b-4 border-pink-600" : "text-gray-400 hover:text-gray-600"}`}>
-            <FiInfo /> Hakkında
+            <FiInfo /> {t("store.about")}
           </button>
         </div>
 
@@ -123,7 +125,7 @@ const StorePage = () => {
             {products.length === 0 ? (
               <div className="text-center py-24 text-gray-400 bg-white rounded-3xl border-2 border-dashed border-gray-200">
                  <div className="text-6xl mb-4 opacity-30">🥀</div>
-                 <p className="text-lg font-medium">Bu mağazada henüz ürün bulunmuyor.</p>
+                 <p className="text-lg font-medium">{t("store.noProducts")}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -159,11 +161,11 @@ const StorePage = () => {
              {/* Özet Kartı */}
              <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="text-center md:text-left">
-                   <h3 className="text-2xl font-bold text-gray-800 mb-1">Mağaza Puanı</h3>
+                   <h3 className="text-2xl font-bold text-gray-800 mb-1">{t("store.storeRating")}</h3>
                    <div className="text-5xl font-black text-yellow-400 flex items-center justify-center md:justify-start gap-2">
                       {averageRating} <span className="text-lg text-gray-300 font-medium">/ 5</span>
                    </div>
-                   <p className="text-sm text-gray-500 mt-2">Toplam {allReviews.length} değerlendirme</p>
+                   <p className="text-sm text-gray-500 mt-2">{t("store.storeRatingCount")} {allReviews.length}</p>
                 </div>
                 <div className="flex gap-1">
                    {[1,2,3,4,5].map(star => (
@@ -177,7 +179,7 @@ const StorePage = () => {
                {allReviews.length === 0 ? (
                  <div className="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200 text-gray-400">
                     <FiMessageSquare className="mx-auto text-4xl mb-2 opacity-30"/>
-                    <p>Bu mağaza için henüz yorum yapılmamış.</p>
+                    <p>{t("store.noReviews")}</p>
                  </div>
                ) : (
                  allReviews.map((review, index) => (
@@ -218,9 +220,9 @@ const StorePage = () => {
         {activeTab === "about" && (
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12 animate-fade-in max-w-4xl mx-auto text-center">
             <div className="w-20 h-20 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl"><FaStore /></div>
-            <h3 className="text-3xl font-black text-gray-900 mb-6">Mağaza Hikayesi</h3>
+            <h3 className="text-3xl font-black text-gray-900 mb-6">{t("store.storeAbout")}</h3>
             <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg mb-10">{settings.description || "Bu mağaza kendisi hakkında henüz detaylı bir bilgi paylaşmamış."}</p>
-            <div className="bg-blue-50 p-6 rounded-2xl inline-block border border-blue-100"><p className="text-blue-800 font-bold mb-1">Güvenli Alışveriş</p><p className="text-blue-600 text-sm">Bu mağazadan yapacağınız tüm alışverişler ÇiçekSepeti UK güvencesi altındadır.</p></div>
+            <div className="bg-blue-50 p-6 rounded-2xl inline-block border border-blue-100"><p className="text-blue-800 font-bold mb-1">{t("store.secureShopping1")}</p><p className="text-blue-600 text-sm">{t("store.secureShopping2")}</p></div>
             {vendor.applicationData?.city && (<div className="mt-6 flex items-center justify-center gap-2 text-gray-500 text-sm"><FiMapPin /> {vendor.applicationData.city}, {vendor.applicationData.address ? "UK" : ""}</div>)}
           </div>
         )}

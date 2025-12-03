@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { FiX, FiAlertTriangle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const CancelModal = ({ onClose, onConfirm }) => {
+  const { t } = useTranslation();
   const [reason, setReason] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const modalRoot = document.getElementById("modal-root") || document.body;
@@ -17,7 +19,7 @@ const CancelModal = ({ onClose, onConfirm }) => {
 
   const handleSubmit = () => {
     if (reason.trim().length < 5) {
-      alert("Lütfen geçerli bir sebep belirtin.");
+      alert(t('cancelModal.inputReason'));
       return;
     }
     onConfirm(reason); // Sebebi üst bileşene gönder
@@ -40,9 +42,9 @@ const CancelModal = ({ onClose, onConfirm }) => {
             <FiAlertTriangle />
           </div>
 
-          <h3 className="text-2xl font-extrabold text-gray-800 mb-2">İptal Talebi</h3>
+          <h3 className="text-2xl font-extrabold text-gray-800 mb-2">{t('cancelModal.cancelRequest')}</h3>
           <p className="text-sm text-gray-500 mb-6">
-            Siparişinizi iptal etmek üzeresiniz. Lütfen bize sebebini kısaca açıklayın.
+            {t('cancelModal.explainReason')}
           </p>
 
           {/* Textarea */}
@@ -50,7 +52,7 @@ const CancelModal = ({ onClose, onConfirm }) => {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:bg-orange-50/20 outline-none h-32 resize-none text-sm text-gray-700 transition placeholder-gray-400"
-            placeholder="Örn: Yanlış ürün seçtim, adres değişikliği..."
+            placeholder={t('cancelModal.explainReasonPlaceholder')}
           />
 
           {/* Butonlar */}
@@ -59,13 +61,13 @@ const CancelModal = ({ onClose, onConfirm }) => {
               onClick={onClose} 
               className="flex-1 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition"
             >
-              Vazgeç
+              {t('cancelModal.cancel')}
             </button>
             <button 
               onClick={handleSubmit} 
               className="flex-1 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 shadow-lg shadow-orange-200 transition transform active:scale-95"
             >
-              Talebi Gönder
+              {t('cancelModal.submitRequest')}
             </button>
           </div>
 

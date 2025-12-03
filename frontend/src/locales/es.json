@@ -1,0 +1,862 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Se produjo un error.",
+    "success": "¡Éxito!",
+    "logout": "Cerrar sesión",
+    "backToHome": "Volver al inicio",
+    "goBack": "Volver",
+    "finished": "AGOTADO",
+    "vendor": "Vendedor",
+    "stock": "Stock",
+    "fastDelivery": "Entrega rápida",
+    "addToCart": "Añadir al carrito",
+    "price": "Precio",
+    "reviews": "Reseñas",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingrese su correo electrónico",
+    "password": "Contraseña",
+    "strongPassword": "¡Contraseña fuerte!",
+    "date": "Fecha",
+    "time": "Hora",
+    "accept": "Acepto",
+    "decline": "Rechazar",
+    "passwordRules": {
+      "rule1": "Al menos 8 caracteres",
+      "rule2": "Al menos 1 mayúscula",
+      "rule3": "Al menos 1 minúscula",
+      "rule4": "Al menos 1 número",
+      "rule5": "Al menos 1 carácter especial (!@#$)"
+    },
+    "phoneNumber": "Número de teléfono",
+    "phoneNumberPlaceholder": "Ingrese su número de contacto",
+    "dropdownOpt": "Seleccionar...",
+    "accountCreated": "¡Cuenta creada!",
+    "pleaseVerifyEmail": "Por favor verifique su correo electrónico.",
+    "ibanNumber": "Número IBAN",
+    "okay": "OK",
+    "lastUpdated": "Última actualización",
+    "print": "Imprimir / Guardar como PDF"
+  },
+  "home": {
+    "heroTitle": "Haz felices a tus seres queridos",
+    "heroSubtitle": "Entregamos las flores más frescas y los regalos más especiales de Londres el mismo día en tu puerta.",
+    "categories": "Categorías",
+    "featured": "Destacados",
+    "categories_sticky": "Categorías",
+    "notFound": "No se encontraron productos con sus criterios.",
+    "showAll": "Mostrar todos los productos",
+    "homeAddToCart": "Añadir",
+    "categories1": {
+      "all": "Todos",
+      "birthday": "Cumpleaños",
+      "anniversary": "Aniversario",
+      "indoor": "Plantas de interior",
+      "eadible": "Regalos comestibles",
+      "rose": "Rosas",
+      "orchid": "Orquídeas",
+      "daisy": "Margaritas",
+      "tulip": "Tulipanes",
+      "unique": "Único",
+      "designFlowers": "Flores de diseño"
+    }
+  },
+  "seo": {
+    "aboutUsPage": {
+      "aboutTitle": "Sobre nosotros - ÇiçekSepeti | Las flores y regalos más frescos",
+      "aboutDescription": "Descubre la historia, misión y valores de ÇiçekSepeti. Nos dedicamos a ofrecer a nuestros clientes la mejor experiencia en flores y regalos."
+    },
+    "homePage": {
+      "homeTitle": "Flores frescas y regalos especiales - ÇiçekSepeti Londres",
+      "locationTitle": "Londres - Las flores más frescas y regalos especiales | ÇiçekSepeti",
+      "homeDescription": "Entregamos las flores más frescas y regalos especiales de Londres el mismo día en tu puerta."
+    },
+    "contactPage": {
+      "contactTitle": "Contacto - ÇiçekSepeti | Contáctenos",
+      "contactDescription": "Contáctenos para sus preguntas, sugerencias o quejas."
+    },
+    "faqPage": {
+      "faqTitle": "Preguntas frecuentes - ÇiçekSepeti",
+      "faqDescription": "Descubre las preguntas frecuentes sobre ÇiçekSepeti."
+    },
+    "favouritesPage": {
+      "title": "Mis favoritos - ÇiçekSepeti | Sus productos favoritos",
+      "description": "Guarde sus favoritos y acceda fácilmente a sus flores, regalos y otros productos preferidos."
+    },
+    "legalPage": {
+      "title": "Información legal - ÇiçekSepeti | Política de privacidad y condiciones de uso",
+      "description": "Obtenga información detallada sobre la política de privacidad y condiciones de uso de ÇiçekSepeti.",
+      "hakkindaDetayliBilgi": "información detallada sobre."
+    },
+    "myOrdersPage": {
+      "title": "Mis pedidos - ÇiçekSepeti | Seguimiento e historial de pedidos",
+      "description": "Vea sus pedidos anteriores y haga seguimiento del estado de sus pedidos."
+    },
+    "registerCourierPage": {
+      "title": "Solicitud de mensajero - ÇiçekSepeti | Conviértase en mensajero",
+      "description": "Únase al programa de mensajeros de ÇiçekSepeti y gane ingresos adicionales."
+    },
+    "registerPage": {
+      "title": "Registrarse - ÇiçekSepeti | Crear nueva cuenta",
+      "description": "Regístrese en ÇiçekSepeti y acceda a las flores más frescas y regalos especiales."
+    },
+    "vendorRegistrationPage": {
+      "title": "Solicitud de vendedor - ÇiçekSepeti | Abra su tienda",
+      "description": "Abra su tienda en la plataforma ÇiçekSepeti y llegue a una amplia base de clientes."
+    }
+  },
+  "admin": {
+    "dashboard": "Panel de control",
+    "yonetimMerkezi": "Centro de administración",
+    "genelBakis": "Vista general",
+    "applications": "Solicitudes",
+    "users": "Usuarios",
+    "products": "Gestión de productos",
+    "orders": "Pedidos",
+    "coupons": "Cupones"
+  },
+  "contact": {
+    "contactUs": "Contáctenos",
+    "infoTest": "Estamos aquí para sus preguntas, sugerencias o quejas.",
+    "hqAddress": "Oficina central",
+    "contactTxt": "Contacto",
+    "workingHours": "Horario de trabajo",
+    "subject": "Asunto",
+    "dropdownOpt1": "Sobre mi pedido",
+    "dropdownOpt2": "Devolución / Cambio",
+    "dropdownOpt3": "Otro",
+    "message": "Su mensaje",
+    "sendMessage": "Enviar mensaje",
+    "successMessage": "¡Su mensaje ha sido recibido!",
+    "successSubMessage": "Le responderemos lo antes posible.",
+    "newMessage": "Enviar nuevo mensaje",
+    "errorMessage": "Se produjo un error al enviar el mensaje. Por favor, inténtelo de nuevo."
+  },
+  "about": {
+    "ourStory": "Nuestra historia",
+    "ourMission": "Distribuimos felicidad",
+    "ourHistory": "Fundado en Londres en 2024, ÇiçekSepeti UK se lanzó para entregar las flores más frescas y los regalos más especiales a sus seres queridos.",
+    "sameDayDelivery": "Entrega el mismo día",
+    "sameDayDeliverySub": "Para pedidos realizados antes de las 18:00 dentro de Londres.",
+    "freshnessGuarantee": "Garantía de frescura",
+    "freshnessGuaranteeSub": "Las flores más frescas seleccionadas cada mañana en la subasta.",
+    "securePayment": "Pago seguro",
+    "securePaymentSub": "Compra 100% segura con infraestructura Stripe.",
+    "whyChooseUs": "¿Por qué elegirnos?",
+    "whyChooseUsSub": "Combinamos nuestra experiencia global con un toque local.",
+    "comment": "agregar más tarde información sobre mensajeros y tiendas"
+  },
+  "FAQ": {
+    "faqTitle": "Preguntas frecuentes",
+    "faqDescription": "Sus preguntas."
+  },
+  "favorites": {
+    "favoritesTitle": "Mis favoritos",
+    "favoritesDescription": "Guardamos aquí los productos que le gustan.",
+    "favoritesEmpty": "Aún no ha añadido favoritos.",
+    "favoritesEmptyDesc": "Aún no ha añadido ningún producto a su lista de favoritos.",
+    "favoritesExploreProducts": "Descubrir productos"
+  },
+  "forgotPassword": {
+    "notifyMessageSent": "¡Correo enviado! 📩",
+    "notifyUserNotFound": "Usuario no encontrado",
+    "passwordForgotten": "¿Olvidó su contraseña?",
+    "passwordForgottenDesc": "Ingrese su correo electrónico, le enviaremos un enlace de restablecimiento.",
+    "emailPlaceholder": "Ingrese su correo electrónico",
+    "sending": "Enviando...",
+    "sendResetLink": "Enviar enlace de restablecimiento",
+    "emailSentTitle": "¡Correo enviado!",
+    "emailSentDescription1": "Por favor revise",
+    "emailSentDescription2": "el correo electrónico",
+    "emailSentDescription3": "(y la carpeta de spam).",
+    "tryAgain": "Intentar de nuevo",
+    "returnToLogin": "← Volver al inicio de sesión"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "legalPageContentTitle": "Política de privacidad",
+      "first": "1. Responsable de datos",
+      "firstDesc": "Como ÇiçekSepeti UK, damos la máxima importancia a la seguridad de sus datos personales en el marco del RGPD.",
+      "second": "2. Datos recopilados y finalidades",
+      "secondDesc": {
+        "part1": "Identidad y contacto: Su nombre, apellido, correo electrónico y número de teléfono se procesan para la confirmación de pedidos y facturación.",
+        "part2": "Información de entrega: La dirección y datos de contacto del destinatario se comparten con el mensajero y la tienda correspondiente.",
+        "part3": "Seguridad de transacciones: La dirección IP y la información del dispositivo se guardan para la detección de fraudes."
+      },
+      "third": "3. Seguridad de pagos",
+      "thirdDesc": "La información de su tarjeta de crédito nunca se almacena en nuestros servidores. Las transacciones de pago se realizan directamente por Stripe."
+    },
+    "termsOfUse": {
+      "title": "Contrato de venta a distancia",
+      "first": "1. Partes",
+      "firstDesc": "Este contrato se celebra entre el COMPRADOR y el VENDEDOR, con ÇiçekSepeti UK como intermediario.",
+      "second": "2. Excepción al derecho de desistimiento (Importante)",
+      "secondDesc": "ATENCIÓN: El derecho de desistimiento NO PUEDE ejercerse para productos perecederos (flores frescas, chocolate, pastel, etc.).",
+      "secondDesc_part2": "Sin embargo, si el producto está dañado o marchito en el momento de la entrega, el comprador puede solicitar una devolución.",
+      "third": "3. Proceso de entrega",
+      "thirdDesc": "Los pedidos se entregan en la fecha y franja horaria elegidas por el comprador."
+    },
+    "termsOfCookies": {
+      "title": "Política de cookies",
+      "firstTerm": "1. ¿Qué es una cookie?",
+      "firstTermDesc": "Las cookies son pequeños archivos de texto guardados en su navegador que nos ayudan a recordarle.",
+      "secondTerm": "2. ¿Qué cookies usamos?",
+      "secondTermDesc": {
+        "first": "Cookies necesarias",
+        "firstDesc": "Necesarias para el carrito, inicio de sesión y seguridad del pago. No se pueden desactivar.",
+        "second": "Cookies funcionales",
+        "secondDesc": "Se utilizan para preferencias de idioma y direcciones guardadas.",
+        "third": "Cookies analíticas",
+        "thirdDesc": "Nos ayudan a mejorar nuestro servicio analizando cómo utiliza nuestro sitio."
+      },
+      "thirdTerm": "3. ¿Cómo gestiono las cookies?",
+      "thirdTermDesc": "Puede eliminar o bloquear las cookies desde la configuración de su navegador."
+    },
+    "pageNotFound": "Página no encontrada",
+    "pageNotFoundDesc": "El contenido que busca no existe.",
+    "backToHome": "← Volver al inicio",
+    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+  },
+  "myOrders": {
+    "notifyCancelRequestSent": "Su solicitud de cancelación ha sido recibida.",
+    "caseOrderLoading": "Cargando sus pedidos...",
+    "caseNoOrders": "Aún no tiene pedidos",
+    "caseNoOrders2": "Comience a comprar ahora y haga felices a sus seres queridos.",
+    "caseNoOrdersLink": "Comenzar a comprar",
+    "myOrdersPageTitle": "Mis pedidos",
+    "myOrdersDelivered": "Entregado",
+    "orderNumber": "N° de pedido",
+    "orderAmount": "Importe",
+    "orderProducts": "Productos",
+    "orderPieces": "Piezas",
+    "delivery": "Entrega",
+    "recipient": "Destinatario",
+    "invoice": "Factura",
+    "cancelOrderRequest": "Crear solicitud de cancelación",
+    "cancelOrderRequestPending": "Su solicitud de cancelación está siendo revisada."
+  },
+  "notFound": {
+    "title": "La página que busca no se encontró",
+    "description": "La página puede haber sido eliminada, renombrada o no estar disponible temporalmente."
+  },
+  "productDetail": {
+    "loginBeforeComment": "¡Debe iniciar sesión para comentar!",
+    "commentEmpty": "Por favor escriba un comentario.",
+    "commentSubmitSuccess": "¡Su comentario ha sido añadido!",
+    "placeholder": "¿Qué piensa del producto?",
+    "submitReview": "Enviar reseña",
+    "submitReviewAlt": "Dar opinión",
+    "yourRating": "Su puntuación",
+    "yourReview": "Su reseña",
+    "loginTocomment1": "Para comentar ",
+    "loginTocomment2": "inicie sesión",
+    "firstComment": "Aún no hay comentarios. ¡Sea el primero en comentar!",
+    "similarProducts": "También le puede gustar"
+  },
+  "profile": {
+    "title": "Mi cuenta",
+    "profileGreetings": "Bienvenido, puede gestionar su perfil y pedidos aquí."
+  },
+  "registerCourier": {
+    "driverLicenseSuccess": "¡Su licencia de conducir ha sido subida!",
+    "uploadError": "Error de carga.",
+    "acceptTermsWarning": "¡Debe aceptar el contrato de mensajero!",
+    "driverLicencePhoto": "Por favor suba una foto de la licencia de conducir.",
+    "applicationReceived": "¡Solicitud recibida! Esperando aprobación.",
+    "uploadDocuments": "Por favor inicie sesión y suba sus documentos.",
+    "becomeACourier": "Conviértase en nuestro mensajero",
+    "yourOwnBoss": "Sea su propio jefe, gane con cada entrega.",
+    "courierApplication": "Solicitud de mensajero",
+    "information": "Primero crearemos su cuenta. Después de iniciar sesión, ingresará la información del vehículo.",
+    "vehicleInfo": "Información del vehículo",
+    "vehicleType": "Tipo de vehículo",
+    "vehicleOpt": {
+      "car": "Coche",
+      "motorcycle": "Motocicleta",
+      "van": "Furgoneta",
+      "bicycle": "Bicicleta"
+    },
+    "vehicleLicensePlate": "Número de matrícula",
+    "licenseNumber": "Número de licencia",
+    "taxNumber": "Número fiscal (si aplica)",
+    "uploadLicense": "Subir licencia",
+    "courierAddress": "Dirección de residencia",
+    "fileReady": "Archivo listo",
+    "policy1": "He leído el contrato de mensajero",
+    "policy2": "Acepto y me comprometo",
+    "btn1": "Procesando...",
+    "btn2": "Crear cuenta",
+    "btn3": "Enviar solicitud",
+    "alreadyHaveAccount": "¿Ya tiene una cuenta? Inicie sesión"
+  },
+  "register": {
+    "passwordWeak": "¡Su contraseña no es suficientemente fuerte!",
+    "notifyPasswordRequirements": "Por favor cumpla con los requisitos de contraseña.",
+    "acceptTerms": "¡Por favor acepte el contrato!",
+    "registrationFailed": "El registro falló. Por favor inténtelo de nuevo.",
+    "joinUs": "Únase a nosotros",
+    "createAccount": "Cree una cuenta rápidamente",
+    "securityMeasures": "Requisitos de seguridad",
+    "userAgrement1": "He leído y acepto ",
+    "userAgrement2": "el contrato de usuario.",
+    "btn1": "Guardando...",
+    "btn2": "Crear cuenta",
+    "alreadyAccount1": "¿Ya tiene una cuenta?",
+    "alreadyAccount2": "Inicie sesión"
+  },
+  "vendor": {
+    "receivedOrders": "Pedidos entrantes",
+    "notifyAdressSaved": "La ubicación se ha guardado en la dirección",
+    "documentLoaded": "Documento subido con éxito",
+    "documentLoadError": "¡Error de carga!",
+    "policyWarning": "¡Debe aceptar el contrato de vendedor!",
+    "uploadYourDocument": "Por favor suba el certificado fiscal/documento.",
+    "accountCreated:": "¡Cuenta creada!",
+    "accountCreated2": "Por favor inicie sesión e ingrese los detalles de la tienda.",
+    "title1": "Solicitud de tienda",
+    "title2": "Abra su tienda",
+    "titleDesc": "Llegue a miles de clientes, aumente sus ventas.",
+    "fullName": "Nombre completo autorizado",
+    "fullNamePlaceholder": "Nombre completo de la persona autorizada",
+    "vendorInfo": "Primero crearemos una cuenta. Después de iniciar sesión, ingresará los detalles de la tienda.",
+    "storeDetails": "Detalles de la tienda",
+    "companyName": "Nombre de la empresa",
+    "companyNamePlaceholder": "Nombre oficial de la empresa",
+    "taxNumber": "Número fiscal",
+    "taxNumberPlaceholder": "Número fiscal",
+    "adress": "Dirección de la tienda",
+    "adressPlaceholder": "Dirección de la tienda (Seleccione en el mapa o ingrese manualmente)",
+    "uploadDocumentSuccess": "Archivo subido con éxito",
+    "policy1": "He leído el contrato de vendedor",
+    "policy2": "Acepto y me comprometo",
+    "btn1": "Procesando...",
+    "btn2": "Crear cuenta",
+    "btn3": "Enviar solicitud"
+  },
+  "resetPassword": {
+    "passwordInvalid": "No se cumplieron los requisitos de contraseña.",
+    "resetPasswordSuccess": "¡Su contraseña ha sido cambiada! Puede iniciar sesión.",
+    "invalidLink": "El enlace es inválido o ha expirado.",
+    "invalidLinkTitle": "Enlace inválido",
+    "linkTimeLimit": "Este enlace de restablecimiento de contraseña ha sido usado o ha expirado.",
+    "resend": "Reenviar",
+    "setNewPassword": "Establecer nueva contraseña",
+    "newPassword": "Nueva contraseña",
+    "resettingPassword": "Actualizando...",
+    "resetPassword": "Actualizar contraseña"
+  },
+  "store": {
+    "storeNotFound": "Tienda no encontrada",
+    "storeNotFoundDesc": "La tienda que busca no existe o puede haber sido eliminada.",
+    "storeDescNotFound": "Aún no se ha ingresado una descripción para esta tienda.",
+    "registration": "Fecha de registro",
+    "products": "Productos",
+    "reviews": "Reseñas",
+    "about": "Acerca de",
+    "noProducts": "Esta tienda aún no tiene productos.",
+    "storeRating": "Puntuación de la tienda",
+    "storeRatingCount": "Total de reseñas",
+    "noReviews": "Esta tienda aún no tiene reseñas.",
+    "storeAbout": "Acerca de la tienda",
+    "secureShopping1": "Compra segura",
+    "secureShopping2": "Todas las compras en esta tienda están protegidas por la garantía ÇiçekSepeti UK."
+  },
+  "success": {
+    "orderSuccess": "¡Su pedido ha sido recibido!",
+    "errorWhileOrder": "Hubo un problema al guardar el pedido. Por favor contacte con soporte.",
+    "processingOrder": "Su pedido está siendo procesado...",
+    "wait": "Por favor espere.",
+    "orderNotVisible1": "El pedido no pudo ser mostrado",
+    "orderNotVisible2": "Su pedido puede haber sido creado pero no puede mostrarse actualmente.",
+    "navigateToOrders": "Ir a mis pedidos",
+    "thankYou": "¡Gracias!",
+    "orderReceived": "Su pedido ha sido recibido.",
+    "orderNumber": "Número de pedido",
+    "orderSummary": "Resumen del pedido",
+    "totalAmount": "Importe del pedido",
+    "deliveryFee": "Gastos de envío",
+    "generalTotal": "Total general",
+    "adressDetails": "Dirección de entrega",
+    "deliveryTime": "Hora de entrega",
+    "allOrders": "Ver todos mis pedidos"
+  },
+  "verificationPending": {
+    "header2": "Revise su correo electrónico",
+    "message1": "Hemos enviado un enlace de verificación para la seguridad de su cuenta.",
+    "emailTo": "Enviado a",
+    "notReceived": "¿No recibió el correo?",
+    "checkSpam": "No olvide revisar la carpeta \"Spam\".",
+    "goToLogin": "Ir a la página de inicio de sesión",
+    "loginWithAnother": "Iniciar sesión con otra cuenta (Cerrar sesión)"
+  },
+  "verifyEmail": {
+    "messageVerified": "¡Su cuenta ha sido verificada! Puede iniciar sesión.",
+    "verifying": "Verificando...",
+    "errorOccurred": "Enlace inválido o expirado.",
+    "pleaseWait": "Por favor espere, su cuenta se está activando.",
+    "great": "¡Excelente!",
+    "login": "Iniciar sesión"
+  },
+  "verify": {
+    "verifying": "Su cuenta está siendo verificada...",
+    "unsucessfull": "La verificación falló. El enlace es inválido o ha expirado.",
+    "waitingMessage": "Por favor espere, su solicitud está siendo procesada.",
+    "success": "¡Felicidades!"
+  },
+  "cartContext": {
+    "maxStockReached": "¡Stock insuficiente! Máximo",
+    "added": "¡añadido al carrito!",
+    "removed": "eliminado.",
+    "cartEmpty": "El carrito ha sido vaciado",
+    "maxLimitReached": "¡Se alcanzó el límite máximo de stock!",
+    "increased": "+1 añadido",
+    "decreased": "-1 reducido",
+    "updated": "actualizado",
+    "deletedFromFavorites": "eliminado de favoritos",
+    "addedToFavorites": "añadido a favoritos",
+    "favoritesNotUpdated": "No se pudo actualizar el favorito. Por favor inicie sesión de nuevo."
+  },
+  "termsModal": {
+    "agree": "He leído, acepto",
+    "customers": {
+      "title": "Contrato de venta y servicio a distancia",
+      "first": {
+        "title": "1. INTRODUCCIÓN Y PARTES",
+        "desc": "Estos términos y condiciones regulan la venta de bienes a través de la Plataforma."
+      },
+      "second": {
+        "title": "2. POLÍTICA DE ENTREGA",
+        "desc": "Nuestro objetivo es entregar los productos en el horario seleccionado durante el pago."
+      },
+      "third": {
+        "title": "3. POLÍTICA DE CANCELACIÓN Y DEVOLUCIÓN",
+        "desc": "NO HAY DERECHO DE CANCELACIÓN para productos perecederos (flores frescas, plantas, alimentos)."
+      },
+      "fifth": {
+        "title": "5. PRIVACIDAD Y PROTECCIÓN DE DATOS",
+        "desc": "Sus datos personales se procesan en conformidad con el RGPD del Reino Unido."
+      }
+    },
+    "courierAgreement": {
+      "title": "Contrato de servicio de mensajero independiente",
+      "first": {
+        "title": "1. MODALIDAD DE TRABAJO",
+        "desc": "El mensajero acepta prestar servicios como trabajador autónomo, como contratista independiente."
+      },
+      "second": {
+        "title": "2. ESTÁNDARES DE SERVICIO",
+        "desc": "El mensajero debe mostrar el máximo cuidado para preservar la integridad de los productos."
+      },
+      "third": {
+        "title": "3. PROTECCIÓN DE DATOS (RGPD - DELITO PENAL)",
+        "titlesub": "AVISO DE CONFIDENCIALIDAD ESTRICTA",
+        "desc": "Los datos del cliente son ÚNICAMENTE para fines de entrega. Es DELITO registrar estos datos o compartirlos."
+      }
+    },
+    "vendorAgreement": {
+      "title": "Contrato de asociación comercial de vendedor",
+      "first": {
+        "title": "1. PARTES Y PROPÓSITO",
+        "desc": "Este contrato es entre la Plataforma y el Vendedor."
+      },
+      "second": {
+        "title": "2. COMISIÓN Y PAGOS",
+        "desc": "La Plataforma cobra una comisión del 10% + IVA sobre cada pedido. Los pagos son semanales."
+      },
+      "third": {
+        "title": "3. RESPONSABILIDAD DEL PRODUCTO Y CUMPLIMIENTO",
+        "desc": "El Vendedor garantiza que todos los bienes cumplen con las normas de seguridad del Reino Unido."
+      },
+      "fourth": {
+        "title": "4. PROTECCIÓN DE DATOS (RGPD)",
+        "desc": "El Vendedor procesará los datos del cliente de acuerdo con el RGPD del Reino Unido."
+      }
+    }
+  },
+  "secureImage": {
+    "uploading": "Subiendo...",
+    "uploadSuccess": "¡Subido con éxito!",
+    "wasNotVisible": "No se pudo mostrar"
+  },
+  "orderTracker": {
+    "ready": "Listo (Esperando mensajero)",
+    "preparing": "Preparando",
+    "courierToStore": "El mensajero va a la tienda",
+    "deliveryOnTheWay": "Entrega en camino",
+    "onTheWay": "En camino",
+    "delivered": "Entregado",
+    "cancelled": "Cancelado",
+    "cancellRequested": "Solicitud de cancelación recibida",
+    "cancelReqUnderReview": "Su solicitud está siendo revisada por servicio al cliente.",
+    "orderCancelled": "Este pedido ha sido cancelado."
+  },
+  "locationPicker": {
+    "locationOnMap": "Haga clic en el mapa para seleccionar una ubicación"
+  },
+  "cookieBanner": {
+    "detailedInfo": "Información detallada",
+    "cookiesAgreement": "Usamos cookies para ofrecerle una mejor experiencia de compra."
+  },
+  "footer": {
+    "col1": "Entregamos las flores más frescas y los regalos más especiales de Londres a sus seres queridos el mismo día.",
+    "col21": "Empresa",
+    "col22": "Sobre nosotros",
+    "col23": "Preguntas frecuentes",
+    "col24": "Contacto / Soporte",
+    "col25": "Carreras",
+    "col26": "Blog y Noticias",
+    "col27": "Política de privacidad",
+    "col3": "Asociación comercial",
+    "col31": "Convertirse en vendedor",
+    "col32": "Convertirse en mensajero",
+    "col33": "Únase a nuestro equipo, sea su propio jefe.",
+    "col4": "Contáctenos",
+    "col41": "Contacto",
+    "allRightsReserved": "Todos los derechos reservados.",
+    "col51": "Política de privacidad",
+    "col52": "Contrato de venta a distancia",
+    "col53": "Política de cookies"
+  },
+  "confirmModal": {
+    "cancel": "Cancelar",
+    "yes": "Sí,",
+    "confirm": "Confirmar"
+  },
+  "chatBot": {
+    "greeting": "¡Hola! Soy el asistente de ÇiçekSepeti 🌸 ¿Cómo puedo ayudarle?",
+    "greetingResponse": "¡Hola! 🌸 Puedo darle información sobre pedidos, cuidado de flores u operaciones de vendedor.",
+    "askQuestion": "Escriba su pregunta aquí...",
+    "send": "Enviar",
+    "welcomeBack": "¡Bienvenido de nuevo! ¿Cómo puedo ayudarle?"
+  },
+  "cartSidebar": {
+    "applyCode": "Ingrese el código",
+    "appliedSuccess": "¡Cupón aplicado!",
+    "invalid": "Código de cupón inválido.",
+    "cartEmpty": "El carrito está vacío.",
+    "fillEmptyBox": "Complete los campos en rojo",
+    "orderSuccess": "¡Pedido creado!",
+    "directingToPayment": "Redirigiendo a la página de pago...",
+    "paymentError": "Error de pago. Por favor inténtelo de nuevo.",
+    "wantToDelete": "¿Quiere eliminar?",
+    "removedFromCart": "será eliminado del carrito.",
+    "emptyCart": "¿Vaciar el carrito?",
+    "allWillBeRemoved": "todos los productos serán eliminados del carrito."
+  },
+  "cancelModal": {
+    "inputReason": "Por favor indique una razón válida.",
+    "cancelRequest": "Solicitud de cancelación",
+    "explainReason": "Está a punto de cancelar su pedido. Por favor explíquenos brevemente el motivo.",
+    "explainReasonPlaceholder": "Escriba su motivo aquí...",
+    "cancel": "Cancelar",
+    "submitRequest": "Enviar solicitud"
+  },
+  "badgeDisplay": {
+    "admin": "Administrador",
+    "vendor": "Tienda aprobada",
+    "courier": "Mensajero",
+    "verified": "Verificado",
+    "newUser": "Nuevo miembro",
+    "firstOrder": "Primer pedido",
+    "year1User": "Miembro legendario (1+ año)",
+    "loyalUser": "Miembro fiel (3+ años)",
+    "gigachad": "Giga Chad (5+ años)",
+    "fifthOrder": "Cliente Bronce (5+)",
+    "tenthOrder": "Cliente Plata (10+)",
+    "twentyfifthOrder": "Cliente Oro (25+)",
+    "fiftythOrder": "Cliente Platino (50+)",
+    "100thOrder": "Cliente Diamante (100+)",
+    "bestSeller": "Más vendido",
+    "starStore": "Tienda estrella"
+  },
+  "vendorSettings": {
+    "logo": "Logo",
+    "banner": "Banner",
+    "loaded": "cargado",
+    "errorLoading": "Error de carga",
+    "storeSettingsSaved": "¡Configuración de la tienda guardada!",
+    "error": "Se produjo un error.",
+    "storeAppearance": "Apariencia de la tienda",
+    "storeDetails": "Detalles de la tienda",
+    "bannerFoto": "Foto de portada",
+    "noBannerFoto": "Sin imagen",
+    "loading": "Cargando...",
+    "change": "Cambiar",
+    "storeDesc": "Descripción de la tienda",
+    "storeDescPlaceholder": "Presente su tienda a sus clientes...",
+    "phone": "Teléfono de contacto",
+    "saveSettings": "Guardar configuración"
+  },
+  "vendorProducts": {
+    "birthday": "Cumpleaños",
+    "product": "Producto",
+    "active": "Activado",
+    "inactive": "Desactivado",
+    "statusNotChanged": "El estado no ha sido modificado",
+    "pictureLoaded": "¡Imagen subida!",
+    "pictureNotLoaded": "No se pudo subir",
+    "missingInfo": "Información faltante.",
+    "reqSuccess": "¡Operación exitosa!",
+    "errorOccurredWhileAdding": "Error al añadir el producto",
+    "deleteProduct": "¿Eliminar el producto?",
+    "cannotBeUndone": "Esta acción no se puede deshacer.",
+    "deleted": "eliminado.",
+    "myProducts": "Mis productos",
+    "searchPlaceholder": "Buscar producto...",
+    "cancel": "Cancelar",
+    "addNew": "Añadir nuevo producto",
+    "editProduct": "Editar producto",
+    "productName": "Nombre del producto",
+    "price": "Precio",
+    "stock": "Stock",
+    "category": "Categoría",
+    "description": "Descripción",
+    "image": "Imagen",
+    "upload": "Subir",
+    "uploadPlaceholder": "o pegar URL",
+    "preview": "vista previa",
+    "isActive": "Este producto está disponible para la venta",
+    "publishProduct": "Publicar producto",
+    "updateProduct": "Guardar cambios",
+    "live": "Publicado",
+    "hidden": "Oculto",
+    "soldOut": "AGOTADO",
+    "last": "ÚLTIMO",
+    "quickStock": "Stock rápido",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "stockUpdated": "¡Stock actualizado!"
+  },
+  "vendorOrders": {
+    "updated": "Actualizado",
+    "orders": "Pedidos entrantes",
+    "empty": "Aún no hay pedidos",
+    "content": "Contenido",
+    "invoice": "Factura",
+    "orderReceived": "Pedido recibido",
+    "orderPreparing": "Pedido en preparación",
+    "ready": "Listo",
+    "courierToStore": "El mensajero va a la tienda",
+    "deliveryOnTheWay": "Entrega en camino"
+  },
+  "vendorDashboard": {
+    "store": "Resumen de la tienda",
+    "totalSales": "Ventas totales",
+    "totalOrders": "Pedidos totales",
+    "totalProducts": "Productos totales",
+    "welcome": "Bienvenido,",
+    "welcome2": "Su tienda está actualmente activa. Puede seguir sus pedidos en la pestaña 'Pedidos', imprimir facturas y entregarlas al mensajero."
+  },
+  "profilePage": {
+    "userInfo": {
+      "profileUpdated": "¡Información del perfil actualizada!",
+      "updateUnsucessfull": "No se pudo actualizar el perfil. Por favor inténtelo de nuevo.",
+      "oldPassword": "Ingrese su contraseña anterior.",
+      "passwordInvalid": "La contraseña no cumple las reglas.",
+      "passwordsNotMatch": "Las contraseñas no coinciden.",
+      "passwordChanged": "Su contraseña ha sido cambiada. Por favor inicie sesión de nuevo.",
+      "passwordChangeFailed": "No se pudo cambiar la contraseña.",
+      "personalInfo": "Información personal",
+      "personalContactInfo": "Su información de identidad y contacto",
+      "edit": "Editar",
+      "cancel": "Cancelar",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "verified": "VERIFICADO",
+      "phone": "Teléfono móvil",
+      "accountType": "Tipo de cuenta",
+      "saveChanges": "Guardar cambios",
+      "passwordSecurity": "Contraseña y Seguridad",
+      "protectAccount": "Proteja su cuenta",
+      "changePassword": "Cambiar contraseña",
+      "createNewPassword": "Crear nueva contraseña",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "repeatNewPassword": "Repetir nueva contraseña",
+      "updatePassword": "Actualizar contraseña"
+    },
+    "userSidebar": {
+      "adressBook": "Mi libreta de direcciones",
+      "informationPassword": "Mi información y Contraseña",
+      "myOrders": "Mis pedidos",
+      "logout": "Cerrar sesión"
+    },
+    "orderHistory": {
+      "cancelRequestReceived": "Su solicitud de cancelación ha sido recibida",
+      "caseNoOrders": "Aún no tiene pedidos",
+      "information": "Sus pedidos se listarán aquí.",
+      "deliverTo": "Información del destinatario",
+      "deliverNote": "Entrega y Nota",
+      "noteNotAdded": "No se añadió nota de tarjeta.",
+      "quantity": "Cantidad",
+      "cancelRequest": "Crear solicitud de cancelación",
+      "invoice": "Factura"
+    },
+    "adressBook": {
+      "adressUpdated": "Dirección actualizada",
+      "adressAdded": "Dirección añadida",
+      "qDeteleAdress": "¿Eliminar la dirección?",
+      "deleteAdressLabel": "La dirección titulada será eliminada permanentemente.",
+      "adressDeleted": "Dirección eliminada",
+      "myAdresses": "Direcciones guardadas",
+      "cancel": "Cancelar",
+      "addNewAdress": "Añadir nueva dirección",
+      "editAdress": "Editar dirección",
+      "newAdressInfo": "Nueva información de dirección",
+      "adressTitle": "Título de la dirección",
+      "adressTitlePlaceholder": "Casa, Trabajo, Mi amigo",
+      "receipentName": "Nombre del destinatario",
+      "receipentNamePlaceholder": "Nombre completo",
+      "receipentPhone": "Teléfono del destinatario",
+      "openAdress": "Dirección del destinatario",
+      "city": "Ciudad",
+      "postCode": "Código postal",
+      "saveChanges": "Guardar cambios",
+      "addAdress": "Guardar dirección",
+      "noSavedAdresses": "Aún no tiene direcciones guardadas.",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    }
+  },
+  "cartSidebarComponents": {
+    "cartItemsList": {
+      "empty": "Su carrito está vacío."
+    },
+    "CheckoutForm": {
+      "contact": "Contacto",
+      "nameSurname": "Su nombre completo",
+      "phoneNumber": "Su número de teléfono",
+      "emailAddress": "Su correo electrónico",
+      "recipientAddress": "Destinatario y Dirección",
+      "savedAddressSelect": "Seleccionar dirección guardada",
+      "recipientName": "Nombre del destinatario",
+      "recipientPhone": "Teléfono del destinatario",
+      "deliveryAddress": "Dirección completa (Calle, Edificio, Apartamento)",
+      "deliveryCity": "Ciudad",
+      "deliveryPostcode": "Código postal",
+      "saveAdress": "Guardar esta dirección en mi libreta de direcciones",
+      "deliveryOptions": "Opciones de entrega",
+      "opt1": "Estándar (2-3 días)",
+      "free": "GRATIS",
+      "opt2": "Día siguiente",
+      "opt3": "Mismo día (Premium)",
+      "deliveryTime": "Fecha y Hora",
+      "selectDateFirst": "Seleccione primero una fecha",
+      "noAvailableTime": "No hay horarios disponibles",
+      "deliveryNote": "Su mensaje de regalo...",
+      "noteToCourier": "Su nota al mensajero...",
+      "sendWithoutName": "Enviar sin nombre"
+    },
+    "index": {
+      "adressSelected": "Dirección seleccionada",
+      "enterCode": "Ingrese el código",
+      "couponApplied": "¡Cupón aplicado!",
+      "couponInvalid": "Código de cupón inválido.",
+      "cartEmpty": "El carrito está vacío",
+      "fillRedFields": "Complete los campos en rojo",
+      "orderSuccess": "¡Pedido recibido!",
+      "redirectingToPayment": "Redirigiendo a la página de pago...",
+      "paymentError": "Error de pago.",
+      "quantity": "Cantidad",
+      "confirmRemove": "¿eliminar del carrito?",
+      "comfirmRemoveTitle": "¿Vaciar el carrito?",
+      "allItemsRemoved": "todos los productos serán eliminados del carrito."
+    },
+    "sideBarFooter": {
+      "discountCode": "Código de descuento",
+      "apply": "Aplicar",
+      "freeDelivery": "Envío gratis",
+      "remove": "Eliminar",
+      "subtotal": "Subtotal",
+      "discount": "Descuento",
+      "delivery": "Entrega",
+      "fast": "Rápido",
+      "standard": "Estándar",
+      "premium": "Premium",
+      "free": "Gratis",
+      "total": "Total general",
+      "confirm": "Confirmar carrito",
+      "processing": "Procesando...",
+      "pleaseWait": "Por favor espere...",
+      "payAndFinish": "Pagar y finalizar"
+    },
+    "sidebarHeader": {
+      "myCart": "Mi carrito",
+      "clear": "Vaciar",
+      "deliveryInfo": "Información de entrega"
+    }
+  },
+  "adminComponents": {
+    "adminOrderComp": {
+      "orderCard": {
+        "request": "SOLICITUD",
+        "loss": "PÉRDIDA",
+        "vendor": "Tienda",
+        "cost": "Costo",
+        "total": "Total",
+        "orderReceived": "Pedido recibido",
+        "orderPreparing": "Pedido en preparación",
+        "ready": "Listo",
+        "onTheWay": "En camino",
+        "delivered": "Entregado",
+        "cancelRequest": "Solicitud de cancelación",
+        "cancel": "Cancelado",
+        "senderReceiver": "Destinatario y Remitente",
+        "sender": "Remitente",
+        "delivery": "Entrega",
+        "notesAndFinance": "Notas y Finanzas",
+        "cardNoteNotAvailable": "Sin nota de tarjeta",
+        "realCost": "Costo real",
+        "netLoss": "PÉRDIDA NETA",
+        "cancelReason": "RAZÓN DE CANCELACIÓN",
+        "products": "Productos",
+        "hideTechnicalDetails": "Ocultar datos técnicos",
+        "showTechnicalDetails": "Mostrar Seguridad y Metadatos",
+        "courierFound": "Mensajero asignado",
+        "printInvoice": "Imprimir factura",
+        "searchPlaceholder": "Buscar N° pedido o destinatario...",
+        "allCases": "Todos los estados",
+        "discounted": "Deficitarios (con descuento)",
+        "cancelRequested": "Solicitudes de cancelación"
+      },
+      "orderMetadata": {
+        "metaDataNotAvailable": "No hay metadatos disponibles.",
+        "securityAnalysis": "Análisis de seguridad"
+      },
+      "orderStats": {
+        "revenue": "Ingresos",
+        "waiting": "En espera",
+        "promoCost": "Costo promocional",
+        "cancelRequest": "Solicitud de cancelación",
+        "completed": "Completado"
+      }
+    },
+    "adminApplication": {
+      "namedApplicant": "el usuario llamado,",
+      "namedApplicant2": "tendrá acceso completo al sistema como. ¿Aprueba esta operación?",
+      "onaylandi": "¡aprobado!",
+      "provideReason": "¡Por favor indique una razón!",
+      "rejected": "Solicitud rechazada",
+      "pendingApplications": "Solicitudes pendientes",
+      "noPendingApplications": "Actualmente no hay solicitudes pendientes de aprobación.",
+      "vendor": "Tienda",
+      "courier": "Mensajero",
+      "reviewAndDecide": "Revisar y Decidir",
+      "rejection": "Rechazo de solicitud",
+      "reasonToReject": "Por favor indique la razón del rechazo.",
+      "reasonToRejectPlaceholder": "Escriba su razón de rechazo aquí...",
+      "cancel": "Cancelar",
+      "send": "Enviar"
+    },
+    "comment": "Admin NOT FINISHED"
+  },
+  "navbar": {
+    "searchPlaceholder": "Buscar flores, chocolate, regalos...",
+    "myAccount": "Mi cuenta",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "viewCart": "Ver carrito",
+    "language": "Idioma"
+  }
+}

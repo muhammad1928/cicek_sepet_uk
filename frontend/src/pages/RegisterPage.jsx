@@ -4,8 +4,11 @@ import { useNavigate, Link } from "react-router-dom";
 import TermsModal from "../components/TermsModal";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Seo from "../components/Seo";
+import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({ fullName: "", email: "", password: "", role: "customer" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
@@ -49,7 +52,7 @@ const RegisterPage = () => {
   const handleBlur = (field) => {
     setTouchedFields((prev) => ({ ...prev, [field]: true }));
     if (field === "password" && !passwordValid && formData.password.length > 0) {
-       notify("Şifreniz yeterince güçlü değil!", "warning");
+       notify(t("register.passwordWeak"), "warning");
     }
   };
 
@@ -57,13 +60,13 @@ const RegisterPage = () => {
     e.preventDefault();
     setTouchedFields({ fullName: true, email: true, password: true });
 
-    if (!passwordValid) return notify("Lütfen şifre kurallarını sağlayın!", "error");
-    if (!acceptedTerms) return notify("Lütfen sözleşmeyi onaylayın! ⚠️", "warning");
+    if (!passwordValid) return notify(t("register.notifyPasswordRequirements"), "error");
+    if (!acceptedTerms) return notify(t("register.acceptTerms") + " ⚠️", "warning");
     
     setLoading(true);
     try {
       await publicRequest.post("/auth/register", formData);
-      notify("Kayıt Başarılı! 🎉 Lütfen mailinizi onaylayın.", "success");
+      notify(t("common.accountCreated") + " 🎉 " + t("register.pleaseVerifyEmail"), "success");
       
       // --- GÜNCELLEME: Navigate ile mail verisini gönderiyoruz ---
       setTimeout(() => {
@@ -73,7 +76,7 @@ const RegisterPage = () => {
 
     } catch (err) {
       setLoading(false);
-      notify(err.response?.data?.message || "Kayıt başarısız!", "error");
+      notify(err.response?.data?.message || t("register.registrationFailed"), "error");
     }
   };
 
@@ -95,7 +98,7 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden">
-      
+      <Seo title={t("seo.registerPage.title")} description={t("seo.registerPage.description")} />
       {/* Arka Plan */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40">
         <div className="absolute top-10 right-10 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
@@ -107,33 +110,33 @@ const RegisterPage = () => {
         
         <div className="text-center mb-5">
           <div className="inline-block p-2 rounded-full bg-pink-100 text-pink-600 mb-2 text-2xl shadow-inner">🚀</div>
-          <h2 className="text-xl font-extrabold text-gray-800 tracking-tight">Aramıza Katılın</h2>
-          <p className="text-gray-500 text-xs mt-1">Hızlıca hesap oluşturun</p>
+          <h2 className="text-xl font-extrabold text-gray-800 tracking-tight">{t("register.joinUs")}</h2>
+          <p className="text-gray-500 text-xs mt-1">{t("register.createAccount")}</p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-3">
           
           {/* Ad Soyad */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Ad Soyad</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("common.fullName")}</label>
             <div className={getContainerClass("fullName")}>
               <span className="pl-3 text-gray-400">📝</span>
-              <input name="fullName" type="text" className={getInputClass("fullName")} placeholder="Adınız Soyadınız" onChange={handleChange} onBlur={() => handleBlur("fullName")} />
+              <input name="fullName" type="text" className={getInputClass("fullName")} placeholder={t("common.fullName")} onChange={handleChange} onBlur={() => handleBlur("fullName")} />
             </div>
           </div>
 
           {/* E-Posta */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">E-Posta</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("common.email")}</label>
             <div className={getContainerClass("email")}>
               <span className="pl-3 text-gray-400">✉️</span>
-              <input name="email" type="email" className={getInputClass("email")} placeholder="mail@site.com" onChange={handleChange} onBlur={() => handleBlur("email")} />
+              <input name="email" type="email" className={getInputClass("email")} placeholder={t("common.emailPlaceholder")} onChange={handleChange} onBlur={() => handleBlur("email")} />
             </div>
           </div>
 
           {/* Şifre ALANI VE DİNAMİK LİSTE */}
           <div className="relative">
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Şifre</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("common.password")}</label>
             <div className={getContainerClass("password")}>
               <span className="pl-3 text-gray-400">🔒</span>
               <input 
@@ -154,19 +157,19 @@ const RegisterPage = () => {
             {(passwordFocused || (formData.password && !passwordValid)) && (
               <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg transition-all duration-300 text-[11px]">
                 
-                <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">Güvenlik Gereksinimleri:</p>
+                <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">{t("register.securityMeasures")}</p>
                 
                 <div className="flex flex-col">
-                  <RuleItem label="Min 8 karakter" valid={rules.length} />
-                  <RuleItem label="1 Büyük Harf" valid={rules.upper} />
-                  <RuleItem label="1 Küçük Harf" valid={rules.lower} />
-                  <RuleItem label="1 Rakam" valid={rules.number} />
-                  <RuleItem label="1 Özel Karakter (!@#$)" valid={rules.special} />
+                  <RuleItem label={t("common.passwordRules.rule1")} valid={rules.length} />
+                  <RuleItem label={t("common.passwordRules.rule2")} valid={rules.upper} />
+                  <RuleItem label={t("common.passwordRules.rule3")} valid={rules.lower} />
+                  <RuleItem label={t("common.passwordRules.rule4")} valid={rules.number} />
+                  <RuleItem label={t("common.passwordRules.rule5")} valid={rules.special} />
                 </div>
 
                 {passwordValid && (
                   <div className="text-green-600 font-bold flex items-center gap-1 animate-bounce mt-1 pt-2 border-t border-gray-100">
-                    <span>✅</span> Şifre Mükemmel!
+                    <span>✅</span> {t("common.strongPassword")}
                   </div>
                 )}
               </div>
@@ -192,9 +195,9 @@ const RegisterPage = () => {
                   // Sadece modal açılacak, onayı oradaki buton yapacak.
                 }}
               >
-                Kullanıcı Sözleşmesini
+                {t("register.userAgrement1")}
               </span>
-              okudum ve kabul ediyorum.
+              {t("register.userAgrement2")}
             </label>
           </div>
 
@@ -204,13 +207,13 @@ const RegisterPage = () => {
             className={`w-full text-white font-bold py-2.5 rounded-xl transition shadow-md flex justify-center items-center gap-2 text-sm transform active:scale-95 
               ${(loading || (touchedFields.password && !passwordValid)) ? "bg-gray-400 cursor-not-allowed opacity-70" : "bg-pink-600 hover:bg-pink-700"}`} 
           >
-            {loading ? "Kaydediliyor..." : "Hesap Oluştur"}
+            {loading ? t("register.btn1") : t("register.btn2")}
           </button>
         </form>
 
         <div className="mt-6 text-center border-t border-gray-200 pt-4">
           <p className="text-xs text-gray-500">
-            Zaten hesabınız var mı? <Link to="/login" className="text-pink-600 font-bold hover:underline hover:text-purple-600 transition">Giriş Yap</Link>
+            {t("register.alreadyAccount1")} <Link to="/login" className="text-pink-600 font-bold hover:underline hover:text-purple-600 transition">{t("register.alreadyAccount2")}</Link>
           </p>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
-import { userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../../components/ConfirmModal";

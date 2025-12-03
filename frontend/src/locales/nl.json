@@ -1,0 +1,30 @@
+{
+  "navbar": {
+    "home": "Home",
+    "shop": "Winkel",
+    "about": "Over ons",
+    "contact": "Contact",
+    "login": "Inloggen",
+    "register": "Registreren",
+    "logout": "Uitloggen",
+    "myAccount": "Mijn account",
+    "searchPlaceholder": "Zoek bloemen, chocolade, cadeaus..."
+  },
+  "home": {
+    "heroTitle": "Maak uw dierbaren blij",
+    "heroSubtitle": "Wij bezorgen de verste bloemen en de meest bijzondere cadeaus van Londen dezelfde dag nog aan uw deur.",
+    "categories": "Categorieën",
+    "featured": "Uitgelicht"
+  },
+  "cart": {
+    "title": "Winkelwagen",
+    "empty": "Uw winkelwagen is leeg.",
+    "checkout": "Afrekenen",
+    "total": "Totaal"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden.",
+    "success": "Gelukt!"
+  }
+}

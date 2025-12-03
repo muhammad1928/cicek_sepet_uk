@@ -1,0 +1,30 @@
+{
+  "navbar": {
+    "home": "Home",
+    "shop": "Negozio",
+    "about": "Chi Siamo",
+    "contact": "Contatti",
+    "login": "Accedi",
+    "register": "Registrati",
+    "logout": "Esci",
+    "myAccount": "Il mio account",
+    "searchPlaceholder": "Cerca fiori, cioccolatini, regali..."
+  },
+  "home": {
+    "heroTitle": "Rendi felici i tuoi cari",
+    "heroSubtitle": "Consegniamo i fiori più freschi e i regali più speciali di Londra a casa tua in giornata.",
+    "categories": "Categorie",
+    "featured": "In primo piano"
+  },
+  "cart": {
+    "title": "Il mio carrello",
+    "empty": "Il tuo carrello è vuoto.",
+    "checkout": "Vai alla cassa",
+    "total": "Totale"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Si è verificato un errore.",
+    "success": "Successo!"
+  }
+}

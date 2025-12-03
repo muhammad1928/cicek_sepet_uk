@@ -174,19 +174,66 @@ router.post('/login',  async (req, res) => {
     if (!user.isVerified) return res.status(403).json({ message: "Lütfen e-postanızı onaylayın." });
     if (user.isBlocked) return res.status(403).json({ message: "Hesabınız askıya alınmıştır! 🚫" });
 
+    // 1. Access Token (Kısa Ömürlü - 5 Dakika)
     const accessToken = jwt.sign(
         { id: user._id, role: user.role },
         process.env.JWT_SEC,
-        { expiresIn: "3d" }
+        { expiresIn: "5m" } // <--- 5 DAKİKA
     );
 
-    const { password, ...others } = user._doc;
+    // 2. Refresh Token (Uzun Ömürlü - 7 Gün)
+    const refreshToken = jwt.sign(
+        { id: user._id },
+        process.env.JWT_REFRESH_SEC,
+        { expiresIn: "7d" }
+    );
+
     await logActivity(user._id, 'login', req);
-    res.status(200).json({ ...others, accessToken });
+    const { password, ...others } = user._doc;
+    
+
+    
+    res
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true, // JS erişemez (XSS Koruması)
+        secure: process.env.NODE_ENV === "production", // Sadece HTTPS (Canlıda)
+        sameSite: "strict", // CSRF Koruması
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 Gün
+      })
+      .status(200)
+      .json({ ...others, accessToken }); // Access Token'ı frontend saklar (Memory/LocalStorage)
 
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+// =============================================================================
+// YENİ ROTA: TOKEN YENİLEME (REFRESH)
+// =============================================================================
+router.post('/refresh', (req, res) => {
+  // Cookie'den refresh token'ı al
+  const refreshToken = req.cookies.refreshToken; // cookie-parser gereklidir!
+  
+  if (!refreshToken) return res.status(401).json("Oturumunuz sonlanmış.");
+
+  // Token'ı doğrula
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_SEC, async (err, decodedUser) => {
+    if (err) return res.status(403).json("Token geçersiz.");
+
+    // Yeni Access Token oluştur
+    const user = await User.findById(decodedUser.id);
+    if(!user) return res.status(404).json("Kullanıcı bulunamadı.");
+
+    const newAccessToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SEC,
+      { expiresIn: "5m" }
+    );
+
+    // Yeni token'ı gönder
+    res.status(200).json({ accessToken: newAccessToken });
+  });
 });
 
 // =============================================================================
@@ -265,4 +312,12 @@ router.post('/reset-password',  async (req, res) => {
   }
 });
 
+// LOGOUT
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+  }).status(200).json("Çıkış yapıldı.");
+});
 module.exports = router;

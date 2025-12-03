@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom"; // Portal için gerekli
 import { FiAlertTriangle, FiTrash2, FiCheckCircle, FiX } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const ConfirmModal = ({ title, message, onConfirm, onCancel, isDanger = false }) => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  
 
   // Portal hedefi (index.html içinde 'modal-root' veya direkt 'body')
   const modalRoot = document.getElementById("modal-root") || document.body;
 
   useEffect(() => {
+    
     setIsMounted(true);
     
     // Animasyonun tetiklenmesi için küçük bir gecikme
@@ -93,7 +97,7 @@ const ConfirmModal = ({ title, message, onConfirm, onCancel, isDanger = false })
             onClick={() => handleClose(onCancel)}
             className="flex-1 py-3.5 rounded-xl font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition transform active:scale-95"
           >
-            Vazgeç
+            {t("confirmModal.cancel")}
           </button>
           
           <button 
@@ -105,7 +109,7 @@ const ConfirmModal = ({ title, message, onConfirm, onCancel, isDanger = false })
                 : "bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-blue-500/30"}
             `}
           >
-            {isDanger ? "Evet" : "Onayla"}
+            {isDanger ? t("confirmModal.yes") : t("confirmModal.confirm")}
           </button>
         </div>
 

@@ -10,11 +10,14 @@ import AdminUsers from "../components/admin/AdminUsers";
 import AdminCoupons from "../components/admin/AdminCoupons";
 // AdminReviews ve AdminApplications dosyalarının var olduğundan emin ol
 import AdminApplications from "../components/admin/AdminApplications"; 
-// import AdminReviews from "../components/admin/AdminReviews"; // Eğer dosya yoksa bunu yorum satırı yap
+import AdminReviews from "../components/admin/AdminReviews"; // Eğer dosya yoksa bunu yorum satırı yap
+import { useTranslation } from "react-i18next";
+
 
 const AdminPage = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Mobil uyumluluk için
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Mobil uyumluluk için
   const navigate = useNavigate();
 
   // Güvenlik Kontrolü
@@ -43,9 +46,9 @@ const AdminPage = () => {
         
         <div className="p-6 border-b border-slate-800">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent" >
-            Admin Panel
+            {t("admin.dashboard")}
           </h2>
-          <p className="text-xs text-gray-500 mt-1">Yönetim Merkezi</p>
+          <p className="text-xs text-gray-500 mt-1">{t("admin.yonetimMerkezi")}</p>
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
@@ -53,43 +56,43 @@ const AdminPage = () => {
             active={activeTab === "dashboard"} 
             onClick={() => setActiveTab("dashboard")} 
             icon={<FiGrid />} 
-            label="Genel Bakış" 
+            label={t("admin.genelBakis")} 
           />
           <SidebarBtn 
             active={activeTab === "applications"} 
             onClick={() => setActiveTab("applications")} 
             icon={<FiFileText />} 
-            label="Başvurular" 
+            label={t("admin.basvurular")} 
           />
           <SidebarBtn 
             active={activeTab === "users"} 
             onClick={() => setActiveTab("users")} 
             icon={<FiUsers />} 
-            label="Kullanıcılar" 
+            label={t("admin.users")} 
           />
           <SidebarBtn 
             active={activeTab === "products"} 
             onClick={() => setActiveTab("products")} 
             icon={<FiPackage />} 
-            label="Ürün Yönetimi" 
+            label={t("admin.products")}
           />
           <SidebarBtn 
             active={activeTab === "orders"} 
             onClick={() => setActiveTab("orders")} 
             icon={<FiTruck />} 
-            label="Siparişler" 
+            label={t("admin.orders")} 
           />
           <SidebarBtn 
             active={activeTab === "coupons"} 
             onClick={() => setActiveTab("coupons")} 
             icon={<FiTag />} 
-            label="Kuponlar" 
+            label={t("admin.coupons")}
           />
           <SidebarBtn 
             active={activeTab === "reviews"} 
             onClick={() => setActiveTab("reviews")} 
             icon={<FiMessageSquare />} 
-            label="Yorumlar" 
+            label={t("common.reviews")} 
           />
         </nav>
 
@@ -98,12 +101,13 @@ const AdminPage = () => {
             onClick={handleLogout} 
             className="w-full flex items-center justify-center gap-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white py-3 rounded-xl text-sm font-bold transition border border-red-600/20"
           >
-            <FiLogOut /> Çıkış Yap
+            <FiLogOut /> {t("common.logout")}
           </button>
         </div>
       </aside>
 
       {/* --- SAĞ İÇERİK ALANI --- */}
+      {/* hata alirsan dillerden sonra burayi degistirmemistik */}
       {/* ml-64: Sidebar kadar soldan boşluk bırakır */}
       <main className="flex-1 p-8 ml-64 w-full">
         <div className="max-w-7xl mx-auto animate-fade-in pb-20">

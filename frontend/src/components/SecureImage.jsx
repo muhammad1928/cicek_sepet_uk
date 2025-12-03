@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 // import axios from "axios";
 import { userRequest } from "../../requestMethods";
+import { useTranslation } from "react-i18next";
 
 const SecureImage = ({ src, alt, className, ...props }) => {
+  const { t } = useTranslation(); 
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -40,8 +42,8 @@ const SecureImage = ({ src, alt, className, ...props }) => {
     };
   }, [src]);
 
-  if (loading) return <div className={`bg-gray-200 animate-pulse flex items-center justify-center text-xs text-gray-400 ${className}`}>Yükleniyor...</div>;
-  if (error) return <div className={`bg-red-50 border border-red-200 flex items-center justify-center text-red-500 text-xs p-2 ${className}`}>Görüntülenemedi</div>;
+  if (loading) return <div className={`bg-gray-200 animate-pulse flex items-center justify-center text-xs text-gray-400 ${className}`}>{t("secureImage.uploading")}</div>;
+  if (error) return <div className={`bg-red-50 border border-red-200 flex items-center justify-center text-red-500 text-xs p-2 ${className}`}>{t("secureImage.wasNotVisible")}</div>;
 
   return <img src={imageSrc} alt={alt} className={className} {...props} />;
 };

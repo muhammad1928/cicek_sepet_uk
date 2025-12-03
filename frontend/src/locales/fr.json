@@ -1,0 +1,868 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite.",
+    "success": "Succès !",
+    "logout": "Déconnexion",
+    "backToHome": "Retour à l'accueil",
+    "goBack": "Retour",
+    "finished": "ÉPUISÉ",
+    "vendor": "Vendeur",
+    "stock": "Stock",
+    "fastDelivery": "Livraison rapide",
+    "addToCart": "Ajouter au panier",
+    "price": "Prix",
+    "reviews": "Avis",
+    "fullName": "Nom complet",
+    "email": "E-mail",
+    "emailPlaceholder": "Entrez votre adresse e-mail",
+    "password": "Mot de passe",
+    "strongPassword": "Mot de passe fort !",
+    "date": "Date",
+    "time": "Heure",
+    "accept": "J'accepte",
+    "decline": "Refuser",
+    "passwordRules": {
+      "rule1": "Au moins 8 caractères",
+      "rule2": "Au moins 1 majuscule",
+      "rule3": "Au moins 1 minuscule",
+      "rule4": "Au moins 1 chiffre",
+      "rule5": "Au moins 1 caractère spécial (!@#$)"
+    },
+    "phoneNumber": "Numéro de téléphone",
+    "phoneNumberPlaceholder": "Entrez votre numéro de contact",
+    "dropdownOpt": "Sélectionner...",
+    "accountCreated": "Compte créé !",
+    "pleaseVerifyEmail": "Veuillez vérifier votre e-mail.",
+    "ibanNumber": "Numéro IBAN",
+    "okay": "OK",
+    "lastUpdated": "Dernière mise à jour",
+    "print": "Imprimer / Enregistrer en PDF"
+  },
+
+  "home": {
+    "heroTitle": "Faites plaisir à vos proches",
+    "heroSubtitle": "Nous livrons les fleurs les plus fraîches et les cadeaux les plus spéciaux de Londres le jour même à votre porte.",
+    "categories": "Catégories",
+    "featured": "En vedette",
+    "categories_sticky": "Catégories",
+    "notFound": "Aucun produit trouvé selon vos critères.",
+    "showAll": "Afficher tous les produits",
+    "homeAddToCart": "Ajouter",
+    "categories1": {
+      "all": "Tous",
+      "birthday": "Anniversaire",
+      "anniversary": "Anniversaire de mariage",
+      "indoor": "Plantes d'intérieur",
+      "eadible": "Cadeaux comestibles",
+      "rose": "Roses",
+      "orchid": "Orchidées",
+      "daisy": "Marguerites",
+      "tulip": "Tulipes",
+      "unique": "Unique",
+      "designFlowers": "Fleurs design"
+    }
+  },
+
+  "seo": {
+    "aboutUsPage": {
+      "aboutTitle": "À propos - ÇiçekSepeti | Fleurs et cadeaux les plus frais",
+      "aboutDescription": "Découvrez l'histoire, la mission et les valeurs de ÇiçekSepeti. Nous nous engageons à offrir à nos clients la meilleure expérience en matière de fleurs et de cadeaux. Nous faisons la différence avec une livraison rapide et un excellent service client."
+    },
+    "homePage": {
+      "homeTitle": "Fleurs fraîches et cadeaux spéciaux - ÇiçekSepeti Londres",
+      "locationTitle": "Londres - Fleurs les plus fraîches et cadeaux spéciaux | ÇiçekSepeti",
+      "homeDescription": "Nous livrons les fleurs les plus fraîches et les cadeaux spéciaux de Londres le jour même à votre porte. Découvrez des options de cadeaux parfaites pour les anniversaires, les anniversaires de mariage, les demandes en mariage et autres occasions spéciales."
+    },
+    "contactPage": {
+      "contactTitle": "Contact - ÇiçekSepeti | Contactez-nous",
+      "contactDescription": "Contactez-nous pour vos questions, suggestions ou réclamations. Chez ÇiçekSepeti, nous sommes toujours heureux de vous aider. Vous pouvez utiliser différents canaux de contact pour nous joindre."
+    },
+    "faqPage": {
+      "faqTitle": "Questions fréquentes - ÇiçekSepeti",
+      "faqDescription": "Découvrez les questions fréquentes sur ÇiçekSepeti. Informez-vous sur les commandes, la livraison, la politique de retour et autres sujets importants. Trouvez des réponses rapides et faciles à vos questions."
+    },
+    "favouritesPage": {
+      "title": "Mes favoris - ÇiçekSepeti | Vos produits préférés",
+      "description": "Enregistrez vos favoris et accédez facilement à vos fleurs, cadeaux et autres produits préférés. Avec ÇiçekSepeti, achetez vos produits préférés en un clic."
+    },
+    "legalPage": {
+      "title": "Informations légales - ÇiçekSepeti | Politique de confidentialité et conditions d'utilisation",
+      "description": "Obtenez des informations détaillées sur la politique de confidentialité, les conditions d'utilisation et la politique de cookies de ÇiçekSepeti. Découvrez comment vos données personnelles sont protégées et vos droits lors de l'utilisation de notre plateforme.",
+      "hakkindaDetayliBilgi": "informations détaillées sur."
+    },
+    "myOrdersPage": {
+      "title": "Mes commandes - ÇiçekSepeti | Suivi et historique des commandes",
+      "description": "Consultez vos commandes passées, examinez les détails des commandes et suivez le statut de vos commandes. Gérez facilement toutes vos commandes avec ÇiçekSepeti."
+    },
+    "registerCourierPage": {
+      "title": "Candidature coursier - ÇiçekSepeti | Devenez coursier",
+      "description": "Rejoignez le programme de coursier de ÇiçekSepeti et gagnez un revenu supplémentaire avec des horaires flexibles. Informez-vous sur le processus de candidature et postulez maintenant."
+    },
+    "registerPage": {
+      "title": "Inscription - ÇiçekSepeti | Créer un nouveau compte",
+      "description": "Inscrivez-vous sur ÇiçekSepeti et accédez aux fleurs les plus fraîches et aux cadeaux spéciaux. Commencez vos achats immédiatement avec un processus d'inscription rapide et facile."
+    },
+    "vendorRegistrationPage": {
+      "title": "Candidature vendeur - ÇiçekSepeti | Ouvrez votre boutique",
+      "description": "Ouvrez votre boutique sur la plateforme ÇiçekSepeti et atteignez une large clientèle. Informez-vous sur le processus de candidature vendeur et postulez maintenant."
+    }
+  },
+
+  "admin": {
+    "dashboard": "Tableau de bord",
+    "yonetimMerkezi": "Centre d'administration",
+    "genelBakis": "Vue d'ensemble",
+    "applications": "Candidatures",
+    "users": "Utilisateurs",
+    "products": "Gestion des produits",
+    "orders": "Commandes",
+    "coupons": "Coupons"
+  },
+
+  "contact": {
+    "contactUs": "Contactez-nous",
+    "infoTest": "Nous sommes là pour vos questions, suggestions ou réclamations.",
+    "hqAddress": "Siège social",
+    "contactTxt": "Contact",
+    "workingHours": "Heures d'ouverture",
+    "subject": "Sujet",
+    "dropdownOpt1": "À propos de ma commande",
+    "dropdownOpt2": "Retour / Échange",
+    "dropdownOpt3": "Autre",
+    "message": "Votre message",
+    "sendMessage": "Envoyer le message",
+    "successMessage": "Votre message a été reçu !",
+    "successSubMessage": "Nous vous répondrons dans les plus brefs délais.",
+    "newMessage": "Envoyer un nouveau message",
+    "errorMessage": "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer."
+  },
+
+  "about": {
+    "ourStory": "Notre histoire",
+    "ourMission": "Nous distribuons le bonheur",
+    "ourHistory": "Fondé à Londres en 2024, ÇiçekSepeti UK s'est lancé pour livrer les fleurs les plus fraîches et les cadeaux les plus spéciaux à vos proches. Notre objectif n'est pas seulement de livrer un produit, mais de vous aider à rapprocher les distances et à exprimer vos sentiments de la plus belle façon.",
+    "sameDayDelivery": "Livraison le jour même",
+    "sameDayDeliverySub": "Pour les commandes passées avant 18h00 dans Londres.",
+    "freshnessGuarantee": "Garantie de fraîcheur",
+    "freshnessGuaranteeSub": "Les fleurs les plus fraîches sélectionnées chaque matin aux enchères.",
+    "securePayment": "Paiement sécurisé",
+    "securePaymentSub": "Shopping 100% sécurisé avec l'infrastructure Stripe.",
+    "whyChooseUs": "Pourquoi nous choisir ?",
+    "whyChooseUsSub": "Nous combinons notre expérience mondiale avec une touche locale. Nous soutenons les fleuristes locaux tout en offrant une qualité de service professionnelle. Notre équipe de livraison livre vos fleurs avec soin, attention et le sourire.",
+    "comment": "ajouter plus tard des informations sur les coursiers et les boutiques et mettre à jour la page about us"
+  },
+
+  "FAQ": {
+    "faqTitle": "Questions fréquentes",
+    "faqDescription": "Vos questions."
+  },
+  "favorites": {
+    "favoritesTitle": "Mes favoris",
+    "favoritesDescription": "Nous conservons ici les produits que vous aimez.",
+    "favoritesEmpty": "Vous n'avez pas encore ajouté de favoris.",
+    "favoritesEmptyDesc": "Vous n'avez pas encore ajouté de produit à votre liste de favoris. Que diriez-vous de découvrir les fleurs et cadeaux les plus frais ?",
+    "favoritesExploreProducts": "Découvrir les produits"
+  },
+  "forgotPassword": {
+    "notifyMessageSent": "E-mail envoyé ! 📩",
+    "notifyUserNotFound": "Utilisateur non trouvé",
+    "passwordForgotten": "Mot de passe oublié ?",
+    "passwordForgottenDesc": "Entrez votre adresse e-mail, nous vous enverrons un lien de réinitialisation.",
+    "emailPlaceholder": "Entrez votre adresse e-mail",
+    "sending": "Envoi en cours...",
+    "sendResetLink": "Envoyer le lien de réinitialisation",
+    "emailSentTitle": "E-mail envoyé !",
+    "emailSentDescription1": "Veuillez vérifier",
+    "emailSentDescription2": "l'adresse e-mail",
+    "emailSentDescription3": "(et le dossier spam).",
+    "tryAgain": "Réessayer",
+    "returnToLogin": "← Retour à la connexion"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "legalPageContentTitle": "Politique de confidentialité",
+      "first": "1. Responsable des données",
+      "firstDesc": "En tant que ÇiçekSepeti UK, nous accordons la plus grande importance à la sécurité de vos données personnelles dans le cadre du RGPD (Règlement général sur la protection des données).",
+      "second": "2. Données collectées et finalités",
+      "secondDesc": {
+        "part1": "Identité et contact : Votre nom, prénom, e-mail et numéro de téléphone sont traités pour la confirmation de commande et la facturation.",
+        "part2": "Informations de livraison : L'adresse et les coordonnées du destinataire sont partagées avec le coursier et la boutique concernée (vendeur) pour la livraison.",
+        "part3": "Sécurité des transactions : L'adresse IP et les informations sur l'appareil sont conservées pour la détection de fraude et les obligations légales."
+      },
+      "third": "3. Sécurité des paiements",
+      "thirdDesc": "Vos informations de carte de crédit ne sont jamais stockées sur nos serveurs. Les transactions de paiement sont effectuées directement par l'infrastructure de paiement mondiale Stripe via une connexion cryptée certifiée SSL."
+    },
+    "termsOfUse": {
+      "title": "Contrat de vente à distance",
+      "first": "1. Parties",
+      "firstDesc": "Ce contrat est conclu entre l'ACHETEUR qui passe commande via la plateforme et le VENDEUR (boutique) qui fournit le produit, avec ÇiçekSepeti UK comme intermédiaire.",
+      "second": "2. Exception au droit de rétractation (Important)",
+      "secondDesc": "ATTENTION : Conformément à la réglementation, le droit de rétractation NE PEUT PAS être exercé pour les \"contrats de livraison de biens susceptibles de se détériorer ou de se périmer rapidement\" (fleurs fraîches, chocolat, gâteau, etc.).",
+      "secondDesc_part2": "Cependant, si le produit est endommagé, fané ou complètement différent de l'image au moment de la livraison, l'acheteur peut refuser la livraison et demander un retour.",
+      "third": "3. Processus de livraison",
+      "thirdDesc": "Les commandes sont livrées à la date et au créneau horaire choisis par l'acheteur. Sauf cas de force majeure (intempéries, accident de circulation, etc.), la plateforme est responsable des retards."
+    },
+    "termsOfCookies": {
+      "title": "Politique de cookies",
+      "firstTerm": "1. Qu'est-ce qu'un cookie ?",
+      "firstTermDesc": "Les cookies sont de petits fichiers texte enregistrés dans votre navigateur par les sites web que vous visitez et qui nous aident à vous reconnaître. Certains cookies sont nécessaires au fonctionnement de notre site.",
+      "secondTerm": "2. Quels cookies utilisons-nous ?",
+      "secondTermDesc": {
+        "first": "Cookies nécessaires",
+        "firstDesc": "Nécessaires pour mémoriser les produits dans votre panier, vous connecter à votre compte et assurer la sécurité des paiements. Ils ne peuvent pas être désactivés.",
+        "second": "Cookies fonctionnels",
+        "secondDesc": "Utilisés pour vos préférences linguistiques, vos adresses enregistrées et des fonctionnalités comme \"Se souvenir de moi\".",
+        "third": "Cookies analytiques",
+        "thirdDesc": "Nous aident à améliorer notre service en analysant anonymement comment vous utilisez notre site (quelles pages vous consultez)."
+      },
+      "thirdTerm": "3. Comment gérer les cookies ?",
+      "thirdTermDesc": "Vous pouvez supprimer ou bloquer les cookies à tout moment depuis le menu des paramètres de votre navigateur. Cependant, bloquer les cookies nécessaires peut perturber les fonctions de panier et de paiement."
+    },
+    "pageNotFound": "Page non trouvée",
+    "pageNotFoundDesc": "Le contenu que vous recherchez n'existe pas.",
+    "backToHome": "← Retour à l'accueil",
+    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+  },
+  "myOrders": {
+    "notifyCancelRequestSent": "Votre demande d'annulation a été reçue.",
+    "caseOrderLoading": "Chargement de vos commandes...",
+    "caseNoOrders": "Vous n'avez pas encore de commandes",
+    "caseNoOrders2": "Commencez vos achats maintenant et faites plaisir à vos proches.",
+    "caseNoOrdersLink": "Commencer les achats",
+    "myOrdersPageTitle": "Mes commandes",
+    "myOrdersDelivered": "Livré",
+    "orderNumber": "N° de commande",
+    "orderAmount": "Montant",
+    "orderProducts": "Produits",
+    "orderPieces": "Pièces",
+    "delivery": "Livraison",
+    "recipient": "Destinataire",
+    "invoice": "Facture",
+    "cancelOrderRequest": "Créer une demande d'annulation",
+    "cancelOrderRequestPending": "Votre demande d'annulation est en cours d'examen."
+  },
+  "notFound": {
+    "title": "La page que vous recherchez est introuvable",
+    "description": "La page que vous essayez d'atteindre a peut-être été supprimée, renommée ou est temporairement indisponible."
+  },
+  "productDetail": {
+    "loginBeforeComment": "Vous devez vous connecter pour commenter !",
+    "commentEmpty": "Veuillez écrire un commentaire.",
+    "commentSubmitSuccess": "Votre commentaire a été ajouté !",
+    "placeholder": "Que pensez-vous du produit ?",
+    "submitReview": "Envoyer l'avis",
+    "submitReviewAlt": "Donner un avis",
+    "yourRating": "Votre note",
+    "yourReview": "Votre avis",
+    "loginTocomment1": "Pour commenter ",
+    "loginTocomment2": "connectez-vous",
+    "firstComment": "Pas encore de commentaires. Soyez le premier à commenter !",
+    "similarProducts": "Vous aimerez aussi"
+  },
+  "profile": {
+    "title": "Mon compte",
+    "profileGreetings": "Bienvenue, vous pouvez gérer votre profil et vos commandes ici."
+  },
+  "registerCourier": {
+    "driverLicenseSuccess": "Votre permis de conduire a été téléchargé !",
+    "uploadError": "Erreur de téléchargement.",
+    "acceptTermsWarning": "Vous devez accepter le contrat de coursier !",
+    "driverLicencePhoto": "Veuillez télécharger une photo du permis de conduire.",
+    "applicationReceived": "Candidature reçue ! En attente d'approbation.",
+    "uploadDocuments": "Veuillez vous connecter et télécharger vos documents.",
+    "becomeACourier": "Devenez notre coursier",
+    "yourOwnBoss": "Soyez votre propre patron, gagnez à chaque livraison.",
+    "courierApplication": "Candidature coursier",
+    "information": "Nous allons d'abord créer votre compte. Après la connexion, vous entrerez les informations sur le véhicule.",
+    "vehicleInfo": "Informations sur le véhicule",
+    "vehicleType": "Type de véhicule",
+    "vehicleOpt": {
+      "car": "Voiture",
+      "motorcycle": "Moto",
+      "van": "Camionnette",
+      "bicycle": "Vélo"
+    },
+    "vehicleLicensePlate": "Numéro d'immatriculation",
+    "licenseNumber": "Numéro de permis",
+    "taxNumber": "Numéro fiscal (si applicable)",
+    "uploadLicense": "Télécharger le permis",
+    "courierAddress": "Adresse de résidence",
+    "fileReady": "Fichier prêt",
+    "policy1": "J'ai lu le contrat de coursier",
+    "policy2": "J'accepte et m'engage",
+    "btn1": "Traitement en cours...",
+    "btn2": "Créer un compte",
+    "btn3": "Envoyer la candidature",
+    "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous"
+  },
+  "register": {
+    "passwordWeak": "Votre mot de passe n'est pas assez fort !",
+    "notifyPasswordRequirements": "Veuillez respecter les exigences du mot de passe.",
+    "acceptTerms": "Veuillez accepter le contrat !",
+    "registrationFailed": "L'inscription a échoué. Veuillez réessayer.",
+    "joinUs": "Rejoignez-nous",
+    "createAccount": "Créez un compte rapidement",
+    "securityMeasures": "Exigences de sécurité",
+    "userAgrement1": "J'ai lu et j'accepte ",
+    "userAgrement2": "le contrat d'utilisation.",
+    "btn1": "Enregistrement...",
+    "btn2": "Créer un compte",
+    "alreadyAccount1": "Vous avez déjà un compte ?",
+    "alreadyAccount2": "Connectez-vous"
+  },
+  "vendor": {
+    "receivedOrders": "Commandes entrantes",
+    "notifyAdressSaved": "L'emplacement a été enregistré à l'adresse",
+    "documentLoaded": "Document téléchargé avec succès",
+    "documentLoadError": "Erreur de téléchargement !",
+    "policyWarning": "Vous devez accepter le contrat de vendeur !",
+    "uploadYourDocument": "Veuillez télécharger le certificat fiscal/document.",
+    "accountCreated:": "Compte créé !",
+    "accountCreated2": "Veuillez vous connecter et entrer les détails de la boutique.",
+    "title1": "Candidature boutique",
+    "title2": "Ouvrez votre boutique",
+    "titleDesc": "Atteignez des milliers de clients, augmentez vos ventes.",
+    "fullName": "Nom complet autorisé",
+    "fullNamePlaceholder": "Nom complet de la personne autorisée",
+    "vendorInfo": "Nous allons d'abord créer un compte. Après la connexion, vous entrerez les détails de la boutique.",
+    "storeDetails": "Détails de la boutique",
+    "companyName": "Nom de l'entreprise",
+    "companyNamePlaceholder": "Nom officiel de l'entreprise",
+    "taxNumber": "Numéro fiscal",
+    "taxNumberPlaceholder": "Numéro fiscal",
+    "adress": "Adresse de la boutique",
+    "adressPlaceholder": "Adresse de la boutique (Sélectionnez sur la carte ou entrez manuellement)",
+    "uploadDocumentSuccess": "Fichier téléchargé avec succès",
+    "policy1": "J'ai lu le contrat de vendeur",
+    "policy2": "J'accepte et m'engage",
+    "btn1": "Traitement en cours...",
+    "btn2": "Créer un compte",
+    "btn3": "Envoyer la candidature"
+  },
+  "resetPassword": {
+    "passwordInvalid": "Les exigences du mot de passe ne sont pas remplies.",
+    "resetPasswordSuccess": "Votre mot de passe a été changé ! Vous pouvez vous connecter.",
+    "invalidLink": "Le lien est invalide ou a expiré.",
+    "invalidLinkTitle": "Lien invalide",
+    "linkTimeLimit": "Ce lien de réinitialisation de mot de passe a été utilisé ou a expiré.",
+    "resend": "Renvoyer",
+    "setNewPassword": "Définir un nouveau mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "resettingPassword": "Mise à jour...",
+    "resetPassword": "Mettre à jour le mot de passe"
+  },
+  "store": {
+    "storeNotFound": "Boutique non trouvée",
+    "storeNotFoundDesc": "La boutique que vous recherchez n'existe pas ou a peut-être été supprimée.",
+    "storeDescNotFound": "Aucune description n'a encore été entrée pour cette boutique.",
+    "registration": "Date d'inscription",
+    "products": "Produits",
+    "reviews": "Avis",
+    "about": "À propos",
+    "noProducts": "Cette boutique n'a pas encore de produits.",
+    "storeRating": "Note de la boutique",
+    "storeRatingCount": "Total des avis",
+    "noReviews": "Cette boutique n'a pas encore d'avis.",
+    "storeAbout": "À propos de la boutique",
+    "secureShopping1": "Achats sécurisés",
+    "secureShopping2": "Tous les achats dans cette boutique sont protégés par la garantie ÇiçekSepeti UK."
+  },
+  "success": {
+    "orderSuccess": "Votre commande a été reçue !",
+    "errorWhileOrder": "Un problème est survenu lors de l'enregistrement de la commande. Veuillez contacter le support.",
+    "processingOrder": "Votre commande est en cours de traitement...",
+    "wait": "Veuillez patienter.",
+    "orderNotVisible1": "La commande n'a pas pu être affichée",
+    "orderNotVisible2": "Votre commande a peut-être été créée mais ne peut pas être affichée actuellement. Veuillez vérifier la page \"Mes commandes\".",
+    "navigateToOrders": "Aller à mes commandes",
+    "thankYou": "Merci !",
+    "orderReceived": "Votre commande a été reçue.",
+    "orderNumber": "Numéro de commande",
+    "orderSummary": "Résumé de la commande",
+    "totalAmount": "Montant de la commande",
+    "deliveryFee": "Frais de livraison",
+    "generalTotal": "Total général",
+    "adressDetails": "Adresse de livraison",
+    "deliveryTime": "Heure de livraison",
+    "allOrders": "Voir toutes mes commandes"
+  },
+  "verificationPending": {
+    "header2": "Vérifiez votre e-mail",
+    "message1": "Nous avons envoyé un lien de vérification pour la sécurité de votre compte. Vous êtes presque des nôtres !",
+    "emailTo": "Envoyé à",
+    "notReceived": "Pas reçu d'e-mail ?",
+    "checkSpam": "N'oubliez pas de vérifier le dossier \"Spam\" ou \"Indésirables\".",
+    "goToLogin": "Aller à la page de connexion",
+    "loginWithAnother": "Se connecter avec un autre compte (Déconnexion)"
+  },
+  "verifyEmail": {
+    "messageVerified": "Votre compte a été vérifié ! Vous pouvez vous connecter.",
+    "verifying": "Vérification...",
+    "errorOccurred": "Lien invalide ou expiré.",
+    "pleaseWait": "Veuillez patienter, votre compte est en cours d'activation.",
+    "great": "Excellent !",
+    "login": "Connexion"
+  },
+  "verify": {
+    "verifying": "Votre compte est en cours de vérification...",
+    "unsucessfull": "La vérification a échoué. Le lien est invalide ou a expiré.",
+    "waitingMessage": "Veuillez patienter, votre demande est en cours de traitement.",
+    "success": "Félicitations !"
+  },
+  "cartContext": {
+    "maxStockReached": "Stock insuffisant ! Maximum",
+    "added": "ajouté au panier !",
+    "removed": "supprimé.",
+    "cartEmpty": "Le panier a été vidé",
+    "maxLimitReached": "Limite de stock maximale atteinte !",
+    "increased": "+1 ajouté",
+    "decreased": "-1 retiré",
+    "updated": "mis à jour",
+    "deletedFromFavorites": "retiré des favoris",
+    "addedToFavorites": "ajouté aux favoris",
+    "favoritesNotUpdated": "Le favori n'a pas pu être mis à jour. Veuillez vous reconnecter."
+  },
+  "termsModal": {
+    "agree": "J'ai lu, j'accepte",
+    "customers": {
+      "title": "Contrat de vente et de service à distance",
+      "first": {
+        "title": "1. INTRODUCTION ET PARTIES",
+        "desc": "Ces conditions générales régissent la vente de biens qui vous est faite (\"Acheteur\") par le Vendeur via la Plateforme. En passant commande, vous acceptez d'être lié par ces conditions conformément au Consumer Rights Act 2015."
+      },
+      "second": {
+        "title": "2. POLITIQUE DE LIVRAISON",
+        "desc": "Nous visons à livrer les produits dans le créneau horaire sélectionné lors du paiement. Si l'acheteur n'est pas à l'adresse, le coursier peut laisser le colis dans un \"endroit sûr\" ou chez un voisin en raison de la nature périssable des produits (fleurs/nourriture) (pratique standard au Royaume-Uni)."
+      },
+      "third": {
+        "title": "3. POLITIQUE D'ANNULATION ET DE RETOUR",
+        "desc": "Conformément aux Consumer Contracts Regulations 2013, les consommateurs ont généralement un droit de rétractation de 14 jours. CEPENDANT : Exception pour les produits périssables : Il n'y a PAS DE DROIT D'ANNULATION/RÉTRACTATION pour les biens susceptibles de se détériorer ou de se périmer rapidement (fleurs fraîches, plantes, produits alimentaires). En vertu du Consumer Rights Act 2015, si les produits ne sont pas conformes à la description à la livraison ou sont de qualité insuffisante (par ex. fleurs écrasées), vous avez droit à un remboursement ou un échange. Vous devez nous en informer avec preuves photo dans les 24 heures suivant la livraison."
+      },
+      "fifth": {
+        "title": "5. CONFIDENTIALITÉ ET PROTECTION DES DONNÉES",
+        "desc": "Vos données personnelles (nom, adresse, téléphone) sont traitées en pleine conformité avec le RGPD britannique et le Data Protection Act 2018. Les données sont partagées uniquement avec le Vendeur et le Coursier pour traiter votre commande."
+      }
+    },
+    "courierAgreement": {
+      "title": "Contrat de service de coursier indépendant",
+      "first": {
+        "title": "1. MODE DE TRAVAIL",
+        "desc": "Le coursier accepte de fournir des services en tant que \"Travailleur indépendant\" (Self-Employed), en tant qu'entrepreneur indépendant. Ce contrat ne fait pas du coursier un employé, un travailleur ou un partenaire de la Plateforme. Vous êtes responsable de vos propres impôts et cotisations sociales (NI)."
+      },
+      "second": {
+        "title": "2. NORMES DE SERVICE",
+        "desc": "Le coursier doit faire preuve de la plus grande attention pour préserver l'intégrité esthétique des produits périssables (fleurs, gâteaux). Les livraisons doivent être effectuées dans les délais indiqués."
+      },
+      "third": {
+        "title": "3. PROTECTION DES DONNÉES (RGPD - INFRACTION PÉNALE)",
+        "titlesub": "AVIS DE CONFIDENTIALITÉ STRICTE",
+        "desc": "Les données clients (adresse, téléphone) qui vous sont fournies sont UNIQUEMENT destinées à la livraison. En vertu du Data Protection Act 2018, il est INTERDIT d'enregistrer ces données, de contacter le client pour une raison autre que la livraison ou de les partager avec d'autres. En cas de découverte, le contrat sera résilié et des poursuites judiciaires seront engagées."
+      }
+    },
+    "vendorAgreement": {
+      "title": "Contrat de partenariat commercial vendeur",
+      "first": {
+        "title": "1. PARTIES ET OBJET",
+        "desc": "Ce contrat est conclu entre la Plateforme et le Vendeur (Fournisseur). Le Vendeur accorde à la Plateforme le droit de lister et de vendre ses produits. La propriété légale des produits appartient au Vendeur jusqu'à la vente."
+      },
+      "second": {
+        "title": "2. COMMISSION ET PAIEMENTS",
+        "desc": "La Plateforme prélève une commission de 10% + TVA (VAT) sur la valeur brute de chaque commande. Les paiements sont effectués chaque semaine. La Plateforme se réserve le droit de suspendre les paiements en cas de transactions suspectes ou de taux de retour élevés."
+      },
+      "third": {
+        "title": "3. RESPONSABILITÉ PRODUIT ET CONFORMITÉ",
+        "desc": "Le Vendeur garantit que tous les biens vendus sont conformes au Sale of Goods Act 1979 et (en cas de vente de nourriture) aux normes britanniques de sécurité alimentaire. Le coût des retours dus à des produits de mauvaise qualité, un emballage incorrect ou une non-conformité avec les images est à la charge du Vendeur."
+      },
+      "fourth": {
+        "title": "4. PROTECTION DES DONNÉES (RGPD)",
+        "desc": "Le Vendeur traitera les données clients conformément au RGPD britannique et au Data Protection Act 2018. Les données seront utilisées uniquement pour le traitement des commandes."
+      }
+    }
+  },
+  "secureImage": {
+    "uploading": "Téléchargement...",
+    "uploadSuccess": "Téléchargé avec succès !",
+    "wasNotVisible": "N'a pas pu être affiché"
+  },
+  "orderTracker": {
+    "ready": "Prêt (En attente du coursier)",
+    "preparing": "En préparation",
+    "courierToStore": "Le coursier se rend à la boutique",
+    "deliveryOnTheWay": "Livraison en route",
+    "onTheWay": "En route",
+    "delivered": "Livré",
+    "cancelled": "Annulé",
+    "cancellRequested": "Demande d'annulation reçue",
+    "cancelReqUnderReview": "Votre demande est en cours d'examen par le service client.",
+    "orderCancelled": "Cette commande a été annulée."
+  },
+  "locationPicker": {
+    "locationOnMap": "Cliquez sur la carte pour sélectionner un emplacement"
+  },
+  "cookieBanner": {
+    "detailedInfo": "Informations détaillées",
+    "cookiesAgreement": "Nous utilisons des cookies pour vous offrir une meilleure expérience d'achat. En continuant sur le site, vous acceptez l'utilisation des cookies."
+  },
+  "footer": {
+    "col1": "Nous livrons les fleurs les plus fraîches et les cadeaux les plus spéciaux de Londres à vos proches le jour même. Nous distribuons le bonheur.",
+    "col21": "Entreprise",
+    "col22": "À propos de nous",
+    "col23": "Questions fréquentes",
+    "col24": "Contact / Support",
+    "col25": "Carrières",
+    "col26": "Blog & Actualités",
+    "col27": "Politique de confidentialité",
+    "col3": "Partenariat commercial",
+    "col31": "Devenir vendeur",
+    "col32": "Devenir coursier",
+    "col33": "Rejoignez notre équipe, soyez votre propre patron.",
+    "col4": "Contactez-nous",
+    "col41": "Contact",
+    "allRightsReserved": "Tous droits réservés.",
+    "col51": "Politique de confidentialité",
+    "col52": "Contrat de vente à distance",
+    "col53": "Politique de cookies"
+  },
+  "confirmModal": {
+    "cancel": "Annuler",
+    "yes": "Oui,",
+    "confirm": "Confirmer"
+  },
+  "chatBot": {
+    "greeting": "Bonjour ! Je suis l'assistant ÇiçekSepeti 🌸 Comment puis-je vous aider ?",
+    "greetingResponse": "Bonjour ! 🌸 Je peux vous donner des informations sur les commandes, l'entretien des fleurs ou les opérations vendeur.",
+    "askQuestion": "Écrivez votre question ici...",
+    "send": "Envoyer",
+    "welcomeBack": "Bon retour ! Comment puis-je vous aider ?"
+  },
+  "cartSidebar": {
+    "applyCode": "Entrez le code",
+    "appliedSuccess": "Coupon appliqué !",
+    "invalid": "Code de coupon invalide.",
+    "cartEmpty": "Le panier est vide.",
+    "fillEmptyBox": "Remplissez les champs en rouge",
+    "orderSuccess": "Commande créée !",
+    "directingToPayment": "Redirection vers la page de paiement...",
+    "paymentError": "Erreur de paiement. Veuillez réessayer.",
+    "wantToDelete": "Voulez-vous supprimer ?",
+    "removedFromCart": "sera retiré du panier.",
+    "emptyCart": "Vider le panier ?",
+    "allWillBeRemoved": "tous les produits seront retirés du panier."
+  },
+  "cancelModal": {
+    "inputReason": "Veuillez indiquer une raison valide.",
+    "cancelRequest": "Demande d'annulation",
+    "explainReason": "Vous êtes sur le point d'annuler votre commande. Veuillez nous expliquer brièvement la raison.",
+    "explainReasonPlaceholder": "Écrivez votre raison ici...",
+    "cancel": "Annuler",
+    "submitRequest": "Envoyer la demande"
+  },
+  "badgeDisplay": {
+    "admin": "Administrateur",
+    "vendor": "Boutique approuvée",
+    "courier": "Coursier",
+    "verified": "Vérifié",
+    "newUser": "Nouveau membre",
+    "firstOrder": "Première commande",
+    "year1User": "Membre légendaire (1+ an)",
+    "loyalUser": "Membre fidèle (3+ ans)",
+    "gigachad": "Giga Chad (5+ ans)",
+    "fifthOrder": "Client Bronze (5+)",
+    "tenthOrder": "Client Argent (10+)",
+    "twentyfifthOrder": "Client Or (25+)",
+    "fiftythOrder": "Client Platine (50+)",
+    "100thOrder": "Client Diamant (100+)",
+    "bestSeller": "Meilleures ventes",
+    "starStore": "Boutique étoile"
+  },
+  "vendorSettings": {
+    "logo": "Logo",
+    "banner": "Bannière",
+    "loaded": "chargé",
+    "errorLoading": "Erreur de téléchargement",
+    "storeSettingsSaved": "Paramètres de la boutique enregistrés !",
+    "error": "Une erreur s'est produite.",
+    "storeAppearance": "Apparence de la boutique",
+    "storeDetails": "Détails de la boutique",
+    "bannerFoto": "Photo de couverture",
+    "noBannerFoto": "Pas d'image",
+    "loading": "Chargement...",
+    "change": "Modifier",
+    "storeDesc": "Description de la boutique",
+    "storeDescPlaceholder": "Présentez votre boutique à vos clients...",
+    "phone": "Téléphone de contact",
+    "saveSettings": "Enregistrer les paramètres"
+  },
+  "vendorProducts": {
+    "birthday": "Anniversaire",
+    "product": "Produit",
+    "active": "Activé",
+    "inactive": "Désactivé",
+    "statusNotChanged": "Le statut n'a pas été modifié",
+    "pictureLoaded": "Image téléchargée !",
+    "pictureNotLoaded": "N'a pas pu être téléchargé",
+    "missingInfo": "Informations manquantes.",
+    "reqSuccess": "Opération réussie !",
+    "errorOccurredWhileAdding": "Erreur lors de l'ajout du produit",
+    "deleteProduct": "Supprimer le produit ?",
+    "cannotBeUndone": "Cette action ne peut pas être annulée.",
+    "deleted": "supprimé.",
+    "myProducts": "Mes produits",
+    "searchPlaceholder": "Rechercher un produit...",
+    "cancel": "Annuler",
+    "addNew": "Ajouter un nouveau produit",
+    "editProduct": "Modifier le produit",
+    "productName": "Nom du produit",
+    "price": "Prix",
+    "stock": "Stock",
+    "category": "Catégorie",
+    "description": "Description",
+    "image": "Image",
+    "upload": "Télécharger",
+    "uploadPlaceholder": "ou coller l'URL",
+    "preview": "aperçu",
+    "isActive": "Ce produit est disponible à la vente",
+    "publishProduct": "Publier le produit",
+    "updateProduct": "Enregistrer les modifications",
+    "live": "Publié",
+    "hidden": "Masqué",
+    "soldOut": "ÉPUISÉ",
+    "last": "DERNIER",
+    "quickStock": "Stock rapide",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "stockUpdated": "Stock mis à jour !"
+  },
+  "vendorOrders": {
+    "updated": "Mis à jour",
+    "orders": "Commandes entrantes",
+    "empty": "Pas encore de commandes",
+    "content": "Contenu",
+    "invoice": "Facture",
+    "orderReceived": "Commande reçue",
+    "orderPreparing": "Commande en préparation",
+    "ready": "Prêt",
+    "courierToStore": "Le coursier se rend à la boutique",
+    "deliveryOnTheWay": "Livraison en route"
+  },
+  "vendorDashboard": {
+    "store": "Aperçu de la boutique",
+    "totalSales": "Ventes totales",
+    "totalOrders": "Commandes totales",
+    "totalProducts": "Produits totaux",
+    "welcome": "Bienvenue,",
+    "welcome2": "Votre boutique est actuellement active. Vous pouvez suivre vos commandes dans l'onglet 'Commandes', imprimer les factures et les remettre au coursier."
+  },
+  "profilePage": {
+    "userInfo": {
+      "profileUpdated": "Informations du profil mises à jour !",
+      "updateUnsucessfull": "Le profil n'a pas pu être mis à jour. Veuillez réessayer.",
+      "oldPassword": "Entrez votre ancien mot de passe.",
+      "passwordInvalid": "Le mot de passe ne respecte pas les règles.",
+      "passwordsNotMatch": "Les mots de passe ne correspondent pas.",
+      "passwordChanged": "Votre mot de passe a été changé. Veuillez vous reconnecter.",
+      "passwordChangeFailed": "Le mot de passe n'a pas pu être changé.",
+      "personalInfo": "Informations personnelles",
+      "personalContactInfo": "Vos informations d'identité et de contact",
+      "edit": "Modifier",
+      "cancel": "Annuler",
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "verified": "VÉRIFIÉ",
+      "phone": "Téléphone mobile",
+      "accountType": "Type de compte",
+      "saveChanges": "Enregistrer les modifications",
+      "passwordSecurity": "Mot de passe & Sécurité",
+      "protectAccount": "Protégez votre compte",
+      "changePassword": "Changer le mot de passe",
+      "createNewPassword": "Créer un nouveau mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "repeatNewPassword": "Répéter le nouveau mot de passe",
+      "updatePassword": "Mettre à jour le mot de passe"
+    },
+    "userSidebar": {
+      "adressBook": "Mon carnet d'adresses",
+      "informationPassword": "Mes informations & Mot de passe",
+      "myOrders": "Mes commandes",
+      "logout": "Déconnexion"
+    },
+    "orderHistory": {
+      "cancelRequestReceived": "Votre demande d'annulation a été reçue",
+      "caseNoOrders": "Vous n'avez pas encore de commandes",
+      "information": "Vos commandes seront listées ici.",
+      "deliverTo": "Informations du destinataire",
+      "deliverNote": "Livraison & Note",
+      "noteNotAdded": "Aucune note de carte ajoutée.",
+      "quantity": "Quantité",
+      "cancelRequest": "Créer une demande d'annulation",
+      "invoice": "Facture"
+    },
+    "adressBook": {
+      "adressUpdated": "Adresse mise à jour",
+      "adressAdded": "Adresse ajoutée",
+      "qDeteleAdress": "Supprimer l'adresse ?",
+      "deleteAdressLabel": "L'adresse intitulée sera supprimée définitivement.",
+      "adressDeleted": "Adresse supprimée",
+      "myAdresses": "Adresses enregistrées",
+      "cancel": "Annuler",
+      "addNewAdress": "Ajouter une nouvelle adresse",
+      "editAdress": "Modifier l'adresse",
+      "newAdressInfo": "Nouvelles informations d'adresse",
+      "adressTitle": "Titre de l'adresse",
+      "adressTitlePlaceholder": "Maison, Travail, Mon ami",
+      "receipentName": "Nom du destinataire",
+      "receipentNamePlaceholder": "Nom complet",
+      "receipentPhone": "Numéro de téléphone du destinataire",
+      "openAdress": "Adresse du destinataire",
+      "city": "Ville",
+      "postCode": "Code postal",
+      "saveChanges": "Enregistrer les modifications",
+      "addAdress": "Enregistrer l'adresse",
+      "noSavedAdresses": "Vous n'avez pas encore d'adresses enregistrées.",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    }
+  },
+  "cartSidebarComponents": {
+    "cartItemsList": {
+      "empty": "Votre panier est vide."
+    },
+    "CheckoutForm": {
+      "contact": "Contact",
+      "nameSurname": "Votre nom complet",
+      "phoneNumber": "Votre numéro de téléphone",
+      "emailAddress": "Votre adresse e-mail",
+      "recipientAddress": "Destinataire & Adresse",
+      "savedAddressSelect": "Sélectionner une adresse enregistrée",
+      "recipientName": "Nom du destinataire",
+      "recipientPhone": "Téléphone du destinataire",
+      "deliveryAddress": "Adresse complète (Rue, Bâtiment, Appartement)",
+      "deliveryCity": "Ville",
+      "deliveryPostcode": "Code postal",
+      "saveAdress": "Enregistrer cette adresse dans mon carnet d'adresses",
+      "deliveryOptions": "Options de livraison",
+      "opt1": "Standard (2-3 jours)",
+      "free": "GRATUIT",
+      "opt2": "Lendemain",
+      "opt3": "Jour même (Premium)",
+      "deliveryTime": "Date & Heure",
+      "selectDateFirst": "Sélectionnez d'abord une date",
+      "noAvailableTime": "Plus de créneau disponible",
+      "deliveryNote": "Votre message cadeau...",
+      "noteToCourier": "Votre note au coursier...",
+      "sendWithoutName": "Envoyer sans nom"
+    },
+    "index": {
+      "adressSelected": "Adresse sélectionnée",
+      "enterCode": "Entrez le code",
+      "couponApplied": "Coupon appliqué !",
+      "couponInvalid": "Code de coupon invalide.",
+      "cartEmpty": "Le panier est vide",
+      "fillRedFields": "Remplissez les champs en rouge",
+      "orderSuccess": "Commande reçue !",
+      "redirectingToPayment": "Redirection vers la page de paiement...",
+      "paymentError": "Erreur de paiement.",
+      "quantity": "Quantité",
+      "confirmRemove": "retirer du panier ?",
+      "comfirmRemoveTitle": "Vider le panier ?",
+      "allItemsRemoved": "tous les produits seront retirés du panier."
+    },
+    "sideBarFooter": {
+      "discountCode": "Code de réduction",
+      "apply": "Appliquer",
+      "freeDelivery": "Livraison gratuite",
+      "remove": "Supprimer",
+      "subtotal": "Sous-total",
+      "discount": "Réduction",
+      "delivery": "Livraison",
+      "fast": "Rapide",
+      "standard": "Standard",
+      "premium": "Premium",
+      "free": "Gratuit",
+      "total": "Total général",
+      "confirm": "Confirmer le panier",
+      "processing": "Traitement...",
+      "pleaseWait": "Veuillez patienter...",
+      "payAndFinish": "Payer et terminer"
+    },
+    "sidebarHeader": {
+      "myCart": "Mon panier",
+      "clear": "Vider",
+      "deliveryInfo": "Informations de livraison"
+    }
+  },
+  "adminComponents": {
+    "adminOrderComp": {
+      "orderCard": {
+        "request": "DEMANDE",
+        "loss": "PERTE",
+        "vendor": "Boutique",
+        "cost": "Coût",
+        "total": "Total",
+        "orderReceived": "Commande reçue",
+        "orderPreparing": "Commande en préparation",
+        "ready": "Prêt",
+        "onTheWay": "En route",
+        "delivered": "Livré",
+        "cancelRequest": "Demande d'annulation",
+        "cancel": "Annulé",
+        "senderReceiver": "Destinataire & Expéditeur",
+        "sender": "Expéditeur",
+        "delivery": "Livraison",
+        "notesAndFinance": "Notes & Finances",
+        "cardNoteNotAvailable": "Pas de note de carte",
+        "realCost": "Coût réel",
+        "netLoss": "PERTE NETTE",
+        "cancelReason": "RAISON D'ANNULATION",
+        "products": "Produits",
+        "hideTechnicalDetails": "Masquer les données techniques",
+        "showTechnicalDetails": "Afficher Sécurité & Métadonnées",
+        "courierFound": "Coursier assigné",
+        "printInvoice": "Imprimer la facture",
+        "searchPlaceholder": "Rechercher N° commande ou destinataire...",
+        "allCases": "Tous les statuts",
+        "discounted": "Déficitaires (remisés)",
+        "cancelRequested": "Demandes d'annulation"
+      },
+      "orderMetadata": {
+        "metaDataNotAvailable": "Pas de métadonnées disponibles.",
+        "securityAnalysis": "Analyse de sécurité"
+      },
+      "orderStats": {
+        "revenue": "Chiffre d'affaires",
+        "waiting": "En attente",
+        "promoCost": "Coût promotionnel",
+        "cancelRequest": "Demande d'annulation",
+        "completed": "Terminé"
+      }
+    },
+    "adminApplication": {
+      "namedApplicant": "l'utilisateur nommé,",
+      "namedApplicant2": "aura un accès complet au système en tant que. Approuvez-vous cette opération ?",
+      "onaylandi": "approuvé !",
+      "provideReason": "Veuillez indiquer une raison !",
+      "rejected": "Candidature rejetée",
+      "pendingApplications": "Candidatures en attente",
+      "noPendingApplications": "Il n'y a actuellement aucune candidature en attente d'approbation.",
+      "vendor": "Boutique",
+      "courier": "Coursier",
+      "reviewAndDecide": "Examiner & Décider",
+      "rejection": "Rejet de candidature",
+      "reasonToReject": "Veuillez indiquer la raison du rejet.",
+      "reasonToRejectPlaceholder": "Écrivez votre raison de rejet ici...",
+      "cancel": "Annuler",
+      "send": "Envoyer"
+    },
+    "comment": "Admin NOT FINISHED"
+  },
+  "navbar": {
+    "searchPlaceholder": "Rechercher fleurs, chocolat, cadeaux...",
+    "myAccount": "Mon compte",
+    "login": "Connexion",
+    "register": "Inscription",
+    "viewCart": "Voir le panier",
+    "language": "Langue"
+  }
+}

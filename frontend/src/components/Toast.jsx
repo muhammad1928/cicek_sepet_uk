@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 
+
 const Toast = () => {
+  
   const { notification, notificationType, closeNotification } = useCart();
   const [isVisible, setIsVisible] = useState(false);
 

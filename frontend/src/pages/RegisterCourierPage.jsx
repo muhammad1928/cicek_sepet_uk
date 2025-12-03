@@ -5,18 +5,22 @@ import TermsModal from "../components/TermsModal";
 import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
-// Araç Tipleri
-const VEHICLE_TYPES = [
-  { value: "motor", label: "Motosiklet 🏍️" },
-  { value: "car", label: "Otomobil 🚗" },
-  { value: "van", label: "Ticari Araç (Van) 🚐" },
-  { value: "bicycle", label: "Bisiklet 🚲" }
-];
+
 
 const RegisterCourierPage = () => {
+  const { t } = useTranslation();
   // --- STATE TANIMLARI ---
 
+
+  // Araç Tipleri
+  const VEHICLE_TYPES = [
+    { value: "motor", label: `${t("registerCourierPage.vehicleOpt.motorcycle")} 🏍️` },
+    { value: "car", label: `${t("registerCourierPage.vehicleOpt.car")} 🚗` },
+    { value: "van", label: `${t("registerCourierPage.vehicleOpt.van")} 🚐` },
+    { value: "bicycle", label: `${t("registerCourierPage.vehicleOpt.bicycle")} 🚲` }
+  ];
   // 1. Kayıt Verileri (Giriş yapmamışsa)
   const [regData, setRegData] = useState({ fullName: "", email: "", password: "", role: "courier" });
   
@@ -72,19 +76,19 @@ const RegisterCourierPage = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await publicRequest.post("/upload", data); setLicenseFile(res.data); notify("Ehliyet yüklendi ✅", "success"); } 
-    catch { notify("Yükleme hatası", "error"); } finally { setUploading(false); }
+    try { const res = await publicRequest.post("/upload", data); setLicenseFile(res.data); notify(t("registerCourier.driverLicenseSuccess") + " ✅", "success"); } 
+    catch { notify(t("registerCourier.uploadError"), "error"); } finally { setUploading(false); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!acceptedTerms) return notify("Kurye sözleşmesini onaylamalısınız!", "warning");
+    if (!acceptedTerms) return notify(t("registerCourier.acceptTermsWarning"), "warning");
     if (!user && !passwordValid) return notify("Şifre kurallara uymuyor!", "error");
 
     setLoading(true);
     try {
       if (user) {
-        if (!licenseFile) { setLoading(false); return notify("Lütfen ehliyet fotoğrafı yükleyin.", "warning"); }
+        if (!licenseFile) { setLoading(false); return notify(t("registerCourier.driverLicencePhoto"), "warning"); }
         
         await userRequest.post(`/users/${user._id}/apply`, {
           ...appData,
@@ -95,7 +99,7 @@ const RegisterCourierPage = () => {
         const updatedUser = { ...user, applicationStatus: 'pending' };
         localStorage.setItem("user", JSON.stringify(updatedUser));
         
-        notify("Başvuru Alındı! 🎉 Onay bekleniyor.", "success");
+        notify(t("registerCourier.applicationReceived") + " 🎉", "success");
         setTimeout(() => navigate("/partner-application"), 1500);
       } else {
         await publicRequest.post("/auth/register", { 
@@ -104,18 +108,18 @@ const RegisterCourierPage = () => {
             password: regData.password,
             role: "customer" 
         });
-        notify("Hesap Oluşturuldu! 🎉 Lütfen giriş yapıp belgelerinizi yükleyin.", "success");
+        notify(t("common.accountCreated") + " 🎉 " + t("registerCourier.uploadDocuments"), "success");
         setTimeout(() => navigate("/login"), 2000);
       }
     } catch (err) {
       setLoading(false);
-      notify(err.response?.data?.message || "Hata!", "error");
+      notify(err.response?.data?.message || t("common.error"), "error");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-700 p-4 font-sans relative overflow-hidden pt-2">
-      <Seo title="Kurye Ol" description="ÇiçekSepeti UK kurye ekibine katılın." />
+      <Seo title={t("registerCourierPage.title")} description={t("registerCourierPage.description")} />
       <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
       {/* --- MODERN SCROLLBAR --- */}
@@ -132,8 +136,8 @@ const RegisterCourierPage = () => {
         <div className="flex items-center justify-center space-x-4 mb-2">
           <div className="inline-block p-3 rounded-full bg-blue-100 text-blue-600 mb-3 text-3xl">🛵</div>
           <div className="text-center">
-            <h2 className="text-2xl font-extrabold text-gray-800">{user ? `Kurye Başvurusu: ${user.fullName}` : "Kuryemiz Olun"}</h2>
-            <p className="text-gray-500 text-sm">Kendi işinin patronu ol, teslim ettikçe kazan.</p>
+            <h2 className="text-2xl font-extrabold text-gray-800">{user ? `${t("registerCourierPage.courierApplication")}: ${user.fullName}` : t("registerCourierPage.becomeACourier")}</h2>
+            <p className="text-gray-500 text-sm"> {t("registerCourierPage.yourOwnBoss")}</p>
           </div>
         </div>
 
@@ -145,12 +149,12 @@ const RegisterCourierPage = () => {
             {!user && (
               <>
                 <div className="grid grid-cols-2 gap-4">
-                  <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Ad Soyad</label><input name="fullName" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-blue-500" placeholder="Adınız Soyadınız" required /></div>
-                  <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">E-Posta</label><input name="email" type="email" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-blue-500" placeholder="Email" required /></div>
+                  <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.fullName")}</label><input name="fullName" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-blue-500" placeholder={t("common.fullName")} required /></div>
+                  <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.email")}</label><input name="email" type="email" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-blue-500" placeholder={t("common.emailPlaceholder")} required /></div>
                 </div>
                 
                 <div className="relative">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Şifre</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.password")}</label>
                     <div className="flex items-center border rounded bg-white overflow-hidden relative">
                       <input name="password" type={showPassword ? "text" : "password"} onChange={handleRegChange} className="w-full p-3 outline-none" required onFocus={()=>setPasswordFocused(true)} onBlur={()=>setPasswordFocused(false)} />
                       <button type="button" onClick={() => setShowPassword(!showPassword)} className="px-4 text-gray-400 hover:text-blue-600 transition">{showPassword ? <FaEyeSlash /> : <FaEye />}</button>
@@ -159,49 +163,49 @@ const RegisterCourierPage = () => {
                       <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200 text-[10px]">
                         <p className="font-bold text-gray-400 mb-1 uppercase">Gereksinimler:</p>
                         <div className="flex flex-col gap-1">
-                          <RuleItem label="En az 8 karakter" valid={rules.length} />
-                          <RuleItem label="1 Büyük Harf" valid={rules.upper} />
-                          <RuleItem label="1 Küçük Harf" valid={rules.lower} />
-                          <RuleItem label="1 Rakam" valid={rules.number} />
-                          <RuleItem label="1 Özel Karakter (!@#$)" valid={rules.special} />
+                          <RuleItem label={t("common.passwordRules.rule1")} valid={rules.length} />
+                          <RuleItem label={t("common.passwordRules.rule2")} valid={rules.upper} />
+                          <RuleItem label={t("common.passwordRules.rule3")} valid={rules.lower} />
+                          <RuleItem label={t("common.passwordRules.rule4")} valid={rules.number} />
+                          <RuleItem label={t("common.passwordRules.rule5")} valid={rules.special} />
                         </div>
-                        {passwordValid && <div className="text-green-600 font-bold mt-1">✅ Şifre Güçlü!</div>}
+                        {passwordValid && <div className="text-green-600 font-bold mt-1">✅ {t("common.strongPassword")}</div>}
                       </div>
                     )}
                 </div>
-                <div className="bg-blue-50 p-3 rounded text-xs text-blue-700 mb-2">💡 Önce hesabınızı oluşturacağız. Giriş yaptıktan sonra araç bilgilerini gireceksiniz.</div>
+                <div className="bg-blue-50 p-3 rounded text-xs text-blue-700 mb-2">💡 {t("registerCourierPage.information")}</div>
               </>
             )}
 
             {/* --- DURUM 2: GİRİŞ YAPMIŞSA --- */}
             {user && (
               <div className="space-y-4 bg-gray-50 p-5 rounded-xl border border-gray-200">
-                 <h3 className="font-bold text-gray-700 text-sm border-b pb-3 mb-2">Araç ve Belge Bilgileri</h3>
+                 <h3 className="font-bold text-gray-700 text-sm border-b pb-3 mb-2">{t("registerCourierPage.vehicleInfo")}</h3>
                  
                  <div className="grid grid-cols-2 gap-4">
-                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Cep Telefonu</label><input name="phone" placeholder="Telefon" onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.phoneNumber")}</label><input name="phone" placeholder={t("common.phoneNumberPlaceholder")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                     <div>
-                        <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Araç Tipi</label>
+                        <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.vehicleType")}</label>
                         <select name="vehicleType" onChange={handleAppChange} className="w-full p-3 border rounded text-sm bg-white outline-none focus:border-blue-500 cursor-pointer" required>
-                          <option value="">Seçiniz...</option>
+                          <option value="">{t("common.dropdownOpt")}</option>
                           {VEHICLE_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
                         </select>
                     </div>
                  </div>
                  
                  <div className="grid grid-cols-2 gap-4">
-                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Plaka No</label><input name="plateNumber" placeholder="Plaka" onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
-                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Ehliyet / TC No</label><input name="licenseNumber" placeholder="Ehliyet No" onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.vehicleLicensePlate")}</label><input name="plateNumber" placeholder={t("registerCourierPage.vehicleLicensePlate")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.licenseNumber")}</label><input name="licenseNumber" placeholder={t("registerCourierPage.licenseNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                  </div>
                  
                  <div className="grid grid-cols-2 gap-4">
-                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Vergi No (Opsiyonel)</label><input name="taxNumber" placeholder="Vergi No" onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" /></div>
-                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">IBAN</label><input name="iban" placeholder="IBAN" onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.taxNumber")}</label><input name="taxNumber" placeholder={t("registerCourierPage.taxNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" /></div>
+                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.ibanNumber")}</label><input name="iban" placeholder={t("common.ibanNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                  </div>
 
                  <div>
-                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">İkamet Adresi</label>
-                    <textarea name="address" placeholder="Adres" onChange={handleAppChange} className="w-full p-3 border rounded text-sm h-24 resize-none outline-none focus:border-blue-500 bg-white" required />
+                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.courierAddress")}</label>
+                    <textarea name="address" placeholder={t("registerCourierPage.courierAddress")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm h-24 resize-none outline-none focus:border-blue-500 bg-white" required />
                  </div>
                  
                  <div className="border-2 border-dashed border-blue-300 p-4 rounded-lg text-center bg-white hover:bg-blue-50 transition cursor-pointer group">
@@ -209,7 +213,7 @@ const RegisterCourierPage = () => {
                        <span className="text-blue-600 font-bold text-sm group-hover:text-blue-800 transition">{uploading ? "Yükleniyor..." : "+ Ehliyet Fotoğrafı Yükle"}</span>
                        <input type="file" className="hidden" onChange={handleUpload} accept="image/*" disabled={uploading} />
                      </label>
-                     {licenseFile && <p className="text-[10px] text-green-600 mt-2 font-bold">Dosya Hazır ✅</p>}
+                     {licenseFile && <p className="text-[10px] text-green-600 mt-2 font-bold">{t("registerCourierPage.fileReady")} ✅</p>}
                   </div>
               </div>
             )}
@@ -217,8 +221,8 @@ const RegisterCourierPage = () => {
             <div className="flex items-center gap-2 pt-2">
               <input type="checkbox" id="terms" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="w-4 h-4 accent-blue-600 cursor-pointer" />
               <label htmlFor="terms" className="text-xs text-gray-600 cursor-pointer">
-                <span className="text-blue-600 font-bold hover:underline mr-1" onClick={(e) => { e.preventDefault(); setShowTerms(true); }}>Kurye Sözleşmesini</span>
-                okudum ve kabul ediyorum.
+                <span className="text-blue-600 font-bold hover:underline mr-1" onClick={(e) => { e.preventDefault(); setShowTerms(true); }}>{t("registerCourierPage.policy1")}</span>
+                {t("registerCourierPage.policy2")}
               </label>
             </div>
 
@@ -227,13 +231,13 @@ const RegisterCourierPage = () => {
               disabled={loading || uploading || (!user && !passwordValid)} 
               className={`w-full text-white bg-blue-600 hover:bg-blue-700 font-bold py-3.5 rounded-xl transition shadow-lg flex justify-center items-center gap-2 text-lg ${(!user && !passwordValid) ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}`}
             >
-              {loading ? "İşleniyor..." : (user ? "Başvuruyu Gönder" : "Hesap Oluştur")}
+              {loading ? t("registerCourierPage.btn1") : (user ? t("registerCourierPage.btn3") : t("registerCourierPage.btn2"))}
             </button>
 
           </form>
         </div>
         
-        {!user && <div className="mt-4 text-center text-xs text-gray-500 flex-shrink-0"><Link to="/login" className="hover:text-blue-600 font-bold">Zaten hesabınız var mı? Giriş Yapın</Link></div>}
+        {!user && <div className="mt-4 text-center text-xs text-gray-500 flex-shrink-0"><Link to="/login" className="hover:text-blue-600 font-bold">{t("registerCourierPage.alreadyHaveAccount")}</Link></div>}
       </div>
 
       {showTerms && <TermsModal onClose={() => setShowTerms(false)} type="courier" onAccept={() => setAcceptedTerms(true)} />}

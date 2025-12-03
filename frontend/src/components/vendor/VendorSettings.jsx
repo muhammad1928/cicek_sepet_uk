@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
+import { useTranslation } from "react-i18next";
 
 const VendorSettings = ({ user }) => {
+  const { t } = useTranslation();
   const { notify } = useCart();
   const [formData, setFormData] = useState({
     logo: "",
@@ -29,11 +31,11 @@ const VendorSettings = ({ user }) => {
     data.append("file", file);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/upload", data);
+      const res = await userRequest.post("/upload", data);
       setFormData(prev => ({ ...prev, [field]: res.data }));
-      notify(`${field === 'logo' ? 'Logo' : 'Banner'} yüklendi!`, "success");
+      notify(`${field === 'logo' ? t('vendorSettings.logo') : t('vendorSettings.banner')} ${t('vendorSettings.loaded')}!`, "success");
     } catch (err) {
-      notify("Yükleme hatası", "error");
+      notify(t('vendorSettings.errorLoading'), "error");
     } finally {
       setUploading(false);
     }
@@ -45,7 +47,7 @@ const VendorSettings = ({ user }) => {
     try {
       // User güncelleme rotasını kullanıyoruz (Backend'de users.js içindeki PUT /:id)
       // Mevcut user verilerini koruyup sadece storeSettings'i güncelliyoruz
-      await axios.put(`http://localhost:5000/api/users/${user._id}`, {
+      await userRequest.put(`/users/${user._id}`, {
         storeSettings: formData
       });
       
@@ -53,16 +55,16 @@ const VendorSettings = ({ user }) => {
       const updatedUser = { ...user, storeSettings: formData };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       
-      notify("Mağaza ayarları kaydedildi! 🎉", "success");
+      notify(`${t('vendorSettings.storeSettingsSaved')} 🎉`, "success");
     } catch (err) {
-      notify("Hata oluştu", "error");
+      notify(t('vendorSettings.error'), "error");
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Mağaza Görünümü</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('vendorSettings.storeAppearance')}</h2>
 
         <form onSubmit={handleSave} className="space-y-8">
           
@@ -73,12 +75,12 @@ const VendorSettings = ({ user }) => {
               {formData.banner ? (
                 <img src={formData.banner} className="w-full h-full object-cover" alt="Banner" />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">Görsel Yok</div>
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400">{t('vendorSettings.noBannerFoto')}</div>
               )}
               
               {/* Yükleme Butonu */}
               <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-white font-bold">
-                {uploading ? "Yükleniyor..." : "📷 Değiştir"}
+                {uploading ? t('vendorSettings.loading') : t('vendorSettings.change')}
                 <input type="file" className="hidden" onChange={(e) => handleUpload(e, 'banner')} accept="image/*" disabled={uploading} />
               </label>
             </div>
@@ -88,7 +90,7 @@ const VendorSettings = ({ user }) => {
             
             {/* Logo Alanı */}
             <div className="flex-shrink-0">
-              <label className="block text-sm font-bold text-gray-700 mb-2">Logo</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t('vendorSettings.logo')}</label>
               <div className="relative w-32 h-32 bg-gray-100 rounded-full overflow-hidden border-2 border-dashed border-gray-300 hover:border-pink-400 transition group mx-auto md:mx-0">
                 {formData.logo ? (
                   <img src={formData.logo} className="w-full h-full object-cover" alt="Logo" />
@@ -96,7 +98,7 @@ const VendorSettings = ({ user }) => {
                   <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-2xl">🏪</div>
                 )}
                 <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer text-white text-xs font-bold">
-                  {uploading ? "..." : "Değiştir"}
+                  {uploading ? t('vendorSettings.loading') : t('vendorSettings.change')}
                   <input type="file" className="hidden" onChange={(e) => handleUpload(e, 'logo')} accept="image/*" disabled={uploading} />
                 </label>
               </div>
@@ -105,22 +107,22 @@ const VendorSettings = ({ user }) => {
             {/* Bilgi Alanları */}
             <div className="flex-1 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mağaza Açıklaması</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorSettings.storeDesc')}</label>
                 <textarea 
                   value={formData.description} 
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   className="w-full p-3 border rounded-xl outline-none focus:border-pink-500 h-24"
-                  placeholder="Müşterilerinize mağazanızı anlatın..."
+                  placeholder={t('vendorSettings.storeDescPlaceholder')}
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">İletişim Telefonu</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorSettings.phone')}</label>
                 <input 
                   type="text"
                   value={formData.phone} 
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   className="w-full p-3 border rounded-xl outline-none focus:border-pink-500"
-                  placeholder="0555..."
+                  placeholder="+46..."
                 />
               </div>
             </div>
@@ -132,7 +134,7 @@ const VendorSettings = ({ user }) => {
                className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg"
                disabled={uploading}
              >
-               Ayarları Kaydet
+               {t('vendorSettings.saveSettings')}
              </button>
           </div>
 

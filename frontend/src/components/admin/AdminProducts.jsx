@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
-import { FaStore } from "react-icons/fa"; // Vendor adı için
+
 
 const CATEGORIES = ["Tümü", "Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
 

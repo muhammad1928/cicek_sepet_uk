@@ -1,14 +1,16 @@
 import CookieConsent from "react-cookie-consent";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const CookieBanner = () => {
+  const { t } = useTranslation();
   return (
     <CookieConsent
       location="bottom"
-      buttonText="Kabul Ediyorum"
-      declineButtonText="Reddet"
+      buttonText={t("common.accept")}
+      declineButtonText={t("common.decline")}
       enableDeclineButton
-      cookieName="ciceksepeti_uk_consent"
+      cookieName="ciceksepeti_uk_consent" // page name
       style={{ 
         background: "#1e293b", // Slate-800 (Koyu Gri)
         color: "#fff", 
@@ -39,10 +41,9 @@ const CookieBanner = () => {
       <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
         <span className="text-2xl">🍪</span>
         <span>
-          Sizlere daha iyi bir alışveriş deneyimi sunabilmek için çerezleri (cookies) kullanıyoruz. 
-          Siteye devam ederek çerez kullanımını kabul etmiş sayılırsınız.
+          {t("cookieBanner.cookiesAgreement")}
           <Link to="/legal/cookie-policy" className="text-pink-400 hover:text-pink-300 underline ml-2 font-bold">
-            Detaylı Bilgi
+            {t("cookieBanner.detailedInfo")}
           </Link>
         </span>
       </div>

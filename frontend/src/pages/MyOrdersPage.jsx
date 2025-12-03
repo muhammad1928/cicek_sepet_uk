@@ -8,9 +8,11 @@ import InvoiceModal from "../components/InvoiceModal";
 // --- YENİ İPTAL MODALI ---
 import CancelModal from "../components/CancelModal"; 
 import { FiPackage, FiClock, FiMapPin, FiChevronDown, FiChevronUp, FiX, FiPrinter, FiAlertTriangle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 
 const MyOrdersPage = () => {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -59,14 +61,14 @@ const MyOrdersPage = () => {
         cancellationReason: reason
       });
 
-      notify("İptal talebiniz başarıyla alındı.", "info");
+      notify(t("myOrders.notifyCancelRequestSent"), "info");
       
       // Listeyi güncelle
       setOrders(prev => prev.map(o => o._id === selectedOrderId ? { ...o, status: "İptal Talebi" } : o));
       
       setShowCancelModal(false);
     } catch (err) {
-      notify("Bir hata oluştu.", "error");
+      notify(t("common.error"), "error");
     }
   };
 
@@ -94,7 +96,7 @@ const MyOrdersPage = () => {
   if (loading) return (
     <div className="min-h-screen pt-32 text-center">
         <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-gray-500">Siparişleriniz yükleniyor...</p>
+        <p className="text-gray-500">{t("myOrders.caseOrderLoading")}</p>
     </div>
   );
 
@@ -102,20 +104,20 @@ const MyOrdersPage = () => {
     <div className="min-h-screen pt-32 pb-10 px-4 text-center">
         <div className="bg-white max-w-md mx-auto p-10 rounded-3xl shadow-xl border border-gray-100">
             <div className="text-6xl mb-4 opacity-50">🛍️</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Henüz Siparişiniz Yok</h2>
-            <p className="text-gray-500 mb-6">Hemen alışverişe başlayıp sevdiklerinizi mutlu edin.</p>
-            <Link to="/" className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg">Alışverişe Başla</Link>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{t("myOrders.caseNoOrders")}</h2>
+            <p className="text-gray-500 mb-6">{t("myOrders.caseNoOrders2")}</p>
+            <Link to="/" className="bg-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-pink-700 transition shadow-lg">{t("myOrders.caseNoOrdersLink")}</Link>
         </div>
     </div>
   );
 
   return (
     <div className="rounded-2xl border min-h-screen bg-gray-50 font-sans pt-4 pb-20 px-4">
-      <Seo title="Siparişlerim" description="Geçmiş siparişlerinizi görüntüleyin." />
+      <Seo title={t("myOrdersPage.title")} description={t("myOrdersPage.description")} />
       
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
-          <span className="bg-pink-100 text-pink-600 p-2 rounded-xl"><FiPackage /></span> Siparişlerim
+          <span className="bg-pink-100 text-pink-600 p-2 rounded-xl"><FiPackage /></span> {t("myOrdersPage.title")}
         </h1>
 
         <div className="space-y-6">
@@ -139,7 +141,7 @@ const MyOrdersPage = () => {
                        {order.status === 'Teslim Edildi' ? '🎁' : '📦'}
                     </div>
                     <div>
-                       <div className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-0.5">Sipariş No</div>
+                       <div className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-0.5">{t("myOrders.orderNumber")}</div>
                        <div className="text-lg font-bold text-gray-800 font-mono">#{order._id.slice(-8).toUpperCase()}</div>
                        <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
                          <FiClock /> {new Date(order.createdAt).toLocaleDateString()}
@@ -149,7 +151,7 @@ const MyOrdersPage = () => {
 
                   {/* Orta: Tutar */}
                   <div className="text-center md:text-right w-full md:w-auto">
-                     <div className="text-sm font-bold text-gray-400 uppercase tracking-wide">Tutar</div>
+                     <div className="text-sm font-bold text-gray-400 uppercase tracking-wide">{t("myOrders.orderAmount")}</div>
                      <div className="text-xl font-extrabold text-pink-600">£{order.totalAmount.toFixed(2)}</div>
                   </div>
 
@@ -176,14 +178,14 @@ const MyOrdersPage = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                        {/* Ürün Listesi */}
                        <div>
-                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiPackage /> Ürünler</h4>
+                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiPackage /> {t("myOrders.orderProducts")}</h4>
                           <div className="space-y-3">
                             {order.items.map((item, i) => (
                               <div key={i} className="flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-200">
                                 <img src={item.img} className="w-14 h-14 rounded-lg object-cover border" alt={item.title} />
                                 <div className="flex-1">
                                   <div className="font-bold text-gray-800 text-sm">{item.title}</div>
-                                  <div className="text-xs text-gray-500">Adet: {item.quantity}</div>
+                                  <div className="text-xs text-gray-500">{t("myOrders.orderQuantity")}: {item.quantity}</div>
                                 </div>
                                 <div className="font-bold text-gray-700">£{item.price.toFixed(2)}</div>
                               </div>
@@ -193,9 +195,9 @@ const MyOrdersPage = () => {
 
                        {/* Teslimat Bilgileri */}
                        <div>
-                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiMapPin /> Teslimat</h4>
+                          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiMapPin /> {t("myOrders.delivery")}</h4>
                           <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-2 text-sm text-gray-700 shadow-sm">
-                             <p><span className="font-bold">Alıcı:</span> {order.recipient.name}</p>
+                             <p><span className="font-bold">{t("myOrders.recipient")}:</span> {order.recipient.name}</p>
                              <p className="text-xs text-gray-500">{order.recipient.phone}</p>
                              <p className="bg-gray-50 p-2 rounded border border-gray-100 mt-2 leading-relaxed">
                                 {order.recipient.address}<br/>
@@ -217,7 +219,7 @@ const MyOrdersPage = () => {
                           onClick={() => setSelectedInvoice(order)} 
                           className="flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition shadow-md"
                        >
-                          <FiPrinter /> Fatura
+                          <FiPrinter /> {t("myOrders.invoice")}
                        </button>
 
                        {/* İPTAL TALEBİ BUTONU (Sadece Sipariş Alındı ise ve İptal Talebi yoksa) */}
@@ -226,13 +228,13 @@ const MyOrdersPage = () => {
                            onClick={(e) => handleCancelClick(e, order._id)} 
                            className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-xl font-bold text-sm transition border border-transparent hover:border-red-100"
                          >
-                           <FiX /> İptal Talebi Oluştur
+                           <FiX /> {t("myOrders.cancelOrderRequest")}
                          </button>
                        )}
                        
                        {order.status === "İptal Talebi" && (
                           <span className="flex items-center gap-2 text-orange-600 bg-orange-50 px-4 py-2 rounded-xl font-bold text-sm border border-orange-100 animate-pulse">
-                            <FiAlertTriangle /> Talep İnceleniyor...
+                            <FiAlertTriangle /> {t("myOrders.cancelRequestPending")}
                           </span>
                        )}
                     </div>

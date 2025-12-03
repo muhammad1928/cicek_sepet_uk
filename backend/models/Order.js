@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
   // --- SİPARİŞİ VEREN ÜYE (Varsa) ---
-  userId: { type: String }, // Üye ID'si (Misafir ise null olabilir)
+  userId: { type: String, index: true }, // "Siparişlerim" sayfası için
 
   // --- 1. GÖNDERİCİ BİLGİLERİ ---
   sender: {
@@ -69,7 +69,8 @@ const OrderSchema = new mongoose.Schema({
         'Teslim Edildi',   // İşlem tamam
         'İptal',           // İptal edildi
         'İptal Talebi'     // Müşteri iptal istedi, onay bekliyor
-    ]
+    ],
+    index: true
   },
 
   // --- 7. İPTAL VE İADE YÖNETİMİ ---

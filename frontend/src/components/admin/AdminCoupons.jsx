@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { publicRequest, userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiTrash2, FiPlus, FiTag, FiCalendar, FiPercent, FiTruck, FiSearch, FiAlertCircle, FiCheckCircle } from "react-icons/fi";

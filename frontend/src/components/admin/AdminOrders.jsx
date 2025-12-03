@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import InvoiceModal from "../InvoiceModal";
 import { FiRefreshCw } from "react-icons/fi";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 
 // YENİ BİLEŞENLERİN IMPORTU
 import OrderStats from "./adminOrderComponents/OrderStats";

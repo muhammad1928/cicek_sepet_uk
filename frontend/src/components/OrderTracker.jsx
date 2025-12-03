@@ -8,9 +8,10 @@ import {
   FaTimes,         // İptal
   FaShippingFast   // Genel Yolda
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const OrderTracker = ({ status }) => {
-  
+  const { t } = useTranslation();   
   // 1. HANGİ ADIMDAYIZ? (0-3 Arası)
   const getStepIndex = (s) => {
     switch(s) {
@@ -40,16 +41,16 @@ const OrderTracker = ({ status }) => {
     },
     { 
       // Durum "Hazır" ise Kutu İkonu, değilse Çark İkonu
-      label: status === "Hazır" ? "Hazır (Kurye Bekleniyor)" : "Hazırlanıyor", 
+      label: status === "Hazır" ? t("orderTracker.ready") : t("orderTracker.preparing"), 
       icon: status === "Hazır" ? <FaBoxOpen /> : <FaCogs className={status === 'Hazırlanıyor' ? "animate-spin-slow" : ""} /> 
     },
     { 
       // Kurye durumuna göre detaylı bilgi
-      label: status === "Kurye Yolda" ? "Kurye Mağazaya Gidiyor" : (status === "Dağıtımda" ? "Kurye Size Geliyor" : "Yola Çıktı"), 
+      label: status === "Kurye Yolda" ? t("orderTracker.courierToStore") : (status === "Dağıtımda" ? t("orderTracker.deliveryOnTheWay") : t("orderTracker.onTheWay")), 
       icon: status === "Kurye Yolda" ? <FaMotorcycle /> : (status === "Dağıtımda" ? <FaMapMarkedAlt /> : <FaShippingFast />)
     },
     { 
-      label: "Teslim Edildi", 
+      label: t("orderTracker.delivered"), 
       icon: <FaHome /> 
     }
   ];
@@ -63,10 +64,10 @@ const OrderTracker = ({ status }) => {
         </div>
         <div>
           <h4 className={`font-bold ${status === "İptal" ? "text-red-800" : "text-orange-800"}`}>
-            {status === "İptal Talebi" ? "İptal Talebiniz Alındı" : "Sipariş İptal Edildi"}
+            {status === "İptal Talebi" ? t("orderTracker.cancellRequested") : t("orderTracker.cancelled")}
           </h4>
           <p className={`text-sm ${status === "İptal" ? "text-red-600" : "text-orange-600"}`}>
-            {status === "İptal Talebi" ? "Talebiniz müşteri hizmetleri tarafından inceleniyor." : "Bu sipariş iptal edilmiştir."}
+            {status === "İptal Talebi" ? t("orderTracker.cancelReqUnderReview") : t("orderTracker.orderCancelled")}
           </p>
         </div>
       </div>

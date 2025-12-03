@@ -3,8 +3,10 @@ import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiEdit, FiTrash2, FiPlus, FiMapPin, FiX } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const AddressBook = ({ user }) => {
+  const { t } = useTranslation();
   const [addresses, setAddresses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   
@@ -50,28 +52,28 @@ const AddressBook = ({ user }) => {
     try {
       if (editingId) { 
         await userRequest.put(`/users/${user._id}/addresses/${editingId}`, addressData); 
-        notify("Adres güncellendi ✅", "success"); 
+        notify(`${t("adressBook.adressUpdated")} ✅`, "success"); 
       } else { 
         await userRequest.post(`/users/${user._id}/addresses`, addressData); 
-        notify("Adres eklendi ✅", "success"); 
+        notify(`${t("adressBook.adressAdded")} ✅`, "success"); 
       }
       handleCancel(); // İşlem bitince kapat
       fetchAddresses();
-    } catch(e){ notify("Hata oluştu", "error"); }
+    } catch(e){ notify(`${t("common.error")}`, "error"); }
   };
 
   const handleDeleteRequest = (id, title) => {
     setConfirmData({
       isOpen: true,
-      title: "Adresi Sil?",
-      message: `"${title}" başlıklı adres kalıcı olarak silinecek.`,
+      title: t("adressBook.qDeteleAdress"),
+      message: `"${title}" ${t("adressBook.deleteAdressLabel")}`,
       isDanger: true,
       action: async () => {
         try {
           await userRequest.delete(`/users/${user._id}/addresses/${id}`);
-          notify("Adres silindi.", "success");
+          notify(t("adressBook.adressDeleted"), "success");
           fetchAddresses();
-        } catch { notify("Silinemedi", "error"); }
+        } catch { notify(t("common.error"), "error"); }
         setConfirmData(null);
       }
     });
@@ -83,7 +85,8 @@ const AddressBook = ({ user }) => {
       {/* BAŞLIK VE MODERN BUTON */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-          Kayıtlı Adresler
+          {t("adressBook.myAdresses")}
+          {/* {t("adressBook.addressBook")} <FiMapPin className="text-pink-600" /> */}
         </h2>
         
         {/* AÇ/KAPA BUTONU (MODERN) */}
@@ -97,7 +100,7 @@ const AddressBook = ({ user }) => {
             }
           `}
         >
-          {showForm ? <><FiX /> İptal</> : <><FiPlus /> Yeni Adres Ekle</>}
+          {showForm ? <><FiX /> {t("adressBook.cancel")}</> : <><FiPlus /> {t("adressBook.addNewAdress")}</>}
         </button>
       </div>
 
@@ -109,38 +112,38 @@ const AddressBook = ({ user }) => {
             <div className="mb-6 border-b border-gray-100 pb-4">
                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                  {editingId ? <FiEdit className="text-blue-500"/> : <FiPlus className="text-green-500"/>}
-                 {editingId ? "Adresi Düzenle" : "Yeni Adres Bilgileri"}
+                 {editingId ? t("adressBook.editAdress") : t("adressBook.newAdressInfo")}
                </h3>
             </div>
             
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Adres Başlığı</label>
-                   <input placeholder="Örn: Evim, İş Yeri" className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.addressTitle")}</label>
+                   <input placeholder={t("adressBook.adressTitlePlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Alıcı Adı</label>
-                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.recipientName")}</label>
+                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" placeholder={t("adressBook.recipientNamePlaceholder")} value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Telefon</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.receipentPhone")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.recipientPhone} onChange={e=>setAddressData({...addressData, recipientPhone:e.target.value})} />
                 </div>
 
                 <div className="md:col-span-2">
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Açık Adres</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.openAddress")}</label>
                    <textarea className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition h-24 resize-none" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
                 </div>
 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Şehir</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.city")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.city} onChange={e=>setAddressData({...addressData, city:e.target.value})} />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">Posta Kodu</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.postCode")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.postcode} onChange={e=>setAddressData({...addressData, postcode:e.target.value})} />
                 </div>
                 
@@ -151,13 +154,13 @@ const AddressBook = ({ user }) => {
                       onClick={handleCancel} 
                       className="flex-1 py-3.5 border-2 border-gray-100 text-gray-500 font-bold rounded-xl hover:bg-gray-50 transition"
                     >
-                      Vazgeç
+                      {t("adressBook.cancel")}
                     </button>
                     <button 
                       type="submit" 
                       className="flex-[2] py-3.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-pink-500/30 transition transform active:scale-95"
                     >
-                      {editingId ? "Değişiklikleri Kaydet" : "Adresi Kaydet"}
+                      {editingId ? t("adressBook.saveChanges") : t("adressBook.addAdress")}
                     </button>
                 </div>
             </form>
@@ -168,7 +171,7 @@ const AddressBook = ({ user }) => {
       {addresses.length === 0 && !showForm ? (
         <div className="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200">
             <div className="text-5xl mb-4 opacity-20">📍</div>
-            <p className="text-gray-400 font-medium">Henüz kayıtlı bir adresiniz bulunmuyor.</p>
+            <p className="text-gray-400 font-medium">{t("adressBook.noSavedAdresses")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-5">
@@ -196,7 +199,7 @@ const AddressBook = ({ user }) => {
                   <button 
                     onClick={() => openForm(addr)} 
                     className="text-blue-500 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition" 
-                    title="Düzenle"
+                    title={t('adressBook.edit')}
                   >
                     <FiEdit size={16} />
                   </button>
@@ -204,7 +207,7 @@ const AddressBook = ({ user }) => {
                   <button 
                     onClick={() => handleDeleteRequest(addr._id, addr.title)} 
                     className="text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition" 
-                    title="Sil"
+                    title={t('adressBook.delete')}
                   >
                     <FiTrash2 size={16} />
                   </button>

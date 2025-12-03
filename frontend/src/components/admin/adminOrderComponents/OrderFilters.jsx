@@ -1,6 +1,8 @@
 import { FiSearch, FiFilter } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const OrderFilters = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilter }) => {
+  const { t } = useTranslation();
   const statusOptions = ["Sipariş Alındı", "Hazırlanıyor", "Hazır", "Yola Çıktı", "Teslim Edildi", "İptal"];
 
   return (
@@ -10,7 +12,7 @@ const OrderFilters = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilter
       <div className="relative w-full md:w-80">
          <input 
            type="text" 
-           placeholder="Sipariş No veya Alıcı Ara..." 
+           placeholder={t('adminComponents.adminOrderComp.OrderFilters.searchPlaceholder')} 
            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 bg-gray-50 shadow-sm focus:bg-white focus:border-pink-500 outline-none transition text-sm" 
            value={searchTerm} 
            onChange={(e) => setSearchTerm(e.target.value)}
@@ -26,9 +28,9 @@ const OrderFilters = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilter
            value={statusFilter} 
            onChange={e => setStatusFilter(e.target.value)}
          >
-           <option value="Tümü">Tüm Durumlar</option>
-           <option value="Zarar Edenler">📉 Zarar Edenler (İndirimli)</option>
-           <option value="İptal Talebi">⚠️ İptal Talepleri</option>
+           <option value="Tümü">{t('adminComponents.adminOrderComp.OrderFilters.allCases')}</option>
+           <option value="Zarar Edenler">📉 {t('adminComponents.adminOrderComp.OrderFilters.discounted')}</option>
+           <option value="İptal Talebi">⚠️ {t('adminComponents.adminOrderComp.OrderFilters.cancelRequested')}</option>
            {statusOptions.map(s => <option key={s} value={s}>{s}</option>)}
          </select>
       </div>

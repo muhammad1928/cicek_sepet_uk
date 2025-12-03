@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
-import { userRequest, publicRequest } from "../../requestMethods";
+import { userRequest} from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import OrderTracker from "../OrderTracker";
 import InvoiceModal from "../InvoiceModal";
 import CancelModal from "../CancelModal";
-import { FiPackage, FiClock, FiMapPin, FiUser, FiBox, FiPrinter, FiX, FiChevronDown, FiChevronUp, FiAlertCircle } from "react-icons/fi";
+import { FiUser, FiBox, FiPrinter, FiX, FiChevronDown, FiChevronUp, FiAlertCircle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+
 
 const OrderHistory = ({ user }) => {
+  const { t } = useTranslation();
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
@@ -40,7 +44,7 @@ const OrderHistory = ({ user }) => {
         status: "İptal Talebi",
         cancellationReason: reason
       });
-      notify("İptal talebiniz alındı.", "info");
+      notify("{orderHistory.cancelRequestReceived}.", "info");
       setOrders(prev => prev.map(o => o._id === selectedOrderId ? { ...o, status: "İptal Talebi" } : o));
       setShowCancelModal(false);
     } catch (err) { notify("Hata oluştu", "error"); }
@@ -54,8 +58,8 @@ const OrderHistory = ({ user }) => {
     return "bg-blue-100 text-blue-700 border-blue-200";
   };
 
-  if (loading) return <div className="text-center p-20 text-gray-400 font-bold animate-pulse">Yükleniyor...</div>;
-  if (orders.length === 0) return <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200"><div className="text-5xl mb-4 opacity-30">🛍️</div><h3 className="text-lg font-bold text-gray-700">Henüz Siparişiniz Yok</h3><p className="text-gray-400 text-sm mt-1">Verdiğiniz siparişler burada listelenecek.</p></div>;
+  if (loading) return <div className="text-center p-20 text-gray-400 font-bold animate-pulse">{t("common.loading")}</div>;
+  if (orders.length === 0) return <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200"><div className="text-5xl mb-4 opacity-30">🛍️</div><h3 className="text-lg font-bold text-gray-700">{t("profilePage.orderHistory.caseNoOrders")}</h3><p className="text-gray-400 text-sm mt-1">{t("profilePage.orderHistory.information")}</p></div>;
 
   return (
     <div className="space-y-6 rounded-2xl animate-fade-in">
@@ -83,19 +87,43 @@ const OrderHistory = ({ user }) => {
                <div className="mb-8 bg-white p-6 rounded-xl border border-gray-200 shadow-sm"><OrderTracker status={order.status} /></div>
                
                <div className="grid md:grid-cols-2 gap-8 mb-8">
-                  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm h-full"><h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiUser /> Alıcı Bilgileri</h4><p className="font-bold text-gray-800 text-lg">{order.recipient.name}</p><p className="text-sm text-gray-600 mb-2">{order.recipient.phone}</p><p className="text-sm text-gray-600 leading-snug bg-gray-50 p-2 rounded">{order.recipient.address}, {order.recipient.city}, {order.recipient.postcode}</p></div>
-                  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm h-full"><h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiBox /> Teslimat & Not</h4><div className="flex items-center gap-3 text-sm font-medium text-blue-600 mb-3"><span className="bg-blue-50 px-2 py-1 rounded">📅 {new Date(order.delivery.date).toLocaleDateString()}</span><span className="bg-blue-50 px-2 py-1 rounded">⏰ {order.delivery.timeSlot}</span></div>{order.delivery.cardMessage ? (<div className="text-sm text-pink-700 italic bg-pink-50 p-3 rounded-lg border border-pink-100 relative"><span className="absolute -top-2 -left-1 text-2xl">💌</span> <span className="ml-6">"{order.delivery.cardMessage}"</span></div>) : <span className="text-xs text-gray-400 italic">Kart notu eklenmemiş.</span>}</div>
+                  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm h-full">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2">
+                      <FiUser /> {t("profilePage.orderHistory.deliverTo")}
+                      </h4>
+                      <p className="font-bold text-gray-800 text-lg">{order.recipient.name}</p>
+                      <p className="text-sm text-gray-600 mb-2">{order.recipient.phone}</p>
+                      <p className="text-sm text-gray-600 leading-snug bg-gray-50 p-2 rounded">{order.recipient.address}, {order.recipient.city}, {order.recipient.postcode}</p>
+                    </div>
+                  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm h-full">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2">
+                      <FiBox /> {t("profilePage.orderHistory.deliverNote")}
+                    </h4>
+                  <div className="flex items-center gap-3 text-sm font-medium text-blue-600 mb-3"><span className="bg-blue-50 px-2 py-1 rounded">📅 {new Date(order.delivery.date).toLocaleDateString()}</span><span className="bg-blue-50 px-2 py-1 rounded">⏰ {order.delivery.timeSlot}</span></div>{order.delivery.cardMessage ? (<div className="text-sm text-pink-700 italic bg-pink-50 p-3 rounded-lg border border-pink-100 relative"><span className="absolute -top-2 -left-1 text-2xl">💌</span> <span className="ml-6">"{order.delivery.cardMessage}"</span></div>) : <span className="text-xs text-gray-400 italic">{t("profilePage.orderHistory.noteNotAdded")}</span>}</div>
                </div>
 
-               <div className="space-y-3">{order.items.map((item, i) => (<div key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:border-pink-300 transition"><div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-100 shrink-0"><img src={item.img} className="w-full h-full object-cover" alt={item.title} /></div><div className="flex-1"><div className="font-bold text-gray-800 text-sm">{item.title}</div><div className="text-xs text-gray-500">Adet: {item.quantity}</div></div><div className="font-extrabold text-gray-700">£{item.price.toFixed(2)}</div></div>))}</div>
+               <div className="space-y-3">{order.items.map((item, i) => (<div key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:border-pink-300 transition">
+                <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-100 shrink-0">
+                  <img src={item.img} className="w-full h-full object-cover" alt={item.title} />
+                </div>
+                <div className="flex-1">
+                  <div className="font-bold text-gray-800 text-sm">{item.title}
+                  </div>
+                  <div className="text-xs text-gray-500">{t("profilePage.orderHistory.quantity")}: {item.quantity}
+                  </div>
+                </div>
+                <div className="font-extrabold text-gray-700">£{item.price.toFixed(2)}
+                </div>
+              </div>))}
+            </div>
                
                <div className="mt-8 flex justify-between items-center pt-5 border-t border-gray-200">
                   <div>
                     {order.status === "Sipariş Alındı" && (
-                        <button onClick={(e) => handleCancelClick(e, order._id)} className="px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 border border-red-200 rounded-xl transition flex items-center gap-2"><FiX /> İptal Talebi Oluştur</button>
+                        <button onClick={(e) => handleCancelClick(e, order._id)} className="px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 border border-red-200 rounded-xl transition flex items-center gap-2"><FiX /> {t("profilePage.orderHistory.cancelRequest")}</button>
                     )}
                   </div>
-                  <button onClick={() => setSelectedInvoice(order)} className="flex items-center gap-2 bg-gray-900 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition shadow-md transform active:scale-95"><FiPrinter /> Fatura</button>
+                  <button onClick={() => setSelectedInvoice(order)} className="flex items-center gap-2 bg-gray-900 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition shadow-md transform active:scale-95"><FiPrinter /> {t("profilePage.orderHistory.invoice")}</button>
                </div>
             </div>
           )}

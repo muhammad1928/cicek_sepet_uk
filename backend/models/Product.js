@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, index: true }, // İsimle arama için
   desc: { type: String, required: true },
-  price: { type: Number, required: true },
+  price: { type: Number, required: true, index: true }, // Fiyat sıralaması için
   currency: { type: String, default: 'GBP' },
   img: { type: String },
-  category: { type: String },
+  category: { type: String, index: true }, // Kategori filtresi için
   stock: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   favoritesCount: { type: Number, default: 0 },
@@ -24,7 +24,7 @@ const ProductSchema = new mongoose.Schema({
     }
   ],
 
-  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }, // Satıcı ürünleri için
 }, { 
   timestamps: true,
   toJSON: { virtuals: true },

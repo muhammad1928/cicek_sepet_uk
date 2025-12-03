@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import 'leaflet/dist/leaflet.css';
-import { BrowserRouter } from 'react-router-dom'
+import './i18n'; // <--- BU SATIRI EKLE (İMPORT ET)
 
 // --- GÜVENLİK: PRODUCTION MODUNDA LOGLARI KAPAT ---
 if (import.meta.env.MODE === 'production') {

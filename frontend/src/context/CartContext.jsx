@@ -1,43 +1,47 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react"; // useMemo eklendi
+import { useTranslation } from "react-i18next";
+import { userRequest } from "../requestMethods"; // Merkezi Request Metotları
 
 const CartContext = createContext();
-import { userRequest } from "../../requestMethods";
-export const useCart = () => useContext(CartContext);
+
+const initialCart = JSON.parse(localStorage.getItem("cart")) || [];
+const initialFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 export const CartProvider = ({ children }) => {
-  
-  // 1. SEPETİ YÜKLE (LocalStorage)
-  const [cart, setCart] = useState(() => {
-    try {
-      const storedCart = localStorage.getItem("cart");
-      return storedCart ? JSON.parse(storedCart) : [];
-    } catch (e) {
-      console.error("Sepet yüklenemedi", e);
-      return [];
-    }
-  });
-
-  // 2. FAVORİLERİ YÜKLE
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      const storedFavs = localStorage.getItem("favorites");
-      return storedFavs ? JSON.parse(storedFavs) : [];
-    } catch (e) { return []; }
-  });
-
-  // GLOBAL STATE'LER
+  const { t } = useTranslation();
+  // --- STATE TANIMLARI ---
+  const [cart, setCart] = useState(initialCart);
+  const [favorites, setFavorites] = useState(initialFavorites);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [notificationType, setNotificationType] = useState("success");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // KRİTİK EKSİK: user objesi
+  const [user, setUser] = useState(null);
 
-  // KALICILIK (Persistence)
+  // --- KULLANICI DURUMU SENKRONİZASYONU ---
+  useEffect(() => {
+    const checkUser = () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(storedUser);
+    };
+    
+    // Uygulama açılışında yükle
+    checkUser(); 
+    
+    // Interceptor veya Logout'tan gelen olayları dinle
+    window.addEventListener('user-change', checkUser);
+
+    return () => window.removeEventListener('user-change', checkUser);
+  }, []);
+
+  // --- KALICILIK (Persistence) ---
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
     // Miktar kontrolü (0 olanları temizle)
     if (cart.some(item => item.quantity <= 0)) {
-       setCart(prev => prev.filter(item => item.quantity > 0));
+      setCart(prev => prev.filter(item => item.quantity > 0));
     }
   }, [cart]);
 
@@ -45,20 +49,18 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
+  // --- HESAPLAMALAR (useMemo ile Optimize) ---
+  const totalPrice = useMemo(() => {
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  }, [cart]);
+
+
   // --- YARDIMCI FONKSİYONLAR ---
-
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-  // BİLDİRİM GÖSTER (DÜZELTİLDİ: Zamanlayıcı Kaldırıldı)
-  // Zamanlamayı Toast.jsx bileşeni yönetecek ve closeNotification'ı çağıracak.
   const notify = (msg, type = "success") => {
     setNotification(msg);
     setNotificationType(type);
   };
-  
   const closeNotification = () => setNotification(null);
-
-  // --- SEPET İŞLEMLERİ ---
 
   // 1. EKLEME
   const addToCart = (product, quantity = 1) => {
@@ -68,32 +70,27 @@ export const CartProvider = ({ children }) => {
     if (existingItem) {
       const newQuantity = existingItem.quantity + quantity;
       if (newQuantity > itemStock) {
-        notify(`Stok yetersiz! Maksimum: ${itemStock}`, 'error');
+        notify(`${t('cartContext.maxStockReached')}: ${itemStock}`, 'error');
         return;
       }
-      setCart(cart.map(item => 
-        item._id === product._id ? { ...item, quantity: newQuantity } : item
-      ));
+      setCart(cart.map(item => item._id === product._id ? { ...item, quantity: newQuantity } : item));
     } else {
-      if (quantity > itemStock) {
-         notify(`Stok yetersiz!`, 'error');
-         return;
-      }
+      if (quantity > itemStock) { notify(`${t('cartContext.maxStockReached')}: ${itemStock}`, 'error'); return; }
       setCart([...cart, { ...product, quantity }]);
     }
-    notify(`${product.title} sepete eklendi!`, 'success');
+    notify(`${product.title} ${t('cartContext.added')}`, 'success');
   };
 
   // 2. SİLME
   const removeFromCart = (id, title) => {
     setCart(cart.filter(item => item._id !== id));
-    if (title) notify(`${title} silindi.`, 'error');
+    if (title) notify(`${title} ${t('cartContext.removed')}`, 'error');
   };
 
   // 3. TEMİZLEME
   const clearCart = () => {
     setCart([]);
-    notify('Sepet temizlendi.', 'warning');
+    notify(t('cartContext.cartEmpty'), 'warning');
   };
 
   // 4. ARTIRMA
@@ -101,10 +98,10 @@ export const CartProvider = ({ children }) => {
     setCart(cart.map(item => {
       if (item._id === id) {
         if (item.quantity + 1 > stock) {
-          notify(`Maksimum stok limitine ulaşıldı!`, 'error');
+          notify(`${t('cartContext.maxLimitReached')}`, 'error');
           return item;
         }
-        notify(`${title} +1 eklendi`, 'success'); 
+        notify(`${title} ${t('cartContext.increased')}`, 'success'); 
         return { ...item, quantity: item.quantity + 1 };
       }
       return item;
@@ -113,7 +110,7 @@ export const CartProvider = ({ children }) => {
 
   // 5. AZALTMA
   const decreaseQuantity = (id, title) => {
-    notify(`${title} -1 azaltıldı`, 'warning');
+    notify(`${title} ${t('cartContext.decreased')}`, 'warning');
     setCart(cart.map(item => 
       item._id === id ? { ...item, quantity: item.quantity - 1 } : item
     ).filter(item => item.quantity > 0));
@@ -121,62 +118,60 @@ export const CartProvider = ({ children }) => {
 
   // 6. GÜNCELLEME (Input)
   const updateItemQuantity = (id, newQuantity, stock, title) => {
-     if (newQuantity > stock) {
-        notify(`Stok yetersiz! Max: ${stock}`, 'error');
-        newQuantity = stock;
-     }
-     if (newQuantity <= 0) {
-        removeFromCart(id, title);
-        return;
-     }
-     
-     notify(`${title} güncellendi: ${newQuantity}`, 'success');
-     
-     setCart(cart.map(item =>
-        item._id === id ? { ...item, quantity: newQuantity } : item
-     ));
+      if (newQuantity > stock) { notify(`${t('cartContext.maxStockReached')} ${stock}`, 'error'); newQuantity = stock; }
+      if (newQuantity <= 0) { removeFromCart(id, title); return; }
+      
+      notify(`${title} ${t('cartContext.updated')}: ${newQuantity}`, 'success');
+      
+      setCart(cart.map(item => item._id === id ? { ...item, quantity: newQuantity } : item));
   };
   
-  // --- FAVORİ İŞLEMLERİ ---
+  // 7. FAVORİ EKLE/ÇIKAR (BACKEND İLE SİNK)
   const toggleFavorite = async (productId) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const isCurrentlyFav = favorites.includes(productId);
     
-    if (!user) {
-       if (favorites.includes(productId)) {
-         setFavorites(prev => prev.filter(id => id !== productId));
-         notify("Favorilerden çıkarıldı (Yerel)", "warning");
-       } else {
-         setFavorites(prev => [...prev, productId]);
-         notify("Favorilere eklendi (Giriş yaparsanız kaydedilir)", "success");
-       }
-       return;
-    }
-
-    try {
-      await userRequest.put(`/users/${user._id}/favorites`, { productId });
-      
-      if (favorites.includes(productId)) {
-        setFavorites(prev => prev.filter(id => id !== productId));
-        notify("Favorilerden çıkarıldı", "error");
-      } else {
-        setFavorites(prev => [...prev, productId]);
-        notify("Favorilere eklendi ❤️", "success");
+    if (user) {
+      // 1. Üye Girişi Yapılmışsa: DB üzerinden kaydet
+      try {
+        const res = await userRequest.put(`/users/${user._id}/favorites`, { productId });
+        setFavorites(res.data); 
+        notify(isCurrentlyFav ? t('cartContext.deletedFromFavorites') : t('cartContext.addedToFavorites') + " ❤️", "success");
+        return; 
+      } catch (e) {
+        notify(t('cartContext.favoritesNotUpdated'), "error");
+        return; 
       }
-    } catch (err) {
-      notify("İşlem başarısız", "error");
+    } 
+
+    // 2. Misafir (Guest) Kullanıcı: LocalStorage'a kaydet
+    let newFavorites;
+    if (isCurrentlyFav) {
+      newFavorites = favorites.filter(id => id !== productId);
+    } else {
+      newFavorites = [...favorites, productId];
     }
+    setFavorites(newFavorites);
+    notify(isCurrentlyFav ? t('cartContext.deletedFromFavorites') : t('cartContext.addedToFavorites') + " ❤️", "success");
   };
 
+  const isFavorite = (productId) => favorites.includes(productId);
+
+
   return (
-    <CartContext.Provider value={{
-      cart, setCart, addToCart, removeFromCart, clearCart, 
-      increaseQuantity, decreaseQuantity, updateItemQuantity,
-      totalPrice, isCartOpen, setIsCartOpen, 
-      notify, notification, notificationType, closeNotification,
-      favorites, toggleFavorite, 
-      searchTerm, setSearchTerm
-    }}>
+    <CartContext.Provider
+      value={{
+        cart, setCart, addToCart, removeFromCart, clearCart, 
+        increaseQuantity, decreaseQuantity, updateItemQuantity,
+        totalPrice, isCartOpen, setIsCartOpen, 
+        notify, notification, notificationType, closeNotification,
+        favorites, toggleFavorite, isFavorite,
+        searchTerm, setSearchTerm,
+        user, // User objesini tüm uygulamaya aç
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
+
+export const useCart = () => useContext(CartContext);

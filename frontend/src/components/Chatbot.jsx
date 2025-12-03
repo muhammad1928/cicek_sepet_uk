@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Chatbot = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  // page name
   const [messages, setMessages] = useState([
-    { text: "Merhaba! Ben ÇiçekSepeti Asistanı 🌸 Size nasıl yardımcı olabilirim?", sender: "bot" }
+    { text: t("chatBot.greeting"), sender: "bot" }
   ]);
   
   const messagesEndRef = useRef(null);
@@ -20,8 +23,8 @@ const Chatbot = () => {
     const lower = text.toLowerCase();
 
     // 1. Selamlaşma
-    if (lower.match(/(merhaba|selam|hey|günaydın|iyi akşamlar)/)) 
-      return "Merhaba! 🌸 Size siparişler, çiçek bakımı veya satıcı işlemleri hakkında bilgi verebilirim.";
+    if (lower.match(/(merhaba|selam|hey|günaydın|morning|good morning|good day|iyi akşamlar)/)) 
+      return t("chatBot.greetingResponse");
 
     // 2. Bakım
     if (lower.includes("soldu") || lower.includes("bakım") || lower.includes("sula") || lower.includes("ömrü")) 

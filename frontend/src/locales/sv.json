@@ -1,0 +1,867 @@
+{
+  "common": {
+    "loading": "Laddar...",
+    "error": "Ett fel uppstod.",
+    "success": "Lyckades!",
+    "logout": "Logga ut",
+    "backToHome": "Tillbaka till startsidan",
+    "goBack": "Gå tillbaka",
+    "finished": "SLUTSÅLD",
+    "vendor": "Säljare",
+    "stock": "Lager",
+    "fastDelivery": "Snabb leverans",
+    "addToCart": "Lägg i kundvagn",
+    "price": "Pris",
+    "reviews": "Recensioner",
+    "fullName": "Ditt fullständiga namn",
+    "email": "E-post",
+    "emailPlaceholder": "Ange din e-postadress",
+    "password": "Lösenord",
+    "strongPassword": "Lösenordet är starkt!",
+    "date": "Datum",
+    "time": "Tid",
+    "accept": "Jag accepterar",
+    "decline": "Avböj",
+    "passwordRules": {
+      "rule1": "Minst 8 tecken",
+      "rule2": "Minst 1 versal",
+      "rule3": "Minst 1 gemen",
+      "rule4": "Minst 1 siffra",
+      "rule5": "Minst 1 specialtecken (!@#$)"
+    },
+    "phoneNumber": "Telefonnummer",
+    "phoneNumberPlaceholder": "Ange ditt kontaktnummer",
+    "dropdownOpt": "Välj...",
+    "accountCreated": "Konto skapat!",
+    "pleaseVerifyEmail": "Vänligen verifiera din e-post.",
+    "ibanNumber": "IBAN-nummer",
+    "okay": "OK",
+    "lastUpdated": "Senast uppdaterad",
+    "print": "Skriv ut / Spara som PDF"
+  },
+
+  "home": {
+    "heroTitle": "Gör dina nära och kära glada",
+    "heroSubtitle": "Vi levererar Londons fräschaste blommor och mest speciella presenter samma dag till din dörr.",
+    "categories": "Kategorier",
+    "featured": "Utvalda",
+    "categories_sticky": "Kategorier",
+    "notFound": "Inga produkter hittades med dina kriterier.",
+    "showAll": "Visa alla produkter",
+    "homeAddToCart": "Lägg till"
+  },
+
+  "seo": {
+    "aboutUsPage": {
+      "aboutTitle": "Om oss - ÇiçekSepeti | Fräschaste blommor och presenter",
+      "aboutDescription": "Upptäck ÇiçekSepetis historia, mission och värderingar. Vi är dedikerade till att erbjuda våra kunder den bästa blomster- och presentupplevelsen. Vi gör skillnad med snabb leverans och utmärkt kundservice."
+    },
+    "homePage": {
+      "homeTitle": "Färska blommor och specialpresenter - ÇiçekSepeti London",
+      "locationTitle": "London - Fräschaste blommor och specialpresenter | ÇiçekSepeti",
+      "homeDescription": "Vi levererar Londons fräschaste blommor och specialpresenter samma dag till din dörr. Upptäck perfekta presentalternativ för födelsedagar, årsdagar, frierier och andra speciella tillfällen.",
+      "categories": {
+        "all": "Alla",
+        "birthday": "Födelsedag",
+        "anniversary": "Årsdag",
+        "indoor": "Inomhusblommor",
+        "eadible": "Ätbara presenter",
+        "rose": "Rosor",
+        "orchid": "Orkidéer",
+        "daisy": "Prästkragar",
+        "tulip": "Tulpaner",
+        "unique": "Unika",
+        "designFlowers": "Designblommor"
+      }
+    },
+    "contactPage": {
+      "contactTitle": "Kontakt - ÇiçekSepeti | Kontakta oss",
+      "contactDescription": "Kontakta oss för frågor, förslag eller klagomål. På ÇiçekSepeti hjälper vi alltid gärna till. Du kan använda olika kontaktkanaler för att nå oss."
+    },
+    "faqPage": {
+      "faqTitle": "Vanliga frågor - ÇiçekSepeti",
+      "faqDescription": "Upptäck vanliga frågor om ÇiçekSepeti. Få information om beställning, leverans, returpolicy och andra viktiga ämnen. Hitta snabba och enkla svar på dina frågor."
+    },
+    "favouritesPage": {
+      "title": "Mina favoriter - ÇiçekSepeti | Dina favoritprodukter",
+      "description": "Spara dina favoriter och få enkel tillgång till dina favoritblommor, presenter och andra produkter. Med ÇiçekSepeti kan du köpa dina favoritprodukter med ett klick."
+    },
+    "legalPage": {
+      "title": "Juridisk information - ÇiçekSepeti | Integritetspolicy och användarvillkor",
+      "description": "Få detaljerad information om ÇiçekSepetis integritetspolicy, användarvillkor och cookiepolicy. Lär dig hur dina personuppgifter skyddas och dina rättigheter när du använder vår plattform.",
+      "hakkindaDetayliBilgi": "detaljerad information om."
+    },
+    "myOrdersPage": {
+      "title": "Mina beställningar - ÇiçekSepeti | Orderspårning och historik",
+      "description": "Se dina tidigare beställningar, granska orderdetaljer och spåra statusen för dina beställningar. Hantera alla dina beställningar enkelt med ÇiçekSepeti."
+    },
+    "registerCourierPage": {
+      "title": "Budansökan - ÇiçekSepeti | Bli bud",
+      "description": "Gå med i ÇiçekSepetis budprogram och tjäna extra inkomst med flexibla arbetstider. Lär dig om ansökningsprocessen och ansök nu."
+    },
+    "registerPage": {
+      "title": "Registrera dig - ÇiçekSepeti | Skapa nytt konto",
+      "description": "Registrera dig på ÇiçekSepeti och få tillgång till de fräschaste blommorna och specialpresenterna. Börja handla direkt med en snabb och enkel registreringsprocess."
+    },
+    "vendorRegistrationPage": {
+      "title": "Säljaransökan - ÇiçekSepeti | Öppna din butik",
+      "description": "Öppna din butik på ÇiçekSepeti-plattformen och nå en bred kundbas. Lär dig om ansökningsprocessen för säljare och ansök nu."
+    }
+  },
+
+  "admin": {
+    "dashboard": "Kontrollpanel",
+    "yonetimMerkezi": "Administrationscenter",
+    "genelBakis": "Översikt",
+    "applications": "Ansökningar",
+    "users": "Användare",
+    "products": "Produkthantering",
+    "orders": "Beställningar",
+    "coupons": "Kuponger"
+  },
+
+  "contact": {
+    "contactUs": "Kontakta oss",
+    "infoTest": "Vi finns här för dina frågor, förslag eller klagomål.",
+    "hqAddress": "Huvudkontor",
+    "contactTxt": "Kontakt",
+    "workingHours": "Arbetstider",
+    "subject": "Ämne",
+    "dropdownOpt1": "Om min beställning",
+    "dropdownOpt2": "Retur / Byte",
+    "dropdownOpt3": "Övrigt",
+    "message": "Ditt meddelande",
+    "sendMessage": "Skicka meddelande",
+    "successMessage": "Ditt meddelande har mottagits!",
+    "successSubMessage": "Vi återkommer till dig så snart som möjligt.",
+    "newMessage": "Skicka nytt meddelande",
+    "errorMessage": "Ett fel uppstod när meddelandet skickades. Vänligen försök igen."
+  },
+
+  "about": {
+    "ourStory": "Vår historia",
+    "ourMission": "Vi sprider glädje",
+    "ourHistory": "ÇiçekSepeti UK grundades i London 2024 för att leverera de fräschaste blommorna och mest speciella presenterna till dina nära och kära. Vårt mål är inte bara att leverera en produkt, utan att hjälpa dig att överbrygga avstånd och uttrycka dina känslor på det vackraste sättet.",
+    "sameDayDelivery": "Leverans samma dag",
+    "sameDayDeliverySub": "För beställningar inom London före 18:00.",
+    "freshnessGuarantee": "Fräschgaranti",
+    "freshnessGuaranteeSub": "De fräschaste blommorna utvalda från auktionen varje morgon.",
+    "securePayment": "Säker betalning",
+    "securePaymentSub": "100% säker shopping med Stripe-infrastruktur.",
+    "whyChooseUs": "Varför välja oss?",
+    "whyChooseUsSub": "Vi kombinerar global erfarenhet med lokal touch. Vi stödjer både lokala florister och erbjuder företagsservicekvalitet. Vårt budteam levererar dina blommor varsamt, omsorgsfullt och med ett leende."
+  },
+
+  "FAQ": {
+    "faqTitle": "Vanliga frågor",
+    "faqDescription": "Dina frågor."
+  },
+  "favorites": {
+    "favoritesTitle": "Mina favoriter",
+    "favoritesDescription": "Vi sparar produkterna du gillar här.",
+    "favoritesEmpty": "Du har inte lagt till några favoriter ännu.",
+    "favoritesEmptyDesc": "Du har inte lagt till några produkter i din favoritlista ännu. Vad sägs om att utforska de fräschaste blommorna och presenterna?",
+    "favoritesExploreProducts": "Utforska produkter"
+  },
+  "forgotPassword": {
+    "notifyMessageSent": "E-post skickad! 📩",
+    "notifyUserNotFound": "Användaren hittades inte",
+    "passwordForgotten": "Glömt ditt lösenord?",
+    "passwordForgottenDesc": "Ange din e-postadress så skickar vi en återställningslänk.",
+    "emailPlaceholder": "Ange din e-postadress",
+    "sending": "Skickar...",
+    "sendResetLink": "Skicka återställningslänk",
+    "emailSentTitle": "E-post skickad!",
+    "emailSentDescription1": "Vänligen kontrollera",
+    "emailSentDescription2": "e-post",
+    "emailSentDescription3": "adressen (och skräppostmappen).",
+    "tryAgain": "Försök igen",
+    "returnToLogin": "← Tillbaka till inloggning"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "legalPageContentTitle": "Integritetspolicy",
+      "first": "1. Personuppgiftsansvarig",
+      "firstDesc": "Som ÇiçekSepeti UK lägger vi största vikt vid säkerheten för dina personuppgifter inom ramen för GDPR (General Data Protection Regulation).",
+      "second": "2. Insamlade uppgifter och ändamål",
+      "secondDesc": {
+        "part1": "Identitet och kontakt: Ditt namn, efternamn, e-post och telefonnummer behandlas för orderbekräftelse och fakturering.",
+        "part2": "Leveransinformation: Mottagarens adress och kontaktuppgifter delas med bud och relevant butik (säljare) för leverans.",
+        "part3": "Transaktionssäkerhet: IP-adress och enhetsinformation sparas för bedrägeridetektering och juridiska skyldigheter."
+      },
+      "third": "3. Betalningssäkerhet",
+      "thirdDesc": "Din kreditkortsinformation lagras aldrig på våra servrar. Betalningstransaktioner utförs direkt av den globala betalningsinfrastrukturen Stripe via SSL-certifierad krypterad anslutning."
+    },
+    "termsOfUse": {
+      "title": "Distansförsäljningsavtal",
+      "first": "1. Parter",
+      "firstDesc": "Detta avtal ingås mellan KÖPAREN som lägger en beställning via plattformen och SÄLJAREN (butiken) som levererar produkten, med ÇiçekSepeti UK som mellanhand.",
+      "second": "2. Undantag från ångerrätt (Viktigt)",
+      "secondDesc": "OBS: Enligt förordningen kan ångerrätten INTE användas för \"avtal om leverans av varor som snabbt kan försämras eller vars utgångsdatum snabbt kan passera\" (färska blommor, choklad, tårta etc.).",
+      "secondDesc_part2": "Men om produkten är skadad, vissnad eller helt annorlunda än bilden vid leverans kan köparen avvisa leveransen och begära retur.",
+      "third": "3. Leveransprocess",
+      "thirdDesc": "Beställningar levereras på det datum och tidsintervall som köparen valt. Förutom force majeure (dåligt väder, trafikolycka etc.) är plattformen ansvarig för förseningar."
+    },
+    "termsOfCookies": {
+      "title": "Cookiepolicy",
+      "firstTerm": "1. Vad är cookies?",
+      "firstTermDesc": "Cookies är små textfiler som sparas i din webbläsare av webbplatser du besöker och hjälper oss att komma ihåg dig. Vissa cookies är nödvändiga för att vår webbplats ska fungera.",
+      "secondTerm": "2. Vilka cookies använder vi?",
+      "secondTermDesc": {
+        "first": "Nödvändiga cookies",
+        "firstDesc": "Krävs för att komma ihåg produkter i din varukorg, logga in på ditt konto och betalningssäkerhet. Dessa kan inte stängas av.",
+        "second": "Funktionella cookies",
+        "secondDesc": "Används för språkpreferenser, sparade adresser och funktioner som \"Kom ihåg mig\".",
+        "third": "Analytiska cookies",
+        "thirdDesc": "Hjälper oss att förbättra vår service genom att anonymt analysera hur du använder vår webbplats (vilka sidor du tittar på)."
+      },
+      "thirdTerm": "3. Hur hanterar jag cookies?",
+      "thirdTermDesc": "Du kan radera eller blockera cookies när som helst från din webbläsares inställningsmeny. Men att blockera nödvändiga cookies kan störa varukorg- och betalningsfunktioner."
+    },
+    "pageNotFound": "Sidan hittades inte",
+    "pageNotFoundDesc": "Innehållet du söker finns inte.",
+    "backToHome": "← Tillbaka till startsidan",
+    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+  },
+  "myOrders": {
+    "notifyCancelRequestSent": "Din avbokningsförfrågan har mottagits.",
+    "caseOrderLoading": "Laddar dina beställningar...",
+    "caseNoOrders": "Du har inga beställningar ännu",
+    "caseNoOrders2": "Börja handla nu och gör dina nära och kära glada.",
+    "caseNoOrdersLink": "Börja handla",
+    "myOrdersPageTitle": "Mina beställningar",
+    "myOrdersDelivered": "Levererad",
+    "orderNumber": "Ordernummer",
+    "orderAmount": "Belopp",
+    "orderProducts": "Produkter",
+    "orderPieces": "Stycken",
+    "delivery": "Leverans",
+    "recipient": "Mottagare",
+    "invoice": "Faktura",
+    "cancelOrderRequest": "Skapa avbokningsförfrågan",
+    "cancelOrderRequestPending": "Din avbokningsförfrågan granskas."
+  },
+  "notFound": {
+    "title": "Sidan du söker hittades inte",
+    "description": "Sidan du försöker nå kan ha tagits bort, bytt namn eller är tillfälligt otillgänglig."
+  },
+  "productDetail": {
+    "loginBeforeComment": "Du måste logga in för att kommentera!",
+    "commentEmpty": "Vänligen skriv en kommentar.",
+    "commentSubmitSuccess": "Din kommentar har lagts till!",
+    "placeholder": "Vad tycker du om produkten?",
+    "submitReview": "Skicka recension",
+    "submitReviewAlt": "Lämna omdöme",
+    "yourRating": "Ditt betyg",
+    "yourReview": "Din recension",
+    "loginTocomment1": "För att kommentera ",
+    "loginTocomment2": "logga in",
+    "firstComment": "Inga kommentarer ännu. Bli den första att kommentera!",
+    "similarProducts": "Du kanske också gillar"
+  },
+  "profile": {
+    "title": "Mitt konto",
+    "profileGreetings": "Välkommen, du kan hantera din profil och beställningar här."
+  },
+  "registerCourier": {
+    "driverLicenseSuccess": "Ditt körkort har laddats upp!",
+    "uploadError": "Uppladdningsfel.",
+    "acceptTermsWarning": "Du måste godkänna budavtalet!",
+    "driverLicencePhoto": "Vänligen ladda upp körkortsfoto.",
+    "applicationReceived": "Ansökan mottagen! Väntar på godkännande.",
+    "uploadDocuments": "Vänligen logga in och ladda upp dina dokument.",
+    "becomeACourier": "Bli vårt bud",
+    "yourOwnBoss": "Var din egen chef, tjäna pengar med varje leverans.",
+    "courierApplication": "Budansökan",
+    "information": "Först skapar vi ditt konto. Efter inloggning anger du fordonsinformation.",
+    "vehicleInfo": "Fordonsinformation",
+    "vehicleType": "Fordonstyp",
+    "vehicleOpt": {
+      "car": "Bil",
+      "motorcycle": "Motorcykel",
+      "van": "Skåpbil",
+      "bicycle": "Cykel"
+    },
+    "vehicleLicensePlate": "Registreringsnummer",
+    "licenseNumber": "Körkortsnummer",
+    "taxNumber": "Skattenummer (om tillämpligt)",
+    "uploadLicense": "Ladda upp körkort",
+    "courierAddress": "Bostadsadress",
+    "fileReady": "Fil redo",
+    "policy1": "Jag har läst budavtalet",
+    "policy2": "Jag accepterar och förbinder mig",
+    "btn1": "Bearbetar...",
+    "btn2": "Skapa konto",
+    "btn3": "Skicka ansökan",
+    "alreadyHaveAccount": "Har du redan ett konto? Logga in"
+  },
+  "register": {
+    "passwordWeak": "Ditt lösenord är inte tillräckligt starkt!",
+    "notifyPasswordRequirements": "Vänligen uppfyll lösenordskraven.",
+    "acceptTerms": "Vänligen godkänn avtalet!",
+    "registrationFailed": "Registreringen misslyckades. Vänligen försök igen.",
+    "joinUs": "Gå med oss",
+    "createAccount": "Skapa ett konto snabbt",
+    "securityMeasures": "Säkerhetskrav",
+    "userAgreement1": "Jag har läst och accepterar ",
+    "userAgreement2": "användaravtalet.",
+    "btn1": "Sparar...",
+    "btn2": "Skapa konto",
+    "alreadyAccount1": "Har du redan ett konto?",
+    "alreadyAccount2": "Logga in"
+  },
+  "vendor": {
+    "receivedOrders": "Inkommande beställningar",
+    "notifyAddressSaved": "Plats har sparats till adressen",
+    "documentLoaded": "Dokument har laddats upp",
+    "documentLoadError": "Uppladdningsfel uppstod!",
+    "policyWarning": "Du måste godkänna säljaravtalet!",
+    "uploadYourDocument": "Vänligen ladda upp skatteintyg/dokument.",
+    "accountCreated": "Konto skapat!",
+    "accountCreated2": "Vänligen logga in och ange butiksdetaljer.",
+    "title1": "Butiksansökan",
+    "title2": "Öppna din butik",
+    "titleDesc": "Nå tusentals kunder, öka din försäljning.",
+    "fullName": "Auktoriserat fullständigt namn",
+    "fullNamePlaceholder": "Auktoriserad persons fullständiga namn",
+    "vendorInfo": "Först skapar vi ett konto. Efter inloggning anger du butiksdetaljer.",
+    "storeDetails": "Butiksdetaljer",
+    "companyName": "Företagsnamn",
+    "companyNamePlaceholder": "Officiellt företagsnamn",
+    "taxNumber": "Skattenummer",
+    "taxNumberPlaceholder": "Skattenummer",
+    "address": "Butiksadress",
+    "addressPlaceholder": "Butiksadress (Välj från kartan eller skriv manuellt)",
+    "uploadDocumentSuccess": "Fil har laddats upp",
+    "policy1": "Jag har läst säljaravtalet",
+    "policy2": "Jag accepterar och förbinder mig",
+    "btn1": "Bearbetar...",
+    "btn2": "Skapa konto",
+    "btn3": "Skicka ansökan"
+  },
+  "resetPassword": {
+    "passwordInvalid": "Lösenordskraven uppfylldes inte.",
+    "resetPasswordSuccess": "Ditt lösenord har ändrats! Du kan logga in.",
+    "invalidLink": "Länken är ogiltig eller har gått ut.",
+    "invalidLinkTitle": "Ogiltig länk",
+    "linkTimeLimit": "Denna lösenordsåterställningslänk har använts eller gått ut.",
+    "resend": "Skicka igen",
+    "setNewPassword": "Ange nytt lösenord",
+    "newPassword": "Nytt lösenord",
+    "resettingPassword": "Uppdaterar...",
+    "resetPassword": "Uppdatera lösenord"
+  },
+  "store": {
+    "storeNotFound": "Butiken hittades inte",
+    "storeNotFoundDesc": "Butiken du söker finns inte eller kan ha tagits bort.",
+    "storeDescNotFound": "Ingen beskrivning har angetts för denna butik ännu.",
+    "registration": "Medlemsdatum",
+    "products": "Produkter",
+    "reviews": "Recensioner",
+    "about": "Om",
+    "noProducts": "Det finns inga produkter i denna butik ännu.",
+    "storeRating": "Butiksbetyg",
+    "storeRatingCount": "Totalt antal recensioner",
+    "noReviews": "Det finns inga recensioner för denna butik ännu.",
+    "storeAbout": "Om butiken",
+    "secureShopping1": "Säker shopping",
+    "secureShopping2": "Alla köp från denna butik är skyddade av ÇiçekSepeti UK-garantin."
+  },
+  "success": {
+    "orderSuccess": "Din beställning har mottagits!",
+    "errorWhileOrder": "Ett problem uppstod när beställningen sparades. Vänligen kontakta support.",
+    "processingOrder": "Din beställning behandlas...",
+    "wait": "Vänligen vänta.",
+    "orderNotVisible1": "Beställningen kunde inte visas",
+    "orderNotVisible2": "Din beställning kan ha skapats men kan inte visas just nu. Vänligen kontrollera sidan \"Mina beställningar\".",
+    "navigateToOrders": "Gå till mina beställningar",
+    "thankYou": "Tack!",
+    "orderReceived": "Din beställning har mottagits.",
+    "orderNumber": "Ordernummer",
+    "orderSummary": "Ordersammanfattning",
+    "totalAmount": "Orderbelopp",
+    "deliveryFee": "Leveransavgift",
+    "generalTotal": "Totalsumma",
+    "addressDetails": "Leveransadress",
+    "deliveryTime": "Leveranstid",
+    "allOrders": "Se alla mina beställningar"
+  },
+  "verificationPending": {
+    "header2": "Kontrollera din e-post",
+    "message1": "Vi har skickat en verifieringslänk för din kontosäkerhet. Du är nästan med oss!",
+    "emailTo": "Skickad till",
+    "notReceived": "Fick du inget mail?",
+    "checkSpam": "Glöm inte att kontrollera mappen \"Skräppost\" eller \"Spam\".",
+    "goToLogin": "Gå till inloggningssidan",
+    "loginWithAnother": "Logga in med ett annat konto (Logga ut)"
+  },
+  "verifyEmail": {
+    "messageVerified": "Ditt konto har verifierats! Du kan logga in.",
+    "verifying": "Verifierar...",
+    "errorOccurred": "Ogiltig eller utgången länk.",
+    "pleaseWait": "Vänligen vänta, ditt konto aktiveras.",
+    "great": "Utmärkt!",
+    "login": "Logga in"
+  },
+  "verify": {
+    "verifying": "Ditt konto verifieras...",
+    "unsucessfull": "Verifieringen misslyckades. Länken är ogiltig eller har gått ut.",
+    "waitingMessage": "Vänligen vänta, din begäran behandlas.",
+    "success": "Grattis!"
+  },
+  "cartContext": {
+    "maxStockReached": "Otillräckligt lager! Maximum",
+    "added": "tillagd i varukorgen!",
+    "removed": "borttagen.",
+    "cartEmpty": "Varukorgen har tömts",
+    "maxLimitReached": "Maximalt lagerlimit uppnått!",
+    "increased": "+1 tillagd",
+    "decreased": "-1 minskad",
+    "updated": "uppdaterad",
+    "deletedFromFavorites": "borttagen från favoriter",
+    "addedToFavorites": "tillagd i favoriter",
+    "favoritesNotUpdated": "Favorit kunde inte uppdateras. Vänligen logga in igen."
+  },
+  "termsModal": {
+    "agree": "Jag har läst, jag accepterar",
+    "customers": {
+      "title": "Distansförsäljnings- och serviceavtal",
+      "first": {
+        "title": "1. INTRODUKTION OCH PARTER",
+        "desc": "Dessa villkor reglerar försäljningen av varor till dig (\"Köparen\") av Säljaren via Plattformen. Genom att lägga en beställning samtycker du till att vara bunden av dessa villkor enligt Consumer Rights Act 2015."
+      },
+      "second": {
+        "title": "2. LEVERANSPOLICY",
+        "desc": "Vi strävar efter att leverera produkter inom det tidsintervall som valts vid betalning. Om köparen inte är på adressen kan budet lämna paketet på en \"säker plats\" eller hos en granne på grund av produkternas (blommor/mat) förgängliga natur (brittisk standardpraxis)."
+      },
+      "third": {
+        "title": "3. AVBOKNINGS- OCH RETURPOLICY",
+        "desc": "Enligt Consumer Contracts Regulations 2013 har konsumenter vanligtvis 14 dagars ångerrätt. DOCK: Undantag för förgängliga produkter: Det finns INGEN AVBOKNINGS/ÅNGERRÄTT för varor som snabbt kan försämras eller vars utgångsdatum snabbt kan passera (färska blommor, växter, livsmedelsprodukter). Enligt Consumer Rights Act 2015, om produkterna inte är som beskrivna vid leverans eller är av otillräcklig kvalitet (t.ex. krossade blommor), har du rätt till återbetalning eller byte. Du måste meddela oss med fotodokumentation inom 24 timmar efter leverans."
+      },
+      "fifth": {
+        "title": "5. INTEGRITET OCH DATASKYDD",
+        "desc": "Dina personuppgifter (namn, adress, telefon) behandlas i full överensstämmelse med UK GDPR och Data Protection Act 2018. Data delas endast med Säljaren och Budet för att slutföra din beställning."
+      }
+    },
+    "courierAgreement": {
+      "title": "Oberoende budserviceavtal",
+      "first": {
+        "title": "1. ARBETSSÄTT",
+        "desc": "Budet samtycker till att tillhandahålla tjänster som \"Egenföretagare\" (Self-Employed), som oberoende entreprenör. Detta avtal gör inte Budet till anställd, arbetare eller partner till Plattformen. Du är ansvarig för dina egna skatter och socialförsäkringsavgifter (NI)."
+      },
+      "second": {
+        "title": "2. SERVICESTANDARDER",
+        "desc": "Budet måste visa största omsorg för att bevara den estetiska integriteten hos förgängliga produkter (blommor, tårtor). Leveranser måste slutföras inom angivna tidsramar."
+      },
+      "third": {
+        "title": "3. DATASKYDD (GDPR - BROTTSLIGT)",
+        "titlesub": "STRIKT SEKRETESSMEDDELANDE",
+        "desc": "Kunddata (adress, telefon) som tillhandahålls dig är ENDAST för leveransändamål. Enligt Data Protection Act 2018 är det BROTTSLIGT att registrera dessa uppgifter, kontakta kunden av någon anledning utanför leverans eller dela med andra. Vid upptäckt kommer avtalet att sägas upp och rättsliga åtgärder kommer att vidtas."
+      }
+    },
+    "vendorAgreement": {
+      "title": "Säljares affärspartnerskapsavtal",
+      "first": {
+        "title": "1. PARTER OCH SYFTE",
+        "desc": "Detta avtal är mellan Plattformen och Säljaren (Leverantören). Säljaren ger Plattformen rätten att lista och sälja sina produkter. Juridisk äganderätt till produkterna tillhör Säljaren tills försäljning sker."
+      },
+      "second": {
+        "title": "2. PROVISION OCH BETALNINGAR",
+        "desc": "Plattformen tar ut 10% + moms (VAT) provision på bruttovärdet av varje beställning. Betalningar görs veckovis. Plattformen förbehåller sig rätten att hålla inne betalning vid misstänkta transaktioner eller höga returfrekvenser."
+      },
+      "third": {
+        "title": "3. PRODUKTANSVAR OCH EFTERLEVNAD",
+        "desc": "Säljaren garanterar att alla sålda varor överensstämmer med Sale of Goods Act 1979 och (vid försäljning av livsmedel) brittiska livsmedelssäkerhetsstandarder. Kostnaden för returer på grund av produkter av låg kvalitet, felaktig förpackning eller avvikelse från bilder bärs av Säljaren."
+      },
+      "fourth": {
+        "title": "4. DATASKYDD (GDPR)",
+        "desc": "Säljaren kommer att behandla kunddata i enlighet med UK GDPR och Data Protection Act 2018. Data kommer endast att användas för orderbehandling."
+      }
+    }
+  },
+  "secureImage": {
+    "uploading": "Laddar upp...",
+    "uploadSuccess": "Uppladdningen lyckades!",
+    "wasNotVisible": "Kunde inte visas"
+  },
+  "orderTracker": {
+    "ready": "Redo (Väntar på bud)",
+    "preparing": "Förbereds",
+    "courierToStore": "Bud på väg till butiken",
+    "deliveryOnTheWay": "Leverans på väg",
+    "onTheWay": "På väg",
+    "delivered": "Levererad",
+    "cancelled": "Avbruten",
+    "cancellRequested": "Avbokningsförfrågan mottagen",
+    "cancelReqUnderReview": "Din förfrågan granskas av kundtjänst.",
+    "orderCancelled": "Denna beställning har avbrutits."
+  },
+  "locationPicker": {
+    "locationOnMap": "Klicka på kartan för att välja plats"
+  },
+  "cookieBanner": {
+    "detailedInfo": "Detaljerad information",
+    "cookiesAgreement": "Vi använder cookies för att ge dig en bättre shoppingupplevelse. Genom att fortsätta på webbplatsen accepterar du användningen av cookies."
+  },
+  "footer": {
+    "col1": "Vi levererar Londons fräschaste blommor och mest speciella presenter till dina nära och kära samma dag. Vi sprider glädje.",
+    "col21": "Företag",
+    "col22": "Om oss",
+    "col23": "Vanliga frågor",
+    "col24": "Kontakt / Support",
+    "col25": "Karriär",
+    "col26": "Blogg & Nyheter",
+    "col27": "Integritetspolicy",
+    "col3": "Affärspartnerskap",
+    "col31": "Bli säljare",
+    "col32": "Bli bud",
+    "col33": "Gå med i vårt team, var din egen chef.",
+    "col4": "Kontakta oss",
+    "col41": "Kontakt",
+    "allRightsReserved": "Alla rättigheter förbehållna.",
+    "col51": "Integritetspolicy",
+    "col52": "Distansförsäljningsavtal",
+    "col53": "Cookiepolicy"
+  },
+  "confirmModal": {
+    "cancel": "Avbryt",
+    "yes": "Ja,",
+    "confirm": "Bekräfta"
+  },
+  "chatBot": {
+    "greeting": "Hej! Jag är ÇiçekSepeti-assistenten 🌸 Hur kan jag hjälpa dig?",
+    "greetingResponse": "Hej! 🌸 Jag kan ge dig information om beställningar, blomskötsel eller säljaroperationer.",
+    "askQuestion": "Skriv din fråga här...",
+    "send": "Skicka",
+    "welcomeBack": "Välkommen tillbaka! Hur kan jag hjälpa dig?"
+  },
+  "cartSidebar": {
+    "applyCode": "Ange kod",
+    "appliedSuccess": "Kupong tillämpades!",
+    "invalid": "Ogiltig kupongkod.",
+    "cartEmpty": "Varukorgen är tom.",
+    "fillEmptyBox": "Fyll i röda fält",
+    "orderSuccess": "Beställningen skapades!",
+    "directingToPayment": "Omdirigerar till betalningssida...",
+    "paymentError": "Betalningsfel uppstod. Vänligen försök igen.",
+    "wantToDelete": "Vill du ta bort?",
+    "removedFromCart": "kommer att tas bort från varukorgen.",
+    "emptyCart": "Töm varukorgen?",
+    "allWillBeRemoved": "alla produkter kommer att tas bort från varukorgen."
+  },
+  "cancelModal": {
+    "inputReason": "Vänligen ange en giltig anledning.",
+    "cancelRequest": "Avbokningsförfrågan",
+    "explainReason": "Du är på väg att avbryta din beställning. Vänligen förklara kort anledningen för oss.",
+    "explainReasonPlaceholder": "Skriv din anledning här...",
+    "cancel": "Avbryt",
+    "submitRequest": "Skicka förfrågan"
+  },
+  "badgeDisplay": {
+    "admin": "Administratör",
+    "vendor": "Godkänd butik",
+    "courier": "Bud",
+    "verified": "Verifierad",
+    "newUser": "Ny medlem",
+    "firstOrder": "Första beställningen",
+    "year1User": "Legendarisk medlem (1+ år)",
+    "loyalUser": "Lojal medlem (3+ år)",
+    "gigachad": "Giga Chad (5+ år)",
+    "fifthOrder": "Bronzkund (5+)",
+    "tenthOrder": "Silverkund (10+)",
+    "twentyfifthOrder": "Guldkund (25+)",
+    "fiftythOrder": "Platinakund (50+)",
+    "100thOrder": "Diamantkund (100+)",
+    "bestSeller": "Bästsäljare",
+    "starStore": "Stjärnbutik"
+  },
+  "vendorSettings": {
+    "logo": "Logotyp",
+    "banner": "Banner",
+    "loaded": "laddad",
+    "errorLoading": "Uppladdningsfel",
+    "storeSettingsSaved": "Butiksinställningar sparade!",
+    "error": "Ett fel uppstod.",
+    "storeAppearance": "Butiksutseende",
+    "storeDetails": "Butiksdetaljer",
+    "bannerFoto": "Omslagsfoto",
+    "noBannerFoto": "Ingen bild",
+    "loading": "Laddar...",
+    "change": "Ändra",
+    "storeDesc": "Butiksbeskrivning",
+    "storeDescPlaceholder": "Berätta för dina kunder om din butik...",
+    "phone": "Kontakttelefon",
+    "saveSettings": "Spara inställningar"
+  },
+  "vendorProducts": {
+    "birthday": "Födelsedag",
+    "product": "Produkt",
+    "active": "Aktiverad",
+    "inactive": "Inaktiverad",
+    "statusNotChanged": "Status ändrades inte",
+    "pictureLoaded": "Bild uppladdad!",
+    "pictureNotLoaded": "Kunde inte laddas upp",
+    "missingInfo": "Information saknas.",
+    "reqSuccess": "Åtgärden lyckades!",
+    "errorOccurredWhileAdding": "Fel uppstod vid tillägg av produkt",
+    "deleteProduct": "Ta bort produkt?",
+    "cannotBeUndone": "Denna åtgärd kan inte ångras.",
+    "deleted": "borttagen.",
+    "myProducts": "Mina produkter",
+    "searchPlaceholder": "Sök produkt...",
+    "cancel": "Avbryt",
+    "addNew": "Lägg till ny produkt",
+    "editProduct": "Redigera produkt",
+    "productName": "Produktnamn",
+    "price": "Pris",
+    "stock": "Lager",
+    "category": "Kategori",
+    "description": "Beskrivning",
+    "image": "Bild",
+    "upload": "Ladda upp",
+    "uploadPlaceholder": "eller klistra in URL",
+    "preview": "förhandsvisning",
+    "isActive": "Denna produkt är tillgänglig för försäljning",
+    "publishProduct": "Publicera produkt",
+    "updateProduct": "Spara ändringar",
+    "live": "Publicerad",
+    "hidden": "Dold",
+    "soldOut": "SLUTSÅLD",
+    "last": "SISTA",
+    "quickStock": "Snabblager",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "stockUpdated": "Lager uppdaterat!"
+  },
+  "vendorOrders": {
+    "updated": "Uppdaterad",
+    "orders": "Inkommande beställningar",
+    "empty": "Inga beställningar ännu",
+    "content": "Innehåll",
+    "invoice": "Faktura",
+    "orderReceived": "Beställning mottagen",
+    "orderPreparing": "Beställning förbereds",
+    "ready": "Redo",
+    "courierToStore": "Bud på väg till butiken",
+    "deliveryOnTheWay": "Leverans på väg"
+  },
+  "vendorDashboard": {
+    "store": "Butiksöversikt",
+    "totalSales": "Total försäljning",
+    "totalOrders": "Totala beställningar",
+    "totalProducts": "Totala produkter",
+    "welcome": "Välkommen,",
+    "welcome2": "Din butik är för närvarande aktiv. Du kan följa dina beställningar från fliken 'Beställningar', skriva ut faktura och överlämna till budet."
+  },
+  "profilePage": {
+    "userInfo": {
+      "profileUpdated": "Profilinformation uppdaterad!",
+      "updateUnsucessfull": "Profilen kunde inte uppdateras. Vänligen försök igen.",
+      "oldPassword": "Ange ditt gamla lösenord.",
+      "passwordInvalid": "Lösenordet uppfyller inte reglerna.",
+      "passwordsNotMatch": "Lösenorden matchar inte.",
+      "passwordChanged": "Ditt lösenord har ändrats. Vänligen logga in igen.",
+      "passwordChangeFailed": "Lösenordet kunde inte ändras.",
+      "personalInfo": "Personlig information",
+      "personalContactInfo": "Din identitets- och kontaktinformation",
+      "edit": "Redigera",
+      "cancel": "Avbryt",
+      "fullName": "Fullständigt namn",
+      "email": "E-postadress",
+      "verified": "VERIFIERAD",
+      "phone": "Mobiltelefon",
+      "accountType": "Kontotyp",
+      "saveChanges": "Spara ändringar",
+      "passwordSecurity": "Lösenord & Säkerhet",
+      "protectAccount": "Skydda ditt konto",
+      "changePassword": "Ändra lösenord",
+      "createNewPassword": "Skapa nytt lösenord",
+      "currentPassword": "Nuvarande lösenord",
+      "newPassword": "Nytt lösenord",
+      "repeatNewPassword": "Upprepa nytt lösenord",
+      "updatePassword": "Uppdatera lösenord"
+    },
+    "userSidebar": {
+      "addressBook": "Min adressbok",
+      "informationPassword": "Min information & Lösenord",
+      "myOrders": "Mina beställningar",
+      "logout": "Logga ut"
+    },
+    "orderHistory": {
+      "cancelRequestReceived": "Din avbokningsförfrågan har mottagits",
+      "caseNoOrders": "Du har inga beställningar ännu",
+      "information": "Dina beställningar kommer att listas här.",
+      "deliverTo": "Mottagarinformation",
+      "deliverNote": "Leverans & Anteckning",
+      "noteNotAdded": "Inget kortmeddelande tillagt.",
+      "quantity": "Antal",
+      "cancelRequest": "Skapa avbokningsförfrågan",
+      "invoice": "Faktura"
+    },
+    "addressBook": {
+      "addressUpdated": "Adress uppdaterad",
+      "addressAdded": "Adress tillagd",
+      "qDeleteAddress": "Ta bort adress?",
+      "deleteAddressLabel": "adressen med titeln kommer att tas bort permanent.",
+      "addressDeleted": "Adress borttagen",
+      "myAddresses": "Sparade adresser",
+      "cancel": "Avbryt",
+      "addNewAddress": "Lägg till ny adress",
+      "editAddress": "Redigera adress",
+      "newAddressInfo": "Ny adressinformation",
+      "addressTitle": "Adresstitel",
+      "addressTitlePlaceholder": "Hem, Arbete, Min vän",
+      "recipientName": "Mottagarens namn",
+      "recipientNamePlaceholder": "Fullständigt namn",
+      "recipientPhone": "Mottagarens telefonnummer",
+      "openAddress": "Mottagarens adress",
+      "city": "Stad",
+      "postCode": "Postnummer",
+      "saveChanges": "Spara ändringar",
+      "addAddress": "Spara adress",
+      "noSavedAddresses": "Du har inga sparade adresser ännu.",
+      "edit": "Redigera",
+      "delete": "Ta bort"
+    }
+  },
+  "cartSidebarComponents": {
+    "cartItemsList": {
+      "empty": "Din varukorg är tom."
+    },
+    "CheckoutForm": {
+      "contact": "Kontakt",
+      "nameSurname": "Ditt fullständiga namn",
+      "phoneNumber": "Ditt telefonnummer",
+      "emailAddress": "Din e-postadress",
+      "recipientAddress": "Mottagare & Adress",
+      "savedAddressSelect": "Välj sparad adress",
+      "recipientName": "Mottagarens namn",
+      "recipientPhone": "Mottagarens telefon",
+      "deliveryAddress": "Fullständig adress (Gata, Byggnad, Lägenhet)",
+      "deliveryCity": "Stad",
+      "deliveryPostcode": "Postnummer",
+      "saveAddress": "Spara denna adress i min adressbok",
+      "deliveryOptions": "Leveransalternativ",
+      "opt1": "Standard (2-3 dagar)",
+      "free": "GRATIS",
+      "opt2": "Nästa dag",
+      "opt3": "Samma dag (Premium)",
+      "deliveryTime": "Datum & Tid",
+      "selectDateFirst": "Välj datum först",
+      "noAvailableTime": "Ingen tid kvar",
+      "deliveryNote": "Ditt presentmeddelande...",
+      "noteToCourier": "Din anteckning till budet...",
+      "sendWithoutName": "Skicka utan namn"
+    },
+    "index": {
+      "addressSelected": "Adress vald",
+      "enterCode": "Ange kod",
+      "couponApplied": "Kupong tillämpad!",
+      "couponInvalid": "Ogiltig kupongkod.",
+      "cartEmpty": "Varukorgen är tom",
+      "fillRedFields": "Fyll i röda fält",
+      "orderSuccess": "Beställning mottagen!",
+      "redirectingToPayment": "Omdirigerar till betalningssida...",
+      "paymentError": "Betalningsfel.",
+      "quantity": "Antal",
+      "confirmRemove": "ta bort från varukorgen?",
+      "comfirmRemoveTitle": "Töm varukorgen?",
+      "allItemsRemoved": "alla produkter kommer att tas bort från varukorgen."
+    },
+    "sideBarFooter": {
+      "discountCode": "Rabattkod",
+      "apply": "Tillämpa",
+      "freeDelivery": "Fri frakt",
+      "remove": "Ta bort",
+      "subtotal": "Delsumma",
+      "discount": "Rabatt",
+      "delivery": "Leverans",
+      "fast": "Snabb",
+      "standard": "Standard",
+      "premium": "Premium",
+      "free": "Gratis",
+      "total": "Totalsumma",
+      "confirm": "Bekräfta varukorg",
+      "processing": "Bearbetar...",
+      "pleaseWait": "Vänligen vänta...",
+      "payAndFinish": "Betala och slutför"
+    },
+    "sidebarHeader": {
+      "myCart": "Min varukorg",
+      "clear": "Rensa",
+      "deliveryInfo": "Leveransinformation"
+    }
+  },
+  "adminComponents": {
+    "adminOrderComp": {
+      "orderCard": {
+        "request": "FÖRFRÅGAN",
+        "loss": "FÖRLUST",
+        "vendor": "Butik",
+        "cost": "Kostnad",
+        "total": "Totalt",
+        "orderReceived": "Beställning mottagen",
+        "orderPreparing": "Beställning förbereds",
+        "ready": "Redo",
+        "onTheWay": "På väg",
+        "delivered": "Levererad",
+        "cancelRequest": "Avbokningsförfrågan",
+        "cancel": "Avbruten",
+        "senderReceiver": "Mottagare & Avsändare",
+        "sender": "Avsändare",
+        "delivery": "Leverans",
+        "notesAndFinance": "Anteckningar & Finans",
+        "cardNoteNotAvailable": "Inget kortmeddelande",
+        "realCost": "Verklig kostnad",
+        "netLoss": "NETTOFÖRLUST",
+        "cancelReason": "AVBOKNINGSORSAK",
+        "products": "Produkter",
+        "hideTechnicalDetails": "Dölj tekniska data",
+        "showTechnicalDetails": "Visa säkerhet & Metadata",
+        "courierFound": "Bud tilldelat",
+        "printInvoice": "Skriv ut faktura",
+        "searchPlaceholder": "Sök ordernr eller mottagare...",
+        "allCases": "Alla status",
+        "discounted": "Förlustbringande (rabatterade)",
+        "cancelRequested": "Avbokningsförfrågningar"
+      },
+      "orderMetadata": {
+        "metaDataNotAvailable": "Ingen metadata tillgänglig.",
+        "securityAnalysis": "Säkerhetsanalys"
+      },
+      "orderStats": {
+        "revenue": "Intäkter",
+        "waiting": "Väntar",
+        "promoCost": "Kampanjkostnad",
+        "cancelRequest": "Avbokningsförfrågan",
+        "completed": "Slutförd"
+      }
+    },
+    "adminApplication": {
+      "namedApplicant": "användaren med namn,",
+      "namedApplicant2": "kommer att få full åtkomst till systemet som. Godkänner du denna åtgärd?",
+      "onaylandi": "godkänd!",
+      "provideReason": "Vänligen ange en anledning!",
+      "rejected": "Ansökan avvisad",
+      "pendingApplications": "Väntande ansökningar",
+      "noPendingApplications": "Det finns inga ansökningar som väntar på godkännande för närvarande.",
+      "vendor": "Butik",
+      "courier": "Bud",
+      "reviewAndDecide": "Granska & Besluta",
+      "rejection": "Ansökningsavslag",
+      "reasonToReject": "Vänligen ange anledningen till avslag.",
+      "reasonToRejectPlaceholder": "Skriv din anledning till avslag här...",
+      "cancel": "Avbryt",
+      "send": "Skicka"
+    },
+    "comment": "Admin NOT FINISHED"
+  },
+  "navbar": {
+    "searchPlaceholder": "Sök blommor, choklad, presenter...",
+    "myAccount": "Mitt konto",
+    "login": "Logga in",
+    "register": "Registrera dig",
+    "viewCart": "Visa varukorg",
+    "language": "Språk"
+  }
+}

@@ -1,8 +1,9 @@
+import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { FiX, FiPrinter } from "react-icons/fi";
 
-const InvoiceModal = ({ order, onClose }) => {
+const InvoiceModal = ({ order, onClose }) => { 
   const [isMounted, setIsMounted] = useState(false);
   
   const modalRoot = document.getElementById("modal-root") || document.body;
@@ -33,13 +34,13 @@ const InvoiceModal = ({ order, onClose }) => {
   // --- TARİH FORMATLAYICI ---
   const formatDate = (dateString) => {
     if (!dateString) return "-";
-    return new Date(dateString).toLocaleDateString('tr-TR');
+    return new Date(dateString).toLocaleDateString('en-GB', { timeZone: 'Europe/London' });
   };
 
   const formatDateTime = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
-    return `${date.toLocaleDateString('tr-TR')} ${date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`;
+    return `${date.toLocaleDateString('en-GB', { timeZone: 'Europe/London' })} ${date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}`;
   };
 
   const modalContent = (
@@ -49,7 +50,7 @@ const InvoiceModal = ({ order, onClose }) => {
         
         {/* HEADER (Yazıcıda Gizli) */}
         <div className="p-5 border-b bg-gray-50 flex justify-between items-center print:hidden shrink-0">
-          <h3 className="font-bold text-gray-700 text-lg">Sipariş Faturası</h3>
+          <h3 className="font-bold text-gray-700 text-lg">Order Invoice</h3>
           <button 
             onClick={onClose} 
             className="text-gray-400 hover:text-red-600 text-3xl font-bold transition leading-none p-1 rounded-full hover:bg-red-50"
@@ -65,7 +66,7 @@ const InvoiceModal = ({ order, onClose }) => {
           {/* Şirket ve Fatura Bilgileri */}
           <div className="flex justify-between items-start mb-10 border-b-2 border-gray-800 pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">ÇiçekSepeti UK</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">ÇiçekSepeti UK</h1> {/* Page name */} {/* page information */}
               <p className="text-gray-600">123 Oxford Street</p>
               <p className="text-gray-600">London, W1D 1BS</p>
               <p className="text-gray-600">United Kingdom</p>
@@ -78,11 +79,11 @@ const InvoiceModal = ({ order, onClose }) => {
               {/* --- TARİH BİLGİLERİ (GÜNCELLENDİ) --- */}
               <div className="mt-2 text-gray-600 text-xs space-y-1">
                 <p>
-                  <span className="font-bold">Sipariş Tarihi:</span> <br/>
+                  <span className="font-bold">Order Date:</span> <br/>
                   {formatDateTime(order.createdAt)}
                 </p>
                 <p>
-                  <span className="font-bold">Teslimat Tarihi:</span> <br/>
+                  <span className="font-bold">Delivery Date:</span> <br/>
                   {formatDate(order.delivery.date)}
                 </p>
               </div>
@@ -93,13 +94,13 @@ const InvoiceModal = ({ order, onClose }) => {
           {/* Adresler */}
           <div className="flex justify-between mb-10 gap-8">
             <div className="w-1/2">
-              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Fatura Edilen (Bill To):</h3>
+              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Bill To:</h3>
               <p className="font-bold text-base text-gray-900">{order.sender.name}</p>
               <p>{order.sender.email}</p>
               <p>{order.sender.phone}</p>
             </div>
             <div className="w-1/2 text-right">
-              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Teslim Edilen (Ship To):</h3>
+              <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Ship To:</h3>
               <p className="font-bold text-base text-gray-900">{order.recipient.name}</p>
               <p>{order.recipient.address}</p>
               <p>{order.recipient.city}, {order.recipient.postcode}</p>
@@ -111,10 +112,10 @@ const InvoiceModal = ({ order, onClose }) => {
           <table className="w-full mb-8 border-collapse">
             <thead>
               <tr className="bg-gray-100 text-gray-600 uppercase text-xs border-b border-gray-300">
-                <th className="py-3 px-2 text-left w-1/2">Ürün / Hizmet</th>
-                <th className="py-3 px-2 text-center">Adet</th>
-                <th className="py-3 px-2 text-right">Birim Fiyat</th>
-                <th className="py-3 px-2 text-right">Tutar</th>
+                <th className="py-3 px-2 text-left w-1/2">Product / Service</th>
+                <th className="py-3 px-2 text-center">Quantity</th>
+                <th className="py-3 px-2 text-right">Unit Price</th>
+                <th className="py-3 px-2 text-right">Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -133,19 +134,19 @@ const InvoiceModal = ({ order, onClose }) => {
           <div className="flex justify-end">
             <div className="w-64 space-y-2">
               <div className="flex justify-between text-gray-600">
-                <span>Ara Toplam (Net):</span>
+                <span>Subtotal (Net):</span>
                 <span>£{netAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>KDV (%20 VAT):</span>
+                <span>VAT (20%):</span>
                 <span>£{vatAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-blue-600 font-medium">
-                <span>Kargo:</span>
-                <span>{deliveryFee === 0 ? "Ücretsiz" : `£${deliveryFee.toFixed(2)}`}</span>
+                <span>Shipping:</span>
+                <span>{deliveryFee === 0 ? "Free" : `£${deliveryFee.toFixed(2)}`}</span>
               </div>
               <div className="flex justify-between text-xl font-bold border-t-2 border-gray-800 pt-3 mt-3 text-black">
-                <span>GENEL TOPLAM:</span>
+                <span>GRAND TOTAL:</span>
                 <span>£{total.toFixed(2)}</span>
               </div>
             </div>
@@ -154,7 +155,7 @@ const InvoiceModal = ({ order, onClose }) => {
           {/* Alt Notlar */}
           {order.delivery.cardMessage && (
              <div className="mt-10 p-4 bg-gray-50 border border-gray-200 rounded italic text-center text-gray-600 print:border-gray-300">
-               <span className="block text-xs font-bold text-gray-400 uppercase mb-1">Kart Notu</span>
+               <span className="block text-xs font-bold text-gray-400 uppercase mb-1">Card Message</span>
                "{order.delivery.cardMessage}"
              </div>
           )}
@@ -172,7 +173,7 @@ const InvoiceModal = ({ order, onClose }) => {
             onClick={handlePrint} 
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 flex items-center gap-2 shadow-lg hover:shadow-blue-500/30 transition transform active:scale-95"
           >
-            <FiPrinter size={20} /> Yazdır / PDF Kaydet
+            <FiPrinter size={20} /> {t("common.print")}
           </button>
         </div>
 

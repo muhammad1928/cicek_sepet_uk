@@ -1,16 +1,18 @@
 const router = require('express').Router();
 const Product = require('../models/Product');
-const jwt = require('jsonwebtoken'); // Token okumak için
-const logActivity = require('../utils/logActivity'); // Loglama Fonksiyonu
+const jwt = require('jsonwebtoken');
+const logActivity = require('../utils/logActivity');
+
+// --- GÜVENLİK KATMANI ---
 const { 
-  verifyTokenAndAuthorization,
-  verifyTokenAndAdmin,
-} = require('./verifyToken'); // GÜVENLİK İMPORTU
-// --- KÜFÜR LİSTESİ ---
+  verifyToken, 
+  verifyTokenAndAdmin, 
+  verifyTokenAndSeller 
+} = require('./verifyToken');
+
 const BAD_WORDS = ["aptal", "salak", "gerizekali", "dolandirici", "sahtekar", "scam", "fraud", "idiot"];
 
-// --- YARDIMCI: GİZLİCE KULLANICI ID'Sİ ALMA ---
-// (Public rotalarda kimin gezdiğini anlamak için)
+// Yardımcı: Token'dan User ID al (Hata verirse null dön)
 const getUserId = (req) => {
   try {
     const authHeader = req.headers.token;
@@ -19,39 +21,46 @@ const getUserId = (req) => {
       const decoded = jwt.verify(token, process.env.JWT_SEC);
       return decoded.id;
     }
-  } catch (err) {
-    return null; // Token yoksa veya geçersizse null dön
-  }
+  } catch (err) { return null; }
   return null;
 };
 
 // =============================================================================
-// 1. YENİ ÜRÜN OLUŞTUR (POST)
+// 1. YENİ ÜRÜN OLUŞTUR (POST) - KİLİTLİ
 // =============================================================================
-router.post('/', verifyTokenAndAuthorization, async (req, res) => {
+router.post('/', verifyTokenAndSeller, async (req, res) => {
   try {
     const productData = req.body;
-
-    // Otomatik Kod
-    const generateProductCode = () => "PR-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-    if (!productData.productCode) {
-        productData.productCode = generateProductCode();
+    
+    // Satıcı ekliyorsa vendor ID'yi sabitle
+    if (req.user.role === 'vendor') {
+        productData.vendor = req.user.id;
     }
+
+    const generateProductCode = () => "PR-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    if (!productData.productCode) productData.productCode = generateProductCode();
 
     const newProduct = new Product(productData);
     const savedProduct = await newProduct.save();
-    
     res.status(200).json(savedProduct);
   } catch (err) {
+    console.error("Ürün ekleme hatası:", err);
     res.status(500).json(err);
   }
 });
 
 // =============================================================================
-// 2. ÜRÜN GÜNCELLE (PUT)
+// 2. ÜRÜN GÜNCELLE (PUT) - KİLİTLİ
 // =============================================================================
-router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
+router.put('/:id', verifyTokenAndSeller, async (req, res) => {
   try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json("Ürün bulunamadı");
+
+    if (req.user.role === 'vendor' && product.vendor?.toString() !== req.user.id) {
+        return res.status(403).json("Bu ürünü düzenleme yetkiniz yok!");
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -64,10 +73,17 @@ router.put('/:id', verifyTokenAndAuthorization, async (req, res) => {
 });
 
 // =============================================================================
-// 3. ÜRÜN SİL (DELETE)
+// 3. ÜRÜN SİL (DELETE) - KİLİTLİ
 // =============================================================================
-router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
+router.delete('/:id', verifyTokenAndSeller, async (req, res) => {
   try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json("Ürün bulunamadı");
+
+    if (req.user.role === 'vendor' && product.vendor?.toString() !== req.user.id) {
+        return res.status(403).json("Bu ürünü silme yetkiniz yok!");
+    }
+
     await Product.findByIdAndDelete(req.params.id);
     res.status(200).json("Ürün silindi.");
   } catch (err) {
@@ -76,23 +92,22 @@ router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
 });
 
 // =============================================================================
-// 4. TEK ÜRÜN GETİR (GET) + LOGLAMA (View Product)
+// 4. TEK ÜRÜN GETİR (GET) + LOG
 // =============================================================================
-router.get('/:id', verifyTokenAndAuthorization, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate('vendor');
     
-    // --- LOGLAMA: ÜRÜN GÖRÜNTÜLEME ---
+    // Loglama (Hata olsa bile devam et)
     const userId = getUserId(req);
     if (userId) {
-        // Hata olsa bile akışı bozma (catch yok sayılır)
-        logActivity(userId, 'view_product', req, { 
-            productId: product._id, 
-            productName: product.title,
-            category: product.category
-        }).catch(() => {});
+        try {
+            logActivity(userId, 'view_product', req, { 
+                productId: product._id, 
+                productName: product.title 
+            });
+        } catch(e) {}
     }
-    // ---------------------------------
 
     res.status(200).json(product);
   } catch (err) {
@@ -101,57 +116,73 @@ router.get('/:id', verifyTokenAndAuthorization, async (req, res) => {
 });
 
 // =============================================================================
-// 5. TÜM ÜRÜNLERİ GETİR (GET ALL) + LOGLAMA (Search)
+// 5. TÜM ÜRÜNLERİ GETİR (GET ALL) - DÜZELTİLDİ (Regex Search)
 // =============================================================================
-router.get('/', verifyTokenAndAuthorization, async (req, res) => {
+router.get('/', async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
   const qSearch = req.query.search;
 
-  try {
-    let products;
+  // Cache Anahtarı oluştur (Sorguya göre değişmeli)
+  const cacheKey = `products:${JSON.stringify(req.query)}`;
 
+
+  try {
+    // 1. Önce Redis'e bak
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      // Varsa direkt gönder (Veritabanına gitme!)
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
+    // 2. Yoksa veritabanından çek
+    let products;
     if (qNew) {
       products = await Product.find().sort({ createdAt: -1 }).limit(5);
     } else if (qCategory) {
       products = await Product.find({ categories: { $in: [qCategory] } });
     } else if (qSearch) {
-      // Metin araması
-      products = await Product.find({ $text: { $search: qSearch } });
+      // DÜZELTME: $text yerine $regex kullanıyoruz (Index gerektirmez, daha güvenli çalışır)
+      products = await Product.find({ 
+        title: { $regex: qSearch, $options: "i" } 
+      });
       
-      // --- LOGLAMA: ARAMA ---
+      // Loglama
       const userId = getUserId(req);
       if (userId && qSearch.length > 2) {
-          logActivity(userId, 'search', req, { query: qSearch }).catch(() => {});
+          try { logActivity(userId, 'search', req, { query: qSearch }); } catch(e){}
       }
-      // ----------------------
 
     } else {
+      // Varsayılan: Hepsini getir
       products = await Product.find().sort({ createdAt: -1 }).populate('vendor');
     }
 
+    // 3. Veriyi Redis'e Kaydet (Örn: 1 Saatlik - 3600sn)
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+    
     res.status(200).json(products);
   } catch (err) {
-    res.status(500).json(err);
+    // Hata detayını konsola yaz (Server terminalinde görebilmek için)
+    console.error("Ürün çekme hatası:", err);
+    res.status(500).json({ message: "Ürünler yüklenirken hata oluştu.", error: err.message });
   }
 });
 
 // =============================================================================
-// 6. SATICININ ÜRÜNLERİNİ GETİR
+// 6. SATICI ÜRÜNLERİ
 // =============================================================================
-router.get('/vendor/:vendorId', verifyTokenAndAuthorization, async (req, res) => {
+router.get('/vendor/:vendorId', async (req, res) => {
   try {
     const products = await Product.find({ vendor: req.params.vendorId }).sort({ createdAt: -1 });
     res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  } catch (err) { res.status(500).json(err); }
 });
 
 // =============================================================================
-// 7. YORUM EKLEME (POST REVIEW)
+// 7. YORUM EKLE (POST)
 // =============================================================================
-router.post('/:id/reviews', verifyTokenAndAuthorization, async (req, res) => {
+router.post('/:id/reviews', verifyToken, async (req, res) => {
   const { user, rating, comment } = req.body;
 
   const isBad = BAD_WORDS.some(word => comment.toLowerCase().includes(word));
@@ -168,22 +199,15 @@ router.post('/:id/reviews', verifyTokenAndAuthorization, async (req, res) => {
     product.averageRating = (totalRating / product.reviews.length).toFixed(1);
 
     await product.save();
-
-    // --- LOGLAMA: YORUM YAPMA ---
-    const userId = getUserId(req); // Yorum yapan giriş yapmış olmalı ama yine de kontrol
-    if (userId) {
-       logActivity(userId, 'add_review', req, { productId: product._id, rating }).catch(() => {});
-    }
-    // ----------------------------
+    
+    try { logActivity(req.user.id, 'add_review', req, { productId: product._id, rating }); } catch(e){}
 
     res.status(200).json(product);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  } catch (err) { res.status(500).json(err); }
 });
 
 // =============================================================================
-// 8. YORUM SİLME (DELETE REVIEW)
+// 8. YORUM SİL (DELETE) - SADECE ADMIN
 // =============================================================================
 router.delete('/:id/reviews/:reviewId', verifyTokenAndAdmin, async (req, res) => {
   try {
@@ -204,10 +228,7 @@ router.delete('/:id/reviews/:reviewId', verifyTokenAndAdmin, async (req, res) =>
 
     await product.save();
     res.status(200).json({ message: "Yorum silindi.", product });
-
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  } catch (err) { res.status(500).json(err); }
 });
 
 module.exports = router;

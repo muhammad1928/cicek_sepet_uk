@@ -3,13 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { publicRequest } from "../requestMethods";
 import { FiCheckCircle, FiXCircle, FiLoader } from "react-icons/fi";
 import Confetti from "react-confetti";
+import { useTranslation } from "react-i18next";
 
 const VerifyEmailPage = () => {
+  const { t } = useTranslation();
   const { token } = useParams();
   const navigate = useNavigate();
   
   const [status, setStatus] = useState("loading"); // loading | success | error
-  const [message, setMessage] = useState("Doğrulanıyor...");
+  const [message, setMessage] = useState(t("verifyEmail.verifying"));
 
   useEffect(() => {
     const verifyAccount = async () => {
@@ -18,14 +20,14 @@ const VerifyEmailPage = () => {
         await publicRequest.post("/auth/verify", { token });
         
         setStatus("success");
-        setMessage("Hesabınız başarıyla doğrulandı! Giriş yapabilirsiniz.");
+        setMessage(t("verifyEmail.messageVerified"));
         
         // 3 Saniye sonra login'e yönlendir
         setTimeout(() => navigate("/login"), 3000);
 
       } catch (err) {
         setStatus("error");
-        setMessage(err.response?.data?.message || "Geçersiz veya süresi dolmuş bağlantı.");
+        setMessage(err.response?.data?.message || t("verifyEmail.invalidOrExpired"));
       }
     };
 
@@ -33,7 +35,7 @@ const VerifyEmailPage = () => {
       verifyAccount();
     } else {
         setStatus("error");
-        setMessage("Token bulunamadı.");
+        setMessage(t("verifyEmail.tokenNotFound"));
     }
   }, [token, navigate]);
 
@@ -51,8 +53,8 @@ const VerifyEmailPage = () => {
             <div className="flex justify-center mb-6">
               <FiLoader className="text-5xl text-blue-500 animate-spin" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-700 mb-2">Doğrulanıyor...</h2>
-            <p className="text-gray-500">Lütfen bekleyin, hesabınız aktifleştiriliyor.</p>
+            <h2 className="text-2xl font-bold text-gray-700 mb-2">{t("verifyEmail.verifying")}</h2>
+            <p className="text-gray-500">{t("verifyEmail.pleaseWait")}</p>
           </>
         )}
 
@@ -64,13 +66,13 @@ const VerifyEmailPage = () => {
                 <FiCheckCircle />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Harika! 🎉</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{t("verifyEmail.great")} 🎉</h2>
             <p className="text-green-600 font-medium mb-6">{message}</p>
             <button 
               onClick={() => navigate("/login")} 
               className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition shadow-lg"
             >
-              Giriş Yap
+              {t("verifyEmail.login")}
             </button>
           </>
         )}
@@ -83,13 +85,13 @@ const VerifyEmailPage = () => {
                 <FiXCircle />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Hata Oluştu</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{t("common.error")}</h2>
             <p className="text-red-500 font-medium mb-6">{message}</p>
             <button 
               onClick={() => navigate("/")} 
               className="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black transition shadow-lg"
             >
-              Ana Sayfaya Dön
+              {t("common.backToHome")}
             </button>
           </>
         )}

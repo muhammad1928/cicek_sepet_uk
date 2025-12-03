@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 

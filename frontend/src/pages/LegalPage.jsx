@@ -1,34 +1,36 @@
 import { useParams, Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import { FiFileText, FiShield, FiAlertCircle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const LegalPage = () => {
+  const { t } = useTranslation();
   const { type } = useParams(); // url'den 'privacy-policy', 'terms-of-use', 'cookie-policy' alır
 
   const content = {
     // 1. GİZLİLİK POLİTİKASI
     "privacy-policy": {
-      title: "Gizlilik ve Veri Güvenliği Politikası",
+      title: t("legal.privacyPolicy.legalPageContentTitle"),
       icon: <FiShield />,
       body: (
         <div className="space-y-6">
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">1. Veri Sorumlusu</h3>
-            <p>ÇiçekSepeti UK olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin güvenliğine maksimum önem veriyoruz.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.privacyPolicy.first")}</h3>
+            <p>{t("legal.privacyPolicy.firstDesc")}</p>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">2. Toplanan Veriler ve Amaçları</h3>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.privacyPolicy.second")}</h3>
             <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Kimlik ve İletişim:</strong> Ad, soyad, e-posta ve telefon numaranız; sipariş onayı ve fatura işlemleri için işlenir.</li>
-              <li><strong>Teslimat Bilgisi:</strong> Alıcının adresi ve iletişim bilgileri, siparişin teslimi amacıyla <strong>Kurye</strong> ve ilgili <strong>Mağaza (Satıcı)</strong> ile paylaşılır.</li>
-              <li><strong>İşlem Güvenliği:</strong> IP adresi ve cihaz bilgileri, dolandırıcılık tespiti ve yasal yükümlülükler için saklanır.</li>
+              <li><strong>{t("legal.privacyPolicy.secondDesc.part1")}</strong></li>
+              <li><strong>{t("legal.privacyPolicy.secondDesc.part2")}</strong></li>
+              <li><strong>{t("legal.privacyPolicy.secondDesc.part3")}</strong></li>
             </ul>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">3. Ödeme Güvenliği</h3>
-            <p>Kredi kartı bilgileriniz sunucularımızda <u>asla saklanmaz</u>. Ödeme işlemleri, SSL sertifikalı şifreli bağlantı üzerinden doğrudan global ödeme altyapısı <strong>Stripe</strong> tarafından gerçekleştirilir.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.privacyPolicy.third")}</h3>
+            <p>{t("legal.privacyPolicy.thirdDesc")}</p>
           </section>
         </div>
       )
@@ -36,13 +38,13 @@ const LegalPage = () => {
 
     // 2. MESAFELİ SATIŞ SÖZLEŞMESİ
     "terms-of-use": {
-      title: "Mesafeli Satış Sözleşmesi",
+      title: t("legal.termsOfUse.title"),
       icon: <FiFileText />,
       body: (
         <div className="space-y-6">
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">1. Taraflar</h3>
-            <p>İşbu sözleşme, platform üzerinden sipariş veren ALICI ile ürünü tedarik eden SATICI (Mağaza) arasında, ÇiçekSepeti UK arabuluculuğunda akdedilmiştir.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.termsOfUse.first")}</h3>
+            <p>{t("legal.termsOfUse.firstDesc")}</p>
           </section>
 
           <section>
@@ -50,15 +52,15 @@ const LegalPage = () => {
             <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100 text-sm text-yellow-800 flex gap-3">
                <FiAlertCircle className="text-xl shrink-0 mt-0.5" />
                <div>
-                 <strong>DİKKAT:</strong> Yönetmelik gereği; "Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmelerde" (Canlı Çiçek, Çikolata, Pasta vb.) <strong>CAYMA HAKKI KULLANILAMAZ.</strong>
+                 <strong>{t("legal.termsOfUse.second")}</strong>
                </div>
             </div>
-            <p className="mt-3">Ancak ürün; teslimat anında hasarlı, solmuş veya görselden tamamen farklı ise, alıcı teslimatı kabul etmeyerek iade talep edebilir.</p>
+            <p className="mt-3">{t("legal.termsOfUse.secondDesc_part2")}</p>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">3. Teslimat Süreci</h3>
-            <p>Siparişler, alıcının seçtiği tarih ve saat aralığında teslim edilir. Mücbir sebepler (hava muhalefeti, trafik kazası vb.) dışında gecikmelerden platform sorumludur.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.termsOfUse.third")}</h3>
+            <p>{t("legal.termsOfUse.thirdDesc")}</p>
           </section>
         </div>
       )
@@ -71,42 +73,43 @@ const LegalPage = () => {
       body: (
         <div className="space-y-6">
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">1. Çerez Nedir?</h3>
-            <p>Çerezler, ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen ve sizi hatırlamamıza yarayan küçük metin dosyalarıdır. Sitemizin çalışması için bazı çerezler zorunludur.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.termsOfCookies.firstTerm")}</h3>
+            <p>{t("legal.termsOfCookies.firstTermDesc")}</p>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">2. Hangi Çerezleri Kullanıyoruz?</h3>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.termsOfCookies.secondTerm")}</h3>
             <div className="grid gap-4">
                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                  <h4 className="font-bold text-pink-600 text-sm uppercase mb-1">Zorunlu Çerezler</h4>
-                  <p className="text-xs">Sepetinizdeki ürünleri hatırlamak, hesabınıza giriş yapabilmeniz ve ödeme güvenliği için gereklidir. Bunlar kapatılamaz.</p>
+                  <h4 className="font-bold text-pink-600 text-sm uppercase mb-1">{t("legal.termsOfCookies.secondTermDesc.first")}</h4>
+                  <p className="text-xs">{t("legal.termsOfCookies.secondTermDesc.firstTermDesc")}</p>
                </div>
                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                  <h4 className="font-bold text-blue-600 text-sm uppercase mb-1">İşlevsel Çerezler</h4>
-                  <p className="text-xs">Dil tercihleriniz, adres kayıtlarınız ve "Beni Hatırla" gibi özellikler için kullanılır.</p>
+                  <h4 className="font-bold text-blue-600 text-sm uppercase mb-1">{t("legal.termsOfCookies.secondTermDesc.second")}</h4>
+                  <p className="text-xs">{t("legal.termsOfCookies.secondTermDesc.secondTermDesc")}</p>
                </div>
                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                  <h4 className="font-bold text-purple-600 text-sm uppercase mb-1">Analitik Çerezler</h4>
-                  <p className="text-xs">Sitemizi nasıl kullandığınızı (hangi sayfalara baktığınızı) anonim olarak analiz ederek hizmetimizi geliştirmemize yardımcı olur.</p>
+                  <h4 className="font-bold text-purple-600 text-sm uppercase mb-1">{t("legal.termsOfCookies.secondTermDesc.third")}</h4>
+                  <p className="text-xs">{t("legal.termsOfCookies.secondTermDesc.thirdTermDesc")}</p>
                </div>
             </div>
           </section>
 
           <section>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">3. Çerezleri Nasıl Yönetirim?</h3>
-            <p>Tarayıcınızın ayarlar menüsünden çerezleri dilediğiniz zaman silebilir veya engelleyebilirsiniz. Ancak zorunlu çerezleri engellemek, sepet ve ödeme fonksiyonlarının çalışmasını bozabilir.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">{t("legal.termsOfCookies.thirdTerm")}</h3>
+            <p>{t("legal.termsOfCookies.thirdTermDesc")}</p>
           </section>
         </div>
       )
     }
   };
 
-  const data = content[type] || { title: "Sayfa Bulunamadı", body: "Aradığınız içerik mevcut değil.", icon: <FiAlertCircle /> };
+  const data = content[type] || { title: t("legal.pageNotFound"), body: t("legal.pageNotFoundDesc"), icon: <FiAlertCircle /> };
+
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans pt-10 pb-20 px-4">
-      <Seo title={data.title} description={`${data.title} hakkında detaylı bilgi.`} />
+      <Seo title={data.title} description={`${data.title} ${t("legal.legalPage.hakkindaDetayliBilgi")}`} />
       
       <div className="max-w-4xl mx-auto">
         
@@ -117,7 +120,7 @@ const LegalPage = () => {
            </div>
            <div>
               <h1 className="text-3xl font-black text-gray-800">{data.title}</h1>
-              <p className="text-gray-500 text-sm mt-1">Son Güncelleme: {new Date().toLocaleDateString()}</p>
+              <p className="text-gray-500 text-sm mt-1">{t("common.lastUpdated")}: {new Date().toLocaleDateString()}</p>
            </div>
         </div>
 
@@ -126,8 +129,8 @@ const LegalPage = () => {
           {typeof data.body === 'string' ? <p>{data.body}</p> : data.body}
 
           <div className="mt-10 pt-10 border-t border-gray-100 flex justify-between items-center">
-             <Link to="/" className="text-gray-500 font-bold hover:text-black transition">← Ana Sayfaya Dön</Link>
-             <p className="text-xs text-gray-400">&copy; ÇiçekSepeti UK Legal Team</p>
+             <Link to="/" className="text-gray-500 font-bold hover:text-black transition">{t("legal.backToHome")}</Link>
+             <p className="text-xs text-gray-400">{t("legal.backToHome2")}</p>
           </div>
         </div>
 

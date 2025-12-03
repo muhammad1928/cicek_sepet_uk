@@ -1,9 +1,9 @@
 import { useCart } from "../context/CartContext";
-import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../requestMethods";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
+import { useTranslation } from "react-i18next";
 
 // Yeni Componentler
 import SidebarHeader from "./cartSidebar/SidebarHeader";
@@ -12,6 +12,7 @@ import CheckoutForm from "./cartSidebar/CheckoutForm";
 import SidebarFooter from "./cartSidebar/SidebarFooter";
 
 const CartSidebar = () => {
+  const { t } = useTranslation();
   const { 
     cart, removeFromCart, increaseQuantity, decreaseQuantity, updateItemQuantity,
     totalPrice, isCartOpen, setIsCartOpen, setCart, clearCart, notify
@@ -107,16 +108,16 @@ const CartSidebar = () => {
   };
 
   const handleApplyCoupon = async () => {
-      if(!couponCode) return notify("Kod giriniz","warning");
+      if(!couponCode) return notify(t("cartSidebar.applyCode"),"warning");
       try {
           const userIdParam = user ? `?userId=${user._id}` : "";
           const res = await userRequest.get(`/coupons/validate/${couponCode}${userIdParam}`);
-          setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify("Kupon uygulandı!","success");
-      } catch(e) { setDiscount(0); setCouponApplied(false); notify(e.response?.data?.message||"Geçersiz","error"); }
+          setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify(t("cartSidebar.appliedSuccess"),"success");
+      } catch(e) { setDiscount(0); setCouponApplied(false); notify(e.response?.data?.message||t("cartSidebar.invalid"),"error"); }
   };
 
   const handleCheckoutClick = () => {
-      if (cart.length === 0) { notify("Sepet boş!", "error"); return; }
+      if (cart.length === 0) { notify(t("cartSidebar.emptyCart"), "error"); return; }
       setView("checkout");
   };
 
@@ -127,7 +128,7 @@ const CartSidebar = () => {
 
     const newErrors = {};
     ["senderName","senderPhone","recipientName","recipientPhone","address","city","deliveryDate"].forEach(f => { if(!formData[f]) newErrors[f]=true; });
-    if (Object.keys(newErrors).length > 0) { setErrors(newErrors); notify("Kırmızı alanları doldurun","error"); setIsProcessing(false); return; }
+    if (Object.keys(newErrors).length > 0) { setErrors(newErrors); notify(t("cartSidebar.fillEmptyBox"),"error"); setIsProcessing(false); return; }
 
     const metaDataInfo = { userAgent: navigator.userAgent, language: navigator.language, platform: navigator.platform, deviceType: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop", screenResolution: `${window.screen.width}x${window.screen.height}`, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, referrer: document.referrer || "Direct" };
     const orderData = { userId: user ? user._id : null, items: cart, totalAmount: finalPrice, couponCode: couponApplied ? couponCode : null, deliveryFee, sender: { name: formData.senderName, phone: formData.senderPhone, email: formData.senderEmail }, recipient: { name: formData.recipientName, phone: formData.recipientPhone, address: formData.address, city: formData.city, postcode: formData.postcode }, delivery: { date: formData.deliveryDate, timeSlot: formData.timeSlot, cardMessage: formData.cardMessage, courierNote: formData.courierNote, isAnonymous: formData.isAnonymous, deliveryType: formData.deliveryType }, metaData: metaDataInfo, saveAddress };
@@ -135,17 +136,17 @@ const CartSidebar = () => {
     if (finalPrice <= 0) {
         try {
             const res = await userRequest.post("/orders", orderData);
-            notify("Sipariş alındı!","success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } });
-        } catch (e) { notify("Hata oluştu","error"); setIsProcessing(false); }
+            notify(t("cartSidebar.orderSuccess"),"success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } });
+        } catch (e) { notify(t("common.error"),"error"); setIsProcessing(false); }
         return;
     }
 
     localStorage.setItem("tempOrderData", JSON.stringify(orderData));
     try {
-        notify("Ödeme sayfasına gidiliyor...","success");
+        notify(t("cartSidebar.directingToPayment"),"success");
         const res = await userRequest.post("/payment/create-checkout-session", { items: cart, couponCode: couponApplied ? couponCode : null, userEmail: formData.senderEmail, userId: user ? user._id : null, deliveryFee });
         window.location.href = res.data.url;
-    } catch (e) { notify("Ödeme hatası","error"); setIsProcessing(false); }
+    } catch (e) { notify(t("cartSidebar.paymentError"),"error"); setIsProcessing(false); }
   };
 
   if (!isCartOpen) return null;
@@ -177,8 +178,8 @@ const CartSidebar = () => {
            handleCheckoutClick={handleCheckoutClick} isProcessing={isProcessing} isCheckoutReady={isCheckoutReady} proceedToPayment={proceedToPayment}
         />
         
-        {itemToDelete && <ConfirmModal title="Silinsin mi?" message={`"${itemToDelete.title}" sepetten çıkarılacak.`} isDanger={true} onConfirm={() => { removeFromCart(itemToDelete._id, itemToDelete.title); setItemToDelete(null); }} onCancel={() => setItemToDelete(null)} />}
-        {showClearConfirm && <ConfirmModal title="Sepeti Boşalt?" message="Tüm ürünler silinecek." isDanger={true} onConfirm={() => { clearCart(); setShowClearConfirm(false); }} onCancel={() => setShowClearConfirm(false)} />}
+        {itemToDelete && <ConfirmModal title={t("cartSidebar.wantToDelete")} message={`"${itemToDelete.title}" ${t("cartSidebar.removedFromCart")}`} isDanger={true} onConfirm={() => { removeFromCart(itemToDelete._id, itemToDelete.title); setItemToDelete(null); }} onCancel={() => setItemToDelete(null)} />}
+        {showClearConfirm && <ConfirmModal title={t("cartSidebar.emptyCart")} message={t("cartSidebar.allWillBeRemoved")} isDanger={true} onConfirm={() => { clearCart(); setShowClearConfirm(false); }} onCancel={() => setShowClearConfirm(false)} />}
 
       </div>
     </div>

@@ -1,12 +1,50 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import { FiLogOut, FiHeart, FiShoppingCart, FiSearch, FiX } from "react-icons/fi";
+import { useTranslation } from "react-i18next"; // <--- IMPORT
+import { FiLogOut, FiHeart, FiShoppingCart, FiSearch, FiX, FiGlobe, FiChevronDown } from "react-icons/fi";
 import { FaStore, FaMotorcycle, FaUserShield } from "react-icons/fa";
 import { userRequest, publicRequest } from "../../requestMethods";
 
+
+// 1. DİLLERİ BURAYA TANIMLA (8 Tane)
+const LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'nl', label: 'Nederlands' },
+  { code: 'sv', label: 'Svenska' },
+];
+
 const Navbar = () => {
+  const { t, i18n } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false); // Dropdown açık mı?
+  const dropdownRef = useRef(null); // Dışarı tıklayınca kapatmak için
+
+  // Mevcut dili bul (yoksa varsayılan olarak ilkini al)
+  const currentLang = LANGUAGES.find(l => l.code === i18n.language) || LANGUAGES[0];
+
+  // Dili Değiştir ve Menüyü Kapat
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setIsOpen(false);
+  };
+
+  // Dışarı tıklayınca menüyü kapatma mantığı
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  
   const { cart, setIsCartOpen, searchTerm, setSearchTerm } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,7 +142,7 @@ const Navbar = () => {
           : "bg-white shadow-sm border-transparent py-2"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center gap-4">
+      <div className="max-w-8xl mx-auto px-4 flex justify-between items-center gap-4">
         
         {/* --- LOGO (ANİMASYONLU) --- */}
         {/* hover:hue-rotate-60 -> Rengi mor/maviye kaydırır */}
@@ -120,6 +158,7 @@ const Navbar = () => {
             active:scale-95 active:opacity-80
           "
         >
+          {/* page name */}
           🌸 <span className="tracking-tight">ÇiçekSepeti UK</span>
         </Link>
 
@@ -128,7 +167,7 @@ const Navbar = () => {
           <div className="relative">
             <input 
               type="text" 
-              placeholder="Çiçek, Çikolata, Hediye ara..." 
+              placeholder={t('navbar.searchPlaceholder')} 
               className="w-full pl-10 pr-10 py-2 rounded-full border border-gray-200 bg-gray-50 focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 outline-none transition text-sm"
               value={searchTerm}
               onChange={handleSearch}
@@ -168,24 +207,24 @@ const Navbar = () => {
                   group relative w-9 h-9 flex items-center justify-center rounded-full bg-pink-100 border border-pink-200 text-pink-600 font-bold text-sm shadow-sm transition-all duration-500 ease-out hover:bg-pink-600 hover:text-white hover:border-pink-600 hover:shadow-md hover:scale-105 hover:brightness-110 active:scale-90 active:bg-pink-700
 
                 "
-                title="Hesabım"
+                title={t('navbar.myAccount')}
               >
                 {userInitial}
               </Link>
               
               {/* Rol Butonları */}
               {user.role === "admin" && (
-                <Link to="/admin" className="text-purple-600 hover:text-purple-800 hover:bg-purple-50 p-2 rounded-full transition" title="Yönetim Paneli">
+                <Link to="/admin" className="text-purple-600 hover:text-purple-800 hover:bg-purple-50 p-2 rounded-full transition" title="Admin Panel">
                   <FaUserShield className="text-xl" />
                 </Link>
               )}
               {user.role === "vendor" && (
-                <Link to="/vendor" className="text-pink-600 hover:text-pink-800 hover:bg-pink-50 p-2 rounded-full transition" title="Mağaza Paneli">
+                <Link to="/vendor" className="text-pink-600 hover:text-pink-800 hover:bg-pink-50 p-2 rounded-full transition" title="Vendor Panel">
                   <FaStore className="text-xl" />
                 </Link>
               )}
               {user.role === "courier" && (
-                <Link to="/courier" className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-full transition" title="Kurye Paneli">
+                <Link to="/courier" className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-full transition" title="Courier Panel">
                   <FaMotorcycle className="text-xl" />
                 </Link>
               )}
@@ -231,9 +270,9 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-2 text-sm font-medium">
-              <Link to="/login" className="text-gray-600 hover:text-pink-600 transition px-3 py-1 hover:bg-gray-50 rounded-lg">Giriş</Link>
+              <Link to="/login" className="text-gray-600 hover:text-pink-600 transition px-3 py-1 hover:bg-gray-50 rounded-lg">{t('navbar.login')}</Link>
               <span className="text-gray-300">|</span>
-              <Link to="/register" className="text-gray-600 hover:text-pink-600 transition px-2">Kayıt Ol</Link>
+              <Link to="/register" className="text-gray-600 hover:text-pink-600 transition px-2">{t('navbar.register')}</Link>
             </div>
           )}
 
@@ -243,7 +282,7 @@ const Navbar = () => {
             <button 
               onClick={() => setIsCartOpen(true)} 
               className="custom-btn p-2 flex items-center justify-center"
-              title="Sepeti Görüntüle"
+              title={t('navbar.viewCart')}
             >
               <FiShoppingCart className="text-lg group-hover:rotate-12 transition" />
             </button>
@@ -265,8 +304,71 @@ const Navbar = () => {
             )}
           
           </div>
+
+          {/* --- DİL SEÇİMİ (Fütüristik & Modern) --- */}
+          <div className="relative" ref={dropdownRef}>
+            
+            {/* 1. Ana Buton (Tetikleyici) */}
+            
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition text-xs font-bold text-gray-700"
+            >
+              {/* Globe Icon on Top */}
+              <FiGlobe className="text-xl mb-1" />
+              <span className="text-xl filter drop-shadow-sm transform transition-transform group-hover:scale-110">
+                {currentLang.flag}
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider">
+                {currentLang.code}
+              </span>
+              <FiChevronDown 
+                className={`text-xs transition-transform duration-500 ${isOpen ? "rotate-180 text-pink-500" : "text-gray-400"}`} 
+              />
+            </button>
+
+            {/* 2. Açılır Menü (Dropdown) */}
+            {isOpen && (
+              <div className="absolute right-0 mt-3 w-48 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 p-2 z-50 animate-fade-in-up overflow-hidden ring-1 ring-black/5">
+                
+                {/* Başlık */}
+                <div className="px-3 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100/50 mb-1 flex justify-between items-center">
+                   <span>{t('navbar.language')}</span>
+                   <FiGlobe />
+                </div>
+
+                {/* Liste */}
+                <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent pr-1">
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => changeLanguage(lang.code)}
+                      className={`
+                        w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group
+                        ${i18n.language === lang.code 
+                          ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md transform scale-[1.02]" 
+                          : "text-gray-600 hover:bg-gray-100/80 hover:text-gray-900"}
+                      `}
+                    >
+                      {/* Bayrak İkonu */}
+
+                      <span className="flex-1 text-left">{lang.label}</span>
+                      {/* Seçili İkonu */}
+                      {i18n.language === lang.code && (
+                        <span className="bg-white/20 p-1 rounded-full animate-pulse">
+                           <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+        
       </div>
+      
     </nav>
   );
 };

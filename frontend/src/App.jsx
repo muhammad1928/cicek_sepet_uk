@@ -7,7 +7,7 @@ import axios from "axios"; // Axios importu gerekli
 // --- BİLEŞENLER ---
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import CartSidebar from "./components/cartSidebar"; // index.jsx'i otomatik alır
+import CartSidebar from "./components/CartSidebar"; // index.jsx'i otomatik alır
 import Toast from "./components/Toast";
 import Chatbot from "./components/Chatbot";
 import ScrollToTop from "./components/ScrollToTop";
@@ -22,7 +22,7 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import SuccessPage from "./pages/SuccessPage";
 import ProfilePage from "./pages/ProfilePage";
-import VerificationPending from "./pages/VerificationPending";
+import VerificationPending from "./components/VerificationPending";
 import StorePage from "./pages/StorePage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -82,7 +82,7 @@ function App() {
             <Toast />
             <Chatbot />
             
-            <div className="flex-1 pt-10 relative z-0">
+            <div className="flex-1  relative z-0">
               <Routes>
                 {/* Müşteri Rotaları */}
                 <Route path="/" element={<HomePage />} />

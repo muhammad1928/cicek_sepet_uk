@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import SecureImage from "../SecureImage";
@@ -10,6 +10,22 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(true);
   const { notify } = useCart();
   const userMe = JSON.parse(localStorage.getItem("user"));
+
+  // --- YENİ: MODAL STATE ---
+  const [selectedUserLog, setSelectedUserLog] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await userRequest.get("/users"); // userRequest ile çek
+        setUsers(res.data.reverse()); // En yeniler üstte
+        setLoading(false);
+      } catch (err) { console.log(err); }
+    };
+    fetchUsers();
+  }, []);
+
+ 
 
   // --- FİLTRELEME ---
   const [searchTerm, setSearchTerm] = useState("");
@@ -89,6 +105,7 @@ const AdminUsers = () => {
   };
 
   const getDocUrl = (data) => data?.licenseImage || data?.documentImage;
+
 
   // Filtreleme Mantığı
   const filteredUsers = users.filter(u => {

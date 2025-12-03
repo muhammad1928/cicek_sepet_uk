@@ -1,12 +1,14 @@
 import { FiTrash2 } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const CartItemList = ({ cart, increaseQuantity, decreaseQuantity, updateItemQuantity, removeFromCart, setItemToDelete }) => {
+  const { t } = useTranslation();
   
   if (cart.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 opacity-60">
         <span className="text-6xl mb-4">🛒</span>
-        <p>Sepetiniz henüz boş.</p>
+        <p>{t("cartSidebarComponents.cartItemsList.empty")}</p>
       </div>
     );
   }

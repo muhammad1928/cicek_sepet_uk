@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import axios from "axios";
 import L from "leaflet";
+import { useTranslation } from "react-i18next";
 
 // Leaflet varsayılan ikon hatasını düzeltme
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -57,6 +58,7 @@ const LocationMarker = ({ setPos, onSelect }) => {
 };
 
 const LocationPicker = ({ onSelect }) => {
+  const { t } = useTranslation(); 
   // Varsayılan Konum: Londra Merkezi (Değiştirebilirsin)
   const [position, setPosition] = useState([51.505, -0.09]);
 
@@ -85,7 +87,7 @@ const LocationPicker = ({ onSelect }) => {
       </MapContainer>
       
       <div className="absolute bottom-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] text-gray-500 font-bold shadow-sm z-[400] pointer-events-none">
-        Konum Seçmek İçin Haritaya Tıkla 📍
+        {t("locationPicker.locationOnMap")} 📍
       </div>
     </div>
   );

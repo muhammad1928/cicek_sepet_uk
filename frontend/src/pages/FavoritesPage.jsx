@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { publicRequest, userRequest } from "../requestMethods";
+import { publicRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import Seo from "../components/Seo";
 import { FiHeart, FiShoppingCart, FiTrash2, FiArrowRight } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const FavoritesPage = () => {
+  const { t } = useTranslation();
   const [favProducts, setFavProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { favorites, toggleFavorite, addToCart } = useCart();
@@ -34,7 +36,7 @@ const FavoritesPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans pt-10 pb-20 px-4 relative overflow-hidden">
-      <Seo title="Favorilerim" description="Beğendiğiniz ürünler." />
+      <Seo title={t("seo.favouritesPage.title")} description={t("seo.favouritesPage.description")} />
       
       {/* Arka Plan Süslemesi */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden bg-gradient-to-b from-pink-50 to-white pointer-events-none">
@@ -47,8 +49,8 @@ const FavoritesPage = () => {
         <div className="flex items-center gap-4 mb-10">
             <div className="bg-white p-3 rounded-2xl shadow-sm text-pink-600 text-2xl"><FiHeart /></div>
             <div>
-                <h1 className="text-3xl font-extrabold text-gray-900">Favorilerim</h1>
-                <p className="text-gray-500 text-sm">Beğendiğiniz ürünleri burada saklıyoruz.</p>
+                <h1 className="text-3xl font-extrabold text-gray-900">{t("favorites.favoritesTitle")}</h1>
+                <p className="text-gray-500 text-sm">{t("favorites.favoritesDescription")}</p>
             </div>
         </div>
 
@@ -61,10 +63,10 @@ const FavoritesPage = () => {
              <div className="bg-white p-8 rounded-full shadow-xl mb-6 border border-pink-50">
                 <span className="text-6xl opacity-80">💔</span>
              </div>
-             <h2 className="text-2xl font-bold text-gray-800 mb-2">Listeniz Boş Görünüyor</h2>
-             <p className="text-gray-500 max-w-md mb-8">Henüz favori listenize bir ürün eklemediniz. En taze çiçekleri ve hediyeleri keşfetmeye ne dersiniz?</p>
+             <h2 className="text-2xl font-bold text-gray-800 mb-2">{t("favorites.favoritesEmpty")}</h2>
+             <p className="text-gray-500 max-w-md mb-8">{t("favorites.favoritesEmptyDesc")}</p>
              <Link to="/" className="bg-gray-900 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-black transition shadow-lg hover:shadow-xl flex items-center gap-2 transform hover:-translate-y-1 active:translate-y-0 duration-300">
-               Ürünleri Keşfet <FiArrowRight />
+               {t("favorites.favoritesExploreProducts")} <FiArrowRight />
              </Link>
           </div>
         ) : (
@@ -110,14 +112,14 @@ const FavoritesPage = () => {
                   
                   <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-50">
                     <div className="flex flex-col">
-                        <span className="text-xs text-gray-400 font-bold uppercase">Fiyat</span>
+                        <span className="text-xs text-gray-400 font-bold uppercase">{t("common.price")}</span>
                         <span className="text-xl font-extrabold text-gray-900">£{product.price}</span>
                     </div>
                     
                     <button 
                       onClick={() => addToCart(product)}
                       className="bg-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-700 transition shadow-lg shadow-pink-200 active:scale-90"
-                      title="Sepete Ekle"
+                      title={t("common.addToCart")}
                     >
                       <FiShoppingCart />
                     </button>

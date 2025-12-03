@@ -1,9 +1,9 @@
 import { useCart } from "../../context/CartContext";
-import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { userRequest } from "../requestMethods";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../ConfirmModal";
+import { useTranslation } from "react-i18next";
 
 // Alt Bileşenler
 import SidebarHeader from "./SidebarHeader";
@@ -12,6 +12,7 @@ import CheckoutForm from "./CheckoutForm";
 import SidebarFooter from "./SidebarFooter";
 
 const CartSidebar = () => {
+  const { t } = useTranslation();
   const { 
     cart, removeFromCart, increaseQuantity, decreaseQuantity, updateItemQuantity,
     totalPrice, isCartOpen, setIsCartOpen, setCart, clearCart, notify
@@ -166,17 +167,17 @@ const CartSidebar = () => {
   const handleAddressSelect = (e) => {
       const index = e.target.value; if(index==="")return; const s = savedAddresses[index];
       setFormData(prev => ({...prev, recipientName: s.recipientName, recipientPhone: s.recipientPhone, address: s.address, city: s.city, postcode: s.postcode }));
-      notify("Adres seçildi", "success"); setErrors({});
+      notify(t("cartSidebarComponents.index.adressSelected"), "success"); setErrors({});
   };
   
   const handleApplyCoupon = async () => {
-      if(!couponCode) return notify("Kod giriniz","warning");
-      try { const res = await userRequest.get(`/coupons/validate/${couponCode}?userId=${user?._id||''}`); setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify("Kupon uygulandı!","success"); } 
-      catch(e) { setDiscount(0); setCouponApplied(false); notify(e.response?.data?.message||"Geçersiz","error"); }
+      if(!couponCode) return notify(t("cartSidebarComponents.index.enterCode"),"warning");
+      try { const res = await userRequest.get(`/coupons/validate/${couponCode}?userId=${user?._id||''}`); setCouponData(res.data); setDiscount(res.data.discountRate); setCouponApplied(true); notify(t("cartSidebarComponents.index.couponApplied"),"success"); } 
+      catch(e) { setDiscount(0); setCouponApplied(false); notify(e.response?.data?.message||t("cartSidebarComponents.index.couponInvalid"),"error"); }
   };
   
   const handleCheckoutClick = () => {
-      if (cart.length === 0) { notify("Sepet boş","error"); return; }
+      if (cart.length === 0) { notify(t("cartSidebarComponents.index.cartEmpty"),"error"); return; }
       setView("checkout");
   };
   
@@ -185,17 +186,17 @@ const CartSidebar = () => {
     
     const reqFields = ["senderName","senderPhone","recipientName","recipientPhone","address","city","deliveryDate"];
     const newErr={}; reqFields.forEach(f=>{if(!formData[f]) newErr[f]=true});
-    if(Object.keys(newErr).length>0){ setErrors(newErr); notify("Kırmızı alanları doldurun","error"); return; }
+    if(Object.keys(newErr).length>0){ setErrors(newErr); notify(t("cartSidebarComponents.index.fillRedFields"),"error"); return; }
     
     setIsProcessing(true);
     const metaDataInfo = { userAgent: navigator.userAgent, language: navigator.language };
     const orderData = { userId: user?user._id:null, items: cart, totalAmount: finalPrice, couponCode: couponApplied?couponCode:null, deliveryFee, sender: {name:formData.senderName, phone:formData.senderPhone, email:formData.senderEmail}, recipient: {name:formData.recipientName, phone:formData.recipientPhone, address:formData.address, city:formData.city, postcode:formData.postcode}, delivery: {date:formData.deliveryDate, timeSlot:formData.timeSlot, cardMessage:formData.cardMessage, courierNote:formData.courierNote, isAnonymous:formData.isAnonymous, deliveryType:formData.deliveryType}, metaData: metaDataInfo, saveAddress };
 
     if (finalPrice <= 0) {
-        try { const res = await userRequest.post("/orders", orderData); notify("Sipariş alındı!","success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } }); } catch { notify("Hata","error"); setIsProcessing(false); } return;
+        try { const res = await userRequest.post("/orders", orderData); notify(t("cartSidebarComponents.index.orderSuccess"),"success"); setCart([]); setIsCartOpen(false); localStorage.removeItem("tempOrderData"); navigate("/success", { state: { order: res.data.order } }); } catch { notify(t("commonerror"),"error"); setIsProcessing(false); } return;
     }
     localStorage.setItem("tempOrderData", JSON.stringify(orderData));
-    try { notify("Ödeme sayfasına gidiliyor...","success"); const res = await userRequest.post("/payment/create-checkout-session", { items: cart, couponCode: couponApplied?couponCode:null, userEmail: formData.senderEmail, userId: user?user._id:null, deliveryFee }); window.location.href = res.data.url; } catch { notify("Ödeme hatası","error"); setIsProcessing(false); }
+    try { notify(t("cartSidebarComponents.index.redirectingToPayment"),"success"); const res = await userRequest.post("/payment/create-checkout-session", { items: cart, couponCode: couponApplied?couponCode:null, userEmail: formData.senderEmail, userId: user?user._id:null, deliveryFee }); window.location.href = res.data.url; } catch { notify(t("cartSidebarComponents.index.paymentError"),"error"); setIsProcessing(false); }
   };
 
   const handleDeleteClick = (item) => setItemToDelete(item);
@@ -246,11 +247,11 @@ const CartSidebar = () => {
         <ConfirmModal
             title={
             <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 tracking-tight">
-                {itemToDelete.quantity} adet 
+                {itemToDelete.quantity} {t("cartSidebarComponents.index.quantity")} 
                 <span className="font-semibold"> "{itemToDelete.title.toUpperCase()}" </span>
             </span>
             }
-            message=" sepetten silinsin mi?"
+            message={t("cartSidebarComponents.index.confirmRemove")}
             isDanger={true}
             onConfirm={() => {
             removeFromCart(itemToDelete._id, itemToDelete.title);
@@ -260,7 +261,7 @@ const CartSidebar = () => {
         />
         )}
 
-        {showClearConfirm && <ConfirmModal title="Sepeti Boşalt?" message="Tüm ürünler silinecek." isDanger={true} onConfirm={() => { clearCart(); setShowClearConfirm(false); }} onCancel={() => setShowClearConfirm(false)} />}
+        {showClearConfirm && <ConfirmModal title={t("cartSidebarComponents.index.comfirmRemoveTitle")} message={t("cartSidebarComponents.index.allItemsRemoved")} isDanger={true} onConfirm={() => { clearCart(); setShowClearConfirm(false); }} onCancel={() => setShowClearConfirm(false)} />}
 
       </div>
     </div>
