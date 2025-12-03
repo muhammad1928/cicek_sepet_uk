@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Veuillez vérifier vos informations.",
+    "emailExists": "Un compte existe déjà avec cet email.",
+    "registerSuccess": "Inscription réussie ! Veuillez vérifier votre email.",
+    "userNotFound": "Utilisateur non trouvé.",
+    "wrongPassword": "Mot de passe incorrect.",
+    "verifyEmail": "Veuillez confirmer votre adresse email.",
+    "accountBlocked": "Votre compte a été suspendu.",
+    "sessionExpired": "Session expirée. Veuillez vous reconnecter.",
+    "invalidToken": "Le lien est invalide ou a expiré.",
+    "verifiedSuccess": "Compte vérifié avec succès !",
+    "resetLinkSent": "Un lien de réinitialisation du mot de passe a été envoyé à votre email.",
+    "weakPassword": "Le mot de passe n'est pas assez fort.",
+    "passwordUpdated": "Votre mot de passe a été mis à jour avec succès.",
+    "logoutSuccess": "Déconnexion réussie."
+  },
   "common": {
+    "serverError": "Une erreur serveur s'est produite. Veuillez réessayer plus tard.",
     "loading": "Chargement...",
     "error": "Une erreur s'est produite.",
     "success": "Succès !",

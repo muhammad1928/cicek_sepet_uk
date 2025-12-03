@@ -8,7 +8,7 @@ import Seo from "../components/Seo";
 import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
-  const { t } = useTranslation();
+  const { t} = useTranslation();
   const [formData, setFormData] = useState({ fullName: "", email: "", password: "", role: "customer" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTerms, setShowTerms] = useState(false);

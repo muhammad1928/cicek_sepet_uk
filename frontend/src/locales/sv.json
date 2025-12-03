@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Vänligen kontrollera dina uppgifter.",
+    "emailExists": "Ett konto med denna e-post finns redan.",
+    "registerSuccess": "Registrering lyckades! Vänligen kontrollera din e-post.",
+    "userNotFound": "Användaren hittades inte.",
+    "wrongPassword": "Felaktigt lösenord.",
+    "verifyEmail": "Vänligen bekräfta din e-postadress.",
+    "accountBlocked": "Ditt konto har stängts av.",
+    "sessionExpired": "Sessionen har gått ut. Vänligen logga in igen.",
+    "invalidToken": "Länken är ogiltig eller har gått ut.",
+    "verifiedSuccess": "Kontot har verifierats!",
+    "resetLinkSent": "En länk för att återställa lösenordet har skickats till din e-post.",
+    "weakPassword": "Lösenordet är inte tillräckligt starkt.",
+    "passwordUpdated": "Ditt lösenord har uppdaterats.",
+    "logoutSuccess": "Utloggad."
+  },
   "common": {
+    "serverError": "Ett serverfel har uppstått. Vänligen försök igen senare.",
     "loading": "Laddar...",
     "error": "Ett fel uppstod.",
     "success": "Lyckades!",

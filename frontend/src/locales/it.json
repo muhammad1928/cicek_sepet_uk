@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Si prega di verificare i propri dati.",
+    "emailExists": "Esiste già un account con questa email.",
+    "registerSuccess": "Registrazione completata! Controlla la tua email.",
+    "userNotFound": "Utente non trovato.",
+    "wrongPassword": "Password errata.",
+    "verifyEmail": "Si prega di verificare il proprio indirizzo email.",
+    "accountBlocked": "Il tuo account è stato sospeso.",
+    "sessionExpired": "Sessione scaduta. Effettua nuovamente l'accesso.",
+    "invalidToken": "Il link non è valido o è scaduto.",
+    "verifiedSuccess": "Account verificato con successo!",
+    "resetLinkSent": "Il link per reimpostare la password è stato inviato alla tua email.",
+    "weakPassword": "La password non è abbastanza forte.",
+    "passwordUpdated": "La tua password è stata aggiornata con successo.",
+    "logoutSuccess": "Disconnessione effettuata."
+  },
   "common": {
+    "serverError": "Si è verificato un errore del server. Riprova più tardi.",
     "loading": "Caricamento...",
     "error": "Si è verificato un errore.",
     "success": "Successo!",

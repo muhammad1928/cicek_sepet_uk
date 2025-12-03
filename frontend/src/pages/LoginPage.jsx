@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
-import { publicRequest, userRequest } from "../requestMethods";
+import { publicRequest } from "../requestMethods";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +23,7 @@ const LoginPage = () => {
       const res = await publicRequest.post("/auth/login", {
         email, 
         password,
+        language: i18n.language
       });
 
       // Başarılı ise kullanıcıyı kaydet
@@ -71,7 +73,8 @@ const LoginPage = () => {
       console.error("Giriş Hatası:", err);
       
       // Backend'den gelen hata mesajını yakala
-      const errorMessage = err.response?.data?.message || "E-posta veya şifre yanlış!";
+      const errorMessage = err.response?.data?.message;
+      
       
       // Kırmızı Toast bildirimi göster
       notify(errorMessage, "error");

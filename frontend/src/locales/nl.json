@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Controleer uw gegevens.",
+    "emailExists": "Er bestaat al een account met dit e-mailadres.",
+    "registerSuccess": "Registratie geslaagd! Controleer uw e-mail.",
+    "userNotFound": "Gebruiker niet gevonden.",
+    "wrongPassword": "Onjuist wachtwoord.",
+    "verifyEmail": "Bevestig uw e-mailadres.",
+    "accountBlocked": "Uw account is opgeschort.",
+    "sessionExpired": "Sessie verlopen. Log opnieuw in.",
+    "invalidToken": "De link is ongeldig of verlopen.",
+    "verifiedSuccess": "Account succesvol geverifieerd!",
+    "resetLinkSent": "Er is een link voor het opnieuw instellen van het wachtwoord naar uw e-mail verzonden.",
+    "weakPassword": "Het wachtwoord is niet sterk genoeg.",
+    "passwordUpdated": "Uw wachtwoord is succesvol bijgewerkt.",
+    "logoutSuccess": "Uitgelogd."
+  },
   "common": {
+    "serverError": "Er is een serverfout opgetreden. Probeer het later opnieuw.",
     "loading": "Laden...",
     "error": "Er is een fout opgetreden.",
     "success": "Succes!",

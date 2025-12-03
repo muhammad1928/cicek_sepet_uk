@@ -1,5 +1,21 @@
-{
+{ "auth": {
+    "validationError": "Please check your input fields.",
+    "emailExists": "An account with this email already exists.",
+    "registerSuccess": "Registration successful! Please check your email.",
+    "userNotFound": "User not found.",
+    "wrongPassword": "Incorrect password.",
+    "verifyEmail": "Please verify your email address.",
+    "accountBlocked": "Your account has been suspended.",
+    "sessionExpired": "Session expired. Please login again.",
+    "invalidToken": "Invalid or expired link.",
+    "verifiedSuccess": "Account verified successfully!",
+    "resetLinkSent": "Password reset link sent to your email.",
+    "weakPassword": "Password is not strong enough.",
+    "passwordUpdated": "Password successfully updated.",
+    "logoutSuccess": "Logged out successfully."
+  },
   "common": {
+    "serverError": "Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.",
     "loading": "Loading...",
     "error": "An error occurred.",
     "success": "Success!",

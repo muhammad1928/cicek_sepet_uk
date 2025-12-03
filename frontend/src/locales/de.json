@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Bitte überprüfen Sie Ihre Angaben.",
+    "emailExists": "Ein Konto mit dieser E-Mail existiert bereits.",
+    "registerSuccess": "Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail.",
+    "userNotFound": "Benutzer nicht gefunden.",
+    "wrongPassword": "Falsches Passwort.",
+    "verifyEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse.",
+    "accountBlocked": "Ihr Konto wurde gesperrt.",
+    "sessionExpired": "Sitzung abgelaufen. Bitte melden Sie sich erneut an.",
+    "invalidToken": "Der Link ist ungültig oder abgelaufen.",
+    "verifiedSuccess": "Konto erfolgreich verifiziert!",
+    "resetLinkSent": "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.",
+    "weakPassword": "Das Passwort ist nicht stark genug.",
+    "passwordUpdated": "Ihr Passwort wurde erfolgreich aktualisiert.",
+    "logoutSuccess": "Abmeldung erfolgreich."
+  },
   "common": {
+    "serverError": "Ein Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
     "loading": "Wird geladen...",
     "error": "Ein Fehler ist aufgetreten.",
     "success": "Erfolgreich!",

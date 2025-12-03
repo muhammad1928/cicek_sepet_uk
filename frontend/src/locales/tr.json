@@ -1,5 +1,22 @@
 {
+  "auth": {
+    "validationError": "Lütfen bilgilerinizi kontrol edin.",
+    "emailExists": "Bu e-posta ile zaten bir hesap var.",
+    "registerSuccess": "Kayıt başarılı! Lütfen mailinizi kontrol edin.",
+    "userNotFound": "Kullanıcı bulunamadı.",
+    "wrongPassword": "Şifre hatalı.",
+    "verifyEmail": "Lütfen e-posta adresinizi onaylayın.",
+    "accountBlocked": "Hesabınız askıya alınmıştır.",
+    "sessionExpired": "Oturum süresi doldu. Lütfen tekrar giriş yapın.",
+    "invalidToken": "Link geçersiz veya süresi dolmuş.",
+    "verifiedSuccess": "Hesap başarıyla doğrulandı!",
+    "resetLinkSent": "Şifre sıfırlama linki e-postanıza gönderildi.",
+    "weakPassword": "Şifre yeterince güçlü değil.",
+    "passwordUpdated": "Şifreniz başarıyla güncellendi.",
+    "logoutSuccess": "Çıkış yapıldı."
+  },
   "common": {
+    "serverError": "Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.",
     "loading": "Yükleniyor...",
     "error": "Bir hata oluştu.",
     "success": "Başarılı!",
