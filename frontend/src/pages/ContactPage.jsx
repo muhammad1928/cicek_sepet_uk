@@ -43,6 +43,7 @@ const ContactPage = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-pink-500 mb-2">{t("contact.contactTxt")}</h3>
+                {/* page name */}
                 <p className="text-gray-300">destek@ciceksepeti.uk</p>
                 <p className="text-gray-300">+44 20 7946 0000</p>
               </div>

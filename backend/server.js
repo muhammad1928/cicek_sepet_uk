@@ -44,13 +44,28 @@ if (process.env.NODE_ENV === 'development') {
 // 2. Güvenlik Başlıkları (Helmet)
 app.use(helmet());
 
-// 3. CORS Ayarları (Sadece senin frontend'ine izin ver)
-// Production'a geçerken 'http://localhost:5173' yerine gerçek domainini yazmalısın!
+// GÜVENLİ BEYAZ LİSTE (Whitelist)
+const allowedOrigins = [
+  "http://localhost:5173",                  // Geliştirme ortamı
+  "https://cicek-sepet-uk.vercel.app",      // Canlı Frontend (Slashsız)
+  "https://cicek-sepet-uk.vercel.app/",     // Canlı Frontend (Slashlı - Bazen tarayıcı ekler)
+  process.env.CLIENT_URL                    // .env dosyasından gelen (Yedek)
+];
+
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: (origin, callback) => {
+    // !origin: Postman, Mobile App veya Stripe Webhook gibi "tarayıcı olmayan" istekler.
+    // allowedOrigins.includes(origin): Gelen istek bizim listemizde var mı?
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS Hatası: ${origin} adresine izin verilmiyor.`));
+    }
+  },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Cookie/Token için gerekli
+  credentials: true, // Cookie (Token) transferi için ZORUNLU
 };
+
 app.use(cors(corsOptions));
 
 // 4. Rate Limiting (Hız Sınırlama)
