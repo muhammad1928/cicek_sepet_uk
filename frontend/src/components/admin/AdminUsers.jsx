@@ -4,6 +4,7 @@ import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import SecureImage from "../SecureImage";
 import { FiEye, FiSearch, FiRefreshCw, FiFilter, FiX, FiMaximize, FiUser, FiShield, FiLock } from "react-icons/fi";
+import UserActivityModal from "./UserActivityModal";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -13,19 +14,6 @@ const AdminUsers = () => {
 
   // --- YENİ: MODAL STATE ---
   const [selectedUserLog, setSelectedUserLog] = useState(null);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await userRequest.get("/users"); // userRequest ile çek
-        setUsers(res.data.reverse()); // En yeniler üstte
-        setLoading(false);
-      } catch (err) { console.log(err); }
-    };
-    fetchUsers();
-  }, []);
-
- 
 
   // --- FİLTRELEME ---
   const [searchTerm, setSearchTerm] = useState("");
@@ -182,6 +170,15 @@ const AdminUsers = () => {
                   }
                 </td>
                 <td className="p-4 text-right space-x-2">
+                  {/* --- AKTİVİTE BUTONU (YENİ) --- */}
+                  <button 
+                    onClick={() => setSelectedUserLog(u)} // Modalı açar
+                    className="text-indigo-500 hover:text-indigo-700 p-2 bg-indigo-50 rounded-lg transition hover:bg-indigo-100" 
+                    title="Aktivite Geçmişi"
+                  >
+                    <FiActivity />
+                  </button>
+
                   {/* Detay Butonu */}
                   <button onClick={() => handleViewDetails(u)} className="text-blue-500 hover:text-blue-700 p-2 bg-blue-50 rounded-lg transition" title="Detayları Gör"><FiEye /></button>
                   
@@ -308,6 +305,13 @@ const AdminUsers = () => {
 
       {/* Onay Modalı */}
       {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
+        {/* --- YENİ AKTİVİTE MODALI --- */}
+      {selectedUserLog && (
+        <UserActivityModal 
+          user={selectedUserLog} 
+          onClose={() => setSelectedUserLog(null)} 
+        />
+      )}
     </div>
   );
 };

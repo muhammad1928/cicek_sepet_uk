@@ -51,36 +51,36 @@ const createOrderEmail = (order, title, message) => {
         <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px;">
           <thead>
             <tr style="background-color: #f9f9f9; color: #666;">
-              <th style="text-align: left; padding: 10px;">Ürün</th>
-              <th style="text-align: center; padding: 10px;">Adet</th>
-              <th style="text-align: right; padding: 10px;">Fiyat</th>
+              <th style="text-align: left; padding: 10px;">Product</th>
+              <th style="text-align: center; padding: 10px;">Quantity</th>
+              <th style="text-align: right; padding: 10px;">Price</th>
             </tr>
           </thead>
           <tbody>${itemsHtml}</tbody>
         </table>
 
         <div style="text-align: right; margin-top: 20px; font-size: 14px;">
-          <p style="margin: 5px 0; color: #666;">Ara Toplam: <strong>£${subTotal.toFixed(2)}</strong></p>
-          ${discountAmount > 0.01 ? `<p style="margin: 5px 0; color: #16a34a;">İndirim: <strong>-£${discountAmount.toFixed(2)}</strong></p>` : ''}
-          <p style="margin: 5px 0; color: #666;">Kargo: <strong>${order.deliveryFee === 0 ? 'Ücretsiz' : '£' + order.deliveryFee.toFixed(2)}</strong></p>
+          <p style="margin: 5px 0; color: #666;">Subtotal: <strong>£${subTotal.toFixed(2)}</strong></p>
+          ${discountAmount > 0.01 ? `<p style="margin: 5px 0; color: #16a34a;">Discount: <strong>-£${discountAmount.toFixed(2)}</strong></p>` : ''}
+          <p style="margin: 5px 0; color: #666;">Delivery: <strong>${order.deliveryFee === 0 ? 'Free' : '£' + order.deliveryFee.toFixed(2)}</strong></p>
           <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
-            <p style="margin: 0; font-size: 22px; color: #db2777;"><strong>Ödenen Tutar: £${order.totalAmount.toFixed(2)}</strong></p>
+            <p style="margin: 0; font-size: 22px; color: #db2777;"><strong>Total: £${order.totalAmount.toFixed(2)}</strong></p>
           </div>
         </div>
 
         <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 25px; border: 1px solid #e2e8f0;">
-          <p style="margin: 0; font-size: 14px; color: #334155;"><strong>📍 Teslimat Adresi:</strong><br/>
+          <p style="margin: 0; font-size: 14px; color: #334155;"><strong>📍 Delivery Address:</strong><br/>
           ${order.recipient.name}<br/>
           ${order.recipient.address}, ${order.recipient.city}<br/>
           ${order.recipient.phone}</p>
         </div>
 
         <div style="text-align: center; margin-top: 35px;">
-          <a href="http://localhost:5173/my-orders" style="background-color: #db2777; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px;">Siparişi Takip Et</a>
+          <a href="http://localhost:5173/my-orders" style="background-color: #db2777; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px;">Track Order</a>
         </div>
       </div>
       <div style="background-color: #f1f5f9; padding: 15px; text-align: center; font-size: 12px; color: #94a3b8;">
-        &copy; ${new Date().getFullYear()} ÇiçekSepeti UK. Tüm hakları saklıdır.
+        &copy; ${new Date().getFullYear()} ÇiçekSepeti UK. All rights reserved.
       </div>
     </div>
   `;
@@ -90,11 +90,11 @@ const createOrderEmail = (order, title, message) => {
 const createCourierCancelEmail = (courierName, orderId) => {
   return `
     <div style="font-family: Arial; padding: 20px; border: 2px solid #dc2626; border-radius: 8px; background-color: #fef2f2;">
-      <h2 style="color: #dc2626; margin-top: 0;">🛑 DUR! SİPARİŞ İPTAL EDİLDİ</h2>
-      <p>Merhaba <b>${courierName}</b>,</p>
-      <p>Üzerine aldığın <strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> numaralı sipariş iptal edilmiştir.</p>
-      <p style="font-weight: bold;">Lütfen teslimat adresine veya mağazaya GİTMEYİNİZ.</p>
-      <p>Bu görev üzerinizden düşürülmüştür.</p>
+      <h2 style="color: #dc2626; margin-top: 0;">🛑 STOP! ORDER CANCELED</h2>
+      <p>Hello <b>${courierName}</b>,</p>
+      <p>The order you accepted with number <strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> has been canceled.</p>
+      <p style="font-weight: bold;">Please DO NOT go to the delivery address or store.</p>
+      <p>This task has been removed from you.</p>
     </div>
   `;
 };
@@ -117,34 +117,34 @@ const createVendorEmail = (vendorData, orderId) => {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
       <div style="background-color: #4f46e5; padding: 20px; text-align: center; color: white;">
-        <h2 style="margin: 0;">📦 Yeni Siparişiniz Var!</h2>
+        <h2 style="margin: 0;">📦 You have a new order!</h2>
       </div>
       <div style="padding: 25px;">
-        <p style="font-size: 16px; color: #333;">Merhaba <b>${vendorData.name}</b>,</p>
-        <p style="color: #555;">Mağazanızdan yeni ürünler sipariş edildi (Sipariş No: #${orderId.toString().slice(-8).toUpperCase()}).</p>
+        <p style="font-size: 16px; color: #333;">Hello <b>${vendorData.name}</b>,</p>
+        <p style="color: #555;">New products have been ordered from your store (Order No: #${orderId.toString().slice(-8).toUpperCase()}).</p>
         
         <div style="background-color: #eef2ff; padding: 12px; border-radius: 6px; color: #3730a3; font-size: 13px; margin: 15px 0; border-left: 4px solid #4f46e5;">
-          ℹ️ <b>Bilgi:</b> Bu siparişteki müşteri indirimleri platform tarafından karşılanmıştır. Sizin kazancınız <b>Orijinal Liste Fiyatı</b> üzerinden hesaplanmıştır.
+          ℹ️ <b>Info:</b> Customer discounts in this order have been covered by the platform. Your earnings are calculated based on the <b>Original List Price</b>.
         </div>
         
         <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;">
           <thead>
              <tr style="background-color: #f3f4f6; color: #555;">
-               <th style="text-align: left; padding: 10px;">Ürün</th>
-               <th style="text-align: center; padding: 10px;">Adet</th>
-               <th style="text-align: right; padding: 10px;">Birim Fiyat</th>
-               <th style="text-align: right; padding: 10px;">Toplam</th>
+               <th style="text-align: left; padding: 10px;">Product</th>
+               <th style="text-align: center; padding: 10px;">Quantity</th>
+               <th style="text-align: right; padding: 10px;">Unit Price</th>
+               <th style="text-align: right; padding: 10px;">Total</th>
              </tr>
           </thead>
           <tbody>${itemsHtml}</tbody>
         </table>
         
         <div style="text-align: right; margin-top: 20px; font-size: 18px;">
-           <p>Toplam Hakediş: <strong style="color: #4f46e5;">£${vendorTotal.toFixed(2)}</strong></p>
+           <p>Total Earnings: <strong style="color: #4f46e5;">£${vendorTotal.toFixed(2)}</strong></p>
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-          <a href="http://localhost:5173/vendor" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Mağaza Paneline Git</a>
+          <a href="http://localhost:5173/vendor" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to Store Panel</a>
         </div>
       </div>
     </div>
@@ -155,12 +155,12 @@ const createVendorEmail = (vendorData, orderId) => {
 const createVendorCancelEmail = (vendorName, orderId) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #fee2e2; border-radius: 8px; background-color: #fff5f5;">
-      <h2 style="color: #991b1b; margin-top: 0;">❌ Sipariş İptal Edildi</h2>
-      <p>Merhaba <b>${vendorName}</b>,</p>
-      <p><strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> numaralı sipariş iptal edilmiştir.</p>
-      <p>Lütfen bu sipariş için ürün hazırlamayın veya gönderim yapmayın.</p>
+      <h2 style="color: #991b1b; margin-top: 0;">❌ Order Cancelled</h2>
+      <p>Hello <b>${vendorName}</b>,</p>
+      <p><strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> order has been cancelled.</p>
+      <p>Please do not prepare or ship products for this order.</p>
       <hr style="border: 0; border-top: 1px solid #fecaca; margin: 20px 0;">
-      <p style="font-size: 12px; color: #7f1d1d;">ÇiçekSepeti UK Satıcı Ekibi</p>
+      <p style="font-size: 12px; color: #7f1d1d;">ÇiçekSepeti UK Seller Team</p>
     </div>
   `;
 };
@@ -180,10 +180,10 @@ router.post('/',  async (req, res) => {
       const product = await Product.findById(item._id);
       
       if (!product) {
-        return res.status(404).json({ message: `Ürün bulunamadı: ${item.title}` });
+        return res.status(404).json({ message: `Product not found: ${item.title}` });
       }
       if (product.stock < item.quantity) {
-        return res.status(400).json({ message: `Stok yetersiz: ${item.title}. Kalan: ${product.stock}` });
+        return res.status(400).json({ message: `Insufficient stock: ${item.title}. Remaining: ${product.stock}` });
       }
       
       // Fiyatı veritabanından al (Güvenlik: Frontend fiyatına güvenilmez)
@@ -320,8 +320,8 @@ router.post('/',  async (req, res) => {
     }
 
     // --- F) MÜŞTERİYE MAİL GÖNDER ---
-    const customerMailContent = createOrderEmail(savedOrder, "Siparişiniz Alındı! 🌸", `Merhaba ${sender.name}, siparişiniz başarıyla oluşturuldu.`);
-    sendEmail(sender.email, "Sipariş Onayı - ÇiçekSepeti UK", customerMailContent).catch(console.error);
+    const customerMailContent = createOrderEmail(savedOrder, "Your order have been received 🌸", `Hello ${sender.name}, your order has been successfully placed.`);
+    sendEmail(sender.email, "Order Confirmation - ÇiçekSepeti UK", customerMailContent).catch(console.error);
 
     // --- G) SATICILARA BİLDİRİM GÖNDER ---
     const vendorMap = new Map(); 
@@ -350,14 +350,14 @@ router.post('/',  async (req, res) => {
     // Her satıcıya mail at
     for (const [id, data] of vendorMap) {
         const vendorMail = createVendorEmail(data, savedOrder._id);
-        sendEmail(data.email, "Yeni Sipariş Aldınız! 📦", vendorMail).catch(console.error);
+        sendEmail(data.email, "New Order Received! 📦", vendorMail).catch(console.error);
     }
 
-    res.status(200).json({ message: "Sipariş başarıyla oluşturuldu! 🌸", order: savedOrder });
+    res.status(200).json({ message: "Order successfully created! 🌸", order: savedOrder });
 
   } catch (err) {
-    console.error("Sipariş Hatası:", err);
-    res.status(500).json({ message: "Sunucu hatası oluştu." });
+    console.error("Order Error:", err);
+    res.status(500).json({ message: "Server error occurred." });
   }
 });
 
@@ -437,7 +437,7 @@ router.put('/:id', verifyTokenAndWorker, async (req, res) => {
             if (product && product.vendor && !vendorSet.has(product.vendor._id.toString())) {
                 vendorSet.add(product.vendor._id.toString());
                 const mailContent = createVendorCancelEmail(product.vendor.fullName, updatedOrder._id);
-                sendEmail(product.vendor.email, "Sipariş İptali ❌", mailContent).catch(console.error);
+                sendEmail(product.vendor.email, "Order Cancellation ❌", mailContent).catch(console.error);
             }
         }
 
@@ -446,7 +446,7 @@ router.put('/:id', verifyTokenAndWorker, async (req, res) => {
             const courier = await User.findById(oldOrder.courierId);
             if (courier) {
                 const courierMail = createCourierCancelEmail(courier.fullName, updatedOrder._id);
-                sendEmail(courier.email, "GÖREV İPTAL EDİLDİ 🛑", courierMail).catch(console.error);
+                sendEmail(courier.email, "Task Cancelled 🛑", courierMail).catch(console.error);
             }
         }
     }
@@ -457,24 +457,24 @@ router.put('/:id', verifyTokenAndWorker, async (req, res) => {
 
     switch (status) {
       case "Hazırlanıyor":
-        subject = "Siparişiniz Hazırlanıyor! 🎁";
-        msg = `Siparişiniz onaylandı ve hazırlanıyor.`;
+        subject = "Your order is being prepared! 🎁";
+        msg = `Your order has been confirmed and is being prepared.`;
         break;
       case "Yola Çıktı":
-        subject = "Siparişiniz Yola Çıktı! 🛵";
-        msg = `Siparişiniz kuryemize teslim edildi. Adresinize doğru yola çıktı.`;
+        subject = "Your order is on the way! 🛵";
+        msg = `Your order has been handed over to the courier and is on its way to your address.`;
         break;
       case "Teslim Edildi":
-        subject = "Teslimat Başarılı! ✅";
-        msg = `Siparişiniz başarıyla teslim edildi. Bizi tercih ettiğiniz için teşekkür ederiz.`;
+        subject = "Delivery Successful! ✅";
+        msg = `Your order has been successfully delivered. Thank you for choosing us.`;
         break;
       case "İptal":
-        subject = "Sipariş İptali ❌";
-        msg = `Siparişiniz iptal edilmiştir. Detaylı bilgi için bizimle iletişime geçin.`;
+        subject = "Order Cancellation ❌";
+        msg = `Your order has been cancelled. Please contact us for more information.`;
         break;
       case "İptal Talebi":
-        subject = "İptal Talebiniz Alındı 📩";
-        msg = `Sipariş iptal talebiniz tarafımıza ulaştı.<br/><br/><b>Sebep:</b> ${cancellationReason || 'Belirtilmedi'}<br/><br/>Müşteri temsilcimiz inceleyip size dönüş yapacaktır.`;
+        subject = "Your Cancellation Request Has Been Received 📩";
+        msg = `Your order cancellation request has been received.<br/><br/><b>Reason:</b> ${cancellationReason || 'Not specified'}<br/><br/>Our customer representative will review and get back to you.`;
         break;
     }
 
