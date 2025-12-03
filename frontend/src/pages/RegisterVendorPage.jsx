@@ -139,8 +139,8 @@ const RegisterVendorPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-900 p-4 font-sans relative overflow-hidden pt-2">
-      <Seo title={t("vendorRegistrationPage.title")} description={t("vendorRegistrationPage.description")} />
+    <div className="pt-20 min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-900 p-4 font-sans relative overflow-hidden pt-2">
+      <Seo title={t("seo.vendorRegistrationPage.title")} description={t("seo.vendorRegistrationPage.description")} />
       
       <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
@@ -169,9 +169,9 @@ const RegisterVendorPage = () => {
         <div className="inline-block p-3 rounded-full bg-purple-100 text-purple-600 text-3xl">🏪</div>
         <div className="text-center">
           <h2 className="text-2xl font-extrabold text-gray-800">
-            {user ? `${t("vendorRegistrationPage.title1")}: ${user.fullName}` : t("vendorRegistrationPage.title2")}
+            {user ? `${t("vendor.title1")}: ${user.fullName}` : t("vendor.title2")}
           </h2>
-          <p className="text-gray-500 text-sm">{t("vendorRegistrationPage.titleDesc")}</p>
+          <p className="text-gray-500 text-sm">{t("vendor.titleDesc")}</p>
         </div>
       </div>
 
@@ -184,8 +184,8 @@ const RegisterVendorPage = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                      <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("vendorRegistrationPage.fullName")}</label>
-                      <input name="fullName" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-purple-500" placeholder={t("vendorRegistrationPage.fullNamePlaceholder")} required />
+                      <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("vendor.fullName")}</label>
+                      <input name="fullName" onChange={handleRegChange} className="w-full p-3 border rounded outline-none focus:border-purple-500" placeholder={t("vendor.fullNamePlaceholder")} required />
                   </div>
                   <div>
                       <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.email")}</label>

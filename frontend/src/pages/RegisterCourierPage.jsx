@@ -16,10 +16,10 @@ const RegisterCourierPage = () => {
 
   // Araç Tipleri
   const VEHICLE_TYPES = [
-    { value: "motor", label: `${t("registerCourierPage.vehicleOpt.motorcycle")} 🏍️` },
-    { value: "car", label: `${t("registerCourierPage.vehicleOpt.car")} 🚗` },
-    { value: "van", label: `${t("registerCourierPage.vehicleOpt.van")} 🚐` },
-    { value: "bicycle", label: `${t("registerCourierPage.vehicleOpt.bicycle")} 🚲` }
+    { value: "motor", label: `${t("registerCourier.vehicleOpt.motorcycle")} 🏍️` },
+    { value: "car", label: `${t("registerCourier.vehicleOpt.car")} 🚗` },
+    { value: "van", label: `${t("registerCourier.vehicleOpt.van")} 🚐` },
+    { value: "bicycle", label: `${t("registerCourier.vehicleOpt.bicycle")} 🚲` }
   ];
   // 1. Kayıt Verileri (Giriş yapmamışsa)
   const [regData, setRegData] = useState({ fullName: "", email: "", password: "", role: "courier" });
@@ -119,7 +119,7 @@ const RegisterCourierPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-700 p-4 font-sans relative overflow-hidden pt-2">
-      <Seo title={t("registerCourierPage.title")} description={t("registerCourierPage.description")} />
+      <Seo title={t("seo.registerCourierPage.title")} description={t("seo.registerCourierPage.description")} />
       <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
       {/* --- MODERN SCROLLBAR --- */}
@@ -136,8 +136,8 @@ const RegisterCourierPage = () => {
         <div className="flex items-center justify-center space-x-4 mb-2">
           <div className="inline-block p-3 rounded-full bg-blue-100 text-blue-600 mb-3 text-3xl">🛵</div>
           <div className="text-center">
-            <h2 className="text-2xl font-extrabold text-gray-800">{user ? `${t("registerCourierPage.courierApplication")}: ${user.fullName}` : t("registerCourierPage.becomeACourier")}</h2>
-            <p className="text-gray-500 text-sm"> {t("registerCourierPage.yourOwnBoss")}</p>
+            <h2 className="text-2xl font-extrabold text-gray-800">{user ? `${t("registerCourier.courierApplication")}: ${user.fullName}` : t("registerCourier.becomeACourier")}</h2>
+            <p className="text-gray-500 text-sm"> {t("registerCourier.yourOwnBoss")}</p>
           </div>
         </div>
 
@@ -173,19 +173,19 @@ const RegisterCourierPage = () => {
                       </div>
                     )}
                 </div>
-                <div className="bg-blue-50 p-3 rounded text-xs text-blue-700 mb-2">💡 {t("registerCourierPage.information")}</div>
+                <div className="bg-blue-50 p-3 rounded text-xs text-blue-700 mb-2">💡 {t("registerCourier.information")}</div>
               </>
             )}
 
             {/* --- DURUM 2: GİRİŞ YAPMIŞSA --- */}
             {user && (
               <div className="space-y-4 bg-gray-50 p-5 rounded-xl border border-gray-200">
-                 <h3 className="font-bold text-gray-700 text-sm border-b pb-3 mb-2">{t("registerCourierPage.vehicleInfo")}</h3>
+                 <h3 className="font-bold text-gray-700 text-sm border-b pb-3 mb-2">{t("registerCourier.vehicleInfo")}</h3>
                  
                  <div className="grid grid-cols-2 gap-4">
                     <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.phoneNumber")}</label><input name="phone" placeholder={t("common.phoneNumberPlaceholder")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                     <div>
-                        <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.vehicleType")}</label>
+                        <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourier.vehicleType")}</label>
                         <select name="vehicleType" onChange={handleAppChange} className="w-full p-3 border rounded text-sm bg-white outline-none focus:border-blue-500 cursor-pointer" required>
                           <option value="">{t("common.dropdownOpt")}</option>
                           {VEHICLE_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
@@ -194,18 +194,18 @@ const RegisterCourierPage = () => {
                  </div>
                  
                  <div className="grid grid-cols-2 gap-4">
-                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.vehicleLicensePlate")}</label><input name="plateNumber" placeholder={t("registerCourierPage.vehicleLicensePlate")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
-                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.licenseNumber")}</label><input name="licenseNumber" placeholder={t("registerCourierPage.licenseNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourier.vehicleLicensePlate")}</label><input name="plateNumber" placeholder={t("registerCourier.vehicleLicensePlate")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
+                   <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourier.licenseNumber")}</label><input name="licenseNumber" placeholder={t("registerCourier.licenseNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                  </div>
                  
                  <div className="grid grid-cols-2 gap-4">
-                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.taxNumber")}</label><input name="taxNumber" placeholder={t("registerCourierPage.taxNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" /></div>
+                    <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourier.taxNumber")}</label><input name="taxNumber" placeholder={t("registerCourier.taxNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" /></div>
                     <div><label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("common.ibanNumber")}</label><input name="iban" placeholder={t("common.ibanNumber")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm outline-none focus:border-blue-500 bg-white" required /></div>
                  </div>
 
                  <div>
-                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourierPage.courierAddress")}</label>
-                    <textarea name="address" placeholder={t("registerCourierPage.courierAddress")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm h-24 resize-none outline-none focus:border-blue-500 bg-white" required />
+                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("registerCourier.courierAddress")}</label>
+                    <textarea name="address" placeholder={t("registerCourier.courierAddress")} onChange={handleAppChange} className="w-full p-3 border rounded text-sm h-24 resize-none outline-none focus:border-blue-500 bg-white" required />
                  </div>
                  
                  <div className="border-2 border-dashed border-blue-300 p-4 rounded-lg text-center bg-white hover:bg-blue-50 transition cursor-pointer group">
@@ -213,7 +213,7 @@ const RegisterCourierPage = () => {
                        <span className="text-blue-600 font-bold text-sm group-hover:text-blue-800 transition">{uploading ? "Yükleniyor..." : "+ Ehliyet Fotoğrafı Yükle"}</span>
                        <input type="file" className="hidden" onChange={handleUpload} accept="image/*" disabled={uploading} />
                      </label>
-                     {licenseFile && <p className="text-[10px] text-green-600 mt-2 font-bold">{t("registerCourierPage.fileReady")} ✅</p>}
+                     {licenseFile && <p className="text-[10px] text-green-600 mt-2 font-bold">{t("registerCourier.fileReady")} ✅</p>}
                   </div>
               </div>
             )}
@@ -221,8 +221,8 @@ const RegisterCourierPage = () => {
             <div className="flex items-center gap-2 pt-2">
               <input type="checkbox" id="terms" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="w-4 h-4 accent-blue-600 cursor-pointer" />
               <label htmlFor="terms" className="text-xs text-gray-600 cursor-pointer">
-                <span className="text-blue-600 font-bold hover:underline mr-1" onClick={(e) => { e.preventDefault(); setShowTerms(true); }}>{t("registerCourierPage.policy1")}</span>
-                {t("registerCourierPage.policy2")}
+                <span className="text-blue-600 font-bold hover:underline mr-1" onClick={(e) => { e.preventDefault(); setShowTerms(true); }}>{t("registerCourier.policy1")}</span>
+                {t("registerCourier.policy2")}
               </label>
             </div>
 
@@ -231,13 +231,13 @@ const RegisterCourierPage = () => {
               disabled={loading || uploading || (!user && !passwordValid)} 
               className={`w-full text-white bg-blue-600 hover:bg-blue-700 font-bold py-3.5 rounded-xl transition shadow-lg flex justify-center items-center gap-2 text-lg ${(!user && !passwordValid) ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}`}
             >
-              {loading ? t("registerCourierPage.btn1") : (user ? t("registerCourierPage.btn3") : t("registerCourierPage.btn2"))}
+              {loading ? t("registerCourier.btn1") : (user ? t("registerCourier.btn3") : t("registerCourier.btn2"))}
             </button>
 
           </form>
         </div>
         
-        {!user && <div className="mt-4 text-center text-xs text-gray-500 flex-shrink-0"><Link to="/login" className="hover:text-blue-600 font-bold">{t("registerCourierPage.alreadyHaveAccount")}</Link></div>}
+        {!user && <div className="mt-4 text-center text-xs text-gray-500 flex-shrink-0"><Link to="/login" className="hover:text-blue-600 font-bold">{t("registerCourier.alreadyHaveAccount")}</Link></div>}
       </div>
 
       {showTerms && <TermsModal onClose={() => setShowTerms(false)} type="courier" onAccept={() => setAcceptedTerms(true)} />}

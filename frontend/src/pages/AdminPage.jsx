@@ -62,7 +62,7 @@ const AdminPage = () => {
             active={activeTab === "applications"} 
             onClick={() => setActiveTab("applications")} 
             icon={<FiFileText />} 
-            label={t("admin.basvurular")} 
+            label={t("admin.applicants")} 
           />
           <SidebarBtn 
             active={activeTab === "users"} 
