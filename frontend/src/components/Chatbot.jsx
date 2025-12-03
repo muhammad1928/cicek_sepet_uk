@@ -76,7 +76,20 @@ const Chatbot = () => {
     <div className="fixed bottom-5 left-5 z-[1000] flex flex-col items-start">
       
       {isOpen && (
-        <div className="bg-white w-80 h-96 rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-fade-in-up mb-4">
+        <div className="bg-white 
+          /* MOBİL (Varsayılan): Ekran genişliğinden soldaki boşluk ve sağdaki hayali boşluğu (toplam 2.5rem) çıkarır */
+          w-[calc(100vw-2.5rem)] h-[60vh]
+          
+          /* TABLET (sm): Orijinal boyutlarına döner */
+          sm:w-80 sm:h-96
+          
+          /* KÜÇÜK LAPTOP (md): Biraz daha genişler */
+          md:w-96 md:h-[30rem]
+          
+          /* BÜYÜK EKRAN (lg): İyice büyür */
+          lg:w-[28rem] lg:h-[38rem]
+          
+          rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-fade-in-up mb-4 transition-all duration-300 ease-in-out">
           
           {/* Header */}
           <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 text-white flex justify-between items-center">
