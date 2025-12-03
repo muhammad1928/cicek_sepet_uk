@@ -20,7 +20,8 @@ const registerSchema = Joi.object({
     fullName: Joi.string().min(3).max(50).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).pattern(passwordPattern).required(),
-    role: Joi.string().valid('customer', 'vendor', 'courier').optional()
+    role: Joi.string().valid('customer', 'vendor', 'courier').optional(),
+    language: Joi.string().optional().allow(null, '') // Dil bilgisini kabul et
 });
 
 const loginSchema = Joi.object({

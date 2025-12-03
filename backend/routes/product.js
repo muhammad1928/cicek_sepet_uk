@@ -111,7 +111,8 @@ router.get('/:id', async (req, res) => {
 
     res.status(200).json(product);
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Ürün Detay Hatası:", err); // Render loglarında görmek için
+    res.status(500).json({ message: "Sunucu hatası" });
   }
 });
 
