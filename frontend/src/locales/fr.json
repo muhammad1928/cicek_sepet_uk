@@ -180,6 +180,7 @@
     "returnToLogin": "← Retour à la connexion"
   },
   "legal": {
+    "legalTitle": "Politique de cookies",
     "privacyPolicy": {
       "legalPageContentTitle": "Politique de confidentialité",
       "first": "1. Responsable des données",
@@ -222,7 +223,7 @@
     "pageNotFound": "Page non trouvée",
     "pageNotFoundDesc": "Le contenu que vous recherchez n'existe pas.",
     "backToHome": "← Retour à l'accueil",
-    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+    "backToHome2": "ÇiçekSepeti UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "Votre demande d'annulation a été reçue.",

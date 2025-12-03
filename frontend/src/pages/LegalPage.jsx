@@ -68,7 +68,7 @@ const LegalPage = () => {
 
     // 3. ÇEREZ POLİTİKASI (GÜNCELLENMİŞ)
     "cookie-policy": {
-      title: "Çerez (Cookie) Politikası",
+      title: t("legal.legalTitle"),
       icon: <span className="text-2xl">🍪</span>,
       body: (
         <div className="space-y-6">

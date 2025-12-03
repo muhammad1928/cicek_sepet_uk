@@ -181,6 +181,7 @@
     "returnToLogin": "← Giriş Sayfasına Dön"
   },
   "legal": {
+    "legalTitle": "Çerez Politikası",
     "privacyPolicy": {
       "legalPageContentTitle": "Gizlilik Politikası",
       "first": "1. Veri Sorumlusu",
@@ -223,7 +224,7 @@
     "pageNotFound": "Sayfa Bulunamadı",
     "pageNotFoundDesc": "Aradığınız içerik mevcut değil.",
     "backToHome": "← Ana Sayfaya Dön",
-    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+    "backToHome2": "ÇiçekSepeti UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "İptal talebiniz başarıyla alındı.",

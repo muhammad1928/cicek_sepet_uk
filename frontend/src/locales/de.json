@@ -183,6 +183,7 @@
   },
 
   "legal": {
+    "legalTitle": "Cookie-Richtlinie",
     "privacyPolicy": {
       "legalPageContentTitle": "Datenschutzrichtlinie",
       "first": "1. Datenverantwortlicher",
@@ -225,7 +226,7 @@
     "pageNotFound": "Seite nicht gefunden",
     "pageNotFoundDesc": "Der gesuchte Inhalt existiert nicht.",
     "backToHome": "← Zurück zur Startseite",
-    "backToHome2": "&copy; ÇiçekSepeti UK Rechtsteam"
+    "backToHome2": "ÇiçekSepeti UK Rechtsteam"
   },
 
   "myOrders": {

@@ -179,6 +179,7 @@
     "returnToLogin": "← Tillbaka till inloggning"
   },
   "legal": {
+    "legalTitle": "Cookiepolicy",
     "privacyPolicy": {
       "legalPageContentTitle": "Integritetspolicy",
       "first": "1. Personuppgiftsansvarig",
@@ -221,7 +222,7 @@
     "pageNotFound": "Sidan hittades inte",
     "pageNotFoundDesc": "Innehållet du söker finns inte.",
     "backToHome": "← Tillbaka till startsidan",
-    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+    "backToHome2": "ÇiçekSepeti UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "Din avbokningsförfrågan har mottagits.",
