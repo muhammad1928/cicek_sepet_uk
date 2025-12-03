@@ -8,7 +8,7 @@ import Seo from "../components/Seo";
 import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
-  const { t} = useTranslation();
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({ fullName: "", email: "", password: "", role: "customer" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
@@ -22,11 +22,7 @@ const RegisterPage = () => {
 
   // Şifre Kuralları
   const [rules, setRules] = useState({
-    length: false,
-    upper: false,
-    lower: false,
-    number: false,
-    special: false
+    length: false, upper: false, lower: false, number: false, special: false
   });
 
   const navigate = useNavigate();
@@ -65,18 +61,28 @@ const RegisterPage = () => {
     
     setLoading(true);
     try {
-      await publicRequest.post("/auth/register", formData);
+      // Backend'e dil bilgisini de gönderiyoruz (Mail için)
+      await publicRequest.post("/auth/register", { ...formData, language: i18n.language });
+      
       notify(t("common.accountCreated") + " 🎉 " + t("register.pleaseVerifyEmail"), "success");
       
-      // --- GÜNCELLEME: Navigate ile mail verisini gönderiyoruz ---
       setTimeout(() => {
         navigate("/verification-pending", { state: { email: formData.email } }); 
       }, 2000);
-      // -------------------------
 
     } catch (err) {
       setLoading(false);
-      notify(err.response?.data?.message || t("register.registrationFailed"), "error");
+      
+      // --- GÜNCELLEME: Backend'den gelen KODU alıp çeviriyoruz ---
+      const errorKey = err.response?.data?.message; // Örn: "auth.emailExists"
+      
+      // Eğer gelen mesaj '.' içeriyorsa bir koddur, t() ile çevir
+      // Eğer düz metinse (beklenmeyen hata), olduğu gibi göster veya varsayılan hata ver
+      const displayMessage = errorKey && errorKey.includes('.') 
+          ? t(errorKey) 
+          : t("register.registrationFailed");
+
+      notify(displayMessage, "error");
     }
   };
 
@@ -99,6 +105,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-200 p-4 font-sans relative overflow-hidden">
       <Seo title={t("seo.registerPage.title")} description={t("seo.registerPage.description")} />
+      
       {/* Arka Plan */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40">
         <div className="absolute top-10 right-10 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
@@ -134,7 +141,7 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Şifre ALANI VE DİNAMİK LİSTE */}
+          {/* Şifre */}
           <div className="relative">
             <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("common.password")}</label>
             <div className={getContainerClass("password")}>
@@ -153,12 +160,9 @@ const RegisterPage = () => {
               </button>
             </div>
 
-            {/* --- AKILLI ŞİFRE KURALLARI LİSTESİ (DİNAMİK KAYBOLMA) --- */}
             {(passwordFocused || (formData.password && !passwordValid)) && (
               <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg transition-all duration-300 text-[11px]">
-                
                 <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">{t("register.securityMeasures")}</p>
-                
                 <div className="flex flex-col">
                   <RuleItem label={t("common.passwordRules.rule1")} valid={rules.length} />
                   <RuleItem label={t("common.passwordRules.rule2")} valid={rules.upper} />
@@ -166,7 +170,6 @@ const RegisterPage = () => {
                   <RuleItem label={t("common.passwordRules.rule4")} valid={rules.number} />
                   <RuleItem label={t("common.passwordRules.rule5")} valid={rules.special} />
                 </div>
-
                 {passwordValid && (
                   <div className="text-green-600 font-bold flex items-center gap-1 animate-bounce mt-1 pt-2 border-t border-gray-100">
                     <span>✅</span> {t("common.strongPassword")}
@@ -176,7 +179,7 @@ const RegisterPage = () => {
             )}
           </div>
 
-          {/* --- SÖZLEŞME KISMI (DÜZELTİLDİ) --- */}
+          {/* Sözleşme */}
           <div className="flex items-center gap-2 pt-1 px-1">
             <input 
               type="checkbox" 
@@ -191,12 +194,10 @@ const RegisterPage = () => {
                 onClick={(e) => { 
                   e.preventDefault(); 
                   setShowTerms(true); 
-                  // DÜZELTME: Otomatik setAcceptedTerms(true) SİLİNDİ.
-                  // Sadece modal açılacak, onayı oradaki buton yapacak.
                 }}
               >
                 {t("register.userAgrement1")}
-              </span>
+              </span> 
               {t("register.userAgrement2")}
             </label>
           </div>
@@ -219,11 +220,11 @@ const RegisterPage = () => {
 
       </div>
 
-      {/* Modal Bağlantısı */}
+      {/* Modal */}
       {showTerms && (
         <TermsModal 
           onClose={() => setShowTerms(false)} 
-          onAccept={() => setAcceptedTerms(true)} // Modal içindeki 'Kabul Ediyorum' butonuna basınca çalışır
+          onAccept={() => setAcceptedTerms(true)} 
           type="user" 
         />
       )}
@@ -232,17 +233,8 @@ const RegisterPage = () => {
   );
 };
 
-// Dinamik Kural Bileşeni (Yardımcı)
 const RuleItem = ({ label, valid }) => (
-  <div 
-    className={`
-      flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out
-      ${valid 
-        ? "max-h-0 opacity-0 -translate-y-2"  // Sağlandıysa gizle
-        : "max-h-6 opacity-100 translate-y-0" // Sağlanmadıysa göster
-      }
-    `}
-  >
+  <div className={`flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out ${valid ? "max-h-0 opacity-0 -translate-y-2" : "max-h-6 opacity-100 translate-y-0"}`}>
     <span className="text-red-500 font-bold text-xs">•</span> 
     <span className="text-gray-600 font-medium">{label}</span>
   </div>
