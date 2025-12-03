@@ -55,7 +55,7 @@ const loginSchema = Joi.object({
 // =============================================================================
 // 1. KAYIT OL (REGISTER)
 // =============================================================================
-router.post('/register', verifyTokenAndAuthorization, async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     // A) Backend Validasyonu
     const { error } = registerSchema.validate(req.body);
