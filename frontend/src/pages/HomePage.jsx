@@ -115,7 +115,7 @@ const HomePage = () => {
         style={{ top: "60px" }} 
       >
         <div className="absolute inset-0 bg-white/60 backdrop-blur-md border-b border-gray-100 shadow-sm"></div>
-        <div className="max-w-8xl mx-auto px-4 relative">
+        <div className="max-w-7xl mx-auto px-4 relative">
             <div 
               ref={categoryContainerRef}
               className="flex gap-3 overflow-x-auto no-scrollbar pb-1 cursor-grab active:cursor-grabbing select-none"

@@ -1,30 +1,862 @@
 {
-  "navbar": {
-    "home": "Home",
-    "shop": "Winkel",
-    "about": "Over ons",
-    "contact": "Contact",
-    "login": "Inloggen",
-    "register": "Registreren",
-    "logout": "Uitloggen",
-    "myAccount": "Mijn account",
-    "searchPlaceholder": "Zoek bloemen, chocolade, cadeaus..."
-  },
-  "home": {
-    "heroTitle": "Maak uw dierbaren blij",
-    "heroSubtitle": "Wij bezorgen de verste bloemen en de meest bijzondere cadeaus van Londen dezelfde dag nog aan uw deur.",
-    "categories": "Categorieën",
-    "featured": "Uitgelicht"
-  },
-  "cart": {
-    "title": "Winkelwagen",
-    "empty": "Uw winkelwagen is leeg.",
-    "checkout": "Afrekenen",
-    "total": "Totaal"
-  },
   "common": {
     "loading": "Laden...",
     "error": "Er is een fout opgetreden.",
-    "success": "Gelukt!"
+    "success": "Succes!",
+    "logout": "Uitloggen",
+    "backToHome": "Terug naar Home",
+    "goBack": "Terug",
+    "finished": "UITVERKOCHT",
+    "vendor": "Verkoper",
+    "stock": "Voorraad",
+    "fastDelivery": "Snelle levering",
+    "addToCart": "In winkelwagen",
+    "price": "Prijs",
+    "reviews": "Beoordelingen",
+    "fullName": "Volledige naam",
+    "email": "E-mailadres",
+    "emailPlaceholder": "Voer uw e-mailadres in",
+    "password": "Wachtwoord",
+    "strongPassword": "Sterk wachtwoord!",
+    "date": "Datum",
+    "time": "Tijd",
+    "accept": "Accepteren",
+    "decline": "Weigeren",
+    "passwordRules": {
+      "rule1": "Minimaal 8 tekens",
+      "rule2": "Minimaal 1 hoofdletter",
+      "rule3": "Minimaal 1 kleine letter",
+      "rule4": "Minimaal 1 cijfer",
+      "rule5": "Minimaal 1 speciaal teken (!@#$)"
+    },
+    "phoneNumber": "Telefoonnummer",
+    "phoneNumberPlaceholder": "Voer uw contactnummer in",
+    "dropdownOpt": "Selecteren...",
+    "accountCreated": "Account aangemaakt!",
+    "pleaseVerifyEmail": "Verifieer uw e-mailadres.",
+    "ibanNumber": "IBAN-nummer",
+    "okay": "OK",
+    "lastUpdated": "Laatst bijgewerkt",
+    "print": "Afdrukken / Opslaan als PDF"
+  },
+  "home": {
+    "heroTitle": "Maak je dierbaren blij",
+    "heroSubtitle": "Wij bezorgen de versste bloemen en de meest bijzondere cadeaus van Londen dezelfde dag nog bij u thuis.",
+    "categories": "Categorieën",
+    "featured": "Uitgelicht",
+    "categories_sticky": "Categorieën",
+    "notFound": "Geen producten gevonden die aan uw criteria voldoen.",
+    "showAll": "Toon alle producten",
+    "homeAddToCart": "Toevoegen",
+    "categories1": {
+      "all": "Alles",
+      "birthday": "Verjaardag",
+      "anniversary": "Jubileum",
+      "indoor": "Kamerplanten",
+      "eadible": "Eetbare cadeaus",
+      "rose": "Rozen",
+      "orchid": "Orchideeën",
+      "daisy": "Madeliefjes",
+      "tulip": "Tulpen",
+      "unique": "Uniek",
+      "designFlowers": "Designbloemen"
+    }
+  },
+  "seo": {
+    "aboutUsPage": {
+      "aboutTitle": "Over ons - ÇiçekSepeti | De versste bloemen en cadeaus",
+      "aboutDescription": "Ontdek de geschiedenis, missie en waarden van ÇiçekSepeti. We zijn toegewijd om onze klanten de beste bloemen- en cadeau-ervaring te bieden."
+    },
+    "homePage": {
+      "homeTitle": "Verse bloemen en bijzondere cadeaus - ÇiçekSepeti Londen",
+      "locationTitle": "Londen - De versste bloemen en bijzondere cadeaus | ÇiçekSepeti",
+      "homeDescription": "Wij bezorgen de versste bloemen en bijzondere cadeaus van Londen dezelfde dag nog bij u thuis."
+    },
+    "contactPage": {
+      "contactTitle": "Contact - ÇiçekSepeti | Neem contact op",
+      "contactDescription": "Neem contact met ons op voor vragen, suggesties of klachten."
+    },
+    "faqPage": {
+      "faqTitle": "Veelgestelde vragen - ÇiçekSepeti",
+      "faqDescription": "Bekijk de veelgestelde vragen over ÇiçekSepeti."
+    },
+    "favouritesPage": {
+      "title": "Mijn favorieten - ÇiçekSepeti | Uw favoriete producten",
+      "description": "Sla uw favorieten op en krijg eenvoudig toegang tot uw favoriete bloemen, cadeaus en andere producten."
+    },
+    "legalPage": {
+      "title": "Juridische informatie - ÇiçekSepeti | Privacybeleid en gebruiksvoorwaarden",
+      "description": "Krijg gedetailleerde informatie over het privacybeleid en de gebruiksvoorwaarden van ÇiçekSepeti.",
+      "hakkindaDetayliBilgi": "gedetailleerde informatie over."
+    },
+    "myOrdersPage": {
+      "title": "Mijn bestellingen - ÇiçekSepeti | Bestellingen volgen en geschiedenis",
+      "description": "Bekijk uw eerdere bestellingen en volg de status van uw bestellingen."
+    },
+    "registerCourierPage": {
+      "title": "Koerier worden - ÇiçekSepeti | Word koerier",
+      "description": "Word lid van het koeriersprogramma van ÇiçekSepeti en verdien extra inkomen."
+    },
+    "registerPage": {
+      "title": "Registreren - ÇiçekSepeti | Nieuw account aanmaken",
+      "description": "Registreer bij ÇiçekSepeti en krijg toegang tot de versste bloemen en bijzondere cadeaus."
+    },
+    "vendorRegistrationPage": {
+      "title": "Verkoper worden - ÇiçekSepeti | Open uw winkel",
+      "description": "Open uw winkel op het ÇiçekSepeti-platform en bereik een breed klantenbestand."
+    }
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "yonetimMerkezi": "Beheercentrum",
+    "genelBakis": "Overzicht",
+    "applications": "Aanvragen",
+    "users": "Gebruikers",
+    "products": "Productbeheer",
+    "orders": "Bestellingen",
+    "coupons": "Coupons"
+  },
+  "contact": {
+    "contactUs": "Neem contact op",
+    "infoTest": "Wij zijn er voor uw vragen, suggesties of klachten.",
+    "hqAddress": "Hoofdkantoor",
+    "contactTxt": "Contact",
+    "workingHours": "Werktijden",
+    "subject": "Onderwerp",
+    "dropdownOpt1": "Over mijn bestelling",
+    "dropdownOpt2": "Retour / Ruilen",
+    "dropdownOpt3": "Anders",
+    "message": "Uw bericht",
+    "sendMessage": "Bericht versturen",
+    "successMessage": "Uw bericht is ontvangen!",
+    "successSubMessage": "We zullen zo snel mogelijk reageren.",
+    "newMessage": "Nieuw bericht sturen",
+    "errorMessage": "Er is een fout opgetreden bij het verzenden van het bericht. Probeer het opnieuw."
+  },
+  "about": {
+    "ourStory": "Ons verhaal",
+    "ourMission": "Wij bezorgen geluk",
+    "ourHistory": "Opgericht in Londen in 2024, is ÇiçekSepeti UK gelanceerd om de versste bloemen en de meest bijzondere cadeaus aan uw dierbaren te leveren.",
+    "sameDayDelivery": "Levering op dezelfde dag",
+    "sameDayDeliverySub": "Voor bestellingen geplaatst voor 18:00 uur binnen Londen.",
+    "freshnessGuarantee": "Versheidsgarantie",
+    "freshnessGuaranteeSub": "De versste bloemen elke ochtend geselecteerd op de veiling.",
+    "securePayment": "Veilige betaling",
+    "securePaymentSub": "100% veilig winkelen met Stripe-infrastructuur.",
+    "whyChooseUs": "Waarom voor ons kiezen?",
+    "whyChooseUsSub": "We combineren onze wereldwijde ervaring met een lokale touch.",
+    "comment": "later informatie toevoegen over koeriers en winkels"
+  },
+  "FAQ": {
+    "faqTitle": "Veelgestelde vragen",
+    "faqDescription": "Uw vragen."
+  },
+  "favorites": {
+    "favoritesTitle": "Mijn favorieten",
+    "favoritesDescription": "We bewaren hier de producten die u leuk vindt.",
+    "favoritesEmpty": "U heeft nog geen favorieten toegevoegd.",
+    "favoritesEmptyDesc": "U heeft nog geen producten aan uw favorietenlijst toegevoegd.",
+    "favoritesExploreProducts": "Ontdek producten"
+  },
+  "forgotPassword": {
+    "notifyMessageSent": "E-mail verzonden! 📩",
+    "notifyUserNotFound": "Gebruiker niet gevonden",
+    "passwordForgotten": "Wachtwoord vergeten?",
+    "passwordForgottenDesc": "Voer uw e-mailadres in, we sturen u een herstellink.",
+    "emailPlaceholder": "Voer uw e-mailadres in",
+    "sending": "Verzenden...",
+    "sendResetLink": "Stuur herstellink",
+    "emailSentTitle": "E-mail verzonden!",
+    "emailSentDescription1": "Controleer a.u.b.",
+    "emailSentDescription2": "de e-mail",
+    "emailSentDescription3": "(en de spammap).",
+    "tryAgain": "Probeer opnieuw",
+    "returnToLogin": "← Terug naar inloggen"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "legalPageContentTitle": "Privacybeleid",
+      "first": "1. Gegevensbeheerder",
+      "firstDesc": "Als ÇiçekSepeti UK hechten wij het grootste belang aan de veiligheid van uw persoonsgegevens in het kader van de AVG.",
+      "second": "2. Verzamelde gegevens en doeleinden",
+      "secondDesc": {
+        "part1": "Identiteit en contact: Uw voornaam, achternaam, e-mail en telefoonnummer worden verwerkt voor orderbevestiging en facturering.",
+        "part2": "Leveringsinformatie: Adres en contactgegevens van de ontvanger worden gedeeld met de koerier en de betreffende winkel.",
+        "part3": "Transactiebeveiliging: IP-adres en apparaatinformatie worden opgeslagen voor fraudedetectie."
+      },
+      "third": "3. Betalingsbeveiliging",
+      "thirdDesc": "Uw creditcardgegevens worden nooit op onze servers opgeslagen. Betalingstransacties worden rechtstreeks door Stripe afgehandeld."
+    },
+    "termsOfUse": {
+      "title": "Overeenkomst voor verkoop op afstand",
+      "first": "1. Partijen",
+      "firstDesc": "Deze overeenkomst wordt gesloten tussen de KOPER en de VERKOPER, met ÇiçekSepeti UK als tussenpersoon.",
+      "second": "2. Uitzondering op herroepingsrecht (Belangrijk)",
+      "secondDesc": "LET OP: Het herroepingsrecht KAN NIET worden uitgeoefend voor bederfelijke producten (verse bloemen, chocolade, taart, enz.).",
+      "secondDesc_part2": "Echter, als het product beschadigd of verwelkt is op het moment van levering, kan de koper om een retour vragen.",
+      "third": "3. Leveringsproces",
+      "thirdDesc": "Bestellingen worden geleverd op de datum en het tijdslot gekozen door de koper."
+    },
+    "termsOfCookies": {
+      "title": "Cookiebeleid",
+      "firstTerm": "1. Wat is een cookie?",
+      "firstTermDesc": "Cookies zijn kleine tekstbestanden die in uw browser worden opgeslagen en ons helpen u te onthouden.",
+      "secondTerm": "2. Welke cookies gebruiken wij?",
+      "secondTermDesc": {
+        "first": "Noodzakelijke cookies",
+        "firstDesc": "Noodzakelijk voor de winkelwagen, inloggen en betalingsbeveiliging. Deze kunnen niet worden uitgeschakeld.",
+        "second": "Functionele cookies",
+        "secondDesc": "Worden gebruikt voor taalvoorkeuren en opgeslagen adressen.",
+        "third": "Analytische cookies",
+        "thirdDesc": "Helpen ons onze service te verbeteren door te analyseren hoe u onze site gebruikt."
+      },
+      "thirdTerm": "3. Hoe beheer ik cookies?",
+      "thirdTermDesc": "U kunt cookies verwijderen of blokkeren via uw browserinstellingen."
+    },
+    "pageNotFound": "Pagina niet gevonden",
+    "pageNotFoundDesc": "De inhoud die u zoekt bestaat niet.",
+    "backToHome": "← Terug naar Home",
+    "backToHome2": "&copy; ÇiçekSepeti UK Legal Team"
+  },
+  "myOrders": {
+    "notifyCancelRequestSent": "Uw annuleringsverzoek is ontvangen.",
+    "caseOrderLoading": "Uw bestellingen laden...",
+    "caseNoOrders": "U heeft nog geen bestellingen",
+    "caseNoOrders2": "Begin nu met winkelen en maak uw dierbaren blij.",
+    "caseNoOrdersLink": "Begin met winkelen",
+    "myOrdersPageTitle": "Mijn bestellingen",
+    "myOrdersDelivered": "Geleverd",
+    "orderNumber": "Bestelnummer",
+    "orderAmount": "Bedrag",
+    "orderProducts": "Producten",
+    "orderPieces": "Stuks",
+    "delivery": "Levering",
+    "recipient": "Ontvanger",
+    "invoice": "Factuur",
+    "cancelOrderRequest": "Annuleringsverzoek aanmaken",
+    "cancelOrderRequestPending": "Uw annuleringsverzoek wordt beoordeeld."
+  },
+  "notFound": {
+    "title": "De pagina die u zoekt is niet gevonden",
+    "description": "De pagina is mogelijk verwijderd, hernoemd of tijdelijk niet beschikbaar."
+  },
+  "productDetail": {
+    "loginBeforeComment": "U moet inloggen om te reageren!",
+    "commentEmpty": "Schrijf alstublieft een reactie.",
+    "commentSubmitSuccess": "Uw reactie is toegevoegd!",
+    "placeholder": "Wat vindt u van het product?",
+    "submitReview": "Beoordeling versturen",
+    "submitReviewAlt": "Mening geven",
+    "yourRating": "Uw score",
+    "yourReview": "Uw beoordeling",
+    "loginTocomment1": "Om te reageren ",
+    "loginTocomment2": "log in",
+    "firstComment": "Nog geen reacties. Wees de eerste om te reageren!",
+    "similarProducts": "Misschien vindt u dit ook leuk"
+  },
+  "profile": {
+    "title": "Mijn account",
+    "profileGreetings": "Welkom, u kunt hier uw profiel en bestellingen beheren."
+  },
+  "registerCourier": {
+    "driverLicenseSuccess": "Uw rijbewijs is geüpload!",
+    "uploadError": "Fout bij uploaden.",
+    "acceptTermsWarning": "U moet de koeriersovereenkomst accepteren!",
+    "driverLicencePhoto": "Upload alstublieft een foto van uw rijbewijs.",
+    "applicationReceived": "Aanvraag ontvangen! Wachten op goedkeuring.",
+    "uploadDocuments": "Log in en upload uw documenten.",
+    "becomeACourier": "Word onze koerier",
+    "yourOwnBoss": "Wees uw eigen baas, verdien met elke levering.",
+    "courierApplication": "Koeriersaanvraag",
+    "information": "Eerst maken we uw account aan. Na het inloggen voert u de voertuiginformatie in.",
+    "vehicleInfo": "Voertuiginformatie",
+    "vehicleType": "Voertuigtype",
+    "vehicleOpt": {
+      "car": "Auto",
+      "motorcycle": "Motorfiets",
+      "van": "Bestelwagen",
+      "bicycle": "Fiets"
+    },
+    "vehicleLicensePlate": "Kenteken",
+    "licenseNumber": "Rijbewijsnummer",
+    "taxNumber": "Btw-nummer (indien van toepassing)",
+    "uploadLicense": "Rijbewijs uploaden",
+    "courierAddress": "Woonadres",
+    "fileReady": "Bestand gereed",
+    "policy1": "Ik heb de koeriersovereenkomst gelezen",
+    "policy2": "Ik ga akkoord en verbind mij",
+    "btn1": "Verwerken...",
+    "btn2": "Account aanmaken",
+    "btn3": "Aanvraag versturen",
+    "alreadyHaveAccount": "Heeft u al een account? Log in"
+  },
+  "register": {
+    "passwordWeak": "Uw wachtwoord is niet sterk genoeg!",
+    "notifyPasswordRequirements": "Voldoe aan de wachtwoordvereisten.",
+    "acceptTerms": "Accepteer de overeenkomst!",
+    "registrationFailed": "Registratie mislukt. Probeer het opnieuw.",
+    "joinUs": "Word lid",
+    "createAccount": "Maak snel een account aan",
+    "securityMeasures": "Beveiligingsvereisten",
+    "userAgrement1": "Ik heb de ",
+    "userAgrement2": "gebruikersovereenkomst gelezen en ga akkoord.",
+    "btn1": "Opslaan...",
+    "btn2": "Account aanmaken",
+    "alreadyAccount1": "Heeft u al een account?",
+    "alreadyAccount2": "Log in"
+  },
+  "vendor": {
+    "receivedOrders": "Binnenkomende bestellingen",
+    "notifyAdressSaved": "Locatie is opgeslagen op het adres",
+    "documentLoaded": "Document succesvol geüpload",
+    "documentLoadError": "Fout bij uploaden!",
+    "policyWarning": "U moet de verkopersovereenkomst accepteren!",
+    "uploadYourDocument": "Upload het belastingcertificaat/document.",
+    "accountCreated:": "Account aangemaakt!",
+    "accountCreated2": "Log in en voer de winkelgegevens in.",
+    "title1": "Winkelaanvraag",
+    "title2": "Open uw winkel",
+    "titleDesc": "Bereik duizenden klanten, verhoog uw verkoop.",
+    "fullName": "Volledige naam bevoegde",
+    "fullNamePlaceholder": "Volledige naam van de bevoegde persoon",
+    "vendorInfo": "Eerst maken we een account aan. Na het inloggen voert u de winkelgegevens in.",
+    "storeDetails": "Winkelgegevens",
+    "companyName": "Bedrijfsnaam",
+    "companyNamePlaceholder": "Officiële bedrijfsnaam",
+    "taxNumber": "Btw-nummer",
+    "taxNumberPlaceholder": "Btw-nummer",
+    "adress": "Winkeladres",
+    "adressPlaceholder": "Winkeladres (Selecteer op de kaart of voer handmatig in)",
+    "uploadDocumentSuccess": "Bestand succesvol geüpload",
+    "policy1": "Ik heb de verkopersovereenkomst gelezen",
+    "policy2": "Ik ga akkoord en verbind mij",
+    "btn1": "Verwerken...",
+    "btn2": "Account aanmaken",
+    "btn3": "Aanvraag versturen"
+  },
+  "resetPassword": {
+    "passwordInvalid": "Er is niet voldaan aan de wachtwoordvereisten.",
+    "resetPasswordSuccess": "Uw wachtwoord is gewijzigd! U kunt inloggen.",
+    "invalidLink": "De link is ongeldig of verlopen.",
+    "invalidLinkTitle": "Ongeldige link",
+    "linkTimeLimit": "Deze wachtwoordherstellink is gebruikt of verlopen.",
+    "resend": "Opnieuw verzenden",
+    "setNewPassword": "Nieuw wachtwoord instellen",
+    "newPassword": "Nieuw wachtwoord",
+    "resettingPassword": "Bijwerken...",
+    "resetPassword": "Wachtwoord bijwerken"
+  },
+  "store": {
+    "storeNotFound": "Winkel niet gevonden",
+    "storeNotFoundDesc": "De winkel die u zoekt bestaat niet of is mogelijk verwijderd.",
+    "storeDescNotFound": "Er is nog geen beschrijving ingevoerd voor deze winkel.",
+    "registration": "Registratiedatum",
+    "products": "Producten",
+    "reviews": "Beoordelingen",
+    "about": "Over",
+    "noProducts": "Deze winkel heeft nog geen producten.",
+    "storeRating": "Winkelscore",
+    "storeRatingCount": "Totaal aantal beoordelingen",
+    "noReviews": "Deze winkel heeft nog geen beoordelingen.",
+    "storeAbout": "Over de winkel",
+    "secureShopping1": "Veilig winkelen",
+    "secureShopping2": "Alle aankopen in deze winkel worden beschermd door de ÇiçekSepeti UK garantie."
+  },
+  "success": {
+    "orderSuccess": "Uw bestelling is ontvangen!",
+    "errorWhileOrder": "Er was een probleem bij het opslaan van de bestelling. Neem contact op met support.",
+    "processingOrder": "Uw bestelling wordt verwerkt...",
+    "wait": "Even geduld a.u.b.",
+    "orderNotVisible1": "Bestelling kon niet worden weergegeven",
+    "orderNotVisible2": "Uw bestelling is mogelijk aangemaakt maar kan momenteel niet worden getoond.",
+    "navigateToOrders": "Ga naar mijn bestellingen",
+    "thankYou": "Bedankt!",
+    "orderReceived": "Uw bestelling is ontvangen.",
+    "orderNumber": "Bestelnummer",
+    "orderSummary": "Besteloverzicht",
+    "totalAmount": "Bestelbedrag",
+    "deliveryFee": "Verzendkosten",
+    "generalTotal": "Totaalbedrag",
+    "adressDetails": "Afleveradres",
+    "deliveryTime": "Levertijd",
+    "allOrders": "Bekijk al mijn bestellingen"
+  },
+  "verificationPending": {
+    "header2": "Controleer uw e-mail",
+    "message1": "We hebben een verificatielink gestuurd voor de veiligheid van uw account.",
+    "emailTo": "Verzonden naar",
+    "notReceived": "Geen e-mail ontvangen?",
+    "checkSpam": "Vergeet niet de map \"Spam\" te controleren.",
+    "goToLogin": "Ga naar de inlogpagina",
+    "loginWithAnother": "Inloggen met een ander account (Uitloggen)"
+  },
+  "verifyEmail": {
+    "messageVerified": "Uw account is geverifieerd! U kunt inloggen.",
+    "verifying": "Verifiëren...",
+    "errorOccurred": "Ongeldige of verlopen link.",
+    "pleaseWait": "Even geduld, uw account wordt geactiveerd.",
+    "great": "Geweldig!",
+    "login": "Inloggen"
+  },
+  "verify": {
+    "verifying": "Uw account wordt geverifieerd...",
+    "unsucessfull": "Verificatie mislukt. De link is ongeldig of verlopen.",
+    "waitingMessage": "Even geduld, uw aanvraag wordt verwerkt.",
+    "success": "Gefeliciteerd!"
+  },
+  "cartContext": {
+    "maxStockReached": "Onvoldoende voorraad! Maximaal",
+    "added": "toegevoegd aan winkelwagen!",
+    "removed": "verwijderd.",
+    "cartEmpty": "De winkelwagen is leeggemaakt",
+    "maxLimitReached": "Maximale voorraadlimiet bereikt!",
+    "increased": "+1 toegevoegd",
+    "decreased": "-1 verminderd",
+    "updated": "bijgewerkt",
+    "deletedFromFavorites": "verwijderd uit favorieten",
+    "addedToFavorites": "toegevoegd aan favorieten",
+    "favoritesNotUpdated": "Kon favoriet niet bijwerken. Log opnieuw in."
+  },
+  "termsModal": {
+    "agree": "Ik heb gelezen, ik ga akkoord",
+    "customers": {
+      "title": "Overeenkomst voor verkoop en diensten op afstand",
+      "first": {
+        "title": "1. INLEIDING EN PARTIJEN",
+        "desc": "Deze algemene voorwaarden regelen de verkoop van goederen via het Platform."
+      },
+      "second": {
+        "title": "2. LEVERINGSBELEID",
+        "desc": "Ons doel is om producten te leveren op het tijdstip dat is geselecteerd tijdens het afrekenen."
+      },
+      "third": {
+        "title": "3. ANNULERINGS- EN RETOURBELEID",
+        "desc": "ER IS GEEN ANNULERINGSRECHT voor bederfelijke producten (verse bloemen, planten, voedsel)."
+      },
+      "fifth": {
+        "title": "5. PRIVACY EN GEGEVENSBESCHERMING",
+        "desc": "Uw persoonsgegevens worden verwerkt in overeenstemming met de Britse AVG."
+      }
+    },
+    "courierAgreement": {
+      "title": "Overeenkomst voor onafhankelijke koeriersdienst",
+      "first": {
+        "title": "1. WERKWIJZE",
+        "desc": "De koerier gaat ermee akkoord diensten te verlenen als zelfstandige, als onafhankelijke contractant."
+      },
+      "second": {
+        "title": "2. SERVICE-STANDAARDEN",
+        "desc": "De koerier moet de grootst mogelijke zorg betrachten om de integriteit van de producten te waarborgen."
+      },
+      "third": {
+        "title": "3. GEGEVENSBESCHERMING (AVG - STRAFBAAR FEIT)",
+        "titlesub": "KENNISGEVING VAN STRIKTE VERTROUWELIJKHEID",
+        "desc": "Klantgegevens zijn UITSLUITEND voor leveringsdoeleinden. Het is een STRAFBAAR FEIT om deze gegevens vast te leggen of te delen."
+      }
+    },
+    "vendorAgreement": {
+      "title": "Commerciële partnerschapsovereenkomst verkoper",
+      "first": {
+        "title": "1. PARTIJEN EN DOEL",
+        "desc": "Deze overeenkomst is tussen het Platform en de Verkoper."
+      },
+      "second": {
+        "title": "2. COMMISSIE EN BETALINGEN",
+        "desc": "Het Platform brengt 10% commissie + btw in rekening op elke bestelling. Betalingen zijn wekelijks."
+      },
+      "third": {
+        "title": "3. PRODUCTAANSPRAKELIJKHEID EN NALEVING",
+        "desc": "De Verkoper garandeert dat alle goederen voldoen aan de Britse veiligheidsnormen."
+      },
+      "fourth": {
+        "title": "4. GEGEVENSBESCHERMING (AVG)",
+        "desc": "De Verkoper verwerkt klantgegevens in overeenstemming met de Britse AVG."
+      }
+    }
+  },
+  "secureImage": {
+    "uploading": "Uploaden...",
+    "uploadSuccess": "Succesvol geüpload!",
+    "wasNotVisible": "Kon niet worden weergegeven"
+  },
+  "orderTracker": {
+    "ready": "Gereed (Wachten op koerier)",
+    "preparing": "In voorbereiding",
+    "courierToStore": "De koerier gaat naar de winkel",
+    "deliveryOnTheWay": "Levering onderweg",
+    "onTheWay": "Onderweg",
+    "delivered": "Geleverd",
+    "cancelled": "Geannuleerd",
+    "cancellRequested": "Annuleringsverzoek ontvangen",
+    "cancelReqUnderReview": "Uw verzoek wordt beoordeeld door de klantenservice.",
+    "orderCancelled": "Deze bestelling is geannuleerd."
+  },
+  "locationPicker": {
+    "locationOnMap": "Klik op de kaart om een locatie te selecteren"
+  },
+  "cookieBanner": {
+    "detailedInfo": "Gedetailleerde informatie",
+    "cookiesAgreement": "We gebruiken cookies om u een betere winkelervaring te bieden."
+  },
+  "footer": {
+    "col1": "Wij bezorgen de versste bloemen en de meest bijzondere cadeaus van Londen dezelfde dag nog bij uw dierbaren.",
+    "col21": "Bedrijf",
+    "col22": "Over ons",
+    "col23": "Veelgestelde vragen",
+    "col24": "Contact / Support",
+    "col25": "Carrière",
+    "col26": "Blog en Nieuws",
+    "col27": "Privacybeleid",
+    "col3": "Commercieel partnerschap",
+    "col31": "Verkoper worden",
+    "col32": "Koerier worden",
+    "col33": "Word lid van ons team, wees uw eigen baas.",
+    "col4": "Neem contact op",
+    "col41": "Contact",
+    "allRightsReserved": "Alle rechten voorbehouden.",
+    "col51": "Privacybeleid",
+    "col52": "Overeenkomst voor verkoop op afstand",
+    "col53": "Cookiebeleid"
+  },
+  "confirmModal": {
+    "cancel": "Annuleren",
+    "yes": "Ja,",
+    "confirm": "Bevestigen"
+  },
+  "chatBot": {
+    "greeting": "Hallo! Ik ben de assistent van ÇiçekSepeti 🌸 Hoe kan ik u helpen?",
+    "greetingResponse": "Hallo! 🌸 Ik kan u informatie geven over bestellingen, bloemenverzorging of verkoperszaken.",
+    "askQuestion": "Schrijf hier uw vraag...",
+    "send": "Verzenden",
+    "welcomeBack": "Welkom terug! Hoe kan ik u helpen?"
+  },
+  "cartSidebar": {
+    "applyCode": "Voer code in",
+    "appliedSuccess": "Coupon toegepast!",
+    "invalid": "Ongeldige couponcode.",
+    "cartEmpty": "De winkelwagen is leeg.",
+    "fillEmptyBox": "Vul de rode velden in",
+    "orderSuccess": "Bestelling aangemaakt!",
+    "directingToPayment": "Doorsturen naar betaalpagina...",
+    "paymentError": "Betalingsfout. Probeer het opnieuw.",
+    "wantToDelete": "Wilt u verwijderen?",
+    "removedFromCart": "wordt verwijderd uit de winkelwagen.",
+    "emptyCart": "Winkelwagen leegmaken?",
+    "allWillBeRemoved": "alle producten worden uit de winkelwagen verwijderd."
+  },
+  "cancelModal": {
+    "inputReason": "Geef alstublieft een geldige reden op.",
+    "cancelRequest": "Annuleringsverzoek",
+    "explainReason": "U staat op het punt uw bestelling te annuleren. Leg ons kort uit waarom.",
+    "explainReasonPlaceholder": "Schrijf hier uw reden...",
+    "cancel": "Annuleren",
+    "submitRequest": "Verzoek indienen"
+  },
+  "badgeDisplay": {
+    "admin": "Beheerder",
+    "vendor": "Goedgekeurde winkel",
+    "courier": "Koerier",
+    "verified": "Geverifieerd",
+    "newUser": "Nieuw lid",
+    "firstOrder": "Eerste bestelling",
+    "year1User": "Legendarisch lid (1+ jaar)",
+    "loyalUser": "Trouw lid (3+ jaar)",
+    "gigachad": "Giga Chad (5+ jaar)",
+    "fifthOrder": "Brons Klant (5+)",
+    "tenthOrder": "Zilver Klant (10+)",
+    "twentyfifthOrder": "Goud Klant (25+)",
+    "fiftythOrder": "Platina Klant (50+)",
+    "100thOrder": "Diamant Klant (100+)",
+    "bestSeller": "Bestseller",
+    "starStore": "Sterwinkel"
+  },
+  "vendorSettings": {
+    "logo": "Logo",
+    "banner": "Banner",
+    "loaded": "geladen",
+    "errorLoading": "Fout bij laden",
+    "storeSettingsSaved": "Winkelinstellingen opgeslagen!",
+    "error": "Er is een fout opgetreden.",
+    "storeAppearance": "Winkeluiterlijk",
+    "storeDetails": "Winkeldetails",
+    "bannerFoto": "Omslagfoto",
+    "noBannerFoto": "Geen afbeelding",
+    "loading": "Laden...",
+    "change": "Wijzigen",
+    "storeDesc": "Winkelbeschrijving",
+    "storeDescPlaceholder": "Stel uw winkel voor aan uw klanten...",
+    "phone": "Contacttelefoon",
+    "saveSettings": "Instellingen opslaan"
+  },
+  "vendorProducts": {
+    "birthday": "Verjaardag",
+    "product": "Product",
+    "active": "Geactiveerd",
+    "inactive": "Gedeactiveerd",
+    "statusNotChanged": "De status is niet gewijzigd",
+    "pictureLoaded": "Afbeelding geüpload!",
+    "pictureNotLoaded": "Kon niet uploaden",
+    "missingInfo": "Ontbrekende informatie.",
+    "reqSuccess": "Bewerking geslaagd!",
+    "errorOccurredWhileAdding": "Fout bij toevoegen product",
+    "deleteProduct": "Product verwijderen?",
+    "cannotBeUndone": "Deze actie kan niet ongedaan worden gemaakt.",
+    "deleted": "verwijderd.",
+    "myProducts": "Mijn producten",
+    "searchPlaceholder": "Zoek product...",
+    "cancel": "Annuleren",
+    "addNew": "Nieuw product toevoegen",
+    "editProduct": "Product bewerken",
+    "productName": "Productnaam",
+    "price": "Prijs",
+    "stock": "Voorraad",
+    "category": "Categorie",
+    "description": "Beschrijving",
+    "image": "Afbeelding",
+    "upload": "Uploaden",
+    "uploadPlaceholder": "of plak URL",
+    "preview": "voorbeeld",
+    "isActive": "Dit product is beschikbaar voor verkoop",
+    "publishProduct": "Product publiceren",
+    "updateProduct": "Wijzigingen opslaan",
+    "live": "Gepubliceerd",
+    "hidden": "Verborgen",
+    "soldOut": "UITVERKOCHT",
+    "last": "LAATSTE",
+    "quickStock": "Snelle voorraad",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "stockUpdated": "Voorraad bijgewerkt!"
+  },
+  "vendorOrders": {
+    "updated": "Bijgewerkt",
+    "orders": "Binnenkomende bestellingen",
+    "empty": "Nog geen bestellingen",
+    "content": "Inhoud",
+    "invoice": "Factuur",
+    "orderReceived": "Bestelling ontvangen",
+    "orderPreparing": "Bestelling in voorbereiding",
+    "ready": "Gereed",
+    "courierToStore": "De koerier gaat naar de winkel",
+    "deliveryOnTheWay": "Levering onderweg"
+  },
+  "vendorDashboard": {
+    "store": "Winkeloverzicht",
+    "totalSales": "Totale verkoop",
+    "totalOrders": "Totale bestellingen",
+    "totalProducts": "Totale producten",
+    "welcome": "Welkom,",
+    "welcome2": "Uw winkel is momenteel actief. U kunt uw bestellingen volgen op het tabblad 'Bestellingen', facturen afdrukken en deze aan de koerier geven."
+  },
+  "profilePage": {
+    "userInfo": {
+      "profileUpdated": "Profielinformatie bijgewerkt!",
+      "updateUnsucessfull": "Kon profiel niet bijwerken. Probeer het opnieuw.",
+      "oldPassword": "Voer uw oude wachtwoord in.",
+      "passwordInvalid": "Het wachtwoord voldoet niet aan de regels.",
+      "passwordsNotMatch": "Wachtwoorden komen niet overeen.",
+      "passwordChanged": "Uw wachtwoord is gewijzigd. Log opnieuw in.",
+      "passwordChangeFailed": "Kon wachtwoord niet wijzigen.",
+      "personalInfo": "Persoonlijke informatie",
+      "personalContactInfo": "Uw identiteits- en contactgegevens",
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "fullName": "Volledige naam",
+      "email": "E-mail",
+      "verified": "GEVERIFIEERD",
+      "phone": "Mobiele telefoon",
+      "accountType": "Accounttype",
+      "saveChanges": "Wijzigingen opslaan",
+      "passwordSecurity": "Wachtwoord en Beveiliging",
+      "protectAccount": "Beveilig uw account",
+      "changePassword": "Wachtwoord wijzigen",
+      "createNewPassword": "Nieuw wachtwoord aanmaken",
+      "currentPassword": "Huidig wachtwoord",
+      "newPassword": "Nieuw wachtwoord",
+      "repeatNewPassword": "Herhaal nieuw wachtwoord",
+      "updatePassword": "Wachtwoord bijwerken"
+    },
+    "userSidebar": {
+      "adressBook": "Mijn adresboek",
+      "informationPassword": "Mijn informatie en Wachtwoord",
+      "myOrders": "Mijn bestellingen",
+      "logout": "Uitloggen"
+    },
+    "orderHistory": {
+      "cancelRequestReceived": "Uw annuleringsverzoek is ontvangen",
+      "caseNoOrders": "U heeft nog geen bestellingen",
+      "information": "Uw bestellingen worden hier weergegeven.",
+      "deliverTo": "Ontvangerinformatie",
+      "deliverNote": "Levering en Kaart",
+      "noteNotAdded": "Geen kaartje toegevoegd.",
+      "quantity": "Aantal",
+      "cancelRequest": "Annuleringsverzoek aanmaken",
+      "invoice": "Factuur"
+    },
+    "adressBook": {
+      "adressUpdated": "Adres bijgewerkt",
+      "adressAdded": "Adres toegevoegd",
+      "qDeteleAdress": "Adres verwijderen?",
+      "deleteAdressLabel": "Het adres wordt permanent verwijderd.",
+      "adressDeleted": "Adres verwijderd",
+      "myAdresses": "Opgeslagen adressen",
+      "cancel": "Annuleren",
+      "addNewAdress": "Nieuw adres toevoegen",
+      "editAdress": "Adres bewerken",
+      "newAdressInfo": "Nieuwe adresinformatie",
+      "adressTitle": "Adrestitel",
+      "adressTitlePlaceholder": "Thuis, Werk, Mijn vriend",
+      "receipentName": "Naam ontvanger",
+      "receipentNamePlaceholder": "Volledige naam",
+      "receipentPhone": "Telefoon ontvanger",
+      "openAdress": "Adres ontvanger",
+      "city": "Stad",
+      "postCode": "Postcode",
+      "saveChanges": "Wijzigingen opslaan",
+      "addAdress": "Adres opslaan",
+      "noSavedAdresses": "U heeft nog geen opgeslagen adressen.",
+      "edit": "Bewerken",
+      "delete": "Verwijderen"
+    }
+  },
+  "cartSidebarComponents": {
+    "cartItemsList": {
+      "empty": "Uw winkelwagen is leeg."
+    },
+    "CheckoutForm": {
+      "contact": "Contact",
+      "nameSurname": "Uw volledige naam",
+      "phoneNumber": "Uw telefoonnummer",
+      "emailAddress": "Uw e-mailadres",
+      "recipientAddress": "Ontvanger en Adres",
+      "savedAddressSelect": "Selecteer opgeslagen adres",
+      "recipientName": "Naam ontvanger",
+      "recipientPhone": "Telefoon ontvanger",
+      "deliveryAddress": "Volledig adres (Straat, Gebouw, Appartement)",
+      "deliveryCity": "Stad",
+      "deliveryPostcode": "Postcode",
+      "saveAdress": "Sla dit adres op in mijn adresboek",
+      "deliveryOptions": "Leveringsopties",
+      "opt1": "Standaard (2-3 dagen)",
+      "free": "GRATIS",
+      "opt2": "Volgende dag",
+      "opt3": "Dezelfde dag (Premium)",
+      "deliveryTime": "Datum en Tijd",
+      "selectDateFirst": "Selecteer eerst een datum",
+      "noAvailableTime": "Geen tijden beschikbaar",
+      "deliveryNote": "Uw cadeauboodschap...",
+      "noteToCourier": "Uw notitie aan de koerier...",
+      "sendWithoutName": "Verstuur zonder naam"
+    },
+    "index": {
+      "adressSelected": "Geselecteerd adres",
+      "enterCode": "Voer code in",
+      "couponApplied": "Coupon toegepast!",
+      "couponInvalid": "Ongeldige couponcode.",
+      "cartEmpty": "De winkelwagen is leeg",
+      "fillRedFields": "Vul de rode velden in",
+      "orderSuccess": "Bestelling ontvangen!",
+      "redirectingToPayment": "Doorsturen naar betaalpagina...",
+      "paymentError": "Betalingsfout.",
+      "quantity": "Aantal",
+      "confirmRemove": "verwijderen uit winkelwagen?",
+      "comfirmRemoveTitle": "Winkelwagen leegmaken?",
+      "allItemsRemoved": "alle producten worden uit de winkelwagen verwijderd."
+    },
+    "sideBarFooter": {
+      "discountCode": "Kortingscode",
+      "apply": "Toepassen",
+      "freeDelivery": "Gratis verzending",
+      "remove": "Verwijderen",
+      "subtotal": "Subtotaal",
+      "discount": "Korting",
+      "delivery": "Levering",
+      "fast": "Snel",
+      "standard": "Standaard",
+      "premium": "Premium",
+      "free": "Gratis",
+      "total": "Totaalbedrag",
+      "confirm": "Winkelwagen bevestigen",
+      "processing": "Verwerken...",
+      "pleaseWait": "Even geduld...",
+      "payAndFinish": "Betalen en afronden"
+    },
+    "sidebarHeader": {
+      "myCart": "Mijn winkelwagen",
+      "clear": "Leegmaken",
+      "deliveryInfo": "Leveringsinformatie"
+    }
+  },
+  "adminComponents": {
+    "adminOrderComp": {
+      "orderCard": {
+        "request": "AANVRAAG",
+        "loss": "VERLIES",
+        "vendor": "Winkel",
+        "cost": "Kosten",
+        "total": "Totaal",
+        "orderReceived": "Bestelling ontvangen",
+        "orderPreparing": "Bestelling in voorbereiding",
+        "ready": "Gereed",
+        "onTheWay": "Onderweg",
+        "delivered": "Geleverd",
+        "cancelRequest": "Annuleringsverzoek",
+        "cancel": "Geannuleerd",
+        "senderReceiver": "Ontvanger en Afzender",
+        "sender": "Afzender",
+        "delivery": "Levering",
+        "notesAndFinance": "Notities en Financiën",
+        "cardNoteNotAvailable": "Geen kaartnotitie",
+        "realCost": "Werkelijke kosten",
+        "netLoss": "NETTO VERLIES",
+        "cancelReason": "REDEN ANNULERING",
+        "products": "Producten",
+        "hideTechnicalDetails": "Verberg technische details",
+        "showTechnicalDetails": "Toon Beveiliging en Metadata",
+        "courierFound": "Koerier toegewezen",
+        "printInvoice": "Factuur afdrukken",
+        "searchPlaceholder": "Zoek bestelnr. of ontvanger...",
+        "allCases": "Alle statussen",
+        "discounted": "Verlieslatend (met korting)",
+        "cancelRequested": "Annuleringsverzoeken"
+      },
+      "orderMetadata": {
+        "metaDataNotAvailable": "Geen metadata beschikbaar.",
+        "securityAnalysis": "Beveiligingsanalyse"
+      },
+      "orderStats": {
+        "revenue": "Omzet",
+        "waiting": "Wachtend",
+        "promoCost": "Promotiekosten",
+        "cancelRequest": "Annuleringsverzoek",
+        "completed": "Voltooid"
+      }
+    },
+    "adminApplication": {
+      "namedApplicant": "de gebruiker genaamd,",
+      "namedApplicant2": "krijgt volledige toegang tot het systeem als. Keurt u deze handeling goed?",
+      "onaylandi": "goedgekeurd!",
+      "provideReason": "Geef alstublieft een reden op!",
+      "rejected": "Aanvraag afgewezen",
+      "pendingApplications": "In behandeling zijnde aanvragen",
+      "noPendingApplications": "Er zijn momenteel geen aanvragen die wachten op goedkeuring.",
+      "vendor": "Winkel",
+      "courier": "Koerier",
+      "reviewAndDecide": "Beoordelen en Beslissen",
+      "rejection": "Afwijzing van aanvraag",
+      "reasonToReject": "Geef alstublieft de reden voor afwijzing.",
+      "reasonToRejectPlaceholder": "Schrijf hier uw reden voor afwijzing...",
+      "cancel": "Annuleren",
+      "send": "Verzenden"
+    },
+    "comment": "Admin NOT FINISHED"
+  },
+  "navbar": {
+    "searchPlaceholder": "Zoek bloemen, chocolade, cadeaus...",
+    "myAccount": "Mijn account",
+    "login": "Inloggen",
+    "register": "Registreren",
+    "viewCart": "Winkelwagen bekijken",
+    "language": "Taal"
   }
 }
