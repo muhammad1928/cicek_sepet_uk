@@ -12,7 +12,7 @@ const Joi = require('joi');
 // GÜVENLİK KURALLARI (REGEX)
 // =============================================================================
 // En az 1 küçük, 1 büyük, 1 rakam, 1 özel karakter, min 8 karakter
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[}!@#%^&*])/;
 
 // =============================================================================
 // JOI ŞEMALARI (Backend Validasyonu)
