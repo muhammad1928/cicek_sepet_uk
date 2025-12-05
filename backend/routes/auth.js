@@ -48,66 +48,68 @@ router.post('/register', async (req, res) => {
     const checkEmail = await User.findOne({ email: email });
     if (checkEmail) return res.status(400).json({ message: "auth.emailExists" });
 
-    // 3. Şifreleme ve Token
+    // 3. Şifreleme
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    
+    // 4. Token Üretimi
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
-    // 4. Dil Seçimi (Varsayılan 'en')
+    // 5. Dil Seçimi
     const userLang = language || 'en';
     const t = emailTexts[userLang] || emailTexts['en'];
-    
-    // 5. Kullanıcı Oluşturma
+
+    // 6. Kullanıcı Oluşturma
     const newUser = new User({
       fullName: fullName, 
       email: email,
       password: hashedPassword,
-      role: 'customer', // Güvenlik: Varsayılan müşteri
+      role: 'customer',
       isVerified: false, 
       verificationToken: verifyToken,
       language: userLang,
       badges: []
     });
 
-    const savedUser = await newUser.save();
+    savedUser = await newUser.save();
 
-    // 6. Loglama
+    // 7. Loglama
     await logActivity(savedUser._id, 'register', req, { method: 'email' });
-    
-    // 7. Onay Maili Gönderme
+
+    // 8. Mail Gönderimi
     const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const verifyLink = `${frontendUrl}/verify/${verifyToken}`;
     
     const emailContent = `
-      <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
-        <h2 style="color: #db2777;">${t.verifyTitle} ${savedUser.fullName}! 🌸</h2>
+      <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
+        <h2 style="color: #db2777; margin-top: 0;">${t.verifyTitle} ${savedUser.fullName}! 🌸</h2>
         <p>${t.verifyMsg}</p>
         <br/>
         <div style="text-align: center; margin: 20px 0;">
-          <a href="${verifyLink}" style="background: #db2777; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+          <a href="${verifyLink}" style="background-color: #db2777; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">
             ${t.verifyBtn}
           </a>
         </div>
         <br/>
-        <p style="font-size: 12px; color: #777;">${t.verifyLinkFooter}<br/><a href="${verifyLink}">${verifyLink}</a></p>
+        <p style="font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 20px;">
+          ${t.verifyLinkFooter}<br/>
+          <a href="${verifyLink}" style="color: #db2777;">${verifyLink}</a>
+        </p>
       </div>
     `;
 
     await sendEmail(savedUser.email, t.verifySubject, emailContent);
+
     res.status(200).json({ message: "auth.registerSuccess" });
 
   } catch (err) {
     console.error("Register Error:", err);
+    // Hata durumunda kullanıcıyı sil (Zombi kayıt kalmasın)
     if (savedUser && savedUser._id) {
-        try {
-            await User.findByIdAndDelete(savedUser._id);
-            console.log(`⚠️ Mail atılamadığı için kullanıcı silindi: ${savedUser.email}`);
-        } catch (deleteErr) {
-            console.error("Kullanıcı silinirken de hata oldu:", deleteErr);
-        }
+        try { await User.findByIdAndDelete(savedUser._id); } catch(e){}
     }
-    // Frontend'e Hata Dön
     res.status(500).json({ message: "common.serverError" });
+  }
 });
 
 // =============================================================================
