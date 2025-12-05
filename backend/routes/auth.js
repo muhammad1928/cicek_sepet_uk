@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 const logActivity = require('../utils/logActivity');
+const emailTexts = require('../utils/emailTranslations');
 const Joi = require('joi');
 
 // =============================================================================
@@ -49,10 +50,13 @@ router.post('/register', async (req, res) => {
     // 3. Şifreleme
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    
     // 4. Token Üretimi (Email Onayı İçin)
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
+    // 3.5. Dil Seçimi (Varsayılan 'en')
+    const userLang = language || 'en';
+    const t = emailTexts[userLang] || emailTexts['en'];
+    
     // 5. Kullanıcı Oluşturma
     const newUser = new User({
       fullName: fullName, 
@@ -61,6 +65,7 @@ router.post('/register', async (req, res) => {
       role: 'customer', // Güvenlik: Varsayılan müşteri
       isVerified: false, 
       verificationToken: verifyToken,
+      language: userLang,
       badges: []
     });
 
@@ -74,28 +79,26 @@ router.post('/register', async (req, res) => {
     const verifyLink = `${frontendUrl}/verify/${verifyToken}`;
     
     const emailContent = `
-      <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px;">
-        <h2 style="color: #db2777; margin-top: 0;">Welcome, ${savedUser.fullName}! 🌸</h2>
-        <p style="font-size: 16px;">Thank you for joining the CicekSepeti UK family.</p>
-        <p style="font-size: 16px;">Please click the button below to verify your email address and activate your account:</p>
+      <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #db2777;">${t.verifyTitle} ${savedUser.fullName}! 🌸</h2>
+        <p>${t.verifyMsg}</p>
         <br/>
         <div style="text-align: center; margin: 20px 0;">
-          <a href="${verifyLink}" style="background-color: #db2777; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">Verify My Account</a>
+          <a href="${verifyLink}" style="background: #db2777; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            ${t.verifyBtn}
+          </a>
         </div>
         <br/>
-        <p style="font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 20px;">
-          If the button doesn't work, copy and paste this link into your browser:<br/>
-          <a href="${verifyLink}" style="color: #db2777;">${verifyLink}</a>
-        </p>
+        <p style="font-size: 12px; color: #777;">${t.verifyLinkFooter}<br/><a href="${verifyLink}">${verifyLink}</a></p>
       </div>
     `;
 
-    await sendEmail(savedUser.email, "Verify Your Account", emailContent).catch(err => console.error("Mail Hatası:", err));
-
+    await sendEmail(savedUser.email, t.verifySubject, emailContent);
     res.status(200).json({ message: "auth.registerSuccess" });
 
   } catch (err) {
-    console.error(err);
+    console.error("Register Error:", err);
+    if (savedUser && savedUser._id) await User.findByIdAndDelete(savedUser._id); // Hata olursa sil
     res.status(500).json({ message: "common.serverError" });
   }
 });
@@ -114,22 +117,23 @@ router.post('/verify', async (req, res) => {
     user.verificationToken = undefined; 
     await user.save();
 
+    const t = emailTexts[user.language || 'en'] || emailTexts['en'];    
+
     // Hoşgeldin Maili (Kuponlu)
     const couponCode = "WELCOME10"; 
     const loginLink = `${process.env.CLIENT_URL}/login`;
     
     const emailContent = `
       <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">
-        <h2 style="color: #db2777;">Account Verified! 🎉</h2>
-        <p>Welcome ${user.fullName}. Here is your first order gift:</p>
+        <h2 style="color: #db2777;">${t.welcomeGiftTitle}</h2>
+        <p>${t.welcomeGiftMsg}</p>
         <div style="background: #f3f4f6; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0;">
             <h1 style="margin: 0; color: #db2777; letter-spacing: 2px;">${couponCode}</h1>
-            <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">10% OFF on your first order</p>
         </div>
-        <a href="${loginLink}" style="display: block; text-align: center; color: #db2777; font-weight: bold;">Login Now</a>
+        <a href="${loginLink}" style="display:block; text-align:center; font-weight:bold;">${t.loginBtn}</a>
       </div>
     `;
-    sendEmail(user.email, "Welcome Gift 🎁", emailContent).catch(console.error);
+    sendEmail(user.email, t.welcomeGiftSubject, emailContent).catch(console.error);
 
     res.status(200).json({ message: "auth.verifiedSuccess" });
   } catch (err) {
@@ -155,6 +159,14 @@ router.post('/login', async (req, res) => {
     if (!user.isVerified) return res.status(403).json({ message: "auth.verifyEmail" });
     if (user.isBlocked) return res.status(403).json({ message: "auth.accountBlocked" });
 
+    // --- DİL GÜNCELLEME ---
+    // Kullanıcı login olurken dili değiştiyse (örn: İngiliz ama Türkçe'ye geçti), 
+    // veritabanını güncelle ki sonraki mailler Türkçe gitsin.
+    if (req.body.language && req.body.language !== user.language) {
+        user.language = req.body.language;
+        await user.save();
+    }
+
     // 1. Access Token (Kısa Ömürlü - 5 Dakika)
     const accessToken = jwt.sign(
         { id: user._id, role: user.role },
@@ -175,12 +187,11 @@ router.post('/login', async (req, res) => {
     const { password, ...others } = user._doc;
 
     // Cookie Ayarları
-    res
-      .cookie("refreshToken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Canlıda HTTPS zorunlu
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-site
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 Gün
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .status(200)
       .json({ ...others, accessToken });
@@ -223,6 +234,9 @@ router.post('/forgot-password', async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(404).json({ message: "auth.userNotFound" });
 
+    // --- DİL SEÇİMİ ---
+    const t = emailTexts[user.language || 'en'] || emailTexts['en'];
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 saat
@@ -231,13 +245,13 @@ router.post('/forgot-password', async (req, res) => {
     const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
     
     const emailContent = `
-      <h3>Password Reset Request</h3>
-      <p>Click the link below to reset your password:</p>
-      <a href="${resetLink}" style="background: #db2777; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
-      <p style="font-size: 12px; color: #777; margin-top: 20px;">If you didn't request this, please ignore.</p>
+      <h3>${t.resetPwdSubject}</h3>
+      <p>${t.resetPwdMsg}</p>
+      <a href="${resetLink}" style="background: #db2777; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${t.resetPwdBtn}</a>
+      <p style="font-size: 12px; color: #777; margin-top: 20px;">${t.resetPwdFooter}</p>
     `;
 
-    await sendEmail(user.email, "Password Reset", emailContent);
+    await sendEmail(user.email, t.resetPwdSubject, emailContent);
     res.status(200).json({ message: "auth.resetLinkSent" });
 
   } catch (err) {
@@ -265,6 +279,9 @@ router.post('/reset-password', async (req, res) => {
     });
 
     if (!user) return res.status(400).json({ message: "auth.invalidToken" });
+
+    // --- DİL SEÇİMİ ---
+    const t = emailTexts[user.language || 'en'] || emailTexts['en']; 
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);

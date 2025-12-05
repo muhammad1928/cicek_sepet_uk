@@ -25,29 +25,21 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String },
   role: { type: String, enum: ['customer', 'vendor', 'admin', 'courier'], default: 'customer' },
+  language: { type: String, default: 'en', enum: ['en', 'tr'] },
   activityLog: [ActivitySchema],
-
-  
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
-  
   savedAddresses: [{ 
     title: String, recipientName: String, recipientPhone: String, 
     address: String, city: String, postcode: String 
   }],
-
   badges: [{ icon: String, label: String, color: String }],
-
   isVerified: { type: Boolean, default: false },
   verificationToken: String,
-  
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  
   isBlocked: { type: Boolean, default: false },
-
   applicationStatus: { type: String, enum: ['none', 'pending', 'approved', 'rejected'], default: 'none' },
   applicationData: Object,
-
   storeSettings: {
     logo: String,
     banner: String,
