@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Product = require('../models/Product');
 const jwt = require('jsonwebtoken');
+const redisClient = require('../utils/redisClient');
 const logActivity = require('../utils/logActivity');
 
 // --- GÜVENLİK KATMANI ---
