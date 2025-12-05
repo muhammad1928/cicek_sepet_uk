@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
-import { publicRequest, userRequest } from "../../requestMethods";
+import { userRequest } from "../../requestMethods"; // <--- DÜZELTME: axios yerine userRequest
+
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import { FiTrash2, FiPlus, FiTag, FiCalendar, FiPercent, FiTruck, FiSearch, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
@@ -14,26 +14,26 @@ const AdminCoupons = () => {
   const { notify } = useCart();
   const todayStr = new Date().toISOString().split("T")[0]; 
 
-  // 1. Kuponları Çek
+  // 1. KUPONLARI ÇEK (userRequest ile - Otomatik Token)
   const fetchCoupons = useCallback(async () => {
     try {
-      const res = await publicRequest.get("/coupons");
+      const res = await userRequest.get("/coupons");
       setCoupons(res.data);
-    } catch (err) { console.log(err); }
+    } catch (err) { 
+      console.error("Kupon çekme hatası:", err); 
+      // 401 hatası gelirse App.jsx'teki interceptor zaten login'e atar.
+    }
   }, []);
 
   useEffect(() => { fetchCoupons(); }, [fetchCoupons]);
 
-  // 2. Kupon Oluştur
+  // 2. KUPON OLUŞTUR
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.code || !formData.discountRate) return notify("Kod ve İndirim oranı zorunludur.", "warning");
     if (Number(formData.discountRate) > 100) return notify("İndirim %100'den fazla olamaz.", "warning");
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const token = user?.accessToken;
-
       let finalDate = null;
       if (formData.expiryDate) {
           const dateObj = new Date(formData.expiryDate);
@@ -48,6 +48,7 @@ const AdminCoupons = () => {
         includeDelivery: formData.includeDelivery
       };
 
+      // userRequest kullanıyoruz, header yazmaya gerek yok
       await userRequest.post("/coupons", payload);
       
       notify("Kupon oluşturuldu! 🎉", "success");
@@ -58,15 +59,14 @@ const AdminCoupons = () => {
     }
   };
 
-  // 3. Kupon Sil
+  // 3. KUPON SİL
   const handleDeleteRequest = (id) => {
     setConfirmData({
       isOpen: true, title: "Kuponu Sil?", message: "Bu işlem geri alınamaz.", isDanger: true,
       action: async () => {
         try {
-          const user = JSON.parse(localStorage.getItem("user"));
-          const token = user?.accessToken;
-          await userRequest.delete(`/coupons/${id}`, { headers: { token: `Bearer ${token}` } });
+          // userRequest kullanıyoruz
+          await userRequest.delete(`/coupons/${id}`);
           notify("Kupon silindi.", "success");
           fetchCoupons();
         } catch (err) { notify("Silinemedi", "error"); }
@@ -97,7 +97,7 @@ const AdminCoupons = () => {
     <div className="space-y-8 max-w-6xl mx-auto animate-fade-in pb-20">
       
       {/* --- HEADER --- */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b pt-4 border-gray-200  pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-gray-200 pb-6">
         <div>
           <h2 className="text-3xl font-extrabold text-gray-800 flex items-center gap-3">
             <span className="bg-gradient-to-br from-emerald-400 to-green-600 text-white p-2 rounded-xl shadow-lg shadow-green-200"><FiTag /></span>
@@ -139,7 +139,6 @@ const AdminCoupons = () => {
 
         {/* --- SAĞ: KUPON LİSTESİ (ÇİFTER ÇİFTER) --- */}
         <div className="lg:col-span-2">
-          {/* --- BURADAKİ DEĞİŞİKLİK: md:grid-cols-2 eklendi --- */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {processedCoupons.length === 0 ? (
               <div className="col-span-full text-center py-20 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50">
@@ -162,7 +161,6 @@ const AdminCoupons = () => {
                       }
                     `}
                   >
-                    {/* Sol Şerit */}
                     <div className={`absolute left-0 top-4 bottom-4 w-1.5 rounded-r-full ${isExpired ? 'bg-red-400' : 'bg-emerald-400'}`}></div>
 
                     <div className="pl-4 mb-4">
@@ -196,7 +194,7 @@ const AdminCoupons = () => {
                     <div className="w-full flex justify-end">
                       <button 
                         onClick={() => handleDeleteRequest(coupon._id)} 
-                        className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-100 w-full flex items-center justify-center gap-2 text-xs font-bold"
+                        className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-100 w-full flex items-center justify-center gap-2 text-xs font-bold"
                         title="Kuponu Sil"
                       >
                         <FiTrash2 size={16} /> Sil
