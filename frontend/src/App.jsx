@@ -82,7 +82,7 @@ function App() {
             <Toast />
             <Chatbot />
             
-            <div className="flex-1  relative z-0">
+            <div className="flex-1 pt-20 relative z-0">
               <Routes>
                 {/* Müşteri Rotaları */}
                 <Route path="/" element={<HomePage />} />
