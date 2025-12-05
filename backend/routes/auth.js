@@ -12,7 +12,7 @@ const Joi = require('joi');
 // GÜVENLİK KURALLARI (REGEX)
 // =============================================================================
 // En az 1 küçük, 1 büyük, 1 rakam, 1 özel karakter, min 8 karakter
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[}!@#%^&*])/;
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%^&*])/;
 
 // =============================================================================
 // JOI ŞEMALARI (Backend Validasyonu)
@@ -47,13 +47,12 @@ router.post('/register', async (req, res) => {
     const checkEmail = await User.findOne({ email: email });
     if (checkEmail) return res.status(400).json({ message: "auth.emailExists" });
 
-    // 3. Şifreleme
+    // 3. Şifreleme ve Token
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    // 4. Token Üretimi (Email Onayı İçin)
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
-    // 3.5. Dil Seçimi (Varsayılan 'en')
+    // 4. Dil Seçimi (Varsayılan 'en')
     const userLang = language || 'en';
     const t = emailTexts[userLang] || emailTexts['en'];
     
@@ -73,7 +72,7 @@ router.post('/register', async (req, res) => {
 
     // 6. Loglama
     await logActivity(savedUser._id, 'register', req, { method: 'email' });
-
+    
     // 7. Onay Maili Gönderme
     const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const verifyLink = `${frontendUrl}/verify/${verifyToken}`;

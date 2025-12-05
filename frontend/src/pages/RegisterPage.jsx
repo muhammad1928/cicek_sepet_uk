@@ -38,7 +38,7 @@ const RegisterPage = () => {
         upper: /[A-Z]/.test(value),
         lower: /[a-z]/.test(value),
         number: /[0-9]/.test(value),
-        special: /[}!@#%^&*]/.test(value)
+        special: /[!@#%^&*]/.test(value)
       };
       setRules(newRules);
       setPasswordValid(Object.values(newRules).every(Boolean));
