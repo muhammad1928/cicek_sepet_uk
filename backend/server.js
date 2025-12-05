@@ -29,6 +29,7 @@ const contactRoute = require("./routes/contact");
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 
 // ============================================================
 // 🛡️ GÜVENLİK VE MIDDLEWARE KATMANI (SIRASI ÇOK ÖNEMLİDİR)
