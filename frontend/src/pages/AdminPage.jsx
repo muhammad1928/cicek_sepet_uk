@@ -36,7 +36,7 @@ const AdminPage = () => {
 
   return (
  // pt-20: Navbar yüksekliği kadar boşluk (Navbar fixed olduğu için)
-    <div className="min-h-screen flex bg-gray-100 pt-20 font-sans ">
+    <div className="min-h-screen flex bg-gray-100 font-sans ">
       
       {/* --- SIDEBAR (SOL MENÜ) --- */}
       {/* fixed: Sayfa kaydırılsa bile yerinde durur */}
