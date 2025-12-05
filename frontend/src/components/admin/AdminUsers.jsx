@@ -3,7 +3,7 @@ import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import SecureImage from "../SecureImage";
-import { FiEye, FiSearch, FiRefreshCw, FiFilter, FiX, FiMaximize, FiUser, FiShield, FiLock } from "react-icons/fi";
+import { FiEye, FiActivity, FiSearch, FiRefreshCw, FiFilter, FiX, FiMaximize, FiUser, FiShield, FiLock } from "react-icons/fi";
 import UserActivityModal from "./UserActivityModal";
 
 const AdminUsers = () => {
