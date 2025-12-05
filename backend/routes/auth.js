@@ -36,6 +36,7 @@ const loginSchema = Joi.object({
 // 1. KAYIT OL (REGISTER)
 // =============================================================================
 router.post('/register', async (req, res) => {
+  let savedUser = null;
   try {
     // 1. Validasyon
     const { error } = registerSchema.validate(req.body);
@@ -97,9 +98,16 @@ router.post('/register', async (req, res) => {
 
   } catch (err) {
     console.error("Register Error:", err);
-    if (savedUser && savedUser._id) await User.findByIdAndDelete(savedUser._id); // Hata olursa sil
+    if (savedUser && savedUser._id) {
+        try {
+            await User.findByIdAndDelete(savedUser._id);
+            console.log(`⚠️ Mail atılamadığı için kullanıcı silindi: ${savedUser.email}`);
+        } catch (deleteErr) {
+            console.error("Kullanıcı silinirken de hata oldu:", deleteErr);
+        }
+    }
+    // Frontend'e Hata Dön
     res.status(500).json({ message: "common.serverError" });
-  }
 });
 
 // =============================================================================

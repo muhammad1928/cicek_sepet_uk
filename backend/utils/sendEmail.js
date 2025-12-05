@@ -2,37 +2,38 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (email, subject, html) => {
   try {
-    // Gmail için en güvenilir Production ayarı (Port 465 + SSL)
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
-      secure: true, // 465 için true olmalı
+      secure: true, // 465 portu için true olmalı
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // DİKKAT: Burası Google App Password olmalı!
+        pass: process.env.EMAIL_PASS, // DİKKAT: Google App Password olmalı
       },
-      // Render/Cloud sunucularında bazen TLS sertifika sorunu olur, bunu aşmak için:
       tls: {
+        // Render gibi sunucularda sertifika hatasını önler
         rejectUnauthorized: false
       },
-      // 10 saniye içinde bağlanamazsa hata ver (Sonsuza kadar beklemesin)
-      connectionTimeout: 10000 
+      // Bağlantı zaman aşımı (10 saniye)
+      connectionTimeout: 10000, 
+      // Mesaj gönderme zaman aşımı (10 saniye)
+      socketTimeout: 10000 
     });
 
-    // Maili gönder
+    await transporter.verify(); // Bağlantıyı test et
+
     await transporter.sendMail({
-      from: `"ÇiçekSepeti UK" <${process.env.EMAIL_USER}>`,
+      from: `"CicekSepeti UK" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: subject,
       html: html,
     });
 
     console.log(`✅ Mail başarıyla gönderildi: ${email}`);
-    return true;
 
   } catch (error) {
     console.error("❌ Mail Gönderme Hatası:", error.message);
-    // ÖNEMLİ: Hatayı auth.js'e geri fırlat ki kullanıcıyı silsin!
+    // Hatayı fırlat ki auth.js yakalasın ve kullanıcıyı silsin!
     throw new Error("Mail gönderilemedi"); 
   }
 };
