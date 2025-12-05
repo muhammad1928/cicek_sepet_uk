@@ -60,9 +60,9 @@ const AdminCoupons = () => {
   };
 
   // 3. KUPON SİL
-  const handleDeleteRequest = (id, code) => {
+  const handleDeleteRequest = (id) => {
     setConfirmData({
-      isOpen: true, title: `"${code}" Kuponunu Sil?`, message: "Bu işlem geri alınamaz.", isDanger: true,
+      isOpen: true, title: "Kuponu Sil?", message: "Bu işlem geri alınamaz.", isDanger: true,
       action: async () => {
         try {
           // userRequest kullanıyoruz
@@ -193,7 +193,7 @@ const AdminCoupons = () => {
 
                     <div className="w-full flex justify-end">
                       <button 
-                        onClick={() => handleDeleteRequest(coupon._id, coupon.code)} 
+                        onClick={() => handleDeleteRequest(coupon._id)} 
                         className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-100 w-full flex items-center justify-center gap-2 text-xs font-bold"
                         title="Kuponu Sil"
                       >
