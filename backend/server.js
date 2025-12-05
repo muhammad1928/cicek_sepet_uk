@@ -69,6 +69,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// --- SUNUCU SAĞLIK KONTROLÜ (HEALTH CHECK) ---
+app.get("/", (req, res) => {
+  res.send("<h1>🌸 ÇiçekSepeti UK API Çalışıyor! 🚀</h1>");
+});
+
 // 4. Rate Limiting (Hız Sınırlama)
 // 15 dakika içinde aynı IP'den en fazla 100 istek
 const limiter = rateLimit({
