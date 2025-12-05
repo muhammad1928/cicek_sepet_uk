@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
     const { error } = registerSchema.validate(req.body);
     if (error) return res.status(400).json({ message: "auth.validationError" });
 
-    const { email, password, fullName } = req.body;
+    const { email, password, fullName, language } = req.body;
 
     // 2. Email Kontrolü
     const checkEmail = await User.findOne({ email: email });
