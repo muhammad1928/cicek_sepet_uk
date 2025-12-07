@@ -4,6 +4,7 @@ import { CartProvider } from "./context/CartContext";
 import { HelmetProvider } from "react-helmet-async";
 import axios from "axios"; // Axios importu gerekli
 
+
 // --- BİLEŞENLER ---
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -38,6 +39,10 @@ import VendorPage from "./pages/partner/VendorPage";
 import CourierPage from "./pages/partner/CourierPage";
 import AdminPage from "./pages/AdminPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage"; 
+
+// Bu ayar, tüm isteklerde (login, refresh, sync-favorites vb.) 
+// tarayıcının cookie'leri backend'e otomatik göndermesini sağlar.
+axios.defaults.withCredentials = true;
 
 function App() {
 

@@ -135,6 +135,9 @@ const simpleXSS = (req, res, next) => {
     const clean = (obj) => {
         if (!obj) return;
         for (const key in obj) {
+            // 🔥 DİKKAT: Şifre alanlarını temizleme! Hash bozulur.
+            if (key === 'password' || key === 'confirmPassword' || key === 'newPassword') continue;
+
             if (typeof obj[key] === 'string') {
                 obj[key] = escapeHTML(obj[key]);
             } else if (typeof obj[key] === 'object') {
@@ -144,13 +147,9 @@ const simpleXSS = (req, res, next) => {
     };
 
     if (req.body) clean(req.body);
-    // req.query ve req.params genellikle read-only olabilir, onları ellemiyoruz
-    // zaten body'deki XSS en tehlikelisidir.
-    
     next();
 };
 app.use(simpleXSS);
-
 // 8. Parameter Pollution (Parametre Kirliliği Önleme)
 app.use(hpp());
 
@@ -184,28 +183,26 @@ app.use("/api/upload", uploadRoute);
 app.use("/api/contact", contactRoute);
 
 // ============================================================
-// ⚠️ GLOBAL HATA YAKALAYICI
+// ⚠️ GLOBAL HATA YAKALAYICI (TEK VE BİRLEŞİK)
 // ============================================================
 app.use((err, req, res, next) => {
-  console.error("🔥 SUNUCU HATASI:", err.stack);
-  
-  // Müşteriye teknik detay verme, genel mesaj ver
-  res.status(500).json({ 
-      message: "Sunucu tarafında bir hata oluştu!", 
-      error: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error' 
+  // 1. Önce hatayı logla (Winston)
+  if (logger) {
+      logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  } else {
+      console.error("🔥 SUNUCU HATASI:", err);
+  }
+
+  // 2. Sonra yanıtı dön
+  const statusCode = err.status || 500;
+  res.status(statusCode).json({ 
+      success: false, // Frontend kontrolü için iyi olur
+      message: err.message || "Sunucu tarafında bir hata oluştu!", 
+      // Development modunda detay göster, Production'da gizle
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
 
-// GLOBAL HATA YAKALAYICI (WINSTON İLE)
-app.use((err, req, res, next) => {
-  // Hataları dosyaya yaz
-  logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-  
-  res.status(500).json({ 
-      message: "Sunucu tarafında bir hata oluştu!", 
-      error: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error' 
-  });
-});
 
 // ============================================================
 // 🚀 SUNUCUYU BAŞLAT
