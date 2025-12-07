@@ -43,6 +43,14 @@ router.post('/', verifyTokenAndSeller, async (req, res) => {
 
     const newProduct = new Product(productData);
     const savedProduct = await newProduct.save();
+
+    // --- KRİTİK: YENİ ÜRÜN EKLENİNCE CACHE'İ SİL ---
+    // Böylece ana sayfa yenilendiğinde güncel veriyi çeker
+    if (redisClient.isOpen) {
+        const keys = await redisClient.keys('products:*');
+        if (keys.length > 0) await redisClient.del(keys);
+    }
+
     res.status(200).json(savedProduct);
   } catch (err) {
     console.error("Ürün ekleme hatası:", err);
@@ -120,54 +128,99 @@ router.get('/:id', async (req, res) => {
 // =============================================================================
 // 5. TÜM ÜRÜNLERİ GETİR (GET ALL) - DÜZELTİLDİ (Regex Search)
 // =============================================================================
+// router.get('/', async (req, res) => {
+//   const qNew = req.query.new;
+//   const qCategory = req.query.category;
+//   const qSearch = req.query.search;
+
+//   // Cache Anahtarı oluştur (Sorguya göre değişmeli)
+//   const cacheKey = `products:${JSON.stringify(req.query)}`;
+
+
+//   try {
+//     // 1. Önce Redis'e bak
+//     const cachedData = await redisClient.get(cacheKey);
+//     if (cachedData) {
+//       // Varsa direkt gönder (Veritabanına gitme!)
+//       return res.status(200).json(JSON.parse(cachedData));
+//     }
+
+//     // 2. Yoksa veritabanından çek
+//     let products;
+//     if (qNew) {
+//       products = await Product.find().sort({ createdAt: -1 }).limit(5);
+//     } else if (qCategory) {
+//       products = await Product.find({ categories: { $in: [qCategory] } });
+//     } else if (qSearch) {
+//       // DÜZELTME: $text yerine $regex kullanıyoruz (Index gerektirmez, daha güvenli çalışır)
+//       products = await Product.find({ 
+//         title: { $regex: qSearch, $options: "i" } 
+//       });
+      
+//       // Loglama
+//       const userId = getUserId(req);
+//       if (userId && qSearch.length > 2) {
+//           try { logActivity(userId, 'search', req, { query: qSearch }); } catch(e){}
+//       }
+
+//     } else {
+//       // Varsayılan: Hepsini getir
+//       products = await Product.find().sort({ createdAt: -1 }).populate('vendor');
+//     }
+
+//     // 3. Veriyi Redis'e Kaydet (Örn: 1 Saatlik - 3600sn)
+//     await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+    
+//     res.status(200).json(products);
+//   } catch (err) {
+//     // Hata detayını konsola yaz (Server terminalinde görebilmek için)
+//     console.error("Ürün çekme hatası:", err);
+//     res.status(500).json({ message: "Ürünler yüklenirken hata oluştu.", error: err.message });
+//   }
+// });
 router.get('/', async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
   const qSearch = req.query.search;
 
-  // Cache Anahtarı oluştur (Sorguya göre değişmeli)
+  // Cache Anahtarı
   const cacheKey = `products:${JSON.stringify(req.query)}`;
 
-
   try {
-    // 1. Önce Redis'e bak
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) {
-      // Varsa direkt gönder (Veritabanına gitme!)
-      return res.status(200).json(JSON.parse(cachedData));
+    // 1. REDIS KONTROLÜ (Eğer Redis çalışıyorsa)
+    if (redisClient.isOpen) {
+        const cachedData = await redisClient.get(cacheKey);
+        if (cachedData) {
+            // console.log("Veri Redis'ten geldi ⚡");
+            return res.status(200).json(JSON.parse(cachedData));
+        }
     }
 
-    // 2. Yoksa veritabanından çek
+    // 2. VERİTABANI SORGUSU
     let products;
+
     if (qNew) {
       products = await Product.find().sort({ createdAt: -1 }).limit(5);
-    } else if (qCategory) {
+    } else if (qCategory && qCategory !== "all") {
       products = await Product.find({ categories: { $in: [qCategory] } });
     } else if (qSearch) {
-      // DÜZELTME: $text yerine $regex kullanıyoruz (Index gerektirmez, daha güvenli çalışır)
-      products = await Product.find({ 
-        title: { $regex: qSearch, $options: "i" } 
-      });
-      
-      // Loglama
-      const userId = getUserId(req);
-      if (userId && qSearch.length > 2) {
-          try { logActivity(userId, 'search', req, { query: qSearch }); } catch(e){}
-      }
-
+      products = await Product.find({ title: { $regex: qSearch, $options: "i" } });
+      // ... loglama ...
     } else {
       // Varsayılan: Hepsini getir
       products = await Product.find().sort({ createdAt: -1 }).populate('vendor');
     }
 
-    // 3. Veriyi Redis'e Kaydet (Örn: 1 Saatlik - 3600sn)
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
-    
+    // 3. REDIS'E KAYDET (Süresi: 10 Dakika)
+    // Çok uzun süre (1 saat) verirsek yeni ürünler geç görünür. 600sn idealdir.
+    if (redisClient.isOpen) {
+        await redisClient.setEx(cacheKey, 600, JSON.stringify(products));
+    }
+
     res.status(200).json(products);
   } catch (err) {
-    // Hata detayını konsola yaz (Server terminalinde görebilmek için)
-    console.error("Ürün çekme hatası:", err);
-    res.status(500).json({ message: "Ürünler yüklenirken hata oluştu.", error: err.message });
+    console.error("Ürün Listeleme Hatası:", err);
+    res.status(500).json({ message: "Ürünler yüklenirken hata oluştu." });
   }
 });
 
