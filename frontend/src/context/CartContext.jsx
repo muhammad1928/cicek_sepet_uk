@@ -21,19 +21,28 @@ export const CartProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   // --- KULLANICI DURUMU SENKRONİZASYONU ---
+  // --- KULLANICI & FAVORİ SENKRONİZASYONU (GÜNCELLENDİ) ---
   useEffect(() => {
-    const checkUser = () => {
+    const syncUserData = async () => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       setUser(storedUser);
+
+      // EĞER KULLANICI VARSA FAVORİLERİ DB'DEN ÇEK
+      if (storedUser && storedUser._id) {
+        try {
+          const res = await userRequest.get(`/users/${storedUser._id}/favorites`);
+          // Backend'den gelen favoriler string ID listesi olmalı ['id1', 'id2']
+          setFavorites(res.data);
+          localStorage.setItem("favorites", JSON.stringify(res.data)); // Local'i de güncelle
+        } catch (err) {
+          console.error("Favori çekme hatası:", err);
+        }
+      }
     };
     
-    // Uygulama açılışında yükle
-    checkUser(); 
-    
-    // Interceptor veya Logout'tan gelen olayları dinle
-    window.addEventListener('user-change', checkUser);
-
-    return () => window.removeEventListener('user-change', checkUser);
+    syncUserData(); 
+    window.addEventListener('user-change', syncUserData);
+    return () => window.removeEventListener('user-change', syncUserData);
   }, []);
 
   // --- KALICILIK (Persistence) ---
