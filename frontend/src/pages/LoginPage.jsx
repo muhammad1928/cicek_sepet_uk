@@ -40,7 +40,7 @@ const LoginPage = () => {
       // Navbar'ı güncellemesi için sinyal gönder
       window.dispatchEvent(new Event("user-change")); 
 
-      notify(`Hoşgeldin ${res.data.fullName}! 👋`, "success");
+      notify(`${t("login.welcome")} ${res.data.fullName}! 👋`, "success");
 
       // ROL BAZLI YÖNLENDİRME
       setTimeout(() => {
@@ -96,21 +96,21 @@ const LoginPage = () => {
         
         <div className="text-center mb-6">
           <div className="inline-block p-3 rounded-full bg-pink-100 text-pink-600 mb-3 text-2xl shadow-inner">🔐</div>
-          <h2 className="text-2xl font-extrabold text-gray-800 mb-1 tracking-tight">Hoşgeldiniz</h2>
-          <p className="text-gray-500 text-xs">Hesabınıza giriş yapın ve alışverişe başlayın</p>
+          <h2 className="text-2xl font-extrabold text-gray-800 mb-1 tracking-tight">{t("login.welcome")}</h2>
+          <p className="text-gray-500 text-xs">{t("login.welcomedesc")}</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           
           {/* E-POSTA */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">E-Posta Adresi</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("login.emailLabel")}</label>
             <div className="flex items-center border-2 border-gray-200 rounded-xl bg-white focus-within:border-pink-500 focus-within:ring-4 focus-within:ring-pink-500/10 transition overflow-hidden">
               <span className="pl-4 text-gray-400 text-base">✉️</span>
               <input 
                 type="email" 
                 className="w-full px-4 py-2.5 outline-none bg-transparent text-gray-700 font-medium placeholder-gray-400 text-sm" 
-                placeholder="mail@site.com" 
+                placeholder={t("login.emailInput")} 
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
               />
@@ -119,7 +119,7 @@ const LoginPage = () => {
 
           {/* ŞİFRE */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">Şifre</label>
+            <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1 ml-1">{t("login.passwordLabel")}</label>
             <div className="flex items-center border-2 border-gray-200 rounded-xl bg-white focus-within:border-pink-500 focus-within:ring-4 focus-within:ring-pink-500/10 transition overflow-hidden relative">
               <span className="pl-4 text-gray-400 text-base">🔒</span>
               <input 
@@ -141,7 +141,7 @@ const LoginPage = () => {
 
           <div className="text-right">
             <Link to="/forgot-password" className="text-[10px] text-gray-500 hover:text-pink-600 font-bold transition underline decoration-transparent hover:decoration-pink-600 underline-offset-2">
-              Şifremi unuttum?
+              {t("login.forgotPassword")}
             </Link>
           </div>
 
@@ -155,10 +155,10 @@ const LoginPage = () => {
             {loading ? (
               <>
                 <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                Giriş Yapılıyor...
+                {t("login.loginProcessing")}
               </>
             ) : (
-              "Giriş Yap"
+              t("login.loginButton")
             )}
           </button>
         </form>
@@ -166,13 +166,13 @@ const LoginPage = () => {
         {/* ALT LİNKLER */}
         <div className="mt-6 text-center border-t border-gray-200 pt-4">
           <p className="text-xs text-gray-500">
-            Hesabınız yok mu?{" "}
+            {t("login.noAccount1")}{" "}
             <Link to="/register" className="text-pink-600 font-bold hover:underline hover:text-purple-600 transition">
-              Hemen Kayıt Ol
+              {t("login.noAccount2")}
             </Link>
           </p>
           <div className="mt-3">
-             <Link to="/" className="text-gray-400 text-[10px] hover:text-gray-600 transition font-medium">← Ana Sayfaya Dön</Link>
+             <Link to="/" className="text-gray-400 text-[10px] hover:text-gray-600 transition font-medium">{t("login.backToHome")}</Link>
           </div>
         </div>
 

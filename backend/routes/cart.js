@@ -14,7 +14,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // 2. SEPET GÜNCELLE (UPDATE)
-router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.put("/:id",  async (req, res) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       req.params.id,
@@ -28,7 +28,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 // 3. SEPET SİL (DELETE)
-router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await Cart.findByIdAndDelete(req.params.id);
     res.status(200).json("Sepet silindi.");

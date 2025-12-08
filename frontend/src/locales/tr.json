@@ -884,5 +884,19 @@
     "register":"Kayıt Ol",
     "viewCart":"Sepeti Görüntüle",
     "language":"Dil"
+  },
+  "login": {
+    "welcome":"Hosgeldiniz",
+    "welcomedesc":"Hesabınıza giriş yapın ve alışverişe başlayın",
+    "emailLabel":"E-Posta Adresi",
+    "emailInput": "example@mail.com",
+    "passwordLabel":"Şifre",
+    "passwordInput":"Şifrenizi girin",
+    "forgotPassword":"Şifremi Unuttum",
+    "loginButton":"Giriş Yap",
+    "loginProcessing":"Giriş Yapılıyor...",
+    "noAccount1":"Hesabınız yok mu?",
+    "noAccount2":"Hemen Kayıt Olun",
+    "backToHome":"← Ana Sayfaya Dön"
   }
 }
