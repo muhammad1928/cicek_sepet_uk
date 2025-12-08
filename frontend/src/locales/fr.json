@@ -882,5 +882,19 @@
     "register": "Inscription",
     "viewCart": "Voir le panier",
     "language": "Langue"
+  },
+  "login": {
+    "welcome": "Bienvenue",
+    "welcomedesc": "Connectez-vous à votre compte et commencez vos achats",
+    "emailLabel": "Adresse e-mail",
+    "emailInput": "example@mail.com",
+    "passwordLabel": "Mot de passe",
+    "passwordInput": "Entrez votre mot de passe",
+    "forgotPassword": "Mot de passe oublié",
+    "loginButton": "Se connecter",
+    "loginProcessing": "Connexion en cours...",
+    "noAccount1": "Vous n'avez pas de compte ?",
+    "noAccount2": "Inscrivez-vous maintenant",
+    "backToHome": "← Retour à l'accueil"
   }
 }

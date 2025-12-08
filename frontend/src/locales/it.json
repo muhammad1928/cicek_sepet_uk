@@ -876,5 +876,19 @@
     "register": "Registrati",
     "viewCart": "Vedi carrello",
     "language": "Lingua"
+  },
+  "login": {
+    "welcome": "Benvenuto",
+    "welcomedesc": "Accedi al tuo account e inizia a fare acquisti",
+    "emailLabel": "Indirizzo Email",
+    "emailInput": "example@mail.com",
+    "passwordLabel": "Password",
+    "passwordInput": "Inserisci la tua password",
+    "forgotPassword": "Password dimenticata",
+    "loginButton": "Accedi",
+    "loginProcessing": "Accesso in corso...",
+    "noAccount1": "Non hai un account?",
+    "noAccount2": "Registrati ora",
+    "backToHome": "← Torna alla Home"
   }
 }

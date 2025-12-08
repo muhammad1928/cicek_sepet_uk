@@ -876,5 +876,19 @@
     "register": "Registreren",
     "viewCart": "Winkelwagen bekijken",
     "language": "Taal"
-  }
+  },
+  "login": {
+  "welcome": "Welkom",
+  "welcomedesc": "Log in op uw account en begin met winkelen",
+  "emailLabel": "E-mailadres",
+  "emailInput": "example@mail.com",
+  "passwordLabel": "Wachtwoord",
+  "passwordInput": "Voer uw wachtwoord in",
+  "forgotPassword": "Wachtwoord vergeten",
+  "loginButton": "Inloggen",
+  "loginProcessing": "Bezig met inloggen...",
+  "noAccount1": "Heeft u geen account?",
+  "noAccount2": "Registreer nu",
+  "backToHome": "← Terug naar Home"
+}
 }

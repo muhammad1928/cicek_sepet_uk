@@ -881,5 +881,19 @@
     "register": "Registrera dig",
     "viewCart": "Visa varukorg",
     "language": "Språk"
+  },
+  "login": {
+    "welcome": "Välkommen",
+    "welcomedesc": "Logga in på ditt konto och börja handla",
+    "emailLabel": "E-postadress",
+    "emailInput": "example@mail.com",
+    "passwordLabel": "Lösenord",
+    "passwordInput": "Ange ditt lösenord",
+    "forgotPassword": "Glömt lösenord",
+    "loginButton": "Logga in",
+    "loginProcessing": "Loggar in...",
+    "noAccount1": "Har du inget konto?",
+    "noAccount2": "Registrera dig nu",
+    "backToHome": "← Tillbaka till startsidan"
   }
 }

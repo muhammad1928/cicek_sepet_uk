@@ -1,4 +1,5 @@
-{ "auth": {
+{
+  "auth": {
     "validationError": "Please check your input fields.",
     "emailExists": "An account with this email already exists.",
     "registerSuccess": "Registration successful! Please check your email.",
@@ -66,18 +67,18 @@
     "showAll": "Show All Products",
     "homeAddToCart": "Add",
     "categories1": {
-        "all": "All",
-        "birthday": "Birthday",
-        "anniversary": "Anniversary",
-        "indoor": "Indoor Flowers",
-        "eadible": "Edible Gifts",
-        "rose": "Roses",
-        "orchid": "Orchids",
-        "daisy": "Daisies",
-        "tulip": "Tulips",
-        "unique": "Unique",
-        "designFlowers": "Designer Flowers"
-      }
+      "all": "All",
+      "birthday": "Birthday",
+      "anniversary": "Anniversary",
+      "indoor": "Indoor Flowers",
+      "eadible": "Edible Gifts",
+      "rose": "Roses",
+      "orchid": "Orchids",
+      "daisy": "Daisies",
+      "tulip": "Tulips",
+      "unique": "Unique",
+      "designFlowers": "Designer Flowers"
+    }
   },
 
   "seo": {
@@ -88,7 +89,7 @@
     "homePage": {
       "homeTitle": "Fresh Flowers and Special Gifts - ÇiçekSepeti London",
       "locationTitle": "London - Freshest Flowers and Special Gifts | ÇiçekSepeti",
-      "homeDescription": "We deliver London's freshest flowers and special gifts to your door the same day. Discover perfect gift options for birthdays, anniversaries, marriage proposals and other special moments."      
+      "homeDescription": "We deliver London's freshest flowers and special gifts to your door the same day. Discover perfect gift options for birthdays, anniversaries, marriage proposals and other special moments."
     },
     "contactPage": {
       "contactTitle": "Contact - ÇiçekSepeti | Get in Touch",
@@ -917,5 +918,19 @@
     "register": "Register",
     "viewCart": "View Cart",
     "language": "Language"
+  },
+  "login": {
+    "welcome": "Welcome",
+    "welcomedesc": "Log in to your account and start shopping",
+    "emailLabel": "Email Address",
+    "emailInput": "example@mail.com",
+    "passwordLabel": "Password",
+    "passwordInput": "Enter your password",
+    "forgotPassword": "Forgot Password",
+    "loginButton": "Log In",
+    "loginProcessing": "Logging In...",
+    "noAccount1": "Don't have an account?",
+    "noAccount2": "Register Now",
+    "backToHome": "← Back to Home"
   }
 }
