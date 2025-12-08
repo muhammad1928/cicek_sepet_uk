@@ -173,7 +173,7 @@ const HomePage = () => {
                     <img 
                         src={product.img || "https://placehold.co/400"} 
                         alt={product.title} 
-                        className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700" 
+                        className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
                     />
                     {product.category && <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">{product.category}</div>}
                   </div>
