@@ -20,7 +20,8 @@ const MobileMenu = ({ isOpen, setIsOpen, user, handleLogout }) => {
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    // setIsOpen(false); // Tercihe bağlı
+    setIsOpen(false); // Tercihe bağlı
+    setIsMobileLangOpen(false);
   };
 
   const handleSearch = async (e) => {
