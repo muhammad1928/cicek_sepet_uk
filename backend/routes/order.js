@@ -86,7 +86,7 @@ const createOrderEmail = (order, title, message, t) => {
         </div>
       </div>
       <div style="background-color: #f1f5f9; padding: 15px; text-align: center; font-size: 12px; color: #94a3b8;">
-        &copy; ${new Date().getFullYear()} ÇiçekSepeti UK. All rights reserved.
+        &copy; ${new Date().getFullYear()} FlowerLovers. All rights reserved.
       </div>
     </div>
   `;
@@ -148,7 +148,7 @@ const createVendorCancelEmail = (vendorName, orderId, t) => {
       <p>Hello <b>${vendorName}</b>,</p>
       <p>Order <strong>#${orderId.toString().slice(-8).toUpperCase()}</strong> ${t.vendorCancelMsg}</p>
       <hr style="border: 0; border-top: 1px solid #fecaca; margin: 20px 0;">
-      <p style="font-size: 12px; color: #7f1d1d;">ÇiçekSepeti UK Team</p>
+      <p style="font-size: 12px; color: #7f1d1d;">FlowerLovers Team</p>
     </div>
   `;
 };

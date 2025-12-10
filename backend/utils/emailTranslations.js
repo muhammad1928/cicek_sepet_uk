@@ -73,9 +73,9 @@ const translations = {
     // ============================================================
     tr: {
         // --- AUTH EMAILS ---
-        verifySubject: "Hesabınızı Onaylayın - ÇiçekSepeti UK",
+        verifySubject: "Hesabınızı Onaylayın - FlowerLovers",
         verifyTitle: "Hoşgeldiniz,",
-        verifyMsg: "ÇiçekSepeti UK ailesine katıldığınız için teşekkürler. Hesabınızı aktifleştirmek için lütfen aşağıdaki butona tıklayın:",
+        verifyMsg: "FlowerLovers ailesine katıldığınız için teşekkürler. Hesabınızı aktifleştirmek için lütfen aşağıdaki butona tıklayın:",
         verifyBtn: "Hesabımı Onayla",
         verifyLinkFooter: "Eğer buton çalışmıyorsa, şu linki tarayıcınıza yapıştırın:",
 
@@ -141,9 +141,9 @@ const translations = {
     // ============================================================
     sv: {
         // --- AUTH EMAILS ---
-        verifySubject: "Verifiera ditt konto - ÇiçekSepeti UK",
+        verifySubject: "Verifiera ditt konto - FlowerLovers",
         verifyTitle: "Välkommen,",
-        verifyMsg: "Tack för att du gick med i ÇiçekSepeti UK-familjen. Klicka på knappen nedan för att aktivera ditt konto:",
+        verifyMsg: "Tack för att du gick med i FlowerLovers-familjen. Klicka på knappen nedan för att aktivera ditt konto:",
         verifyBtn: "Verifiera mitt konto",
         verifyLinkFooter: "Om knappen inte fungerar, klistra in denna länk i din webbläsare:",
 
@@ -210,9 +210,9 @@ const translations = {
     // ============================================================
     de: {
         // --- AUTH EMAILS ---
-        verifySubject: "Bestätigen Sie Ihr Konto - ÇiçekSepeti UK",
+        verifySubject: "Bestätigen Sie Ihr Konto - FlowerLovers",
         verifyTitle: "Willkommen,",
-        verifyMsg: "Vielen Dank, dass Sie der ÇiçekSepeti UK-Familie beigetreten sind. Klicken Sie auf die Schaltfläche unten, um Ihr Konto zu aktivieren:",
+        verifyMsg: "Vielen Dank, dass Sie der FlowerLovers-Familie beigetreten sind. Klicken Sie auf die Schaltfläche unten, um Ihr Konto zu aktivieren:",
         verifyBtn: "Mein Konto bestätigen",
         verifyLinkFooter: "Falls die Schaltfläche nicht funktioniert, fügen Sie diesen Link in Ihren Browser ein:",
 
@@ -278,9 +278,9 @@ const translations = {
     // ============================================================
     it: {
         // --- AUTH EMAILS ---
-        verifySubject: "Verifica il tuo account - ÇiçekSepeti UK",
+        verifySubject: "Verifica il tuo account - FlowerLovers",
         verifyTitle: "Benvenuto,",
-        verifyMsg: "Grazie per esserti unito alla famiglia ÇiçekSepeti UK. Clicca sul pulsante qui sotto per attivare il tuo account:",
+        verifyMsg: "Grazie per esserti unito alla famiglia FlowerLovers. Clicca sul pulsante qui sotto per attivare il tuo account:",
         verifyBtn: "Verifica il mio account",
         verifyLinkFooter: "Se il pulsante non funziona, incolla questo link nel tuo browser:",
 

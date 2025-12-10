@@ -1,6 +1,6 @@
-# 🌸 ÇiçekSepeti UK - Full Stack Pazaryeri Platformu
+# 🌸 FlowerLovers UK - Full Stack Pazaryeri Platformu
 
-ÇiçekSepeti UK, çok satıcılı (multi-vendor) yapıyı destekleyen, kurye takip sistemi, gelişmiş sipariş yönetimi ve güvenli ödeme altyapısına sahip modern bir e-ticaret platformudur.
+FlowerLovers UK, çok satıcılı (multi-vendor) yapıyı destekleyen, kurye takip sistemi, gelişmiş sipariş yönetimi ve güvenli ödeme altyapısına sahip modern bir e-ticaret platformudur.
 
 ## 🚀 Özellikler
 

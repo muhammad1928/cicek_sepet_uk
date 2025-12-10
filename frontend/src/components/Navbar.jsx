@@ -63,7 +63,7 @@ const Navbar = () => {
             active:scale-95 active:opacity-80
           "
         >
-          🌸 <span className="tracking-tight">ÇiçekSepeti UK</span>
+          🌸 <span className="tracking-tight">FlowerLovers</span>
         </Link>
 
         {/* --- MASAÜSTÜ ARAMA --- */}

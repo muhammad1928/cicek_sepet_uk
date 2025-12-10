@@ -72,7 +72,7 @@ app.use(cors(corsOptions));
 
 // --- SUNUCU SAĞLIK KONTROLÜ (HEALTH CHECK) ---
 app.get("/", (req, res) => {
-  res.send("<h1>🌸 ÇiçekSepeti UK API Çalışıyor! 🚀</h1>");
+  res.send("<h1>🌸 FlowerLovers API Çalışıyor! 🚀</h1>");
 });
 
 // 4. Rate Limiting (Hız Sınırlama)
