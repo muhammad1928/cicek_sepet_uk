@@ -83,46 +83,46 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Hakkımızda - ÇiçekSepeti | En Taze Çiçekler ve Hediyeler",
-      "aboutDescription": "ÇiçekSepeti'nin hikayesini, misyonunu ve değerlerini keşfedin. Müşterilerimize en kaliteli çiçek ve hediye deneyimini sunmaya kendimizi adadık. Hızlı teslimat ve mükemmel müşteri hizmeti ile fark yaratıyoruz."
+      "aboutTitle": "Hakkımızda - Fesfu | En Taze Çiçekler ve Hediyeler",
+      "aboutDescription": "Fesfu'nin hikayesini, misyonunu ve değerlerini keşfedin. Müşterilerimize en kaliteli çiçek ve hediye deneyimini sunmaya kendimizi adadık. Hızlı teslimat ve mükemmel müşteri hizmeti ile fark yaratıyoruz."
     },
     "homePage": {
-      "homeTitle": "Taze Çiçekler ve Özel Hediyeler - ÇiçekSepeti Londra",
-      "locationTitle": "Londra - En Taze Çiçekler ve Özel Hediyeler | ÇiçekSepeti",
+      "homeTitle": "Taze Çiçekler ve Özel Hediyeler - Fesfu Londra",
+      "locationTitle": "Londra - En Taze Çiçekler ve Özel Hediyeler | Fesfu",
       "homeDescription": "Londra'nın en taze çiçekleri ve özel hediyelerini aynı gün kapınıza teslim ediyoruz. Doğum günü, yıldönümü, evlilik teklifleri ve diğer özel anlar için mükemmel hediye seçeneklerini keşfedin."
     },
     "contactPage": {
-      "contactTitle": "İletişim - ÇiçekSepeti | Bize Ulaşın",
-      "contactDescription": "Sorularınız, önerileriniz veya şikayetleriniz için bizimle iletişime geçin. ÇiçekSepeti olarak her zaman yardımcı olmaktan memnuniyet duyarız. Bize ulaşmak için farklı iletişim kanallarını kullanabilirsiniz."
+      "contactTitle": "İletişim - Fesfu | Bize Ulaşın",
+      "contactDescription": "Sorularınız, önerileriniz veya şikayetleriniz için bizimle iletişime geçin. Fesfu olarak her zaman yardımcı olmaktan memnuniyet duyarız. Bize ulaşmak için farklı iletişim kanallarını kullanabilirsiniz."
     },
     "faqPage": {
-      "faqTitle": "Sıkça Sorulan Sorular - ÇiçekSepeti",
-      "faqDescription": "ÇiçekSepeti hakkında sıkça sorulan soruları keşfedin. Sipariş verme, teslimat, iade politikası ve diğer önemli konularda bilgi edinin. Sorularınıza hızlı ve kolay cevaplar bulun."
+      "faqTitle": "Sıkça Sorulan Sorular - Fesfu",
+      "faqDescription": "Fesfu hakkında sıkça sorulan soruları keşfedin. Sipariş verme, teslimat, iade politikası ve diğer önemli konularda bilgi edinin. Sorularınıza hızlı ve kolay cevaplar bulun."
     },
     "favouritesPage": {
-      "title": "Favorilerim - ÇiçekSepeti | Beğendiğiniz Ürünler",
-      "description": "Favorilerinizi saklayın ve en beğendiğiniz çiçekler, hediyeler ve diğer ürünleri kolayca erişin. ÇiçekSepeti ile en sevdiğiniz ürünleri tek tıkla satın alabilirsiniz."
+      "title": "Favorilerim - Fesfu | Beğendiğiniz Ürünler",
+      "description": "Favorilerinizi saklayın ve en beğendiğiniz çiçekler, hediyeler ve diğer ürünleri kolayca erişin. Fesfu ile en sevdiğiniz ürünleri tek tıkla satın alabilirsiniz."
     },
     "legalPage": {
-      "title": "Hukuki Bilgiler - ÇiçekSepeti | Gizlilik Politikası ve Kullanım Şartları",
-      "description": "ÇiçekSepeti'nin gizlilik politikası, kullanım şartları ve çerez politikası hakkında detaylı bilgi edinin. Kişisel verilerinizin nasıl korunduğunu ve platformumuzu kullanırken haklarınızı öğrenin.",
+      "title": "Hukuki Bilgiler - Fesfu | Gizlilik Politikası ve Kullanım Şartları",
+      "description": "Fesfu'nin gizlilik politikası, kullanım şartları ve çerez politikası hakkında detaylı bilgi edinin. Kişisel verilerinizin nasıl korunduğunu ve platformumuzu kullanırken haklarınızı öğrenin.",
       "hakkindaDetayliBilgi": "hakkında detaylı bilgi."
     },
     "myOrdersPage": {
-      "title": "Siparişlerim - ÇiçekSepeti | Sipariş Takibi ve Geçmişi",
-      "description": "Geçmiş siparişlerinizi görüntüleyin, sipariş detaylarını inceleyin ve siparişlerinizin durumunu takip edin. ÇiçekSepeti ile tüm siparişlerinizi kolayca yönetin."
+      "title": "Siparişlerim - Fesfu | Sipariş Takibi ve Geçmişi",
+      "description": "Geçmiş siparişlerinizi görüntüleyin, sipariş detaylarını inceleyin ve siparişlerinizin durumunu takip edin. Fesfu ile tüm siparişlerinizi kolayca yönetin."
     },
     "registerCourierPage": {
-      "title": "Kurye Başvurusu - ÇiçekSepeti | Kurye Olun",
-      "description": "ÇiçekSepeti'nin kurye programına katılın ve esnek çalışma saatleri ile ek gelir elde edin. Kurye başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+      "title": "Kurye Başvurusu - Fesfu | Kurye Olun",
+      "description": "Fesfu'nin kurye programına katılın ve esnek çalışma saatleri ile ek gelir elde edin. Kurye başvuru süreci hakkında bilgi edinin ve hemen başvurun."
     },
     "registerPage": {
-      "title": "Kayıt Ol - ÇiçekSepeti | Yeni Hesap Oluştur",
-      "description": "ÇiçekSepeti'ne kayıt olun ve en taze çiçekler ile özel hediyelere erişim sağlayın. Hızlı ve kolay kayıt süreci ile hemen alışverişe başlayın."
+      "title": "Kayıt Ol - Fesfu | Yeni Hesap Oluştur",
+      "description": "Fesfu'ne kayıt olun ve en taze çiçekler ile özel hediyelere erişim sağlayın. Hızlı ve kolay kayıt süreci ile hemen alışverişe başlayın."
     },
     "vendorRegistrationPage": {
-      "title": "Satıcı Başvurusu - ÇiçekSepeti | Mağazanızı Açın",
-      "description": "ÇiçekSepeti platformunda mağazanızı açın ve geniş müşteri kitlesine ulaşın. Satıcı başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+      "title": "Satıcı Başvurusu - Fesfu | Mağazanızı Açın",
+      "description": "Fesfu platformunda mağazanızı açın ve geniş müşteri kitlesine ulaşın. Satıcı başvuru süreci hakkında bilgi edinin ve hemen başvurun."
     }
   },
 
@@ -159,7 +159,7 @@
   "about": {
     "ourStory": "Bizim Hikayemiz",
     "ourMission": "Mutluluk Dağıtıyoruz",
-    "ourHistory": "2024 yılında Londra'da kurulan ÇiçekSepeti UK, sevdiklerinize en taze çiçekleri ve en özel hediyeleri ulaştırmak için yola çıktı. Amacımız sadece bir ürün teslim etmek değil, mesafeleri kısaltıp duygularınızı en güzel haliyle ifade etmenize yardımcı olmaktır.",
+    "ourHistory": "2024 yılında Londra'da kurulan Fesfu UK, sevdiklerinize en taze çiçekleri ve en özel hediyeleri ulaştırmak için yola çıktı. Amacımız sadece bir ürün teslim etmek değil, mesafeleri kısaltıp duygularınızı en güzel haliyle ifade etmenize yardımcı olmaktır.",
     "sameDayDelivery": "Aynı Gün Teslimat",
     "sameDayDeliverySub": "Londra içi 18:00'a kadar verilen siparişlerde.",
     "freshnessGuarantee": "Tazelik Garantisi",
@@ -202,7 +202,7 @@
     "privacyPolicy": {
       "legalPageContentTitle": "Gizlilik Politikası",
       "first": "1. Veri Sorumlusu",
-      "firstDesc": "ÇiçekSepeti UK olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin güvenliğine maksimum önem veriyoruz.",
+      "firstDesc": "Fesfu UK olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin güvenliğine maksimum önem veriyoruz.",
       "second": "2. Toplanan Veriler ve Amaçları",
       "secondDesc": {
         "part1": "Kimlik ve İletişim: Ad, soyad, e-posta ve telefon numaranız; sipariş onayı ve fatura işlemleri için işlenir.",
@@ -215,7 +215,7 @@
     "termsOfUse": {
       "title": "Mesafeli Satış Sözleşmesi",
       "first": "1. Taraflar",
-      "firstDesc": "İşbu sözleşme, platform üzerinden sipariş veren ALICI ile ürünü tedarik eden SATICI (Mağaza) arasında, ÇiçekSepeti UK arabuluculuğunda akdedilmiştir.",
+      "firstDesc": "İşbu sözleşme, platform üzerinden sipariş veren ALICI ile ürünü tedarik eden SATICI (Mağaza) arasında, Fesfu UK arabuluculuğunda akdedilmiştir.",
       "second": "2. Cayma Hakkı İstisnası (Önemli)",
       "secondDesc": "DİKKAT: Yönetmelik gereği; \"Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmelerde\" (Canlı Çiçek, Çikolata, Pasta vb.) CAYMA HAKKI KULLANILAMAZ.",
       "secondDesc_part2": "Ancak ürün; teslimat anında hasarlı, solmuş veya görselden tamamen farklı ise, alıcı teslimatı kabul etmeyerek iade talep edebilir.",
@@ -241,7 +241,7 @@
     "pageNotFound": "Sayfa Bulunamadı",
     "pageNotFoundDesc": "Aradığınız içerik mevcut değil.",
     "backToHome": "← Ana Sayfaya Dön",
-    "backToHome2": "ÇiçekSepeti UK Legal Team"
+    "backToHome2": "Fesfu UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "İptal talebiniz başarıyla alındı.",
@@ -385,7 +385,7 @@
     "noReviews": "Bu mağaza için henüz yorum yapılmamış.",
     "storeAbout": "Mağaza Hakkında",
     "secureShopping1": "Güvenli Alışveriş",
-    "secureShopping2": "Bu mağazadan yapacağınız tüm alışverişler ÇiçekSepeti UK güvencesi altındadır."
+    "secureShopping2": "Bu mağazadan yapacağınız tüm alışverişler Fesfu UK güvencesi altındadır."
   },
   "success": {
     "orderSuccess": "Siparişiniz başarıyla alındı!",
@@ -549,7 +549,7 @@
     "confirm":"Onayla"
   },
   "chatBot":{
-    "greeting":"Merhaba! Ben ÇiçekSepeti Asistanı 🌸 Size nasıl yardımcı olabilirim?",
+    "greeting":"Merhaba! Ben Fesfu Asistanı 🌸 Size nasıl yardımcı olabilirim?",
     "greetingResponse":"Merhaba! 🌸 Size siparişler, çiçek bakımı veya satıcı işlemleri hakkında bilgi verebilirim.",
     "askQuestion":"Sorunuzu buraya yazın...",
     "send":"Gönder",

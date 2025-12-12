@@ -125,59 +125,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
 // =============================================================================
-// 5. TÜM ÜRÜNLERİ GETİR (GET ALL) - DÜZELTİLDİ (Regex Search)
+// 5. TÜM ÜRÜNLERİ GETİR (GET ALL) - GÜVENLİ HALE GETİRİLDİ
 // =============================================================================
-// router.get('/', async (req, res) => {
-//   const qNew = req.query.new;
-//   const qCategory = req.query.category;
-//   const qSearch = req.query.search;
-
-//   // Cache Anahtarı oluştur (Sorguya göre değişmeli)
-//   const cacheKey = `products:${JSON.stringify(req.query)}`;
-
-
-//   try {
-//     // 1. Önce Redis'e bak
-//     const cachedData = await redisClient.get(cacheKey);
-//     if (cachedData) {
-//       // Varsa direkt gönder (Veritabanına gitme!)
-//       return res.status(200).json(JSON.parse(cachedData));
-//     }
-
-//     // 2. Yoksa veritabanından çek
-//     let products;
-//     if (qNew) {
-//       products = await Product.find().sort({ createdAt: -1 }).limit(5);
-//     } else if (qCategory) {
-//       products = await Product.find({ categories: { $in: [qCategory] } });
-//     } else if (qSearch) {
-//       // DÜZELTME: $text yerine $regex kullanıyoruz (Index gerektirmez, daha güvenli çalışır)
-//       products = await Product.find({ 
-//         title: { $regex: qSearch, $options: "i" } 
-//       });
-      
-//       // Loglama
-//       const userId = getUserId(req);
-//       if (userId && qSearch.length > 2) {
-//           try { logActivity(userId, 'search', req, { query: qSearch }); } catch(e){}
-//       }
-
-//     } else {
-//       // Varsayılan: Hepsini getir
-//       products = await Product.find().sort({ createdAt: -1 }).populate('vendor');
-//     }
-
-//     // 3. Veriyi Redis'e Kaydet (Örn: 1 Saatlik - 3600sn)
-//     await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
-    
-//     res.status(200).json(products);
-//   } catch (err) {
-//     // Hata detayını konsola yaz (Server terminalinde görebilmek için)
-//     console.error("Ürün çekme hatası:", err);
-//     res.status(500).json({ message: "Ürünler yüklenirken hata oluştu.", error: err.message });
-//   }
-// });
 router.get('/', async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;

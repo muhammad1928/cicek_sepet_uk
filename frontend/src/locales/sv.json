@@ -70,12 +70,12 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Om oss - ÇiçekSepeti | Fräschaste blommor och presenter",
-      "aboutDescription": "Upptäck ÇiçekSepetis historia, mission och värderingar. Vi är dedikerade till att erbjuda våra kunder den bästa blomster- och presentupplevelsen. Vi gör skillnad med snabb leverans och utmärkt kundservice."
+      "aboutTitle": "Om oss - Fesfu | Fräschaste blommor och presenter",
+      "aboutDescription": "Upptäck Fesfus historia, mission och värderingar. Vi är dedikerade till att erbjuda våra kunder den bästa blomster- och presentupplevelsen. Vi gör skillnad med snabb leverans och utmärkt kundservice."
     },
     "homePage": {
-      "homeTitle": "Färska blommor och specialpresenter - ÇiçekSepeti London",
-      "locationTitle": "London - Fräschaste blommor och specialpresenter | ÇiçekSepeti",
+      "homeTitle": "Färska blommor och specialpresenter - Fesfu London",
+      "locationTitle": "London - Fräschaste blommor och specialpresenter | Fesfu",
       "homeDescription": "Vi levererar Londons fräschaste blommor och specialpresenter samma dag till din dörr. Upptäck perfekta presentalternativ för födelsedagar, årsdagar, frierier och andra speciella tillfällen.",
       "categories": {
         "all": "Alla",
@@ -92,37 +92,37 @@
       }
     },
     "contactPage": {
-      "contactTitle": "Kontakt - ÇiçekSepeti | Kontakta oss",
-      "contactDescription": "Kontakta oss för frågor, förslag eller klagomål. På ÇiçekSepeti hjälper vi alltid gärna till. Du kan använda olika kontaktkanaler för att nå oss."
+      "contactTitle": "Kontakt - Fesfu | Kontakta oss",
+      "contactDescription": "Kontakta oss för frågor, förslag eller klagomål. På Fesfu hjälper vi alltid gärna till. Du kan använda olika kontaktkanaler för att nå oss."
     },
     "faqPage": {
-      "faqTitle": "Vanliga frågor - ÇiçekSepeti",
-      "faqDescription": "Upptäck vanliga frågor om ÇiçekSepeti. Få information om beställning, leverans, returpolicy och andra viktiga ämnen. Hitta snabba och enkla svar på dina frågor."
+      "faqTitle": "Vanliga frågor - Fesfu",
+      "faqDescription": "Upptäck vanliga frågor om Fesfu. Få information om beställning, leverans, returpolicy och andra viktiga ämnen. Hitta snabba och enkla svar på dina frågor."
     },
     "favouritesPage": {
-      "title": "Mina favoriter - ÇiçekSepeti | Dina favoritprodukter",
-      "description": "Spara dina favoriter och få enkel tillgång till dina favoritblommor, presenter och andra produkter. Med ÇiçekSepeti kan du köpa dina favoritprodukter med ett klick."
+      "title": "Mina favoriter - Fesfu | Dina favoritprodukter",
+      "description": "Spara dina favoriter och få enkel tillgång till dina favoritblommor, presenter och andra produkter. Med Fesfu kan du köpa dina favoritprodukter med ett klick."
     },
     "legalPage": {
-      "title": "Juridisk information - ÇiçekSepeti | Integritetspolicy och användarvillkor",
-      "description": "Få detaljerad information om ÇiçekSepetis integritetspolicy, användarvillkor och cookiepolicy. Lär dig hur dina personuppgifter skyddas och dina rättigheter när du använder vår plattform.",
+      "title": "Juridisk information - Fesfu | Integritetspolicy och användarvillkor",
+      "description": "Få detaljerad information om Fesfus integritetspolicy, användarvillkor och cookiepolicy. Lär dig hur dina personuppgifter skyddas och dina rättigheter när du använder vår plattform.",
       "hakkindaDetayliBilgi": "detaljerad information om."
     },
     "myOrdersPage": {
-      "title": "Mina beställningar - ÇiçekSepeti | Orderspårning och historik",
-      "description": "Se dina tidigare beställningar, granska orderdetaljer och spåra statusen för dina beställningar. Hantera alla dina beställningar enkelt med ÇiçekSepeti."
+      "title": "Mina beställningar - Fesfu | Orderspårning och historik",
+      "description": "Se dina tidigare beställningar, granska orderdetaljer och spåra statusen för dina beställningar. Hantera alla dina beställningar enkelt med Fesfu."
     },
     "registerCourierPage": {
-      "title": "Budansökan - ÇiçekSepeti | Bli bud",
-      "description": "Gå med i ÇiçekSepetis budprogram och tjäna extra inkomst med flexibla arbetstider. Lär dig om ansökningsprocessen och ansök nu."
+      "title": "Budansökan - Fesfu | Bli bud",
+      "description": "Gå med i Fesfus budprogram och tjäna extra inkomst med flexibla arbetstider. Lär dig om ansökningsprocessen och ansök nu."
     },
     "registerPage": {
-      "title": "Registrera dig - ÇiçekSepeti | Skapa nytt konto",
-      "description": "Registrera dig på ÇiçekSepeti och få tillgång till de fräschaste blommorna och specialpresenterna. Börja handla direkt med en snabb och enkel registreringsprocess."
+      "title": "Registrera dig - Fesfu | Skapa nytt konto",
+      "description": "Registrera dig på Fesfu och få tillgång till de fräschaste blommorna och specialpresenterna. Börja handla direkt med en snabb och enkel registreringsprocess."
     },
     "vendorRegistrationPage": {
-      "title": "Säljaransökan - ÇiçekSepeti | Öppna din butik",
-      "description": "Öppna din butik på ÇiçekSepeti-plattformen och nå en bred kundbas. Lär dig om ansökningsprocessen för säljare och ansök nu."
+      "title": "Säljaransökan - Fesfu | Öppna din butik",
+      "description": "Öppna din butik på Fesfu-plattformen och nå en bred kundbas. Lär dig om ansökningsprocessen för säljare och ansök nu."
     }
   },
 
@@ -158,7 +158,7 @@
   "about": {
     "ourStory": "Vår historia",
     "ourMission": "Vi sprider glädje",
-    "ourHistory": "ÇiçekSepeti UK grundades i London 2024 för att leverera de fräschaste blommorna och mest speciella presenterna till dina nära och kära. Vårt mål är inte bara att leverera en produkt, utan att hjälpa dig att överbrygga avstånd och uttrycka dina känslor på det vackraste sättet.",
+    "ourHistory": "Fesfu UK grundades i London 2024 för att leverera de fräschaste blommorna och mest speciella presenterna till dina nära och kära. Vårt mål är inte bara att leverera en produkt, utan att hjälpa dig att överbrygga avstånd och uttrycka dina känslor på det vackraste sättet.",
     "sameDayDelivery": "Leverans samma dag",
     "sameDayDeliverySub": "För beställningar inom London före 18:00.",
     "freshnessGuarantee": "Fräschgaranti",
@@ -200,7 +200,7 @@
     "privacyPolicy": {
       "legalPageContentTitle": "Integritetspolicy",
       "first": "1. Personuppgiftsansvarig",
-      "firstDesc": "Som ÇiçekSepeti UK lägger vi största vikt vid säkerheten för dina personuppgifter inom ramen för GDPR (General Data Protection Regulation).",
+      "firstDesc": "Som Fesfu UK lägger vi största vikt vid säkerheten för dina personuppgifter inom ramen för GDPR (General Data Protection Regulation).",
       "second": "2. Insamlade uppgifter och ändamål",
       "secondDesc": {
         "part1": "Identitet och kontakt: Ditt namn, efternamn, e-post och telefonnummer behandlas för orderbekräftelse och fakturering.",
@@ -213,7 +213,7 @@
     "termsOfUse": {
       "title": "Distansförsäljningsavtal",
       "first": "1. Parter",
-      "firstDesc": "Detta avtal ingås mellan KÖPAREN som lägger en beställning via plattformen och SÄLJAREN (butiken) som levererar produkten, med ÇiçekSepeti UK som mellanhand.",
+      "firstDesc": "Detta avtal ingås mellan KÖPAREN som lägger en beställning via plattformen och SÄLJAREN (butiken) som levererar produkten, med Fesfu UK som mellanhand.",
       "second": "2. Undantag från ångerrätt (Viktigt)",
       "secondDesc": "OBS: Enligt förordningen kan ångerrätten INTE användas för \"avtal om leverans av varor som snabbt kan försämras eller vars utgångsdatum snabbt kan passera\" (färska blommor, choklad, tårta etc.).",
       "secondDesc_part2": "Men om produkten är skadad, vissnad eller helt annorlunda än bilden vid leverans kan köparen avvisa leveransen och begära retur.",
@@ -239,7 +239,7 @@
     "pageNotFound": "Sidan hittades inte",
     "pageNotFoundDesc": "Innehållet du söker finns inte.",
     "backToHome": "← Tillbaka till startsidan",
-    "backToHome2": "ÇiçekSepeti UK Legal Team"
+    "backToHome2": "Fesfu UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "Din avbokningsförfrågan har mottagits.",
@@ -383,7 +383,7 @@
     "noReviews": "Det finns inga recensioner för denna butik ännu.",
     "storeAbout": "Om butiken",
     "secureShopping1": "Säker shopping",
-    "secureShopping2": "Alla köp från denna butik är skyddade av ÇiçekSepeti UK-garantin."
+    "secureShopping2": "Alla köp från denna butik är skyddade av Fesfu UK-garantin."
   },
   "success": {
     "orderSuccess": "Din beställning har mottagits!",
@@ -547,7 +547,7 @@
     "confirm": "Bekräfta"
   },
   "chatBot": {
-    "greeting": "Hej! Jag är ÇiçekSepeti-assistenten 🌸 Hur kan jag hjälpa dig?",
+    "greeting": "Hej! Jag är Fesfu-assistenten 🌸 Hur kan jag hjälpa dig?",
     "greetingResponse": "Hej! 🌸 Jag kan ge dig information om beställningar, blomskötsel eller säljaroperationer.",
     "askQuestion": "Skriv din fråga här...",
     "send": "Skicka",

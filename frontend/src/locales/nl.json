@@ -81,46 +81,46 @@
   },
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Over ons - ÇiçekSepeti | De versste bloemen en cadeaus",
-      "aboutDescription": "Ontdek de geschiedenis, missie en waarden van ÇiçekSepeti. We zijn toegewijd om onze klanten de beste bloemen- en cadeau-ervaring te bieden."
+      "aboutTitle": "Over ons - Fesfu | De versste bloemen en cadeaus",
+      "aboutDescription": "Ontdek de geschiedenis, missie en waarden van Fesfu. We zijn toegewijd om onze klanten de beste bloemen- en cadeau-ervaring te bieden."
     },
     "homePage": {
-      "homeTitle": "Verse bloemen en bijzondere cadeaus - ÇiçekSepeti Londen",
-      "locationTitle": "Londen - De versste bloemen en bijzondere cadeaus | ÇiçekSepeti",
+      "homeTitle": "Verse bloemen en bijzondere cadeaus - Fesfu Londen",
+      "locationTitle": "Londen - De versste bloemen en bijzondere cadeaus | Fesfu",
       "homeDescription": "Wij bezorgen de versste bloemen en bijzondere cadeaus van Londen dezelfde dag nog bij u thuis."
     },
     "contactPage": {
-      "contactTitle": "Contact - ÇiçekSepeti | Neem contact op",
+      "contactTitle": "Contact - Fesfu | Neem contact op",
       "contactDescription": "Neem contact met ons op voor vragen, suggesties of klachten."
     },
     "faqPage": {
-      "faqTitle": "Veelgestelde vragen - ÇiçekSepeti",
-      "faqDescription": "Bekijk de veelgestelde vragen over ÇiçekSepeti."
+      "faqTitle": "Veelgestelde vragen - Fesfu",
+      "faqDescription": "Bekijk de veelgestelde vragen over Fesfu."
     },
     "favouritesPage": {
-      "title": "Mijn favorieten - ÇiçekSepeti | Uw favoriete producten",
+      "title": "Mijn favorieten - Fesfu | Uw favoriete producten",
       "description": "Sla uw favorieten op en krijg eenvoudig toegang tot uw favoriete bloemen, cadeaus en andere producten."
     },
     "legalPage": {
-      "title": "Juridische informatie - ÇiçekSepeti | Privacybeleid en gebruiksvoorwaarden",
-      "description": "Krijg gedetailleerde informatie over het privacybeleid en de gebruiksvoorwaarden van ÇiçekSepeti.",
+      "title": "Juridische informatie - Fesfu | Privacybeleid en gebruiksvoorwaarden",
+      "description": "Krijg gedetailleerde informatie over het privacybeleid en de gebruiksvoorwaarden van Fesfu.",
       "hakkindaDetayliBilgi": "gedetailleerde informatie over."
     },
     "myOrdersPage": {
-      "title": "Mijn bestellingen - ÇiçekSepeti | Bestellingen volgen en geschiedenis",
+      "title": "Mijn bestellingen - Fesfu | Bestellingen volgen en geschiedenis",
       "description": "Bekijk uw eerdere bestellingen en volg de status van uw bestellingen."
     },
     "registerCourierPage": {
-      "title": "Koerier worden - ÇiçekSepeti | Word koerier",
-      "description": "Word lid van het koeriersprogramma van ÇiçekSepeti en verdien extra inkomen."
+      "title": "Koerier worden - Fesfu | Word koerier",
+      "description": "Word lid van het koeriersprogramma van Fesfu en verdien extra inkomen."
     },
     "registerPage": {
-      "title": "Registreren - ÇiçekSepeti | Nieuw account aanmaken",
-      "description": "Registreer bij ÇiçekSepeti en krijg toegang tot de versste bloemen en bijzondere cadeaus."
+      "title": "Registreren - Fesfu | Nieuw account aanmaken",
+      "description": "Registreer bij Fesfu en krijg toegang tot de versste bloemen en bijzondere cadeaus."
     },
     "vendorRegistrationPage": {
-      "title": "Verkoper worden - ÇiçekSepeti | Open uw winkel",
-      "description": "Open uw winkel op het ÇiçekSepeti-platform en bereik een breed klantenbestand."
+      "title": "Verkoper worden - Fesfu | Open uw winkel",
+      "description": "Open uw winkel op het Fesfu-platform en bereik een breed klantenbestand."
     }
   },
   "admin": {
@@ -153,7 +153,7 @@
   "about": {
     "ourStory": "Ons verhaal",
     "ourMission": "Wij bezorgen geluk",
-    "ourHistory": "Opgericht in Londen in 2024, is ÇiçekSepeti UK gelanceerd om de versste bloemen en de meest bijzondere cadeaus aan uw dierbaren te leveren.",
+    "ourHistory": "Opgericht in Londen in 2024, is Fesfu UK gelanceerd om de versste bloemen en de meest bijzondere cadeaus aan uw dierbaren te leveren.",
     "sameDayDelivery": "Levering op dezelfde dag",
     "sameDayDeliverySub": "Voor bestellingen geplaatst voor 18:00 uur binnen Londen.",
     "freshnessGuarantee": "Versheidsgarantie",
@@ -195,7 +195,7 @@
     "privacyPolicy": {
       "legalPageContentTitle": "Privacybeleid",
       "first": "1. Gegevensbeheerder",
-      "firstDesc": "Als ÇiçekSepeti UK hechten wij het grootste belang aan de veiligheid van uw persoonsgegevens in het kader van de AVG.",
+      "firstDesc": "Als Fesfu UK hechten wij het grootste belang aan de veiligheid van uw persoonsgegevens in het kader van de AVG.",
       "second": "2. Verzamelde gegevens en doeleinden",
       "secondDesc": {
         "part1": "Identiteit en contact: Uw voornaam, achternaam, e-mail en telefoonnummer worden verwerkt voor orderbevestiging en facturering.",
@@ -208,7 +208,7 @@
     "termsOfUse": {
       "title": "Overeenkomst voor verkoop op afstand",
       "first": "1. Partijen",
-      "firstDesc": "Deze overeenkomst wordt gesloten tussen de KOPER en de VERKOPER, met ÇiçekSepeti UK als tussenpersoon.",
+      "firstDesc": "Deze overeenkomst wordt gesloten tussen de KOPER en de VERKOPER, met Fesfu UK als tussenpersoon.",
       "second": "2. Uitzondering op herroepingsrecht (Belangrijk)",
       "secondDesc": "LET OP: Het herroepingsrecht KAN NIET worden uitgeoefend voor bederfelijke producten (verse bloemen, chocolade, taart, enz.).",
       "secondDesc_part2": "Echter, als het product beschadigd of verwelkt is op het moment van levering, kan de koper om een retour vragen.",
@@ -234,7 +234,7 @@
     "pageNotFound": "Pagina niet gevonden",
     "pageNotFoundDesc": "De inhoud die u zoekt bestaat niet.",
     "backToHome": "← Terug naar Home",
-    "backToHome2": "ÇiçekSepeti UK Legal Team"
+    "backToHome2": "Fesfu UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "Uw annuleringsverzoek is ontvangen.",
@@ -378,7 +378,7 @@
     "noReviews": "Deze winkel heeft nog geen beoordelingen.",
     "storeAbout": "Over de winkel",
     "secureShopping1": "Veilig winkelen",
-    "secureShopping2": "Alle aankopen in deze winkel worden beschermd door de ÇiçekSepeti UK garantie."
+    "secureShopping2": "Alle aankopen in deze winkel worden beschermd door de Fesfu UK garantie."
   },
   "success": {
     "orderSuccess": "Uw bestelling is ontvangen!",
@@ -542,7 +542,7 @@
     "confirm": "Bevestigen"
   },
   "chatBot": {
-    "greeting": "Hallo! Ik ben de assistent van ÇiçekSepeti 🌸 Hoe kan ik u helpen?",
+    "greeting": "Hallo! Ik ben de assistent van Fesfu 🌸 Hoe kan ik u helpen?",
     "greetingResponse": "Hallo! 🌸 Ik kan u informatie geven over bestellingen, bloemenverzorging of verkoperszaken.",
     "askQuestion": "Schrijf hier uw vraag...",
     "send": "Verzenden",

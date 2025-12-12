@@ -81,46 +81,46 @@
   },
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Chi siamo - ÇiçekSepeti | Fiori e regali più freschi",
-      "aboutDescription": "Scopri la storia, la missione e i valori di ÇiçekSepeti. Ci dedichiamo a offrire ai nostri clienti la migliore esperienza in fiori e regali."
+      "aboutTitle": "Chi siamo - Fesfu | Fiori e regali più freschi",
+      "aboutDescription": "Scopri la storia, la missione e i valori di Fesfu. Ci dedichiamo a offrire ai nostri clienti la migliore esperienza in fiori e regali."
     },
     "homePage": {
-      "homeTitle": "Fiori freschi e regali speciali - ÇiçekSepeti Londra",
-      "locationTitle": "Londra - I fiori più freschi e regali speciali | ÇiçekSepeti",
+      "homeTitle": "Fiori freschi e regali speciali - Fesfu Londra",
+      "locationTitle": "Londra - I fiori più freschi e regali speciali | Fesfu",
       "homeDescription": "Consegniamo i fiori più freschi e regali speciali di Londra in giornata alla tua porta."
     },
     "contactPage": {
-      "contactTitle": "Contatti - ÇiçekSepeti | Contattaci",
+      "contactTitle": "Contatti - Fesfu | Contattaci",
       "contactDescription": "Contattaci per domande, suggerimenti o reclami."
     },
     "faqPage": {
-      "faqTitle": "Domande frequenti - ÇiçekSepeti",
-      "faqDescription": "Scopri le domande frequenti su ÇiçekSepeti."
+      "faqTitle": "Domande frequenti - Fesfu",
+      "faqDescription": "Scopri le domande frequenti su Fesfu."
     },
     "favouritesPage": {
-      "title": "I miei preferiti - ÇiçekSepeti | I tuoi prodotti preferiti",
+      "title": "I miei preferiti - Fesfu | I tuoi prodotti preferiti",
       "description": "Salva i tuoi preferiti e accedi facilmente ai tuoi fiori, regali e altri prodotti preferiti."
     },
     "legalPage": {
-      "title": "Informazioni legali - ÇiçekSepeti | Privacy policy e termini d'uso",
-      "description": "Ottieni informazioni dettagliate sulla privacy policy e le condizioni d'uso di ÇiçekSepeti.",
+      "title": "Informazioni legali - Fesfu | Privacy policy e termini d'uso",
+      "description": "Ottieni informazioni dettagliate sulla privacy policy e le condizioni d'uso di Fesfu.",
       "hakkindaDetayliBilgi": "informazioni dettagliate su."
     },
     "myOrdersPage": {
-      "title": "I miei ordini - ÇiçekSepeti | Tracciamento e cronologia ordini",
+      "title": "I miei ordini - Fesfu | Tracciamento e cronologia ordini",
       "description": "Visualizza i tuoi ordini passati e traccia lo stato dei tuoi ordini."
     },
     "registerCourierPage": {
-      "title": "Candidatura corriere - ÇiçekSepeti | Diventa un corriere",
-      "description": "Unisciti al programma corrieri di ÇiçekSepeti e guadagna entrate extra."
+      "title": "Candidatura corriere - Fesfu | Diventa un corriere",
+      "description": "Unisciti al programma corrieri di Fesfu e guadagna entrate extra."
     },
     "registerPage": {
-      "title": "Registrati - ÇiçekSepeti | Crea un nuovo account",
-      "description": "Registrati su ÇiçekSepeti e accedi ai fiori più freschi e ai regali speciali."
+      "title": "Registrati - Fesfu | Crea un nuovo account",
+      "description": "Registrati su Fesfu e accedi ai fiori più freschi e ai regali speciali."
     },
     "vendorRegistrationPage": {
-      "title": "Candidatura venditore - ÇiçekSepeti | Apri il tuo negozio",
-      "description": "Apri il tuo negozio sulla piattaforma ÇiçekSepeti e raggiungi un'ampia base di clienti."
+      "title": "Candidatura venditore - Fesfu | Apri il tuo negozio",
+      "description": "Apri il tuo negozio sulla piattaforma Fesfu e raggiungi un'ampia base di clienti."
     }
   },
   "admin": {
@@ -153,7 +153,7 @@
   "about": {
     "ourStory": "La nostra storia",
     "ourMission": "Distribuiamo felicità",
-    "ourHistory": "Fondata a Londra nel 2024, ÇiçekSepeti UK è stata lanciata per consegnare i fiori più freschi e i regali più speciali ai tuoi cari.",
+    "ourHistory": "Fondata a Londra nel 2024, Fesfu UK è stata lanciata per consegnare i fiori più freschi e i regali più speciali ai tuoi cari.",
     "sameDayDelivery": "Consegna in giornata",
     "sameDayDeliverySub": "Per ordini effettuati prima delle 18:00 all'interno di Londra.",
     "freshnessGuarantee": "Garanzia di freschezza",
@@ -195,7 +195,7 @@
     "privacyPolicy": {
       "legalPageContentTitle": "Informativa sulla privacy",
       "first": "1. Titolare dei dati",
-      "firstDesc": "Come ÇiçekSepeti UK, diamo la massima importanza alla sicurezza dei tuoi dati personali nel quadro del GDPR.",
+      "firstDesc": "Come Fesfu UK, diamo la massima importanza alla sicurezza dei tuoi dati personali nel quadro del GDPR.",
       "second": "2. Dati raccolti e finalità",
       "secondDesc": {
         "part1": "Identità e contatto: Il tuo nome, cognome, e-mail e numero di telefono sono elaborati per la conferma degli ordini e la fatturazione.",
@@ -208,7 +208,7 @@
     "termsOfUse": {
       "title": "Contratto di vendita a distanza",
       "first": "1. Parti",
-      "firstDesc": "Questo contratto è stipulato tra l'ACQUIRENTE e il VENDITORE, con ÇiçekSepeti UK come intermediario.",
+      "firstDesc": "Questo contratto è stipulato tra l'ACQUIRENTE e il VENDITORE, con Fesfu UK come intermediario.",
       "second": "2. Eccezione al diritto di recesso (Importante)",
       "secondDesc": "ATTENZIONE: Il diritto di recesso NON PUÒ essere esercitato per prodotti deperibili (fiori freschi, cioccolato, torte, ecc.).",
       "secondDesc_part2": "Tuttavia, se il prodotto è danneggiato o appassito al momento della consegna, l'acquirente può richiedere un reso.",
@@ -234,7 +234,7 @@
     "pageNotFound": "Pagina non trovata",
     "pageNotFoundDesc": "Il contenuto che cerchi non esiste.",
     "backToHome": "← Torna alla Home",
-    "backToHome2": "ÇiçekSepeti UK Legal Team"
+    "backToHome2": "Fesfu UK Legal Team"
   },
   "myOrders": {
     "notifyCancelRequestSent": "La tua richiesta di cancellazione è stata ricevuta.",
@@ -378,7 +378,7 @@
     "noReviews": "Questo negozio non ha ancora recensioni.",
     "storeAbout": "Informazioni sul negozio",
     "secureShopping1": "Acquisto sicuro",
-    "secureShopping2": "Tutti gli acquisti in questo negozio sono protetti dalla garanzia ÇiçekSepeti UK."
+    "secureShopping2": "Tutti gli acquisti in questo negozio sono protetti dalla garanzia Fesfu UK."
   },
   "success": {
     "orderSuccess": "Il tuo ordine è stato ricevuto!",
@@ -542,7 +542,7 @@
     "confirm": "Conferma"
   },
   "chatBot": {
-    "greeting": "Ciao! Sono l'assistente di ÇiçekSepeti 🌸 Come posso aiutarti?",
+    "greeting": "Ciao! Sono l'assistente di Fesfu 🌸 Come posso aiutarti?",
     "greetingResponse": "Ciao! 🌸 Posso darti informazioni su ordini, cura dei fiori o operazioni per venditori.",
     "askQuestion": "Scrivi qui la tua domanda...",
     "send": "Invia",

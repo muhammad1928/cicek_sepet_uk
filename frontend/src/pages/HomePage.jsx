@@ -157,7 +157,7 @@ const HomePage = () => {
             {filteredProducts.map((product, index) => {
               const cartItem = getCartItem(product._id);
               const isFav = favorites.includes(product._id);
-              const vendorName = product.vendor?.fullName || product.vendor?.username || "ÇiçekSepeti";
+              const vendorName = product.vendor?.fullName || product.vendor?.username || "Fesfu";
 
               return (
                 <div 

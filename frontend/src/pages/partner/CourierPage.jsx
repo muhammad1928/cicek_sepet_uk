@@ -250,7 +250,7 @@ const CourierPage = () => {
                            
                            <div className="space-y-2">
                                <div className="flex justify-between text-sm text-gray-600 border-b border-yellow-200 pb-2">
-                                   <span>Mağaza:</span> <span className="font-bold text-gray-800">ÇiçekSepeti Depo</span>
+                                   <span>Mağaza:</span> <span className="font-bold text-gray-800">Fesfu Depo</span>
                                </div>
                                <div className="flex justify-between text-sm text-gray-600">
                                    <span>Adres:</span> <span className="font-bold text-gray-800 text-right">123 Oxford St, London</span>

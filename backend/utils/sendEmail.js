@@ -1,37 +1,39 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require('resend');
 
-const sendEmail = async (email, subject, html) => {
+// API Key yoksa (Localde test ederken hata vermesin diye) null kontrolü
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY) 
+  : null;
+
+const sendEmail = async (to, subject, html) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587, // <--- 465 yerine 587
-      secure: false, // <--- 587 için false olmalı (STARTTLS kullanır)
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // Google App Password
-      },
-      tls: {
-        rejectUnauthorized: false // Sertifika hatalarını yoksay
-      },
-      connectionTimeout: 20000, // 20 Saniye bekleme süresi
-      socketTimeout: 20000
-    });
+    if (!resend) {
+        console.log("⚠️ RESEND_API_KEY eksik! Mail gönderilemedi (Simülasyon).");
+        return;
+    }
 
-    // Bağlantıyı Test Et (Opsiyonel ama iyi olur)
-    // await transporter.verify(); 
+    // Domain Doğrulaması Yaptıysan: 'noreply@senindomainin.com'
+    // Yapmadıysan (Test): 'onboarding@resend.dev' kullanmalısın.
+    const fromEmail = process.env.EMAIL_USER || 'onboarding@resend.dev';
 
-    await transporter.sendMail({
-      from: `"CicekSepeti UK" <${process.env.EMAIL_USER}>`,
-      to: email,
+    const data = await resend.emails.send({
+      from: `Fesfu Flowers UK <${fromEmail}>`,
+      to: to, // Test modunda sadece kendi mailine atabilirsin!
       subject: subject,
       html: html,
     });
 
-    console.log(`✅ Mail başarıyla gönderildi: ${email}`);
+    if (data.error) {
+        console.error("Resend Hatası:", data.error);
+        throw new Error(data.error.message);
+    }
+
+    console.log(`✅ Mail başarıyla gönderildi (ID: ${data.id})`);
+    return true;
 
   } catch (error) {
     console.error("❌ Mail Gönderme Hatası:", error.message);
-    // Hatayı fırlat ki auth.js yakalasın
+    // Hatayı fırlat ki auth.js yakalayıp kullanıcıyı silsin
     throw new Error("Mail gönderilemedi"); 
   }
 };

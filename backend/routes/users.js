@@ -204,28 +204,44 @@ router.delete('/:id/addresses/:addressId', verifyTokenAndAuthorization, async (r
 // 5. FAVORİ YÖNETİMİ
 // =============================================================================
 
-// 5.1 FAVORİ EKLE / ÇIKAR
+// FAVORİ EKLE/ÇIKAR (TOGGLE)
 router.put('/:id/favorites', verifyTokenAndAuthorization, async (req, res) => {
-  const { productId } = req.body;
+    const { productId } = req.body;
+    try {
+        const user = await User.findById(req.params.id);
+        
+        // Ürün zaten favoride mi?
+        // (toString() ekleyerek ID karşılaştırmasını garantiye alıyoruz)
+        const index = user.favorites.findIndex(fav => fav.toString() === productId);
+        
+        let actionType = '';
 
-  try {
-    const user = await User.findById(req.params.id).select('favorites');
-    const isFavorited = user.favorites.includes(productId);
+        if (index === -1) {
+            // Ekle
+            user.favorites.push(productId);
+            actionType = 'add_favorite';
+            await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: 1 } });
+        } else {
+            // Çıkar
+            user.favorites.splice(index, 1);
+            actionType = 'remove_favorite';
+            await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: -1 } });
+        }
 
-    if (isFavorited) {
-      await User.findByIdAndUpdate(req.params.id, { $pull: { favorites: productId } });
-      await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: -1 } });
-      await logActivity(req.params.id, 'remove_favorite', req, { productId });
-      res.status(200).json("Çıkarıldı");
-    } else {
-      await User.findByIdAndUpdate(req.params.id, { $push: { favorites: productId } });
-      await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: 1 } });
-      await logActivity(req.params.id, 'add_favorite', req, { productId });
-      res.status(200).json("Eklendi");
+        await user.save();
+
+        // Loglama
+        try {
+           await logActivity(req.params.id, actionType, req, { productId });
+        } catch(e) {}
+
+        // ÖNEMLİ: Sadece ID listesini döndür
+        res.status(200).json(user.favorites);
+        
+    } catch (err) { 
+        console.error(err);
+        res.status(500).json({ message: "common.serverError" }); 
     }
-  } catch (err) {
-    res.status(500).json(err);
-  }
 });
 
 // 5.2 FAVORİLERİ LİSTELE

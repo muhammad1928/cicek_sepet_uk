@@ -83,46 +83,46 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "About Us - ÇiçekSepeti | Freshest Flowers and Gifts",
-      "aboutDescription": "Discover the story, mission and values of ÇiçekSepeti. We are dedicated to providing our customers with the highest quality flower and gift experience. We make a difference with fast delivery and excellent customer service."
+      "aboutTitle": "About Us - Fesfu | Freshest Flowers and Gifts",
+      "aboutDescription": "Discover the story, mission and values of Fesfu. We are dedicated to providing our customers with the highest quality flower and gift experience. We make a difference with fast delivery and excellent customer service."
     },
     "homePage": {
-      "homeTitle": "Fresh Flowers and Special Gifts - ÇiçekSepeti London",
-      "locationTitle": "London - Freshest Flowers and Special Gifts | ÇiçekSepeti",
+      "homeTitle": "Fresh Flowers and Special Gifts - Fesfu London",
+      "locationTitle": "London - Freshest Flowers and Special Gifts | Fesfu",
       "homeDescription": "We deliver London's freshest flowers and special gifts to your door the same day. Discover perfect gift options for birthdays, anniversaries, marriage proposals and other special moments."
     },
     "contactPage": {
-      "contactTitle": "Contact - ÇiçekSepeti | Get in Touch",
-      "contactDescription": "Contact us for your questions, suggestions or complaints. At ÇiçekSepeti, we are always happy to help. You can use different contact channels to reach us."
+      "contactTitle": "Contact - Fesfu | Get in Touch",
+      "contactDescription": "Contact us for your questions, suggestions or complaints. At Fesfu, we are always happy to help. You can use different contact channels to reach us."
     },
     "faqPage": {
-      "faqTitle": "Frequently Asked Questions - ÇiçekSepeti",
-      "faqDescription": "Discover frequently asked questions about ÇiçekSepeti. Learn about ordering, delivery, return policy and other important topics. Find quick and easy answers to your questions."
+      "faqTitle": "Frequently Asked Questions - Fesfu",
+      "faqDescription": "Discover frequently asked questions about Fesfu. Learn about ordering, delivery, return policy and other important topics. Find quick and easy answers to your questions."
     },
     "favouritesPage": {
-      "title": "My Favourites - ÇiçekSepeti | Products You Like",
-      "description": "Save your favourites and easily access your favourite flowers, gifts and other products. With ÇiçekSepeti, you can buy your favourite products with one click."
+      "title": "My Favourites - Fesfu | Products You Like",
+      "description": "Save your favourites and easily access your favourite flowers, gifts and other products. With Fesfu, you can buy your favourite products with one click."
     },
     "legalPage": {
-      "title": "Legal Information - ÇiçekSepeti | Privacy Policy and Terms of Use",
-      "description": "Learn detailed information about ÇiçekSepeti's privacy policy, terms of use and cookie policy. Learn how your personal data is protected and your rights when using our platform.",
+      "title": "Legal Information - Fesfu | Privacy Policy and Terms of Use",
+      "description": "Learn detailed information about Fesfu's privacy policy, terms of use and cookie policy. Learn how your personal data is protected and your rights when using our platform.",
       "hakkindaDetayliBilgi": "detailed information about."
     },
     "myOrdersPage": {
-      "title": "My Orders - ÇiçekSepeti | Order Tracking and History",
-      "description": "View your past orders, review order details and track the status of your orders. Easily manage all your orders with ÇiçekSepeti."
+      "title": "My Orders - Fesfu | Order Tracking and History",
+      "description": "View your past orders, review order details and track the status of your orders. Easily manage all your orders with Fesfu."
     },
     "registerCourierPage": {
-      "title": "Courier Application - ÇiçekSepeti | Become a Courier",
-      "description": "Join ÇiçekSepeti's courier program and earn extra income with flexible working hours. Learn about the courier application process and apply now."
+      "title": "Courier Application - Fesfu | Become a Courier",
+      "description": "Join Fesfu's courier program and earn extra income with flexible working hours. Learn about the courier application process and apply now."
     },
     "registerPage": {
-      "title": "Register - ÇiçekSepeti | Create New Account",
-      "description": "Register with ÇiçekSepeti and get access to the freshest flowers and special gifts. Start shopping now with a quick and easy registration process."
+      "title": "Register - Fesfu | Create New Account",
+      "description": "Register with Fesfu and get access to the freshest flowers and special gifts. Start shopping now with a quick and easy registration process."
     },
     "vendorRegistrationPage": {
-      "title": "Vendor Application - ÇiçekSepeti | Open Your Store",
-      "description": "Open your store on the ÇiçekSepeti platform and reach a wide customer base. Learn about the vendor application process and apply now."
+      "title": "Vendor Application - Fesfu | Open Your Store",
+      "description": "Open your store on the Fesfu platform and reach a wide customer base. Learn about the vendor application process and apply now."
     }
   },
 
@@ -158,7 +158,7 @@
   "about": {
     "ourStory": "Our Story",
     "ourMission": "We Deliver Happiness",
-    "ourHistory": "Founded in London in 2024, ÇiçekSepeti UK set out to deliver the freshest flowers and most special gifts to your loved ones. Our aim is not just to deliver a product, but to help you express your feelings in the best way by shortening distances.",
+    "ourHistory": "Founded in London in 2024, Fesfu UK set out to deliver the freshest flowers and most special gifts to your loved ones. Our aim is not just to deliver a product, but to help you express your feelings in the best way by shortening distances.",
     "sameDayDelivery": "Same Day Delivery",
     "sameDayDeliverySub": "For orders placed before 18:00 within London.",
     "freshnessGuarantee": "Freshness Guarantee",
@@ -204,7 +204,7 @@
     "privacyPolicy": {
       "legalPageContentTitle": "Privacy Policy",
       "first": "1. Data Controller",
-      "firstDesc": "As ÇiçekSepeti UK, we attach maximum importance to the security of your personal data within the scope of the Personal Data Protection Law No. 6698 (KVKK) and the European General Data Protection Regulation (GDPR).",
+      "firstDesc": "As Fesfu UK, we attach maximum importance to the security of your personal data within the scope of the Personal Data Protection Law No. 6698 (KVKK) and the European General Data Protection Regulation (GDPR).",
       "second": "2. Collected Data and Purposes",
       "secondDesc": {
         "part1": "Identity and Contact: Your name, surname, email and phone number are processed for order confirmation and invoice transactions.",
@@ -217,7 +217,7 @@
     "termsOfUse": {
       "title": "Distance Sales Agreement",
       "first": "1. Parties",
-      "firstDesc": "This agreement has been concluded between the BUYER who places an order through the platform and the SELLER (Store) who supplies the product, with the mediation of ÇiçekSepeti UK.",
+      "firstDesc": "This agreement has been concluded between the BUYER who places an order through the platform and the SELLER (Store) who supplies the product, with the mediation of Fesfu UK.",
       "second": "2. Right of Withdrawal Exception (Important)",
       "secondDesc": "ATTENTION: According to the regulation; \"In contracts for the delivery of goods that can spoil quickly or whose expiry date may pass\" (Fresh Flowers, Chocolate, Cake, etc.) THE RIGHT OF WITHDRAWAL CANNOT BE USED.",
       "secondDesc_part2": "However, if the product is damaged, wilted or completely different from the image at the time of delivery, the buyer can refuse delivery and request a return.",
@@ -243,7 +243,7 @@
     "pageNotFound": "Page Not Found",
     "pageNotFoundDesc": "The content you are looking for does not exist.",
     "backToHome": "← Back to Home",
-    "backToHome2": "ÇiçekSepeti UK Legal Team"
+    "backToHome2": "Fesfu UK Legal Team"
   },
 
   "myOrders": {
@@ -396,7 +396,7 @@
     "noReviews": "No reviews for this store yet.",
     "storeAbout": "About the Store",
     "secureShopping1": "Secure Shopping",
-    "secureShopping2": "All purchases you make from this store are under ÇiçekSepeti UK guarantee."
+    "secureShopping2": "All purchases you make from this store are under Fesfu UK guarantee."
   },
 
   "success": {
@@ -573,7 +573,7 @@
   },
 
   "chatBot": {
-    "greeting": "Hello! I'm ÇiçekSepeti Assistant 🌸 How can I help you?",
+    "greeting": "Hello! I'm Fesfu Assistant 🌸 How can I help you?",
     "greetingResponse": "Hello! 🌸 I can provide you with information about orders, flower care or vendor transactions.",
     "askQuestion": "Type your question here...",
     "send": "Send",

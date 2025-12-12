@@ -64,7 +64,7 @@ const StorePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <Seo 
-        title={`${vendor.fullName || vendor.username} - ÇiçekSepeti UK`} //page name
+        title={`${vendor.fullName || vendor.username} - Fesfu UK`} //page name
         description={`${vendor.fullName} mağazasının en özel ürünlerini keşfedin.`} 
       />
 

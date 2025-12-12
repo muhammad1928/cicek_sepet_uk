@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 const Seo = ({ title, description, keywords, noindex }) => {
   return (
     <Helmet>
-      <title>{title} | ÇiçekSepeti UK</title> {/* page name */}
+      <title>{title} | Fesfu UK</title> {/* page name */}
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       

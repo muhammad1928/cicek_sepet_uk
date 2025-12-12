@@ -4,12 +4,21 @@ node_modules/
 
 # Çevre Değişkenleri (Environment variables) - ŞİFRELER BURADA
 .env
+.env.yaml
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 backend/.env
+backend/env.yaml
+backend/.dockerignore
+backend/.gitignore
+backend/.gcloudignore
 frontend/.env
+frontend/.dockerignore
+frontend/.env.production
+frontend/.gcloudignore
+frontend/.gitignore
 
 # Build Çıktıları (Production builds)
 dist/

@@ -14,7 +14,7 @@ const Footer = () => {
           {/* 1. KOLON: Marka & Sosyal Medya */}
           <div className="lg:col-span-2">
             <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-4 inline-block hover:opacity-80 transition">
-              🌸 ÇiçekSepeti UK {/* page name */}
+              🌸 Fesfu UK {/* page name */}
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed mb-6 max-w-sm">
               {t("footer.col1")}
@@ -102,19 +102,19 @@ const Footer = () => {
               <li className="flex items-start gap-3 group">
                 <div className="mt-1 text-pink-500 group-hover:text-white transition"><FaMapMarkerAlt /></div>
                 <span className="leading-relaxed text-gray-400 group-hover:text-gray-300">
-                  123 Oxford Street,<br/>
-                  London, W1D 1BS,<br/>
+                  Soon to Come,<br/>
+                  London,<br/>
                   United Kingdom
                 </span>
               </li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaPhone /></div>
-                <span className="text-gray-400 group-hover:text-gray-300">+44 20 7946 0000</span>
+                <span className="text-gray-400 group-hover:text-gray-300">+44 74 66428290</span>
               </li>
               <li><Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-1"> {t("footer.col41")}</Link></li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaEnvelope /></div>
-                <a href="mailto:destek@ciceksepeti.uk" className="text-gray-400 hover:text-white transition">destek@ciceksepeti.uk</a>
+                <a href="mailto:info@fesfu.com" className="text-gray-400 hover:text-white transition">info@fesfu.com</a>
               </li>
             </ul>
           </div>
@@ -124,7 +124,7 @@ const Footer = () => {
         {/* --- ALT ÇİZGİ & TELİF --- */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
           {/* page name */}
-          <p>&copy; {new Date().getFullYear()} ÇiçekSepeti UK. {t("footer.allRightsReserved")}</p>
+          <p>&copy; {new Date().getFullYear()} Fesfu UK. {t("footer.allRightsReserved")}</p>
           
           <div className="flex gap-6">
             <Link to="/legal/privacy-policy" className="hover:text-white cursor-pointer transition">{t("footer.col51")}</Link>

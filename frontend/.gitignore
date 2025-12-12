@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#frontend
+frontend/.gitignore
+frontend/.dockerignore
+frontend/.gitignore

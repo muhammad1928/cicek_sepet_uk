@@ -347,9 +347,9 @@ const translations = {
     // ============================================================
     fr: {
         // --- AUTH EMAILS ---
-        verifySubject: "Vérifiez votre compte - ÇiçekSepeti UK",
+        verifySubject: "Vérifiez votre compte - Fesfu UK",
         verifyTitle: "Bienvenue,",
-        verifyMsg: "Merci d'avoir rejoint la famille ÇiçekSepeti UK. Cliquez sur le bouton ci-dessous pour activer votre compte :",
+        verifyMsg: "Merci d'avoir rejoint la famille Fesfu UK. Cliquez sur le bouton ci-dessous pour activer votre compte :",
         verifyBtn: "Vérifier mon compte",
         verifyLinkFooter: "Si le bouton ne fonctionne pas, collez ce lien dans votre navigateur :",
 
@@ -415,9 +415,9 @@ const translations = {
     // ============================================================
     nl: {
         // --- AUTH EMAILS ---
-        verifySubject: "Verifieer je account - ÇiçekSepeti UK",
+        verifySubject: "Verifieer je account - Fesfu UK",
         verifyTitle: "Welkom,",
-        verifyMsg: "Bedankt dat je lid bent geworden van de ÇiçekSepeti UK-familie. Klik op de onderstaande knop om je account te activeren:",
+        verifyMsg: "Bedankt dat je lid bent geworden van de Fesfu UK-familie. Klik op de onderstaande knop om je account te activeren:",
         verifyBtn: "Mijn account verifiëren",
         verifyLinkFooter: "Als de knop niet werkt, plak deze link in je browser:",
 
@@ -484,9 +484,9 @@ const translations = {
     // ============================================================
     es: {
         // --- AUTH EMAILS ---
-        verifySubject: "Verifica tu cuenta - ÇiçekSepeti UK",
+        verifySubject: "Verifica tu cuenta - Fesfu UK",
         verifyTitle: "Bienvenido,",
-        verifyMsg: "Gracias por unirte a la familia ÇiçekSepeti UK. Haz clic en el botón de abajo para activar tu cuenta:",
+        verifyMsg: "Gracias por unirte a la familia Fesfu UK. Haz clic en el botón de abajo para activar tu cuenta:",
         verifyBtn: "Verificar mi cuenta",
         verifyLinkFooter: "Si el botón no funciona, pega este enlace en tu navegador:",
 

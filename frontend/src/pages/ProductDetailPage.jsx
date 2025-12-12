@@ -63,7 +63,7 @@ const ProductDetailPage = () => {
   const isFav = favorites.includes(product._id);
   
   // Satıcı İsmi Kontrolü
-  const vendorName = product.vendor?.fullName || product.vendor?.username || "ÇiçekSepeti UK"; // add your own page name
+  const vendorName = product.vendor?.fullName || product.vendor?.username || "Fesfu UK"; // add your own page name
 
   // Sepete Ekleme Fonksiyonu
   const handleAddToCart = () => {
@@ -74,7 +74,7 @@ const ProductDetailPage = () => {
     <div className="min-h-screen bg-gray-50 font-sans pt-28 pb-20 px-4 relative overflow-hidden">
       
       <Seo 
-        title={`${product.title} | ÇiçekSepeti UK`} // page name
+        title={`${product.title} | Fesfu UK`} // page name
         description={`${product.title} sadece £${product.price}. ${product.desc.substring(0, 100)}...`} 
         image={product.img}
       />
