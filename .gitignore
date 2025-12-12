@@ -19,6 +19,7 @@ frontend/.dockerignore
 frontend/.env.production
 frontend/.gcloudignore
 frontend/.gitignore
+frontend/.firebase
 
 # Build Çıktıları (Production builds)
 dist/

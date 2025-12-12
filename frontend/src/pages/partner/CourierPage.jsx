@@ -245,37 +245,37 @@ const CourierPage = () => {
                     {myActiveJob.status === "Kurye Yolda" && (
                       <div className="space-y-6 animate-fade-in">
                         <div className="bg-yellow-50 p-6 rounded-2xl border border-yellow-200 relative overflow-hidden">
-                           <div className="absolute top-0 right-0 bg-yellow-200 text-yellow-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">ADIM 1</div>
-                           <h4 className="font-bold text-yellow-800 mb-4 flex items-center gap-2 text-lg"><FiMapPin /> Rota: Mağaza</h4>
+                           <div className="absolute top-0 right-0 bg-yellow-200 text-yellow-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">STEP 1</div>
+                           <h4 className="font-bold text-yellow-800 mb-4 flex items-center gap-2 text-lg"><FiMapPin /> Route: Store</h4>
                            
                            <div className="space-y-2">
                                <div className="flex justify-between text-sm text-gray-600 border-b border-yellow-200 pb-2">
-                                   <span>Mağaza:</span> <span className="font-bold text-gray-800">Fesfu Depo</span>
+                                   <span>Store:</span> <span className="font-bold text-gray-800">Fesfu Depot</span>
                                </div>
                                <div className="flex justify-between text-sm text-gray-600">
-                                   <span>Adres:</span> <span className="font-bold text-gray-800 text-right">123 Oxford St, London</span>
+                                   <span>Address:</span> <span className="font-bold text-gray-800 text-right">123 Oxford St, London</span>
                                </div>
                            </div>
                         </div>
-                        <button onClick={handlePickup} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 transform active:scale-95 transition">Ürünleri Teslim Aldım ✅</button>
+                        <button onClick={handlePickup} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 transform active:scale-95 transition">I picked up the items ✅</button>
                       </div>
                     )}
 
-                    {/* 2. Adım: Müşteriye Git */}
+                    {/* 2. Step: Go to Customer */}
                     {myActiveJob.status === "Dağıtımda" && (
                       <div className="space-y-6 animate-fade-in">
                         <div className="bg-green-50 p-6 rounded-2xl border border-green-200 relative overflow-hidden">
-                           <div className="absolute top-0 right-0 bg-green-200 text-green-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">ADIM 2 (SON)</div>
-                           <h4 className="font-bold text-green-800 mb-4 flex items-center gap-2 text-lg"><FiUser /> Rota: Müşteri</h4>
+                           <div className="absolute top-0 right-0 bg-green-200 text-green-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">STEP 2 (FINAL)</div>
+                           <h4 className="font-bold text-green-800 mb-4 flex items-center gap-2 text-lg"><FiUser /> Route: Customer</h4>
                            
                            <div className="space-y-3">
                                <div className="flex flex-col gap-1">
-                                   <span className="text-xs text-gray-500 uppercase font-bold">Alıcı</span>
+                                   <span className="text-xs text-gray-500 uppercase font-bold">Recipient</span>
                                    <span className="text-lg font-bold text-gray-800">{myActiveJob.recipient.name}</span>
                                </div>
                                
                                <div className="flex flex-col gap-1">
-                                   <span className="text-xs text-gray-500 uppercase font-bold">Adres</span>
+                                   <span className="text-xs text-gray-500 uppercase font-bold">Address</span>
                                    <span className="text-sm text-gray-800 bg-white p-3 rounded-lg border border-green-100">
                                        {myActiveJob.recipient.address}<br/>
                                        {myActiveJob.recipient.city}, {myActiveJob.recipient.postcode}
@@ -289,11 +289,11 @@ const CourierPage = () => {
                            
                            {myActiveJob.delivery.courierNote && (
                              <div className="mt-4 bg-yellow-100 p-3 rounded-lg border border-yellow-200 text-orange-800 text-xs font-bold flex items-start gap-2">
-                               <span className="text-lg">⚠️</span> <span>Not: {myActiveJob.delivery.courierNote}</span>
+                               <span className="text-lg">⚠️</span> <span>Note: {myActiveJob.delivery.courierNote}</span>
                              </div>
                            )}
                         </div>
-                        <button onClick={handleDeliver} className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-green-700 transform active:scale-95 transition">Teslimat Başarılı! 🏁</button>
+                        <button onClick={handleDeliver} className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-green-700 transform active:scale-95 transition">Delivery Successful! 🏁</button>
                       </div>
                     )}
 
@@ -306,7 +306,7 @@ const CourierPage = () => {
         {/* --- 3. GEÇMİŞ --- */}
         {activeTab === "history" && (
            <div className="space-y-4 animate-fade-in">
-             {orders.length === 0 ? <div className="text-center text-gray-400 py-10 bg-white rounded-2xl border-dashed border-2">Henüz tamamlanmış iş yok.</div> : orders.map(o => (
+             {orders.length === 0 ? <div className="text-center text-gray-400 py-10 bg-white rounded-2xl border-dashed border-2">No completed jobs yet.</div> : orders.map(o => (
                <div key={o._id} className="bg-white p-5 rounded-2xl border border-gray-200 flex justify-between items-center hover:shadow-md transition group">
                  <div>
                    <div className="font-bold text-gray-800 mb-1">#{o._id.slice(-6).toUpperCase()}</div>
@@ -315,7 +315,7 @@ const CourierPage = () => {
                  </div>
                  <div className="text-right">
                    <div className="font-extrabold text-green-600 text-lg">+£{(o.totalAmount * 0.10).toFixed(2)}</div>
-                   <span className="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold inline-block mt-1">Tamamlandı</span>
+                   <span className="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold inline-block mt-1">Completed</span>
                  </div>
                </div>
              ))}

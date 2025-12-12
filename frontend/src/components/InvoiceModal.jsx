@@ -66,7 +66,7 @@ const InvoiceModal = ({ order, onClose }) => {
           {/* Şirket ve Fatura Bilgileri */}
           <div className="flex justify-between items-start mb-10 border-b-2 border-gray-800 pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Fesfu UK</h1> {/* Page name */} {/* page information */}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Fesfu Flowers UK</h1> {/* Page name */} {/* page information */}
               <p className="text-gray-600">123 Oxford Street</p>
               <p className="text-gray-600">London, W1D 1BS</p>
               <p className="text-gray-600">United Kingdom</p>

@@ -181,7 +181,7 @@ const AdminProducts = () => {
               </div>
 
               <div className="p-4 flex-1 flex flex-col">
-                <div className="text-[10px] font-bold text-gray-400 uppercase mb-1 flex items-center gap-1">🏪 {product.vendor?.username || "Fesfu"}</div>
+                <div className="text-[10px] font-bold text-gray-400 uppercase mb-1 flex items-center gap-1">🏪 {product.vendor?.username || "Fesfu Flowers UK"}</div>
                 <h4 className="font-bold text-gray-800 mb-1 truncate" title={product.title}>{product.title}</h4>
                 <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-pink-600">£{product.price}</span><span className="text-xs text-gray-500 font-mono">ID: {product._id.slice(-4)}</span></div>
 
