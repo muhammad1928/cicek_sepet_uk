@@ -28,19 +28,25 @@ export const CartProvider = ({ children }) => {
       setUser(storedUser);
 
       // EĞER KULLANICI VARSA FAVORİLERİ DB'DEN ÇEK
-      if (storedUser && storedUser._id) {
+      if (storedUser && storedUser._id && storedUser.accessToken) {
         try {
           const res = await userRequest.get(`/users/${storedUser._id}/favorites`);
-          // Backend'den gelen favoriler string ID listesi olmalı ['id1', 'id2']
           setFavorites(res.data);
-          localStorage.setItem("favorites", JSON.stringify(res.data)); // Local'i de güncelle
+          localStorage.setItem("favorites", JSON.stringify(res.data));
         } catch (err) {
-          console.error("Favori çekme hatası:", err);
+          // Eğer 401 hatası alırsak (Token geçersizse) sessizce favorileri boşalt
+          // Zaten Axios Interceptor kullanıcıyı logout yapacak veya token yenileyecek.
+          if (err.response && err.response.status === 401) {
+             console.log("Oturum süresi dolmuş, favoriler yüklenemedi.");
+             // İsteğe bağlı: setFavorites([]); 
+          } else {
+             console.error("Favori çekme hatası:", err);
+          }
         }
       }
     };
     
-    syncUserData(); 
+    syncUserData();
     window.addEventListener('user-change', syncUserData);
     return () => window.removeEventListener('user-change', syncUserData);
   }, []);

@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "La contraseña contiene caracteres no permitidos",
+    "nameForbiddenChars": "El nombre contiene caracteres no permitidos",
+    "passwordWeak": "La contraseña no cumple con los requisitos",
     "validationError": "Por favor, verifique sus datos.",
     "emailExists": "Ya existe una cuenta con este correo electrónico.",
     "registerSuccess": "¡Registro exitoso! Por favor, revise su correo electrónico.",
@@ -41,10 +44,11 @@
     "decline": "Rechazar",
     "passwordRules": {
       "rule1": "Al menos 8 caracteres",
-      "rule2": "Al menos 1 mayúscula",
-      "rule3": "Al menos 1 minúscula",
-      "rule4": "Al menos 1 número",
-      "rule5": "Al menos 1 carácter especial (!@#$)"
+      "rule2": "Al menos una letra mayúscula",
+      "rule3": "Al menos una letra minúscula",
+      "rule4": "Al menos un número",
+      "rule5": "Al menos un carácter especial (!@#%^&*)",
+      "rule6": "Sin caracteres no permitidos (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Número de teléfono",
     "phoneNumberPlaceholder": "Ingrese su número de contacto",
@@ -311,6 +315,7 @@
     "alreadyHaveAccount": "¿Ya tiene una cuenta? Inicie sesión"
   },
   "register": {
+    "passwordForbiddenChars": "La contraseña contiene caracteres no permitidos. Por favor, elimine: ' \" ` \\ ; -- { } < > |", 
     "passwordWeak": "¡Su contraseña no es suficientemente fuerte!",
     "notifyPasswordRequirements": "Por favor cumpla con los requisitos de contraseña.",
     "acceptTerms": "¡Por favor acepte el contrato!",

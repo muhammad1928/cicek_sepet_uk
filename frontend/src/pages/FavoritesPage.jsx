@@ -55,7 +55,7 @@ const FavoritesPage = () => {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
              {[1,2,3,4].map(i => <div key={i} className="h-80 bg-gray-200 rounded-3xl animate-pulse"></div>)}
           </div>
         ) : favProducts.length === 0 ? (
@@ -84,7 +84,7 @@ const FavoritesPage = () => {
                     <img 
                       src={product.img} 
                       alt={product.title} 
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                      className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700" 
                     />
                     
                     {/* Silme Butonu (Hover'da çıkar) */}

@@ -1,5 +1,8 @@
 {
   "auth": {
+     "passwordForbiddenChars": "Le mot de passe contient des caractères interdits",
+    "nameForbiddenChars": "Le nom contient des caractères interdits",
+    "passwordWeak": "Le mot de passe ne répond pas aux exigences",
     "validationError": "Veuillez vérifier vos informations.",
     "emailExists": "Un compte existe déjà avec cet email.",
     "registerSuccess": "Inscription réussie ! Veuillez vérifier votre email.",
@@ -40,11 +43,12 @@
     "accept": "J'accepte",
     "decline": "Refuser",
     "passwordRules": {
-      "rule1": "Au moins 8 caractères",
-      "rule2": "Au moins 1 majuscule",
-      "rule3": "Au moins 1 minuscule",
-      "rule4": "Au moins 1 chiffre",
-      "rule5": "Au moins 1 caractère spécial (!@#$)"
+       "rule1": "Au moins 8 caractères",
+      "rule2": "Au moins une lettre majuscule",
+      "rule3": "Au moins une lettre minuscule",
+      "rule4": "Au moins un chiffre",
+      "rule5": "Au moins un caractère spécial (!@#%^&*)",
+      "rule6": "Pas de caractères interdits (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Numéro de téléphone",
     "phoneNumberPlaceholder": "Entrez votre numéro de contact",
@@ -317,6 +321,7 @@
     "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous"
   },
   "register": {
+    "passwordForbiddenChars": "Le mot de passe contient des caractères interdits. Veuillez supprimer: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Votre mot de passe n'est pas assez fort !",
     "notifyPasswordRequirements": "Veuillez respecter les exigences du mot de passe.",
     "acceptTerms": "Veuillez accepter le contrat !",

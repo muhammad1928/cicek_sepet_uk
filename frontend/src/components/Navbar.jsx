@@ -88,7 +88,7 @@ const Navbar = () => {
           {/* DEĞİŞİKLİK: 'ml-2' silindi, 'mr-2' eklendi. Sağdan boşluk vererek sola (içeri) ittik. */}
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-            className="md:hidden p-2 mr-2 text-gray-600 hover:text-pink-600 transition"
+            className="md:hidden p-2 text-gray-600 hover:text-pink-600 transition z-50"
           >
             {isMobileMenuOpen ? <FiX className="text-2xl" /> : <FiMenu className="text-2xl" />}
           </button>

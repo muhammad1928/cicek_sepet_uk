@@ -19,7 +19,7 @@ userRequest.interceptors.request.use(
     // Not: Artık sadece AccessToken'ı tutuyoruz, user detaylarını değil
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.accessToken) {
-      config.headers.token = `Bearer ${user.accessToken}`;
+      config.headers.Authorization = `Bearer ${user.accessToken}`;
     }
     return config;
   },
@@ -48,7 +48,7 @@ userRequest.interceptors.response.use(
         localStorage.setItem("user", JSON.stringify(user));
 
         // 3. Yeni token'ı başarısız olan isteğe ekle
-        originalRequest.headers.token = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         // 4. İsteği tekrarla
         return userRequest(originalRequest);

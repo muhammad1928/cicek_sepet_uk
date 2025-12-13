@@ -14,31 +14,36 @@ const RegisterPage = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  // Şifre Güvenlik State'leri
   const [showPassword, setShowPassword] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [touchedFields, setTouchedFields] = useState({});
 
-  // Şifre Kuralları
+  // Şifre Kuralları - GÜNCELLENDİ
   const [rules, setRules] = useState({
-    length: false, upper: false, lower: false, number: false, special: false
+    length: false, upper: false, lower: false, number: false, special: false, noForbidden: true
   });
 
   const navigate = useNavigate();
   const { notify } = useCart();
+
+  // Tehlikeli karakterler regex - SQL Injection ve XSS koruması
+  const FORBIDDEN_CHARS = /['"`\\;{}|<>]|--|\|\||\/\*|\*\/|<script|<\/script|\$\{|\{\{/i;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     if (name === "password") {
+      const hasForbidden = FORBIDDEN_CHARS.test(value);
+      
       const newRules = {
         length: value.length >= 8,
         upper: /[A-Z]/.test(value),
         lower: /[a-z]/.test(value),
         number: /[0-9]/.test(value),
-        special: /[!@#%^&*]/.test(value)
+        special: /[!@#%^&*()_+\-=\[\]{}|:,.<>?]/.test(value),
+        noForbidden: !hasForbidden // Tehlikeli karakter YOKSA true
       };
       setRules(newRules);
       setPasswordValid(Object.values(newRules).every(Boolean));
@@ -47,8 +52,12 @@ const RegisterPage = () => {
 
   const handleBlur = (field) => {
     setTouchedFields((prev) => ({ ...prev, [field]: true }));
-    if (field === "password" && !passwordValid && formData.password.length > 0) {
-       notify(t("register.passwordWeak"), "warning");
+    if (field === "password") {
+      if (!rules.noForbidden) {
+        notify(t("register.passwordForbiddenChars"), "error");
+      } else if (!passwordValid && formData.password.length > 0) {
+        notify(t("register.passwordWeak"), "warning");
+      }
     }
   };
 
@@ -56,36 +65,30 @@ const RegisterPage = () => {
     e.preventDefault();
     setTouchedFields({ fullName: true, email: true, password: true });
 
+    // Tehlikeli karakter kontrolü
+    if (!rules.noForbidden) {
+      return notify(t("register.passwordForbiddenChars"), "error");
+    }
+
     if (!passwordValid) return notify(t("register.notifyPasswordRequirements"), "error");
     if (!acceptedTerms) return notify(t("register.acceptTerms") + " ⚠️", "warning");
     
     setLoading(true);
     try {
-      // Backend'e dil bilgisini de gönderiyoruz (Mail için)
       await publicRequest.post("/auth/register", { ...formData, language: i18n.language });
-      
       notify(t("common.accountCreated") + " 🎉 " + t("register.pleaseVerifyEmail"), "success");
-      
       setTimeout(() => {
         navigate("/verification-pending", { state: { email: formData.email } }); 
       }, 2000);
-
     } catch (err) {
       setLoading(false);
-      
-      // --- GÜNCELLEME: Backend'den gelen KODU alıp çeviriyoruz ---
-      const errorKey = err.response?.data?.message; // Örn: "auth.emailExists"
-      
-      // Eğer gelen mesaj '.' içeriyorsa bir koddur, t() ile çevir
-      // Eğer düz metinse (beklenmeyen hata), olduğu gibi göster veya varsayılan hata ver
+      const errorKey = err.response?.data?.message;
       const displayMessage = errorKey && errorKey.includes('.') 
           ? t(errorKey) 
           : t("register.registrationFailed");
-
       notify(displayMessage, "error");
     }
   };
-
   // Stil Yardımcıları
   const getInputClass = (field) => {
     const base = "w-full px-3 py-2.5 outline-none bg-transparent text-gray-700 font-medium placeholder-gray-400 text-sm transition";
@@ -161,22 +164,24 @@ const RegisterPage = () => {
             </div>
 
             {(passwordFocused || (formData.password && !passwordValid)) && (
-              <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg transition-all duration-300 text-[11px]">
-                <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">{t("register.securityMeasures")}</p>
-                <div className="flex flex-col">
-                  <RuleItem label={t("common.passwordRules.rule1")} valid={rules.length} />
-                  <RuleItem label={t("common.passwordRules.rule2")} valid={rules.upper} />
-                  <RuleItem label={t("common.passwordRules.rule3")} valid={rules.lower} />
-                  <RuleItem label={t("common.passwordRules.rule4")} valid={rules.number} />
-                  <RuleItem label={t("common.passwordRules.rule5")} valid={rules.special} />
-                </div>
-                {passwordValid && (
-                  <div className="text-green-600 font-bold flex items-center gap-1 animate-bounce mt-1 pt-2 border-t border-gray-100">
-                    <span>✅</span> {t("common.strongPassword")}
-                  </div>
-                )}
+            <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-lg transition-all duration-300 text-[11px]">
+              <p className="font-bold text-gray-400 mb-2 uppercase tracking-wider text-[10px]">{t("register.securityMeasures")}</p>
+              <div className="flex flex-col">
+                <RuleItem label={t("common.passwordRules.rule1")} valid={rules.length} />
+                <RuleItem label={t("common.passwordRules.rule2")} valid={rules.upper} />
+                <RuleItem label={t("common.passwordRules.rule3")} valid={rules.lower} />
+                <RuleItem label={t("common.passwordRules.rule4")} valid={rules.number} />
+                <RuleItem label={t("common.passwordRules.rule5")} valid={rules.special} />
+                {/* Yeni kural - tehlikeli karakterler */}
+                <RuleItem label={t("common.passwordRules.rule6")} valid={rules.noForbidden} isDanger={!rules.noForbidden} />
               </div>
-            )}
+              {passwordValid && (
+                <div className="text-green-600 font-bold flex items-center gap-1 animate-bounce mt-1 pt-2 border-t border-gray-100">
+                  <span>✅</span> {t("common.strongPassword")}
+                </div>
+              )}
+            </div>
+          )}
           </div>
 
           {/* Sözleşme */}
@@ -233,10 +238,11 @@ const RegisterPage = () => {
   );
 };
 
-const RuleItem = ({ label, valid }) => (
-  <div className={`flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out ${valid ? "max-h-0 opacity-0 -translate-y-2" : "max-h-6 opacity-100 translate-y-0"}`}>
-    <span className="text-red-500 font-bold text-xs">•</span> 
-    <span className="text-gray-600 font-medium">{label}</span>
+// RuleItem güncellendi - tehlikeli için kırmızı uyarı
+const RuleItem = ({ label, valid, isDanger = false }) => (
+  <div className={`flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out ${valid && !isDanger ? "max-h-0 opacity-0 -translate-y-2" : "max-h-6 opacity-100 translate-y-0"}`}>
+    <span className={`font-bold text-xs ${isDanger ? "text-red-600" : "text-red-500"}`}>•</span> 
+    <span className={`font-medium ${isDanger ? "text-red-600 font-bold" : "text-gray-600"}`}>{label}</span>
   </div>
 );
 

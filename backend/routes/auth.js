@@ -35,47 +35,68 @@ const loginSchema = Joi.object({
 // =============================================================================
 // 1. KAYIT OL (REGISTER)
 // =============================================================================
+// =============================================================================
+// 1. KAYIT OL (REGISTER)
+// =============================================================================
+
+// Tehlikeli karakter kontrolü fonksiyonu
+const containsForbiddenChars = (str) => {
+  const forbidden = /['"`\\;{}|<>]|--|\|\||\/\*|\*\/|<script|<\/script|\$\{|\{\{/i;
+  return forbidden.test(str);
+};
+
 router.post('/register', async (req, res) => {
   let savedUser = null;
   try {
     // 1. Validasyon
-    const {
-      error
-    } = registerSchema.validate(req.body);
-    if (error) return res.status(400).json({
-      message: "auth.validationError"
-    });
+    const { error } = registerSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: "auth.validationError" });
 
-    const {
-      email,
-      password,
-      fullName,
-      language
-    } = req.body;
+    const { email, password, fullName, language } = req.body;
 
-    // 2. Email Kontrolü
-    const checkEmail = await User.findOne({
-      email: email
-    });
-    if (checkEmail) return res.status(400).json({
-      message: "auth.emailExists"
-    });
+    // 2. Tehlikeli karakter kontrolü (SQL Injection / XSS koruması)
+    if (containsForbiddenChars(password)) {
+      return res.status(400).json({ message: "auth.passwordForbiddenChars" });
+    }
+    
+    if (containsForbiddenChars(fullName)) {
+      return res.status(400).json({ message: "auth.nameForbiddenChars" });
+    }
 
-    // 3. Şifreleme
+    // 3. Şifre gücü kontrolü (backend'de de yapalım)
+    const passwordRules = {
+      length: password.length >= 8,
+      upper: /[A-Z]/.test(password),
+      lower: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#%^&*()_+\-=\[\]{}|:,.<>?]/.test(password)
+    };
+    
+    if (!Object.values(passwordRules).every(Boolean)) {
+      return res.status(400).json({ message: "auth.passwordWeak" });
+    }
+
+    // 4. Email Kontrolü
+    const checkEmail = await User.findOne({ email: email.toLowerCase().trim() });
+    if (checkEmail) return res.status(400).json({ message: "auth.emailExists" });
+
+    // 5. Şifreleme
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 4. Token Üretimi
+    // 6. Token Üretimi
     const verifyToken = crypto.randomBytes(32).toString("hex");
 
-    // 5. Dil Seçimi
+    // 7. Dil Seçimi
     const userLang = (language || 'en').split('-')[0];
     const t = emailTexts[userLang] || emailTexts['en'];
 
-    // 6. Kullanıcı Oluşturma
+    // 8. Kullanıcı Oluşturma - fullName sanitize edildi
+    const sanitizedFullName = fullName.trim().replace(/[<>]/g, '');
+    
     const newUser = new User({
-      fullName: fullName,
-      email: email,
+      fullName: sanitizedFullName,
+      email: email.toLowerCase().trim(),
       password: hashedPassword,
       role: 'customer',
       isVerified: false,
@@ -86,12 +107,10 @@ router.post('/register', async (req, res) => {
 
     savedUser = await newUser.save();
 
-    // 7. Loglama
-    await logActivity(savedUser._id, 'register', req, {
-      method: 'email'
-    });
+    // 9. Loglama
+    await logActivity(savedUser._id, 'register', req, { method: 'email' });
 
-    // 8. Mail Gönderimi
+    // 10. Mail Gönderimi
     const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const verifyLink = `${frontendUrl}/verify/${verifyToken}`;
 
@@ -115,24 +134,16 @@ router.post('/register', async (req, res) => {
 
     await sendEmail(savedUser.email, t.verifySubject, emailContent);
 
-    res.status(200).json({
-      message: "auth.registerSuccess"
-    });
+    res.status(200).json({ message: "auth.registerSuccess" });
 
   } catch (err) {
     console.error("Register Error:", err);
-    // Hata durumunda kullanıcıyı sil (Zombi kayıt kalmasın)
     if (savedUser && savedUser._id) {
-      try {
-        await User.findByIdAndDelete(savedUser._id);
-      } catch (e) {}
+      try { await User.findByIdAndDelete(savedUser._id); } catch (e) {}
     }
-    res.status(500).json({
-      message: "common.serverError"
-    });
+    res.status(500).json({ message: "common.serverError" });
   }
 });
-
 // =============================================================================
 // 2. HESAP ONAYLA (VERIFY)
 // =============================================================================

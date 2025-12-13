@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "Lösenordet innehåller förbjudna tecken",
+    "nameForbiddenChars": "Namnet innehåller förbjudna tecken",
+    "passwordWeak": "Lösenordet uppfyller inte kraven",
     "validationError": "Vänligen kontrollera dina uppgifter.",
     "emailExists": "Ett konto med denna e-post finns redan.",
     "registerSuccess": "Registrering lyckades! Vänligen kontrollera din e-post.",
@@ -41,10 +44,11 @@
     "decline": "Avböj",
     "passwordRules": {
       "rule1": "Minst 8 tecken",
-      "rule2": "Minst 1 versal",
-      "rule3": "Minst 1 gemen",
-      "rule4": "Minst 1 siffra",
-      "rule5": "Minst 1 specialtecken (!@#$)"
+      "rule2": "Minst en versal bokstav",
+      "rule3": "Minst en gemen bokstav",
+      "rule4": "Minst en siffra",
+      "rule5": "Minst ett specialtecken (!@#%^&*)",
+      "rule6": "Inga förbjudna tecken (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Telefonnummer",
     "phoneNumberPlaceholder": "Ange ditt kontaktnummer",
@@ -329,6 +333,7 @@
     "alreadyHaveAccount": "Har du redan ett konto? Logga in"
   },
   "register": {
+    "passwordForbiddenChars": "Lösenordet innehåller förbjudna tecken. Vänligen ta bort: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Ditt lösenord är inte tillräckligt starkt!",
     "notifyPasswordRequirements": "Vänligen uppfyll lösenordskraven.",
     "acceptTerms": "Vänligen godkänn avtalet!",

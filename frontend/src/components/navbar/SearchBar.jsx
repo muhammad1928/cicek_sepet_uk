@@ -18,6 +18,9 @@ const SearchBar = ({ className }) => {
     const value = e.target.value;
     setSearchTerm(value);
 
+    // Arama başlayınca menünün geri kalanını kapat ama kendisi açık kalsın
+    // Bu için yeni bir state ekleyelim veya parent'a bildirelim
+
     if (value.length > 1) {
       try {
         const res = await publicRequest.get("/products");
@@ -25,22 +28,9 @@ const SearchBar = ({ className }) => {
           p.title.toLowerCase().includes(value.toLowerCase()) && p.isActive && p.stock > 0
         ).slice(0, 5);
         setSuggestions(filtered);
-        setShowSuggestions(true);
       } catch (err) { console.log(err); }
     } else {
-      setShowSuggestions(false);
-    }
-    
-    if (location.pathname !== "/") navigate("/");
-
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && value.length > 2) {
-        try {
-             await userRequest.post("/users/log-activity", { 
-               action: 'search', 
-               details: { query: value } 
-             });
-        } catch(e) { console.error("Log hatası:", e); }
+      setSuggestions([]);
     }
   };
 

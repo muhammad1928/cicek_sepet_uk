@@ -20,7 +20,13 @@ const SidebarHeader = ({ view, setView, cartCount, onClose, setShowClearConfirm 
         {view === "cart" && cartCount > 0 && (
             <button onClick={() => setShowClearConfirm(true)} className="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-full transition">{t("cartSidebarComponents.sidebarHeader.clear")}</button>
         )}
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-800 text-2xl transition"><FiX /></button>
+        {/* Kapatma butonu - Mobilde daha belirgin */}
+        <button 
+          onClick={onClose} 
+          className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-gray-600 hover:text-red-600 transition"
+        >
+          <FiX className="text-xl" />
+        </button>
       </div>
     </div>
   );

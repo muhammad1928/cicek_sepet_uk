@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "Das Passwort enthält verbotene Zeichen",
+    "nameForbiddenChars": "Der Name enthält verbotene Zeichen",
+    "passwordWeak": "Das Passwort erfüllt nicht die Anforderungen",
     "validationError": "Bitte überprüfen Sie Ihre Angaben.",
     "emailExists": "Ein Konto mit dieser E-Mail existiert bereits.",
     "registerSuccess": "Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail.",
@@ -41,10 +44,11 @@
     "decline": "Ablehnen",
     "passwordRules": {
       "rule1": "Mindestens 8 Zeichen",
-      "rule2": "Mindestens 1 Großbuchstabe",
-      "rule3": "Mindestens 1 Kleinbuchstabe",
-      "rule4": "Mindestens 1 Zahl",
-      "rule5": "Mindestens 1 Sonderzeichen (!@#$)"
+      "rule2": "Mindestens ein Großbuchstabe",
+      "rule3": "Mindestens ein Kleinbuchstabe",
+      "rule4": "Mindestens eine Zahl",
+      "rule5": "Mindestens ein Sonderzeichen (!@#%^&*)",
+      "rule6": "Keine verbotenen Zeichen (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Telefonnummer",
     "phoneNumberPlaceholder": "Geben Sie Ihre Kontaktnummer ein",
@@ -326,6 +330,7 @@
   },
 
   "register": {
+    "passwordForbiddenChars": "Das Passwort enthält verbotene Zeichen. Bitte entferne: ' \" ` \\ ; -- { } < > |",  
     "passwordWeak": "Ihr Passwort ist nicht stark genug!",
     "notifyPasswordRequirements": "Bitte erfüllen Sie die Passwortanforderungen.",
     "acceptTerms": "Bitte akzeptieren Sie die Vereinbarung!",

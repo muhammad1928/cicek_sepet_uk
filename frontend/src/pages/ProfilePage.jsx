@@ -1,40 +1,52 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+// import { useCart } from "../context/CartContext";
 import { userRequest } from "../requestMethods";
 // Bileşenler
 import BadgeDisplay from "../components/BadgeDisplay";
 import Sidebar from "../components/profilePage/Sidebar";
-import OrderHistory from "../components/profilePage/OrderHistory";
+// import OrderHistory from "../components/profilePage/OrderHistory";
 import AddressBook from "../components/profilePage/AddressBook";
 import UserInfo from "../components/profilePage/UserInfo";
 import MyOrdersPage from "./MyOrdersPage"; // Gömülü Sipariş Sayfası
 import { useTranslation } from "react-i18next";
 
+
+
+
 const ProfilePage = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("orders");
-  const [user, setUser] = useState(null);
-  const [orderCount, setOrderCount] = useState(0);
-
   const navigate = useNavigate();
   
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (!storedUser) {
-      navigate("/login");
-      return;
-    }
-    setUser(storedUser);
-  }, [navigate]);
+  // Lazy initialization - useEffect yerine direkt useState içinde
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  
+  const [activeTab, setActiveTab] = useState("orders");
+  const [orderCount, setOrderCount] = useState(0);
 
+  // User yoksa login'e yönlendir
   useEffect(() => {
-    if (user) {
-      const fetchCount = async () => {
-        try { const res = await userRequest.get(`/orders/find/${user._id}`); setOrderCount(res.data.length); } catch (e) {}
-      };
-      fetchCount();
+    if (!user) {
+      navigate("/login");
     }
+  }, [user, navigate]);
+
+  // Order count'u çek
+  useEffect(() => {
+    if (!user) return;
+    
+    const fetchCount = async () => {
+      try {
+        const res = await userRequest.get(`/orders/find/${user._id}`);
+        setOrderCount(res.data.length);
+      } catch (err) {
+        console.error("Order count fetch error:", err);
+      }
+    };
+    fetchCount();
   }, [user]);
 
   const handleLogout = () => {
@@ -66,7 +78,13 @@ const ProfilePage = () => {
           
           {/* --- SOL MENÜ (STICKY) --- */}
           <div className="w-full lg:w-80 shrink-0 lg:sticky lg:top-28">
-             <Sidebar user={user} orderCount={orderCount} activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+            <Sidebar user={user} orderCount={orderCount} activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+            
+            {/* Rozetler */}
+            <div className="bg-white rounded-2xl shadow-lg p-4 mt-4">
+              <h3 className="text-sm font-bold text-gray-500 mb-2 text-center">{t("profile.badges")}</h3>
+              <BadgeDisplay user={user} orderCount={orderCount} />
+            </div>
           </div>
 
           {/* --- SAĞ İÇERİK --- */}

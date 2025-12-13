@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "Password contains forbidden characters",
+    "nameForbiddenChars": "Name contains forbidden characters",
+    "passwordWeak": "Password does not meet requirements",
     "validationError": "Please check your input fields.",
     "emailExists": "An account with this email already exists.",
     "registerSuccess": "Registration successful! Please check your email.",
@@ -41,10 +44,11 @@
     "decline": "Decline",
     "passwordRules": {
       "rule1": "At least 8 characters",
-      "rule2": "At least 1 uppercase letter",
-      "rule3": "At least 1 lowercase letter",
-      "rule4": "At least 1 number",
-      "rule5": "At least 1 special character (!@#$)"
+      "rule2": "At least one uppercase letter",
+      "rule3": "At least one lowercase letter",
+      "rule4": "At least one number",
+      "rule5": "At least one special character (!@#%^&*)",
+      "rule6": "No forbidden characters (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Phone Number",
     "phoneNumberPlaceholder": "Enter your contact number",
@@ -326,6 +330,7 @@
   },
 
   "register": {
+    "passwordForbiddenChars": "Password contains forbidden characters. Please remove: ' \" ` \\ ; -- { } < > |",  
     "passwordWeak": "Your password is not strong enough!",
     "notifyPasswordRequirements": "Please meet the password requirements.",
     "acceptTerms": "Please accept the agreement!",

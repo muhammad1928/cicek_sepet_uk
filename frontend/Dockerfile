@@ -1,6 +1,6 @@
 # --- AŞAMA 1: BUILD ---
 # En güncel Node 24 sürümünü kullanıyoruz
-FROM node:24-alpine as build
+FROM node:24-alpine AS build
 WORKDIR /app
 
 # Paketleri yükle

@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "Şifre yasaklı karakterler içeriyor",
+    "nameForbiddenChars": "İsim yasaklı karakterler içeriyor",
+    "passwordWeak": "Şifre gereksinimleri karşılamıyor",
     "validationError": "Lütfen bilgilerinizi kontrol edin.",
     "emailExists": "Bu e-posta ile zaten bir hesap var.",
     "registerSuccess": "Kayıt başarılı! Lütfen mailinizi kontrol edin.",
@@ -41,10 +44,11 @@
     "decline": "Reddet",
     "passwordRules": {
       "rule1": "En az 8 karakter",
-      "rule2": "En az 1 büyük harf",
-      "rule3": "En az 1 küçük harf",
-      "rule4": "En az 1 rakam",
-      "rule5": "En az 1 özel karakter (!@#$)"
+      "rule2": "En az bir büyük harf",
+      "rule3": "En az bir küçük harf",
+      "rule4": "En az bir rakam",
+      "rule5": "En az bir özel karakter (!@#%^&*)",
+      "rule6": "Yasaklı karakterler yok (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Telefon Numarası",
     "phoneNumberPlaceholder": "İletişim numaranızı girin",
@@ -318,6 +322,7 @@
     "alreadyHaveAccount": "Zaten hesabınız var mı? Giriş Yapın"
   },
   "register": {
+    "passwordForbiddenChars": "Şifre yasaklı karakterler içeriyor. Lütfen şunları kaldırın: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Şifreniz yeterince güçlü değil!",
     "notifyPasswordRequirements": "Lütfen şifre gereksinimlerini karşılayın.",
     "acceptTerms": "Lütfen sözleşmeyi onaylayın!",

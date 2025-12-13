@@ -1,5 +1,8 @@
 {
   "auth": {
+    "passwordForbiddenChars": "Wachtwoord bevat verboden tekens",
+    "nameForbiddenChars": "Naam bevat verboden tekens",
+    "passwordWeak": "Wachtwoord voldoet niet aan de vereisten",
     "validationError": "Controleer uw gegevens.",
     "emailExists": "Er bestaat al een account met dit e-mailadres.",
     "registerSuccess": "Registratie geslaagd! Controleer uw e-mail.",
@@ -41,10 +44,11 @@
     "decline": "Weigeren",
     "passwordRules": {
       "rule1": "Minimaal 8 tekens",
-      "rule2": "Minimaal 1 hoofdletter",
-      "rule3": "Minimaal 1 kleine letter",
-      "rule4": "Minimaal 1 cijfer",
-      "rule5": "Minimaal 1 speciaal teken (!@#$)"
+      "rule2": "Minimaal één hoofdletter",
+      "rule3": "Minimaal één kleine letter",
+      "rule4": "Minimaal één cijfer",
+      "rule5": "Minimaal één speciaal teken (!@#%^&*)",
+      "rule6": "Geen verboden tekens (' \" ` \\ ; -- { } < > |)"
     },
     "phoneNumber": "Telefoonnummer",
     "phoneNumberPlaceholder": "Voer uw contactnummer in",
@@ -311,6 +315,7 @@
     "alreadyHaveAccount": "Heeft u al een account? Log in"
   },
   "register": {
+    "passwordForbiddenChars": "Wachtwoord bevat verboden tekens. Verwijder alstublieft: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Uw wachtwoord is niet sterk genoeg!",
     "notifyPasswordRequirements": "Voldoe aan de wachtwoordvereisten.",
     "acceptTerms": "Accepteer de overeenkomst!",
