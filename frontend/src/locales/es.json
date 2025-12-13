@@ -58,26 +58,28 @@
   },
   "home": {
     "heroTitle": "Haz felices a tus seres queridos",
-    "heroSubtitle": "Entregamos las flores más frescas y los regalos más especiales de Londres el mismo día en tu puerta.",
+    "heroSubtitle": "Entregamos las flores más frescas y los regalos más especiales de Londres en tu puerta el mismo día.",
     "categories": "Categorías",
     "featured": "Destacados",
     "categories_sticky": "Categorías",
-    "notFound": "No se encontraron productos con sus criterios.",
+    "notFound": "No se encontraron productos que coincidan con tus criterios.",
     "showAll": "Mostrar todos los productos",
     "homeAddToCart": "Añadir",
     "categories1": {
       "all": "Todos",
       "birthday": "Cumpleaños",
       "anniversary": "Aniversario",
-      "indoor": "Plantas de interior",
+      "indoor": "Flores de interior",
       "eadible": "Regalos comestibles",
       "rose": "Rosas",
       "orchid": "Orquídeas",
       "daisy": "Margaritas",
       "tulip": "Tulipanes",
-      "unique": "Único",
+      "unique": "Únicos",
       "designFlowers": "Flores de diseño"
-    }
+    },
+    "questionRemove": "¿ELIMINAR?",
+    "questionRemoveDesc": " se eliminará del carrito."
   },
   "seo": {
     "aboutUsPage": {

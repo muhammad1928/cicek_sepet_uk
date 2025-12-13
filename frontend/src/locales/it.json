@@ -58,26 +58,28 @@
   },
   "home": {
     "heroTitle": "Rendi felici i tuoi cari",
-    "heroSubtitle": "Consegniamo i fiori più freschi e i regali più speciali di Londra in giornata alla tua porta.",
+    "heroSubtitle": "Consegniamo i fiori più freschi e i regali più speciali di Londra a casa tua lo stesso giorno.",
     "categories": "Categorie",
     "featured": "In evidenza",
     "categories_sticky": "Categorie",
-    "notFound": "Nessun prodotto trovato con i tuoi criteri.",
+    "notFound": "Nessun prodotto trovato corrispondente ai tuoi criteri.",
     "showAll": "Mostra tutti i prodotti",
     "homeAddToCart": "Aggiungi",
     "categories1": {
       "all": "Tutti",
       "birthday": "Compleanno",
       "anniversary": "Anniversario",
-      "indoor": "Piante da interno",
+      "indoor": "Fiori da interno",
       "eadible": "Regali commestibili",
       "rose": "Rose",
       "orchid": "Orchidee",
       "daisy": "Margherite",
       "tulip": "Tulipani",
-      "unique": "Unico",
+      "unique": "Unici",
       "designFlowers": "Fiori di design"
-    }
+    },
+    "questionRemove": "RIMUOVERE?",
+    "questionRemoveDesc": " verrà rimosso dal carrello."
   },
   "seo": {
     "aboutUsPage": {

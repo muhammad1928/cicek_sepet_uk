@@ -59,26 +59,28 @@
 
   "home": {
     "heroTitle": "Faites plaisir à vos proches",
-    "heroSubtitle": "Nous livrons les fleurs les plus fraîches et les cadeaux les plus spéciaux de Londres le jour même à votre porte.",
+    "heroSubtitle": "Nous livrons les fleurs les plus fraîches et les cadeaux les plus spéciaux de Londres à votre porte le jour même.",
     "categories": "Catégories",
     "featured": "En vedette",
     "categories_sticky": "Catégories",
-    "notFound": "Aucun produit trouvé selon vos critères.",
+    "notFound": "Aucun produit trouvé correspondant à vos critères.",
     "showAll": "Afficher tous les produits",
     "homeAddToCart": "Ajouter",
     "categories1": {
       "all": "Tous",
       "birthday": "Anniversaire",
       "anniversary": "Anniversaire de mariage",
-      "indoor": "Plantes d'intérieur",
+      "indoor": "Fleurs d'intérieur",
       "eadible": "Cadeaux comestibles",
       "rose": "Roses",
       "orchid": "Orchidées",
       "daisy": "Marguerites",
       "tulip": "Tulipes",
-      "unique": "Unique",
+      "unique": "Uniques",
       "designFlowers": "Fleurs design"
-    }
+    },
+    "questionRemove": "SUPPRIMER ?",
+    "questionRemoveDesc": " sera supprimé du panier."
   },
 
   "seo": {

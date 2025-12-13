@@ -58,8 +58,8 @@
   },
 
   "home": {
-    "heroTitle": "Machen Sie Ihre Lieben glücklich",
-    "heroSubtitle": "Wir liefern Londons frischeste Blumen und besonderste Geschenke noch am selben Tag zu Ihrer Tür.",
+    "heroTitle": "Machen Sie Ihre Liebsten glücklich",
+    "heroSubtitle": "Wir liefern Londons frischeste Blumen und besonderste Geschenke noch am selben Tag zu Ihnen nach Hause.",
     "categories": "Kategorien",
     "featured": "Empfehlungen",
     "categories_sticky": "Kategorien",
@@ -77,8 +77,10 @@
       "daisy": "Gänseblümchen",
       "tulip": "Tulpen",
       "unique": "Einzigartig",
-      "designFlowers": "Designer-Blumen"
-    }
+      "designFlowers": "Designerblumen"
+    },
+    "questionRemove": "ENTFERNEN?",
+    "questionRemoveDesc": " wird aus dem Warenkorb entfernt."
   },
 
   "seo": {

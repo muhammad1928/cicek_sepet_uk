@@ -59,13 +59,28 @@
 
   "home": {
     "heroTitle": "Gör dina nära och kära glada",
-    "heroSubtitle": "Vi levererar Londons fräschaste blommor och mest speciella presenter samma dag till din dörr.",
+    "heroSubtitle": "Vi levererar Londons fräschaste blommor och mest speciella presenter till din dörr samma dag.",
     "categories": "Kategorier",
     "featured": "Utvalda",
     "categories_sticky": "Kategorier",
-    "notFound": "Inga produkter hittades med dina kriterier.",
+    "notFound": "Inga produkter hittades som matchar dina kriterier.",
     "showAll": "Visa alla produkter",
-    "homeAddToCart": "Lägg till"
+    "homeAddToCart": "Lägg till",
+    "categories1": {
+      "all": "Alla",
+      "birthday": "Födelsedag",
+      "anniversary": "Årsdag",
+      "indoor": "Inomhusblommor",
+      "eadible": "Ätbara presenter",
+      "rose": "Rosor",
+      "orchid": "Orkidéer",
+      "daisy": "Prästkragar",
+      "tulip": "Tulpaner",
+      "unique": "Unika",
+      "designFlowers": "Designblommor"
+    },
+    "questionRemove": "TA BORT?",
+    "questionRemoveDesc": " kommer att tas bort från varukorgen."
   },
 
   "seo": {

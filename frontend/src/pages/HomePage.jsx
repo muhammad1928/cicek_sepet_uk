@@ -275,7 +275,7 @@ const HomePage = () => {
   )}
 </div>
 
-      {itemToDelete && <ConfirmModal title={`${itemToDelete.title.toUpperCase()} ÇIKARILSIN MI?`} message={`"${itemToDelete.title}" sepetten silinecek.`} isDanger={true} onConfirm={confirmDelete} onCancel={() => setItemToDelete(null)} />}
+      {itemToDelete && <ConfirmModal title={`${itemToDelete.title.toUpperCase()} ${t('home.questionRemove')}`} message={`"${itemToDelete.title}" ${t('home.questionRemoveDesc')}`} isDanger={true} onConfirm={confirmDelete} onCancel={() => setItemToDelete(null)} />}
     </div>
   );
 };

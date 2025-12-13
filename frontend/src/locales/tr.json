@@ -78,7 +78,9 @@
       "tulip": "Laleler",
       "unique": "Eşsiz",
       "designFlowers":"Tasarım Çiçekleri"
-    }
+    },
+    "questionRemove":"ÇIKARILSIN MI?",
+    "questionRemoveDesc":" sepetten silinecek."
   },
 
   "seo": {

@@ -78,7 +78,9 @@
       "tulip": "Tulips",
       "unique": "Unique",
       "designFlowers": "Designer Flowers"
-    }
+    },
+    "questionRemove": "REMOVE?",
+    "questionRemoveDesc": " will be removed from cart."
   },
 
   "seo": {

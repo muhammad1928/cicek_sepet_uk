@@ -49,7 +49,7 @@ const AdminPage = () => {
       {/* Sadece mobilde görünür (md:hidden), Navbar'ın altında sol üstte durur */}
       <button 
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="md:hidden fixed top-24 left-4 z-50 bg-slate-900 text-white p-3 rounded-lg shadow-lg hover:bg-slate-800 transition-colors"
+        className="md:hidden fixed top-20 left-4 z-50 bg-slate-900 text-white p-3 rounded-lg shadow-lg hover:bg-slate-800 transition-colors"
       >
         {isSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
       </button>
