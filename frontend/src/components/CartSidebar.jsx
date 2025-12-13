@@ -117,8 +117,17 @@ const CartSidebar = () => {
   };
 
   const handleCheckoutClick = () => {
-      if (cart.length === 0) { notify(t("cartSidebar.emptyCart"), "error"); return; }
-      setView("checkout");
+    if (cart.length === 0) { notify(t("cartSidebar.emptyCart"), "error"); return; }
+    
+    // Kullanıcı giriş kontrolü
+    if (!user) {
+      notify(t("cartSidebar.loginRequired"), "warning");
+      setIsCartOpen(false);
+      navigate('/login?redirect=checkout');
+      return;
+    }
+    
+    setView("checkout");
   };
 
   const proceedToPayment = async (e) => {

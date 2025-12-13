@@ -594,7 +594,8 @@
     "wantToDelete": "Möchten Sie löschen?",
     "removedFromCart": "wird aus dem Warenkorb entfernt.",
     "emptyCart": "Warenkorb leeren?",
-    "allWillBeRemoved": "alle Produkte werden aus dem Warenkorb entfernt."
+    "allWillBeRemoved": "alle Produkte werden aus dem Warenkorb entfernt.",
+    "loginRequired": "Bitte melden Sie sich an, um zur Kasse zu gehen"
   },
 
   "cancelModal": {

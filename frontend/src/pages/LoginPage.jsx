@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom"; 
 
 const LoginPage = () => {
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,8 +45,20 @@ const LoginPage = () => {
       notify(`${t("login.welcome")} ${res.data.fullName}! 👋`, "success");
 
       // ROL BAZLI YÖNLENDİRME
+      // ROL BAZLI YÖNLENDİRME
       setTimeout(() => {
         const u = res.data;
+        
+        // Önce redirect parametresini kontrol et
+        const searchParams = new URLSearchParams(location.search);
+        const redirect = searchParams.get('redirect');
+        
+        // Checkout'tan geldiyse sepeti aç
+        if (redirect === 'checkout') {
+          window.dispatchEvent(new Event('open-cart'));
+          window.location.href = "/";
+          return;
+        }
         
         // 1. Eğer Kurye veya Satıcı ise ve durumu 'approved' DEĞİLSE -> Başvuru sayfasına git
         if ((u.role === "vendor" || u.role === "courier") && u.applicationStatus !== "approved") {

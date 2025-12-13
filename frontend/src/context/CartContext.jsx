@@ -45,6 +45,16 @@ export const CartProvider = ({ children }) => {
     return () => window.removeEventListener('user-change', syncUserData);
   }, []);
 
+  // Sepeti dışarıdan açmak için event listener
+  useEffect(() => {
+    const openCartHandler = () => {
+      setTimeout(() => setIsCartOpen(true), 500);
+    };
+    
+    window.addEventListener('open-cart', openCartHandler);
+    return () => window.removeEventListener('open-cart', openCartHandler);
+  }, []);
+
   // --- KALICILIK (Persistence) ---
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -135,33 +145,38 @@ export const CartProvider = ({ children }) => {
       setCart(cart.map(item => item._id === id ? { ...item, quantity: newQuantity } : item));
   };
   
-  // 7. FAVORİ EKLE/ÇIKAR (BACKEND İLE SİNK)
+  // 7. FAVORİ EKLE/SİLME
   const toggleFavorite = async (productId) => {
-    const isCurrentlyFav = favorites.includes(productId);
-    
-    if (user) {
-      // 1. Üye Girişi Yapılmışsa: DB üzerinden kaydet
-      try {
-        const res = await userRequest.put(`/users/${user._id}/favorites`, { productId });
-        setFavorites(res.data); 
-        notify(isCurrentlyFav ? t('cartContext.deletedFromFavorites') : t('cartContext.addedToFavorites') + " ❤️", "success");
-        return; 
-      } catch (e) {
-        notify(t('cartContext.favoritesNotUpdated'), "error");
-        return; 
-      }
-    } 
-
-    // 2. Misafir (Guest) Kullanıcı: LocalStorage'a kaydet
-    let newFavorites;
-    if (isCurrentlyFav) {
-      newFavorites = favorites.filter(id => id !== productId);
-    } else {
-      newFavorites = [...favorites, productId];
+  const isCurrentlyFav = favorites.includes(productId);
+  
+  if (user) {
+    try {
+      const res = await userRequest.put(`/users/${user._id}/favorites`, { productId });
+      setFavorites(res.data); 
+      notify(
+        isCurrentlyFav ? t('cartContext.deletedFromFavorites') + " ❌" : t('cartContext.addedToFavorites') + " ❤️", 
+        isCurrentlyFav ? "error" : "success"
+      );
+      return; 
+    } catch (e) {
+      notify(t('cartContext.favoritesNotUpdated'), "error");
+      return; 
     }
-    setFavorites(newFavorites);
-    notify(isCurrentlyFav ? t('cartContext.deletedFromFavorites') : t('cartContext.addedToFavorites') + " ❤️", "success");
-  };
+  } 
+
+  // Misafir kullanıcı
+  let newFavorites;
+  if (isCurrentlyFav) {
+    newFavorites = favorites.filter(id => id !== productId);
+  } else {
+    newFavorites = [...favorites, productId];
+  }
+  setFavorites(newFavorites);
+  notify(
+    isCurrentlyFav ? t('cartContext.deletedFromFavorites') + " ❌" : t('cartContext.addedToFavorites') + " ❤️", 
+    isCurrentlyFav ? "error" : "success"
+  );
+};
 
   const isFavorite = (productId) => favorites.includes(productId);
 

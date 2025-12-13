@@ -568,7 +568,8 @@
     "wantToDelete": "Voulez-vous supprimer ?",
     "removedFromCart": "sera retiré du panier.",
     "emptyCart": "Vider le panier ?",
-    "allWillBeRemoved": "tous les produits seront retirés du panier."
+    "allWillBeRemoved": "tous les produits seront retirés du panier.",
+    "loginRequired": "Veuillez vous connecter pour procéder au paiement"
   },
   "cancelModal": {
     "inputReason": "Veuillez indiquer une raison valide.",

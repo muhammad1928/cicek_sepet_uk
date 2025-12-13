@@ -594,7 +594,8 @@
     "wantToDelete": "Do you want to delete?",
     "removedFromCart": "will be removed from cart.",
     "emptyCart": "Empty Cart?",
-    "allWillBeRemoved": "all products will be removed from cart."
+    "allWillBeRemoved": "all products will be removed from cart.",
+    "loginRequired": "Please login to proceed to checkout"
   },
 
   "cancelModal": {

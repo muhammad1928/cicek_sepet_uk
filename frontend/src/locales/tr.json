@@ -569,7 +569,8 @@
     "wantToDelete":"Silmek istiyor musunuz?",
     "removedFromCart":"sepetten çıkarılacaktır.",
     "emptyCart":"Sepeti Boşalt?",
-    "allWillBeRemoved":"tüm ürünler sepetten çıkarılacaktır."
+    "allWillBeRemoved":"tüm ürünler sepetten çıkarılacaktır.",
+    "loginRequired":"Ödeme yapmak için giriş yapmalısınız"
   },
   "cancelModal":{
     "inputReason":"Lütfen geçerli bir sebep belirtin.",
@@ -589,7 +590,6 @@
     "year1User":"Efsane Üye (1+ Yıl)",
     "loyalUser":"Sadık Üye (3+ Yıl)",
     "gigachad":"Giga Chad (5+ Yıl)",
-    "firstOrder":"İlk Sipariş",
     "fifthOrder":"Bronz Müşteri (5+)",
     "tenthOrder":"Gümüş Müşteri (10+)",
     "twentyfifthOrder":"Altın Müşteri (25+)",

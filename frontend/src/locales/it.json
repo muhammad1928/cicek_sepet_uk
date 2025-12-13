@@ -562,7 +562,8 @@
     "wantToDelete": "Vuoi eliminare?",
     "removedFromCart": "sarà rimosso dal carrello.",
     "emptyCart": "Svuotare il carrello?",
-    "allWillBeRemoved": "tutti i prodotti saranno rimossi dal carrello."
+    "allWillBeRemoved": "tutti i prodotti saranno rimossi dal carrello.",
+    "loginRequired": "Effettua il login per procedere al pagamento"
   },
   "cancelModal": {
     "inputReason": "Per favore indica un motivo valido.",

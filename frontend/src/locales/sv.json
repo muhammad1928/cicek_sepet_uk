@@ -580,7 +580,8 @@
     "wantToDelete": "Vill du ta bort?",
     "removedFromCart": "kommer att tas bort från varukorgen.",
     "emptyCart": "Töm varukorgen?",
-    "allWillBeRemoved": "alla produkter kommer att tas bort från varukorgen."
+    "allWillBeRemoved": "alla produkter kommer att tas bort från varukorgen.",
+    "loginRequired": "Logga in för att fortsätta till kassan"
   },
   "cancelModal": {
     "inputReason": "Vänligen ange en giltig anledning.",
