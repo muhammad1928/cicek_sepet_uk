@@ -141,8 +141,8 @@ router.post("/create-checkout-session", verifyTokenAndAuthorization, async (req,
       payment_method_types: ["card"],
       line_items: line_items,
       mode: "payment",
-      success_url: `http://localhost:5173/success`,
-      cancel_url: `http://localhost:5173/`,
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: `${process.env.CLIENT_URL}/`,
       customer_email: userEmail,
       discounts: stripeDiscounts, // İndirim burada uygulanır
       metadata: {
