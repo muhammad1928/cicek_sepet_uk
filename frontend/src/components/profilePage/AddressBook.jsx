@@ -52,10 +52,10 @@ const AddressBook = ({ user }) => {
     try {
       if (editingId) { 
         await userRequest.put(`/users/${user._id}/addresses/${editingId}`, addressData); 
-        notify(`${t("adressBook.adressUpdated")} ✅`, "success"); 
+        notify(`${t("profilePage.adressBook.adressUpdated")} ✅`, "success"); 
       } else { 
         await userRequest.post(`/users/${user._id}/addresses`, addressData); 
-        notify(`${t("adressBook.adressAdded")} ✅`, "success"); 
+        notify(`${t("profilePage.adressBook.adressAdded")} ✅`, "success"); 
       }
       handleCancel(); // İşlem bitince kapat
       fetchAddresses();
@@ -65,13 +65,13 @@ const AddressBook = ({ user }) => {
   const handleDeleteRequest = (id, title) => {
     setConfirmData({
       isOpen: true,
-      title: t("adressBook.qDeteleAdress"),
-      message: `"${title}" ${t("adressBook.deleteAdressLabel")}`,
+      title: t("profilePage.adressBook.qDeteleAdress"),
+      message: `"${title}" ${t("profilePage.adressBook.deleteAdressLabel")}`,
       isDanger: true,
       action: async () => {
         try {
           await userRequest.delete(`/users/${user._id}/addresses/${id}`);
-          notify(t("adressBook.adressDeleted"), "success");
+          notify(t("profilePage.adressBook.adressDeleted"), "success");
           fetchAddresses();
         } catch { notify(t("common.error"), "error"); }
         setConfirmData(null);
@@ -85,7 +85,7 @@ const AddressBook = ({ user }) => {
       {/* BAŞLIK VE MODERN BUTON */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-          {t("adressBook.myAdresses")}
+          {t("profilePage.adressBook.myAdresses")}
           {/* {t("adressBook.addressBook")} <FiMapPin className="text-pink-600" /> */}
         </h2>
         
@@ -100,7 +100,7 @@ const AddressBook = ({ user }) => {
             }
           `}
         >
-          {showForm ? <><FiX /> {t("adressBook.cancel")}</> : <><FiPlus /> {t("adressBook.addNewAdress")}</>}
+          {showForm ? <><FiX /> {t("profilePage.adressBook.cancel")}</> : <><FiPlus /> {t("profilePage.adressBook.addNewAdress")}</>}
         </button>
       </div>
 
@@ -112,38 +112,38 @@ const AddressBook = ({ user }) => {
             <div className="mb-6 border-b border-gray-100 pb-4">
                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                  {editingId ? <FiEdit className="text-blue-500"/> : <FiPlus className="text-green-500"/>}
-                 {editingId ? t("adressBook.editAdress") : t("adressBook.newAdressInfo")}
+                 {editingId ? t("profilePage.adressBook.editAdress") : t("profilePage.adressBook.newAdressInfo")}
                </h3>
             </div>
             
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.addressTitle")}</label>
-                   <input placeholder={t("adressBook.adressTitlePlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.addressTitle")}</label>
+                   <input placeholder={t("profilePage.adressBook.adressTitlePlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.recipientName")}</label>
-                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" placeholder={t("adressBook.recipientNamePlaceholder")} value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.recipientName")}</label>
+                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" placeholder={t("profilePage.adressBook.recipientNamePlaceholder")} value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.receipentPhone")}</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.receipentPhone")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.recipientPhone} onChange={e=>setAddressData({...addressData, recipientPhone:e.target.value})} />
                 </div>
 
                 <div className="md:col-span-2">
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.openAddress")}</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.openAddress")}</label>
                    <textarea className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition h-24 resize-none" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
                 </div>
 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.city")}</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.city")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.city} onChange={e=>setAddressData({...addressData, city:e.target.value})} />
                 </div>
                 
                 <div>
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("adressBook.postCode")}</label>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.postCode")}</label>
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.postcode} onChange={e=>setAddressData({...addressData, postcode:e.target.value})} />
                 </div>
                 
@@ -154,13 +154,13 @@ const AddressBook = ({ user }) => {
                       onClick={handleCancel} 
                       className="flex-1 py-3.5 border-2 border-gray-100 text-gray-500 font-bold rounded-xl hover:bg-gray-50 transition"
                     >
-                      {t("adressBook.cancel")}
+                      {t("profilePage.adressBook.cancel")}
                     </button>
                     <button 
                       type="submit" 
                       className="flex-[2] py-3.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-pink-500/30 transition transform active:scale-95"
                     >
-                      {editingId ? t("adressBook.saveChanges") : t("adressBook.addAdress")}
+                      {editingId ? t("profilePage.adressBook.saveChanges") : t("profilePage.adressBook.addAdress")}
                     </button>
                 </div>
             </form>
@@ -171,7 +171,7 @@ const AddressBook = ({ user }) => {
       {addresses.length === 0 && !showForm ? (
         <div className="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200">
             <div className="text-5xl mb-4 opacity-20">📍</div>
-            <p className="text-gray-400 font-medium">{t("adressBook.noSavedAdresses")}</p>
+            <p className="text-gray-400 font-medium">{t("profilePage.adressBook.noSavedAdresses")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-5">
@@ -199,7 +199,7 @@ const AddressBook = ({ user }) => {
                   <button 
                     onClick={() => openForm(addr)} 
                     className="text-blue-500 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition" 
-                    title={t('adressBook.edit')}
+                    title={t('profilePage.adressBook.edit')}
                   >
                     <FiEdit size={16} />
                   </button>
@@ -207,7 +207,7 @@ const AddressBook = ({ user }) => {
                   <button 
                     onClick={() => handleDeleteRequest(addr._id, addr.title)} 
                     className="text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition" 
-                    title={t('adressBook.delete')}
+                    title={t('profilePage.adressBook.delete')}
                   >
                     <FiTrash2 size={16} />
                   </button>

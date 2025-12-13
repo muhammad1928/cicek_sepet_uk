@@ -850,6 +850,37 @@
         "completed": "Voltooid"
       }
     },
+    "adminCoupon": {
+      "discountAmount": "Code en kortingspercentage zijn verplicht",
+      "discountAmountMax": "Korting mag niet meer dan 100% zijn.",
+      "couponCreated": "Coupon succesvol aangemaakt!",
+      "couponUpdated": "Coupon succesvol bijgewerkt!",
+      "errorOccurred": "Er is een fout opgetreden. Probeer het opnieuw.",
+      "deleteCoupon": "Coupon verwijderen",
+      "cannotBeUndone": "Deze actie kan niet ongedaan worden gemaakt.",
+      "deleted": "Coupon verwijderd.",
+      "couponManagement": "Couponbeheer",
+      "couponManagementDesc": "Maak en beheer promotiecodes.",
+      "coupons": "Coupons",
+      "searchPlaceholder": "Zoek code of beschrijving...",
+      "code": "Couponcode",
+      "description": "Beschrijving",
+      "discountValue": "Kortingswaarde %",
+      "create": "Aanmaken",
+      "deliveryIncluded": "Inclusief bezorging",
+      "notFound": "Coupon niet gevonden.",
+      "expired": "VERLOPEN",
+      "usageLimit": "Gebruikslimiet",
+      "perUserLimit": "Limiet per gebruiker",
+      "active": "ACTIEF",
+      "validFrom": "Geldig vanaf",
+      "freeDelivery": "Gratis bezorging",
+      "validUntil": "Geldig tot",
+      "createNewCoupon": "Nieuwe coupon aanmaken",
+      "last": "Laatste",
+      "noExpiry": "Geen vervaldatum",
+      "delete": "Verwijderen"
+    },
     "adminApplication": {
       "namedApplicant": "de gebruiker genaamd,",
       "namedApplicant2": "krijgt volledige toegang tot het systeem als. Keurt u deze handeling goed?",
@@ -878,17 +909,17 @@
     "language": "Taal"
   },
   "login": {
-  "welcome": "Welkom",
-  "welcomedesc": "Log in op uw account en begin met winkelen",
-  "emailLabel": "E-mailadres",
-  "emailInput": "example@mail.com",
-  "passwordLabel": "Wachtwoord",
-  "passwordInput": "Voer uw wachtwoord in",
-  "forgotPassword": "Wachtwoord vergeten",
-  "loginButton": "Inloggen",
-  "loginProcessing": "Bezig met inloggen...",
-  "noAccount1": "Heeft u geen account?",
-  "noAccount2": "Registreer nu",
-  "backToHome": "← Terug naar Home"
-}
+    "welcome": "Welkom",
+    "welcomedesc": "Log in op uw account en begin met winkelen",
+    "emailLabel": "E-mailadres",
+    "emailInput": "example@mail.com",
+    "passwordLabel": "Wachtwoord",
+    "passwordInput": "Voer uw wachtwoord in",
+    "forgotPassword": "Wachtwoord vergeten",
+    "loginButton": "Inloggen",
+    "loginProcessing": "Bezig met inloggen...",
+    "noAccount1": "Heeft u geen account?",
+    "noAccount2": "Registreer nu",
+    "backToHome": "← Terug naar Home"
+  }
 }

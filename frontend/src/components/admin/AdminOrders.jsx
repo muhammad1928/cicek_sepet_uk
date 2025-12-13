@@ -100,9 +100,9 @@ const AdminOrders = () => {
     const st = e.target.value;
     try {
       await userRequest.put(`/orders/${id}`, { status: st });
-      notify(`Sipariş güncellendi: ${st}`, "success");
+      notify(`Order updated: ${st}`, "success");
       setOrders(prev => prev.map(o => o._id === id ? { ...o, status: st } : o));
-    } catch (err) { notify("Hata", "error"); }
+    } catch (err) { notify("Error", "error"); }
   };
 
   return (
@@ -111,10 +111,10 @@ const AdminOrders = () => {
       {/* BAŞLIK */}
       <div className="flex justify-between items-end mb-8 border-b border-gray-100 pb-6">
         <div>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-purple-900 drop-shadow-sm">Sipariş Yönetimi</h2>
-            <p className="text-gray-500 font-medium text-sm flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>Platform üzerindeki tüm siparişlerin anlık durumu.</p>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-purple-900 drop-shadow-sm">Orders Management</h2>
+            <p className="text-gray-500 font-medium text-sm flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>Real-time status of all orders on the platform.</p>
         </div>
-        <button onClick={() => { setLoading(true); fetchOrders(); }} className="bg-white text-blue-600 hover:bg-blue-50 border border-blue-100 px-6 py-3 rounded-2xl font-bold shadow-sm hover:shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2"><FiRefreshCw className={loading ? "animate-spin" : ""} /> Yenile</button>
+        <button onClick={() => { setLoading(true); fetchOrders(); }} className="bg-white text-blue-600 hover:bg-blue-50 border border-blue-100 px-6 py-3 rounded-2xl font-bold shadow-sm hover:shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2"><FiRefreshCw className={loading ? "animate-spin" : ""} /> Refresh</button>
       </div>
 
       {/* İSTATİSTİKLER */}
@@ -126,7 +126,7 @@ const AdminOrders = () => {
       {/* LİSTE */}
       <div className="space-y-4">
         {filteredOrders.length === 0 && !loading ? (
-           <div className="text-center py-20 text-gray-400 border-2 border-dashed rounded-3xl bg-white">Kriterlere uygun sipariş bulunamadı.</div>
+           <div className="text-center py-20 text-gray-400 border-2 border-dashed rounded-3xl bg-white">No available order with this criteria</div>
         ) : (
            filteredOrders.map(order => (
              <OrderCard 

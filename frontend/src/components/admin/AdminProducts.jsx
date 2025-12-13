@@ -6,7 +6,7 @@ import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
 
 
-const CATEGORIES = ["Tümü", "Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
+const CATEGORIES = ["All", "Birthday", "Anniversary", "Indoor Flowers", "Edible Gifts", "Designer Flowers", "Roses", "Orchids"];
 
 const AdminProducts = () => {
   const { notify } = useCart();
@@ -42,7 +42,7 @@ const AdminProducts = () => {
         isActive: newStatus 
       });
 
-      notify(`Ürün ${newStatus ? 'Aktif' : 'Pasif'} yapıldı`, "success");
+      notify(`Product ${newStatus ? 'Active' : 'Inactive'}`, "success");
       
       // Listeyi anında güncelle (Sayfa yenilemeden görmek için)
       setProducts(prev => prev.map(p => 
@@ -50,7 +50,7 @@ const AdminProducts = () => {
       ));
 
     } catch (err) {
-      notify("Durum değiştirilemedi!", "error");
+      notify("Status could not be changed!", "error");
     }
   };
 
@@ -65,13 +65,13 @@ const AdminProducts = () => {
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Resim yüklendi!", "success"); } 
-    catch { notify("Hata", "error"); } finally { setUploading(false); }
+    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Image uploaded!", "success"); } 
+    catch { notify("Error", "error"); } finally { setUploading(false); }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.price) return notify("Eksik bilgi", "warning");
+    if (!formData.title || !formData.price) return notify("Missing information", "warning");
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const payload = { ...formData, vendor: user._id }; 
@@ -79,21 +79,21 @@ const AdminProducts = () => {
       if (editMode) await userRequest.put(`/products/${editMode}`, payload);
       else await userRequest.post("/products", payload);
       
-      notify("İşlem Başarılı!", "success"); 
+      notify("Operation Successful!", "success"); 
       setFormData(initialForm); setShowForm(false); setEditMode(null); fetchProducts();
-    } catch { notify("Hata", "error"); }
+    } catch { notify("Error", "error"); }
   };
 
   const handleEditClick = (p) => { 
     // isActive değeri direkt product objesinden alınır, bu da formdaki checkbox'ı doğru bağlar
-    setFormData({ ...p, category: p.category || "Doğum Günü" }); 
+    setFormData({ ...p, category: p.category || "Birthday" }); 
     setEditMode(p._id); setShowForm(true); window.scrollTo(0,0); 
   };
 
   const handleDeleteRequest = (id) => {
     setConfirmData({
-      isOpen: true, title: "Ürünü Sil?", message: "Bu işlem geri alınamaz.", isDanger: true,
-      action: async () => { try { await userRequest.delete(`/products/${id}`); notify("Silindi", "success"); fetchProducts(); } catch { notify("Hata", "error"); } setConfirmData(null); }
+      isOpen: true, title: "Delete Product?", message: "This action cannot be undone.", isDanger: true,
+      action: async () => { try { await userRequest.delete(`/products/${id}`); notify("Deleted", "success"); fetchProducts(); } catch { notify("Error", "error"); } setConfirmData(null); }
     });
   };
 
@@ -111,7 +111,7 @@ const AdminProducts = () => {
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
           <input 
             type="text" 
-            placeholder="Ürün veya Satıcı Ara..." 
+            placeholder="Search Product or Vendor..." 
             className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" 
             onChange={(e) => setSearchTerm(e.target.value)} 
           />
@@ -119,7 +119,7 @@ const AdminProducts = () => {
             onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} 
             className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}
           >
-            {showForm ? <><FiX /> Kapat</> : <><FiPlus /> Ekle</>}
+            {showForm ? <><FiX /> Close</> : <><FiPlus /> Add</>}
           </button>
         </div>
       </AdminPanelHeader>
@@ -129,23 +129,23 @@ const AdminProducts = () => {
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-100 mb-6 animate-fade-in-down">
           <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">{editMode ? "Düzenle" : "Yeni Ekle"}</h3>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Ad</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded" /></div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 md:grid-cols-2 gap-6">
+            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Name</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded" /></div>
             <div className="flex gap-2">
-                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Fiyat</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
-                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Stok</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded" /></div>
+                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Price</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
+                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Stock</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded" /></div>
             </div>
-            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Kategori</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
-            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Görsel</label><div className="flex gap-2 border p-2 rounded bg-gray-50"><label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 transition shadow-sm"><FiCamera /> {uploading?"...":"Seç"}<input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/></label><input name="img" value={formData.img} onChange={handleChange} className="flex-1 text-xs outline-none bg-transparent" placeholder="URL" /></div></div>
-            <div className="md:col-span-2"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Açıklama</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-20" /></div>
+            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Category</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
+            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Image</label><div className="flex gap-2 border p-2 rounded bg-gray-50"><label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 transition shadow-sm"><FiCamera /> {uploading?"...":"Select"}<input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/></label><input name="img" value={formData.img} onChange={handleChange} className="flex-1 text-xs outline-none bg-transparent" placeholder="URL" /></div></div>
+            <div className="md:col-span-2"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Description</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-20" /></div>
             
             {/* CHECKBOX DÜZELTİLDİ: 'checked' property'si doğru bind edildi. */}
             <div className="md:col-span-2 flex items-center gap-2 bg-gray-50 p-3 rounded border border-gray-200">
                 <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} id="active" className="w-5 h-5 accent-pink-600 cursor-pointer" />
-                <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Bu ürün satışta olsun mu?</label>
+                <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Is this product active for sale?</label>
             </div>
             
-            <button type="submit" className="bg-blue-600 text-white py-3 rounded-lg font-bold md:col-span-2 hover:bg-blue-700 transition shadow-md">Kaydet</button>
+            <button type="submit" className="bg-blue-600 text-white py-3 rounded-lg font-bold md:col-span-2 hover:bg-blue-700 transition shadow-md">Save</button>
           </form>
         </div>
       )}
@@ -161,18 +161,18 @@ const AdminProducts = () => {
               {/* HIZLI DURUM DEĞİŞTİRME (TOGGLE) */}
               <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
                 {isVendorBlocked ? (
-                    <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold animate-pulse cursor-not-allowed">⛔ SATICI ENGELLİ</span>
+                    <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold animate-pulse cursor-not-allowed">⛔ VENDOR BLOCKED</span>
                 ) : (
                     <button 
                         onClick={() => handleToggleStatus(product)}
                         className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-sm transition transform active:scale-95 ${product.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-500 text-white hover:bg-gray-600"}`}
-                        title="Durumu Değiştirmek İçin Tıkla"
+                        title="Click to Change Status"
                     >
-                        {product.isActive ? "🟢 Yayında" : "⚫ Gizli"}
+                        {product.isActive ? "🟢 Active" : "⚫ Hidden"}
                     </button>
                 )}
                 
-                {product.stock <= 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-1 rounded font-bold shadow">Tükendi</span>}
+                {product.stock <= 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-1 rounded font-bold shadow">Sold Out</span>}
               </div>
 
               <div className="h-40 bg-gray-100 relative">
@@ -186,13 +186,13 @@ const AdminProducts = () => {
                 <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-pink-600">£{product.price}</span><span className="text-xs text-gray-500 font-mono">ID: {product._id.slice(-4)}</span></div>
 
                 <div className="mt-auto pt-2 border-t border-gray-200 flex justify-between items-center mb-3">
-                  <span className="text-xs font-bold text-gray-500 uppercase">STOK</span>
+                  <span className="text-xs font-bold text-gray-500 uppercase">STOCK</span>
                   <QuickStockUpdate product={product} refresh={fetchProducts} />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-2">
-                  <button onClick={() => handleEditClick(product)} className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2 rounded font-bold border border-blue-100 hover:bg-blue-100 transition"><FiEdit /> Düzenle</button>
-                  <button onClick={() => handleDeleteRequest(product._id)} className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2 rounded font-bold border border-red-100 hover:bg-red-100 transition"><FiTrash2 /> Sil</button>
+                  <button onClick={() => handleEditClick(product)} className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2 rounded font-bold border border-blue-100 hover:bg-blue-100 transition"><FiEdit /> Edit</button>
+                  <button onClick={() => handleDeleteRequest(product._id)} className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2 rounded font-bold border border-red-100 hover:bg-red-100 transition"><FiTrash2 /> Delete</button>
                 </div>
               </div>
             </div>

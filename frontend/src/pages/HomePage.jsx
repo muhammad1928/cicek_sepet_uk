@@ -144,80 +144,136 @@ const HomePage = () => {
       </div>
 
       {/* LİSTE ALANI */}
-      <div className="max-w-7xl mx-auto px-4 pb-24 pt-4">
-        {loading ? <ProductSkeleton /> : filteredProducts.length === 0 ? (
-          <div className="text-center text-gray-400 py-24 animate-fade-in bg-white rounded-3xl border-2 border-dashed border-gray-200 mx-auto max-w-lg">
-             <div className="text-6xl mb-4 opacity-50 grayscale">🥀</div>
-             <p className="text-lg font-medium text-gray-500">{t('home.notFound')}</p>
-             <button onClick={() => {setSelectedCategory("Tümü")}} className="mt-6 text-white bg-gray-800 px-6 py-2 rounded-full font-bold hover:bg-black transition shadow-lg">{t('home.showAll')}</button>
-          </div>
-        ) : (
-          // GRID: 1 (Mobil) -> 2 (Tablet) -> 3 -> 4 (Desktop)
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product, index) => {
-              const cartItem = getCartItem(product._id);
-              const isFav = favorites.includes(product._id);
-              const vendorName = product.vendor?.fullName || product.vendor?.username || "Fesfu Flowers UK"; // Default vendor name
+<div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 pb-24 pt-4">
+  {loading ? <ProductSkeleton /> : filteredProducts.length === 0 ? (
+    <div className="text-center text-gray-400 py-16 sm:py-24 animate-fade-in bg-white rounded-2xl sm:rounded-3xl border-2 border-dashed border-gray-200 mx-auto max-w-lg">
+       <div className="text-4xl sm:text-6xl mb-4 opacity-50 grayscale">🥀</div>
+       <p className="text-sm sm:text-lg font-medium text-gray-500">{t('home.notFound')}</p>
+       <button onClick={() => {setSelectedCategory("Tümü")}} className="mt-4 sm:mt-6 text-white bg-gray-800 px-4 sm:px-6 py-2 rounded-full text-sm font-bold hover:bg-black transition shadow-lg">{t('home.showAll')}</button>
+    </div>
+  ) : (
+    // GRID: 2 (Mobil) -> 3 (Tablet) -> 4 (Desktop)
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
+      {filteredProducts.map((product, index) => {
+        const cartItem = getCartItem(product._id);
+        const isFav = favorites.includes(product._id);
+        const vendorName = product.vendor?.fullName || product.vendor?.username || "Fesfu Flowers UK";
 
-              return (
-                <div 
-                    key={product._id} 
-                    onClick={() => navigate(`/product/${product._id}`)} 
-                    // DÜZELTME: Sabit yükseklik (h-[420px]) KALDIRILDI. h-full kullanıldı.
-                    className="bg-white rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col relative h-full animate-fade-in-up cursor-pointer hover:-translate-y-1" 
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  
-                  {/* Resim Alanı (Orantılı) */}
-                  <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden flex-shrink-0">
-                    <img 
-                        src={product.img || "https://placehold.co/400"} 
-                        alt={product.title} 
-                        className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
-                    />
-                    {product.category && <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">{product.category}</div>}
-                  </div>
-
-                  <button onClick={(e) => handleToggleFavorite(e, product._id)} className="absolute top-4 right-4 z-20 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-md hover:scale-110 transition group/heart">
-                    <span className={`text-xl transition ${isFav ? "scale-110 text-red-500 drop-shadow-sm" : "scale-100 text-gray-300 group-hover/heart:text-red-400"}`}>{isFav ? <FaHeart/> : <FaRegHeart/>}</span>
-                  </button>
-
-                  <div className="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                          <FaStore className="text-gray-300" /> {vendorName}
-                        </div>
-                        <h3 className="text-base font-bold text-gray-900 mb-1 truncate leading-tight group-hover:text-pink-600 transition-colors" title={product.title}>{product.title}</h3>
-                        <p className="text-xs text-gray-500 line-clamp-2 min-h-[2.5em] leading-relaxed">{product.desc}</p>
-                    </div>
-                    
-                    <div className="flex justify-between items-end mt-4 relative border-t border-gray-50 pt-3">
-                      <div className="flex flex-col">
-                          <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{t('common.price')}</span>
-
-                          {/* burada fiyat birimi duzenlenmeli */}
-                          <span className="text-xl font-black text-gray-900">£{product.price}</span>
-                      </div>
-                      
-                      {!cartItem ? (
-                        <button onClick={(e) => handleAddToCart(e, product)} className="bg-white border-2 border-gray-100 text-gray-800 px-4 py-2 rounded-xl text-xs font-bold hover:border-pink-500 hover:bg-pink-50 hover:text-pink-600 transition-all active:scale-95 shadow-sm flex items-center gap-1.5 group/btn">
-                          <FiShoppingCart className="text-sm group-hover/btn:animate-bounce"/> {t('home.homeAddToCart')}
-                        </button>
-                      ) : (
-                        <div className="flex items-center bg-gray-50 border border-pink-200 rounded-xl overflow-hidden shadow-inner h-9 w-28 justify-between px-0.5" onClick={(e) => e.stopPropagation()}>
-                           <button onClick={(e) => handleDecrease(e, product, cartItem.quantity)} className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-lg transition font-bold"><FiMinus size={14}/></button>
-                           {maxAlertProd === product._id ? <span className="text-red-600 text-[10px] font-black animate-pulse">MAX</span> : <input type="number" value={cartItem.quantity} onClick={(e) => e.stopPropagation()} onChange={(e) => handleInput(e, product)} className="w-8 text-center font-bold text-pink-700 bg-transparent outline-none text-sm appearance-none" />}
-                           <button onClick={(e) => handleIncrease(e, product)} className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-lg transition font-bold"><FiPlus size={14}/></button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+        return (
+          <div 
+              key={product._id} 
+              onClick={() => navigate(`/product/${product._id}`)} 
+              className="bg-white rounded-xl sm:rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col relative h-full animate-fade-in-up cursor-pointer hover:-translate-y-1" 
+              style={{ animationDelay: `${index * 0.05}s` }}
+          >
+            
+            {/* Resim Alanı */}
+            <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden flex-shrink-0">
+              <img 
+                  src={product.img || "https://placehold.co/400"} 
+                  alt={product.title} 
+                  className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
+              />
+              {product.category && (
+                <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">
+                  {product.category}
                 </div>
-              );
-            })}
+              )}
+            </div>
+
+            {/* Favori Butonu */}
+            <button 
+              onClick={(e) => handleToggleFavorite(e, product._id)} 
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 w-7 h-7 sm:w-10 sm:h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-md hover:scale-110 transition group/heart"
+            >
+              <span className={`text-sm sm:text-xl transition ${isFav ? "scale-110 text-red-500 drop-shadow-sm" : "scale-100 text-gray-300 group-hover/heart:text-red-400"}`}>
+                {isFav ? <FaHeart/> : <FaRegHeart/>}
+              </span>
+            </button>
+
+            {/* Kart İçeriği */}
+            <div className="p-2 sm:p-4 lg:p-5 flex-1 flex flex-col justify-between">
+              <div>
+                  {/* Vendor */}
+                  <div className="text-[7px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5 sm:mb-1.5 flex items-center gap-0.5 sm:gap-1">
+                    <FaStore className="text-gray-300 text-[8px] sm:text-xs" /> 
+                    <span className="truncate">{vendorName}</span>
+                  </div>
+                  
+                  {/* Başlık */}
+                  <h3 
+                    className="text-[11px] sm:text-sm lg:text-base font-bold text-gray-900 mb-0.5 sm:mb-1 truncate leading-tight group-hover:text-pink-600 transition-colors" 
+                    title={product.title}
+                  >
+                    {product.title}
+                  </h3>
+                  
+                  {/* Açıklama - Mobilde gizli */}
+                  <p className="hidden sm:block text-xs text-gray-500 line-clamp-2 min-h-[2.5em] leading-relaxed">
+                    {product.desc}
+                  </p>
+              </div>
+              
+              {/* Fiyat & Miktar */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-2 sm:mt-4 relative border-t border-gray-50 pt-2 sm:pt-3 gap-1.5 sm:gap-0">
+                <div className="flex flex-col">
+                    <span className="text-[7px] sm:text-[9px] text-gray-400 font-bold uppercase tracking-widest">
+                      {t('common.price')}
+                    </span>
+                    <span className="text-sm sm:text-lg lg:text-xl font-black text-gray-900">
+                      £{product.price}
+                    </span>
+                </div>
+                
+                {!cartItem ? (
+                  <button 
+                    onClick={(e) => handleAddToCart(e, product)} 
+                    className="w-full sm:w-auto bg-white border-2 border-gray-100 text-gray-800 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold hover:border-pink-500 hover:bg-pink-50 hover:text-pink-600 transition-all active:scale-95 shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 group/btn"
+                  >
+                    <FiShoppingCart className="text-xs sm:text-sm group-hover/btn:animate-bounce"/> 
+                    <span className="hidden xs:inline sm:inline">{t('home.homeAddToCart')}</span>
+                    <span className="xs:hidden sm:hidden">{t('common.add') || 'Add'}</span>
+                  </button>
+                ) : (
+                  <div 
+                    className="flex items-center bg-gray-50 border border-pink-200 rounded-lg sm:rounded-xl overflow-hidden shadow-inner h-7 sm:h-9 w-full sm:w-28 justify-between px-0.5" 
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                     <button 
+                       onClick={(e) => handleDecrease(e, product, cartItem.quantity)} 
+                       className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold"
+                     >
+                       <FiMinus size={12} className="sm:w-3.5 sm:h-3.5"/>
+                     </button>
+                     
+                     {maxAlertProd === product._id ? (
+                       <span className="text-red-600 text-[9px] sm:text-[10px] font-black animate-pulse">MAX</span>
+                     ) : (
+                       <input 
+                         type="number" 
+                         value={cartItem.quantity} 
+                         onClick={(e) => e.stopPropagation()} 
+                         onChange={(e) => handleInput(e, product)} 
+                         className="w-6 sm:w-8 text-center font-bold text-pink-700 bg-transparent outline-none text-xs sm:text-sm appearance-none" 
+                       />
+                     )}
+                     
+                     <button 
+                       onClick={(e) => handleIncrease(e, product)} 
+                       className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold"
+                     >
+                       <FiPlus size={12} className="sm:w-3.5 sm:h-3.5"/>
+                     </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        )}
-      </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
       {itemToDelete && <ConfirmModal title={`${itemToDelete.title.toUpperCase()} ÇIKARILSIN MI?`} message={`"${itemToDelete.title}" sepetten silinecek.`} isDanger={true} onConfirm={confirmDelete} onCancel={() => setItemToDelete(null)} />}
     </div>

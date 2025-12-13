@@ -35,6 +35,31 @@ const deleteFromCloudinary = async (url) => {
   }
 };
 
+
+// 9. TÜM KULLANICILARI GETİR (ADMİN)
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 13. EHLİYET KONTROL (CRON JOB)
+router.get('/check-licenses', verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const users = await User.find({ role: 'courier' });
+    // Kontrol mantığı buraya eklenebilir
+    res.send("Kontrol tamamlandı.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // =============================================================================
 // 1. KULLANICI GÜNCELLEME (GENEL PROFİL)
 // =============================================================================
@@ -349,22 +374,8 @@ router.get('/vendor-profile/:id',  async (req, res) => {
   }
 });
 
-// =============================================================================
-// ======================= ADMİN ROTALARI ======================================
-// =============================================================================
 
-// 9. TÜM KULLANICILARI GETİR (ADMİN)
-router.get('/', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const users = await User.find()
-      .select('-password')
-      .sort({ createdAt: -1 });
 
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 // 10. ROL DEĞİŞTİR (ADMİN)
 router.put('/:id/role', verifyTokenAndAdmin, async (req, res) => {
@@ -478,15 +489,6 @@ router.put('/:id/application-status', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// 13. EHLİYET KONTROL (CRON JOB)
-router.get('/check-licenses', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const users = await User.find({ role: 'courier' });
-    // Kontrol mantığı buraya eklenebilir
-    res.send("Kontrol tamamlandı.");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 
 module.exports = router;

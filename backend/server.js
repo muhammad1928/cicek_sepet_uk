@@ -51,6 +51,9 @@ const allowedOrigins = [
   "http://localhost:5173",                  // Geliştirme ortamı
   "https://cicek-sepet-uk.vercel.app",      // Canlı Frontend (Slashsız)
   "https://cicek-sepet-uk.vercel.app/",     // Canlı Frontend (Slashlı - Bazen tarayıcı ekler)
+  "https://fesfu-frontend-909711828478.europe-west2.run.app", // GCP Frontend
+  'https://fesfu.co.uk',      // <--- BUNU EKLE
+  'https://www.fesfu.co.uk',   // <--- BUNU DA EKLE
   process.env.CLIENT_URL                    // .env dosyasından gelen (Yedek)
 ];
 

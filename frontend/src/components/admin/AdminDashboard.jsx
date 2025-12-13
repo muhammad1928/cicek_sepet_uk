@@ -172,8 +172,8 @@ const AdminDashboard = () => {
     <div className="space-y-8 animate-fade-in pb-20">
       
       <div className="mb-6 border-b border-gray-100 pb-4">
-        <h2 className="text-3xl font-black text-gray-800 tracking-tight">Genel Bakış</h2>
-        <p className="text-gray-500 text-sm">Platformun anlık performans özeti.</p>
+        <h2 className="text-3xl font-black text-gray-800 tracking-tight">General</h2>
+        <p className="text-gray-500 text-sm">Platform current status overview.</p>
       </div>
 
       {/* İSTATİSTİK KARTLARI */}
@@ -185,52 +185,52 @@ const AdminDashboard = () => {
       </div>
 
       {/* --- 1. SATIR: SİPARİŞ ANALİZİ --- */}
-      <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-pink-500 pl-3">Sipariş Analizi</h3>
+      <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-pink-500 pl-3">Order Analysis</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
-          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Sipariş Durum Dağılımı</h3>
+          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Order Status Distribution</h3>
           <div className="w-full h-full flex justify-center items-center relative">
             {statusChartData ? (
               <Doughnut 
                 data={statusChartData} 
                 options={{ maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }} 
               />
-            ) : <p className="text-gray-400">Veri yok.</p>}
+            ) : <p className="text-gray-400">No Data</p>}
           </div>
         </div>
 
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
-           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Son 7 Günlük Kazanç</h3>
+           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Last 7 Days Revenue</h3>
            <div className="w-full h-full relative">
              {revenueChartData ? (
                 <Line 
                   data={revenueChartData} 
                   options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } } }}
                 />
-             ) : <p className="text-gray-400 text-center mt-20">Veri yok.</p>}
+             ) : <p className="text-gray-400 text-center mt-20">No Data</p>}
            </div>
         </div>
       </div>
 
       {/* --- 2. SATIR: KULLANICI ANALİZİ --- */}
-      <h3 className="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-blue-500 pl-3">Kullanıcı Analizi</h3>
+      <h3 className="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-blue-500 pl-3">User Analysis</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
-          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Kullanıcı Rol Dağılımı</h3>
+          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">User Role Distribution</h3>
           <div className="w-full h-full flex justify-center items-center relative">
             {userRoleChartData ? (
               <Doughnut 
                 data={userRoleChartData} 
                 options={{ maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }} 
               />
-            ) : <p className="text-gray-400">Veri yok.</p>}
+            ) : <p className="text-gray-400">No Data</p>}
           </div>
         </div>
 
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
-           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Yeni Üye Katılımı (Son 7 Gün)</h3>
+           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">New User Signups (Last 7 Days)</h3>
            <div className="w-full h-full relative">
              {userGrowthChartData ? (
                 <Bar 
@@ -242,7 +242,7 @@ const AdminDashboard = () => {
                     scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
                   }}
                 />
-             ) : <p className="text-gray-400 text-center mt-20">Veri yok.</p>}
+             ) : <p className="text-gray-400 text-center mt-20">No Data</p>}
            </div>
         </div>
       </div>

@@ -47,9 +47,9 @@ const Sidebar = ({ user, orderCount, activeTab, setActiveTab, onLogout }) => {
 
   // Menü öğeleri yönetimi kolaylaştırmak için diziye alındı
   const menuItems = [
-    { name: "orders", icon: <FiBox />, label: t("userSidebar.myOrders") },
-    { name: "addresses", icon: <FiMapPin />, label: t("userSidebar.adressBook") },
-    { name: "info", icon: <FiUser />, label: t("userSidebar.informationPassword") },
+    { name: "orders", icon: <FiBox />, label: t("profilePage.userSidebar.myOrders") },
+    { name: "addresses", icon: <FiMapPin />, label: t("profilePage.userSidebar.adressBook") },
+    { name: "info", icon: <FiUser />, label: t("profilePage.userSidebar.informationPassword") },
   ];
 
   return (
@@ -98,7 +98,7 @@ const Sidebar = ({ user, orderCount, activeTab, setActiveTab, onLogout }) => {
             className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition flex items-center gap-3 group"
           >
             <FiLogOut className="text-lg group-hover:translate-x-1 transition-transform" /> 
-            {t("userSidebar.logout")}
+            {t("profilePage.userSidebar.logout")}
           </button>
         </div>
       </nav>
