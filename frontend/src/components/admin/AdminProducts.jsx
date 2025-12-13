@@ -4,11 +4,22 @@ import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 
-const CATEGORIES = ["All", "Birthday", "Anniversary", "Indoor Flowers", "Edible Gifts", "Designer Flowers", "Roses", "Orchids"];
-
+// YENİ
+const CATEGORY_OPTIONS = [
+  { key: 'birthday', label: 'Birthday / Doğum Günü' },
+  { key: 'anniversary', label: 'Anniversary / Yıldönümü' },
+  { key: 'indoor', label: 'Indoor Flowers / İç Mekan' },
+  { key: 'edible', label: 'Edible Gifts / Yenilebilir' },
+  { key: 'designFlowers', label: 'Designer Flowers / Tasarım' },
+  { key: 'rose', label: 'Roses / Güller' },
+  { key: 'orchid', label: 'Orchids / Orkideler' },
+  { key: 'daisy', label: 'Daisies / Papatyalar' },
+];
 const AdminProducts = () => {
+  const { t } = useTranslation();
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -19,7 +30,7 @@ const AdminProducts = () => {
   const [uploading, setUploading] = useState(false);
   const [confirmData, setConfirmData] = useState(null);
   
-  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, isActive: true, category: "Doğum Günü" };
+  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, isActive: true, category: "birthday" };
   const [formData, setFormData] = useState(initialForm);
 
   // Veri Çekme
@@ -84,9 +95,9 @@ const AdminProducts = () => {
     } catch { notify("Error", "error"); }
   };
 
+  
   const handleEditClick = (p) => { 
-    // isActive değeri direkt product objesinden alınır, bu da formdaki checkbox'ı doğru bağlar
-    setFormData({ ...p, category: p.category || "Birthday" }); 
+    setFormData({ ...p, category: p.category || "birthday" }); 
     setEditMode(p._id); setShowForm(true); window.scrollTo(0,0); 
   };
 
@@ -135,7 +146,15 @@ const AdminProducts = () => {
                 <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Price</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
                 <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Stock</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded" /></div>
             </div>
-            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Category</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
+            <div>
+              <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Category</label>
+              <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white">
+                <option value="">Select Category</option>
+                {CATEGORY_OPTIONS.map(opt => (
+                  <option key={opt.key} value={opt.key}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
             <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Image</label><div className="flex gap-2 border p-2 rounded bg-gray-50"><label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 transition shadow-sm"><FiCamera /> {uploading?"...":"Select"}<input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/></label><input name="img" value={formData.img} onChange={handleChange} className="flex-1 text-xs outline-none bg-transparent" placeholder="URL" /></div></div>
             <div className="md:col-span-2"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Description</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-20" /></div>
             
@@ -177,7 +196,9 @@ const AdminProducts = () => {
 
               <div className="h-40 bg-gray-100 relative">
                 <img src={product.img || "https://placehold.co/400"} className={`w-full h-full object-cover object-top transition duration-500 ${!product.isActive ? "grayscale" : "group-hover:scale-105"}`} />
-                <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded shadow">{product.category}</span>
+                <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded shadow">
+                  {t(`home.categories1.${product.category}`) || product.category}
+                </span>
               </div>
 
               <div className="p-4 flex-1 flex flex-col">

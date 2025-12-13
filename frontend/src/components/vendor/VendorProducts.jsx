@@ -5,7 +5,17 @@ import ConfirmModal from "../ConfirmModal";
 import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
-const CATEGORIES = ["Doğum Günü", "Yıldönümü", "İç Mekan", "Yenilebilir Çiçek", "Tasarım Çiçek"];
+// YENİ - Vendor sadece seçebilir, yeni ekleyemez
+const CATEGORY_OPTIONS = [
+  { key: 'birthday', label: 'Birthday / Doğum Günü' },
+  { key: 'anniversary', label: 'Anniversary / Yıldönümü' },
+  { key: 'indoor', label: 'Indoor Flowers / İç Mekan' },
+  { key: 'edible', label: 'Edible Gifts / Yenilebilir' },
+  { key: 'designFlowers', label: 'Designer Flowers / Tasarım' },
+  { key: 'rose', label: 'Roses / Güller' },
+  { key: 'orchid', label: 'Orchids / Orkideler' },
+  { key: 'daisy', label: 'Daisies / Papatyalar' },
+];
 
 const VendorProducts = ({ user }) => {
   const { t } = useTranslation();
@@ -19,15 +29,15 @@ const VendorProducts = ({ user }) => {
   const [editMode, setEditMode] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
   
-  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, category: "Doğum Günü", isActive: true };
+  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, category: "birthday", isActive: true };
   const [formData, setFormData] = useState(initialForm);
 
   // RENK KONTROLÜ (STOK)
   const getCardStyle = (stock, isActive) => {
-    if (!isActive) return "border-gray-200 opacity-60 grayscale"; // Pasif
-    if (stock <= 0) return "border-red-500 bg-red-50"; // Tükenmiş
-    if (stock < 5) return "border-yellow-400 bg-yellow-50"; // Kritik
-    return "border-gray-200 hover:border-pink-300"; // Normal
+    if (!isActive) return "border-gray-200 opacity-75 grayscale bg-gray-50";
+    if (stock <= 0) return "border-red-500 bg-red-50 ring-2 ring-red-100";
+    if (stock < 5) return "border-yellow-400 bg-yellow-50 ring-2 ring-yellow-100";
+    return "border-gray-200 hover:border-pink-300";
   };
 
   // Ürünleri Çek
@@ -172,9 +182,17 @@ const VendorProducts = ({ user }) => {
              <div className="flex gap-2">
                <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.price')} (£)</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" required /></div>
                <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.stock')}</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
-             </div>
-             <div><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.category')}</label><select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">{CATEGORIES.map(c => <option key={c}>{c}</option>)}</select></div>
-             <div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.category')}</label>
+                <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500">
+                  <option value="">{t('vendorProducts.selectCategory') || 'Select Category'}</option>
+                  {CATEGORY_OPTIONS.map(opt => (
+                  <option key={opt.key} value={opt.key}>{opt.label}</option>
+                ))}
+              </select>
+              </div>
+              <div>
                <label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.image')}</label>
                <div className="flex items-center gap-2 border p-2 rounded bg-gray-50 border-dashed border-gray-300 hover:border-pink-400 transition">
                   <label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 shadow-sm hover:bg-gray-100">
@@ -202,90 +220,82 @@ const VendorProducts = ({ user }) => {
 
       {/* --- ÜRÜN LİSTESİ --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map(p => {
-          // Kart Rengi Mantığı (Stok Durumuna Göre)
-          let cardBorderClass = "border-gray-200 hover:border-pink-300"; // Varsayılan
-          if (!p.isActive) cardBorderClass = "border-gray-200 opacity-75 grayscale bg-gray-50"; // Pasif
-          else if (p.stock <= 0) cardBorderClass = "border-red-500 bg-red-50 ring-2 ring-red-100"; // Tükenmiş (Kırmızı)
-          else if (p.stock < 5) cardBorderClass = "border-yellow-400 bg-yellow-50 ring-2 ring-yellow-100"; // Kritik (Sarı)
-
-          return (
-            <div key={p._id} className={`rounded-2xl border shadow-sm overflow-hidden transition-all duration-300 group relative flex flex-col ${cardBorderClass}`}>
+        {filteredProducts.map(p => (
+          <div key={p._id} className={`rounded-2xl border shadow-sm overflow-hidden transition-all duration-300 group relative flex flex-col ${getCardStyle(p.stock, p.isActive)}`}>
+            
+            {/* --- DURUM ROZETLERİ (SAĞ ÜST) --- */}
+            <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
+              {/* Yayında / Gizli Butonu */}
+              <button 
+                onClick={() => handleToggleStatus(p)} 
+                className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-md transition transform active:scale-95 flex items-center gap-1 ${p.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-800 text-white hover:bg-black"}`}
+              >
+                {p.isActive ? `🟢 ${t('vendorProducts.live')}` : `⚫ ${t('vendorProducts.hidden')}`}
+              </button>
               
-              {/* --- DURUM ROZETLERİ (SAĞ ÜST) --- */}
-              <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
-                {/* Yayında / Gizli Butonu */}
-                <button 
-                  onClick={() => handleToggleStatus(p)} 
-                  className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-md transition transform active:scale-95 flex items-center gap-1 ${p.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-800 text-white hover:bg-black"}`}
-                >
-                   {p.isActive ? `🟢 ${t('vendorProducts.live')}` : `⚫ ${t('vendorProducts.hidden')}`}
-                </button>
-                
-                {/* Stok Uyarıları */}
-                {p.stock <= 0 && (
-                  <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-md animate-pulse">
-                    ⛔ {t('vendorProducts.soldOut')}
-                  </span>
-                )}
-                {p.stock > 0 && p.stock < 5 && (
-                  <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
-                    ⚠️ {t('vendorProducts.last')} {p.stock}
-                  </span>
-                )}
-              </div>
-
-              {/* --- RESİM ALANI --- */}
-              <div className="h-48 relative bg-gray-200 overflow-hidden">
-                <img 
-                  src={p.img || "https://placehold.co/400"} 
-                  className={`w-full h-full object-cover transition duration-700 ${!p.isActive ? "grayscale" : "group-hover:scale-110"}`} 
-                  alt={p.title}
-                />
-                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3 pt-8">
-                   <span className="text-white text-[10px] font-bold bg-black/30 backdrop-blur-md px-2 py-1 rounded border border-white/20">
-                     {p.category}
-                   </span>
-                </div>
-              </div>
-
-              {/* --- İÇERİK ALANI --- */}
-              <div className="p-5 flex-1 flex flex-col">
-                <h4 className="font-bold text-gray-800 mb-1 truncate text-lg" title={p.title}>
-                  {p.title}
-                </h4>
-                
-                <div className="flex justify-between items-end mb-4">
-                   <span className="text-xl font-extrabold text-pink-600">£{p.price}</span>
-                   <span className="text-xs text-gray-400 font-mono">ID: {p._id.slice(-4)}</span>
-                </div>
-
-                {/* Hızlı Stok Güncelleme */}
-                <div className="mt-auto pt-3 border-t border-gray-200/60 flex justify-between items-center mb-4">
-                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('vendorProducts.quickStock')}</span>
-                   <QuickStockUpdate product={p} refresh={fetchProducts} />
-                </div>
-
-                {/* Aksiyon Butonları */}
-                <div className="grid grid-cols-2 gap-3">
-                   <button 
-                     onClick={() => handleEditClick(p)} 
-                     className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2.5 rounded-xl font-bold hover:bg-blue-100 transition border border-blue-100"
-                   >
-                     <FiEdit /> {t('vendorProducts.edit')}
-                   </button>
-                   <button 
-                     onClick={() => handleDeleteRequest(p._id)} 
-                     className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2.5 rounded-xl font-bold hover:bg-red-100 transition border border-red-100"
-                   >
-                     <FiTrash2 /> {t('vendorProducts.delete')}
-                   </button>
-                </div>
-              </div>
-
+              {/* Stok Uyarıları */}
+              {p.stock <= 0 && (
+                <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-md animate-pulse">
+                  ⛔ {t('vendorProducts.soldOut')}
+                </span>
+              )}
+              {p.stock > 0 && p.stock < 5 && (
+                <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
+                  ⚠️ {t('vendorProducts.last')} {p.stock}
+                </span>
+              )}
             </div>
-          );
-        })}
+
+            {/* --- RESİM ALANI --- */}
+            <div className="h-48 relative bg-gray-200 overflow-hidden">
+              <img 
+                src={p.img || "https://placehold.co/400"} 
+                className={`w-full h-full object-cover transition duration-700 ${!p.isActive ? "grayscale" : "group-hover:scale-110"}`} 
+                alt={p.title}
+              />
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3 pt-8">
+                <span className="text-white text-[10px] font-bold bg-black/30 backdrop-blur-md px-2 py-1 rounded border border-white/20">
+                  {t(`home.categories1.${p.category}`) || p.category}
+                </span>
+              </div>
+            </div>
+
+            {/* --- İÇERİK ALANI --- */}
+            <div className="p-5 flex-1 flex flex-col">
+              <h4 className="font-bold text-gray-800 mb-1 truncate text-lg" title={p.title}>
+                {p.title}
+              </h4>
+              
+              <div className="flex justify-between items-end mb-4">
+                <span className="text-xl font-extrabold text-pink-600">£{p.price}</span>
+                <span className="text-xs text-gray-400 font-mono">ID: {p._id.slice(-4)}</span>
+              </div>
+
+              {/* Hızlı Stok Güncelleme */}
+              <div className="mt-auto pt-3 border-t border-gray-200/60 flex justify-between items-center mb-4">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('vendorProducts.quickStock')}</span>
+                <QuickStockUpdate product={p} refresh={fetchProducts} />
+              </div>
+
+              {/* Aksiyon Butonları */}
+              <div className="grid grid-cols-2 gap-3">
+                <button 
+                  onClick={() => handleEditClick(p)} 
+                  className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2.5 rounded-xl font-bold hover:bg-blue-100 transition border border-blue-100"
+                >
+                  <FiEdit /> {t('vendorProducts.edit')}
+                </button>
+                <button 
+                  onClick={() => handleDeleteRequest(p._id)} 
+                  className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2.5 rounded-xl font-bold hover:bg-red-100 transition border border-red-100"
+                >
+                  <FiTrash2 /> {t('vendorProducts.delete')}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        ))}
       </div>
 
       {/* ONAY MODALI */}
@@ -296,12 +306,12 @@ const VendorProducts = ({ user }) => {
 
 // Hızlı Stok Bileşeni
 const QuickStockUpdate = ({ product, refresh }) => {
+  const { t } = useTranslation();
   const [stock, setStock] = useState(product.stock);
   const [loading, setLoading] = useState(false);
   const { notify } = useCart();
 
   const handleUpdate = async () => {
-    const { t } = useTranslation();
     if (Number(stock) === product.stock) return;
     setLoading(true);
     try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify(t('vendorProducts.stockUpdated'), "success"); refresh(); } 

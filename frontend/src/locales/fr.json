@@ -653,7 +653,8 @@
     "quickStock": "Stock rapide",
     "edit": "Modifier",
     "delete": "Supprimer",
-    "stockUpdated": "Stock mis à jour !"
+    "stockUpdated": "Stock mis à jour !",
+    "selectCategory": "Sélectionner une catégorie"
   },
   "vendorOrders": {
     "updated": "Mis à jour",

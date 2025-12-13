@@ -647,7 +647,8 @@
     "quickStock": "Scorte rapide",
     "edit": "Modifica",
     "delete": "Elimina",
-    "stockUpdated": "Scorte aggiornate!"
+    "stockUpdated": "Scorte aggiornate!",
+    "selectCategory": "Seleziona categoria"
   },
   "vendorOrders": {
     "updated": "Aggiornato",

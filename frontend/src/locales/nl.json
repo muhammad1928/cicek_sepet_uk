@@ -647,7 +647,8 @@
     "quickStock": "Snelle voorraad",
     "edit": "Bewerken",
     "delete": "Verwijderen",
-    "stockUpdated": "Voorraad bijgewerkt!"
+    "stockUpdated": "Voorraad bijgewerkt!",
+    "selectCategory": "Selecteer categorie"
   },
   "vendorOrders": {
     "updated": "Bijgewerkt",

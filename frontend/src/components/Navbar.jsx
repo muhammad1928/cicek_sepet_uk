@@ -37,7 +37,7 @@ const Navbar = () => {
     localStorage.removeItem("user");
     setUser(null);
     window.dispatchEvent(new Event("user-change"));
-    navigate("/homepage");
+    navigate("/");
     setIsMobileMenuOpen(false);
     window.location.reload();
   };

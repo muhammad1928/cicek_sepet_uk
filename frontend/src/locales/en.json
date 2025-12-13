@@ -683,7 +683,8 @@
     "quickStock": "Quick Stock",
     "edit": "Edit",
     "delete": "Delete",
-    "stockUpdated": "Stock updated!"
+    "stockUpdated": "Stock updated!",
+    "selectCategory": "Select Category"
   },
 
   "vendorOrders": {

@@ -665,7 +665,8 @@
     "quickStock": "Snabblager",
     "edit": "Redigera",
     "delete": "Ta bort",
-    "stockUpdated": "Lager uppdaterat!"
+    "stockUpdated": "Lager uppdaterat!",
+    "selectCategory": "Välj kategori"
   },
   "vendorOrders": {
     "updated": "Uppdaterad",

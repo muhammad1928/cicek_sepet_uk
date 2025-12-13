@@ -14,16 +14,26 @@ const HomePage = () => {
   const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Tümü");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [loading, setLoading] = useState(true);
   const [maxAlertProd, setMaxAlertProd] = useState(null); 
 
-  const CATEGORIES = [t('home.categories1.all'), t('home.categories1.birthday'), t('home.categories1.anniversary'), t('home.categories1.indoor'), t('home.categories1.eadible'), t('home.categories1.designFlowers'), t('home.categories1.rose'), t('home.categories1.orchid'), t('home.categories1.daisy')];
+  const CATEGORY_KEYS = ['all', 'birthday', 'anniversary', 'indoor', 'edible', 'designFlowers', 'rose', 'orchid', 'daisy'];
 
-  const getCategoryIcon = (category) => {
-  const icons = { [t('home.categories1.birthday')]: "🎂", [t('home.categories1.anniversary')]: "💍", [t('home.categories1.indoor')]: "🪴", [t('home.categories1.eadible')]: "🍫", [t('home.categories1.designFlowers')]: "✨", [t('home.categories1.rose')]: "🌹", [t('home.categories1.orchid')]: "🌸", [t('home.categories1.daisy')]: "🌼" };
-  return icons[category] || "💐";
-};
+  const getCategoryIcon = (key) => {
+  const icons = {
+    birthday: "🎂",
+    anniversary: "💍",
+    indoor: "🪴",
+    edible: "🍫",
+    designFlowers: "✨",
+    rose: "🌹",
+    orchid: "🌸",
+    daisy: "🌼",
+    all: "💐"
+  };
+  return icons[key] || "💐";
+  };
 
 
   const [showCategoryBar, setShowCategoryBar] = useState(true);
@@ -70,10 +80,14 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    let result = products;
-    if (selectedCategory !== "Tümü") result = result.filter(p => p.category === selectedCategory);
-    if (searchTerm) result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
-    setFilteredProducts(result);
+  let result = products;
+  if (selectedCategory !== "all") {
+    result = result.filter(p => p.category === selectedCategory);
+  }
+  if (searchTerm) {
+    result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+  setFilteredProducts(result);
   }, [selectedCategory, searchTerm, products]);
 
   // Drag Functions
@@ -121,23 +135,22 @@ const HomePage = () => {
               className="flex gap-3 overflow-x-auto no-scrollbar pb-1 cursor-grab active:cursor-grabbing select-none"
               onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}
             >
-            {CATEGORIES.map((cat) => (
-                <button 
-                key={cat} 
-                onClick={() => !isDragging && setSelectedCategory(cat)}
-                // RESPONSIVE STİL: text-xs (mobil) -> text-sm (desktop) | px-4 (mobil) -> px-6 (desktop)
+            {CATEGORY_KEYS.map((key) => (
+              <button 
+                key={key} 
+                onClick={() => !isDragging && setSelectedCategory(key)}
                 className={`
-                    px-2 py-1 md:px-6 md:py-2.5 rounded-full 
-                    text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap flex items-center gap-2 border flex-shrink-0 select-none
-                    ${selectedCategory === cat 
+                  px-2 py-1 md:px-6 md:py-2.5 rounded-full 
+                  text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap flex items-center gap-2 border flex-shrink-0 select-none
+                  ${selectedCategory === key 
                     ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-md border-transparent scale-105" 
                     : "bg-white text-gray-600 border-gray-200 hover:border-pink-200 hover:text-pink-600 hover:shadow-sm"
-                    }
+                  }
                 `}
-                >
-                <span className="text-lg pointer-events-none">{getCategoryIcon(cat)}</span> 
-                <span className="pointer-events-none">{cat}</span>
-                </button>
+              >
+                <span className="text-lg pointer-events-none">{getCategoryIcon(t(`home.categories1.${key}`))}</span>
+                <span className="pointer-events-none">{t(`home.categories1.${key}`)}</span>
+              </button>
             ))}
             </div>
         </div>
@@ -149,7 +162,7 @@ const HomePage = () => {
     <div className="text-center text-gray-400 py-16 sm:py-24 animate-fade-in bg-white rounded-2xl sm:rounded-3xl border-2 border-dashed border-gray-200 mx-auto max-w-lg">
        <div className="text-4xl sm:text-6xl mb-4 opacity-50 grayscale">🥀</div>
        <p className="text-sm sm:text-lg font-medium text-gray-500">{t('home.notFound')}</p>
-       <button onClick={() => {setSelectedCategory("Tümü")}} className="mt-4 sm:mt-6 text-white bg-gray-800 px-4 sm:px-6 py-2 rounded-full text-sm font-bold hover:bg-black transition shadow-lg">{t('home.showAll')}</button>
+       <button onClick={() => setSelectedCategory("all")} className="mt-4 sm:mt-6 text-white bg-gray-800 px-4 sm:px-6 py-2 rounded-full text-sm font-bold hover:bg-black transition shadow-lg">{t('home.showAll')}</button>
     </div>
   ) : (
     // GRID: 2 (Mobil) -> 3 (Tablet) -> 4 (Desktop)
@@ -175,10 +188,10 @@ const HomePage = () => {
                   className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
               />
               {product.category && (
-                <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">
-                  {product.category}
-                </div>
-              )}
+              <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">
+                {t(`home.categories1.${product.category}`)}
+              </div>
+            )}
             </div>
 
             {/* Favori Butonu */}

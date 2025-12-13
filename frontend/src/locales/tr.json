@@ -654,7 +654,8 @@
     "quickStock":"Hızlı Stok",
     "edit":"Düzenle",
     "delete":"Sil",
-    "stockUpdated":"Stok güncellendi!"
+    "stockUpdated":"Stok güncellendi!",
+    "selectCategory": "Kategori Seç"
   },
   "vendorOrders":{
     "updated":"Güncellendi",
