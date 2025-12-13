@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { publicRequest } from "../requestMethods";
-import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
