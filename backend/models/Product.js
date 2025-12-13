@@ -24,6 +24,7 @@ const ProductSchema = new mongoose.Schema({
   },
   category: {
     type: String,
+    enum: ['birthday', 'anniversary', 'indoor', 'edible', 'designFlowers', 'rose', 'orchid', 'daisy'],
     index: true
   }, // Kategori filtresi için
   stock: {

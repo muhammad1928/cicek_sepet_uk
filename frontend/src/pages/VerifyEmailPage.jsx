@@ -10,34 +10,38 @@ const VerifyEmailPage = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   
-  const [status, setStatus] = useState("loading"); // loading | success | error
-  const [message, setMessage] = useState(t("verifyEmail.verifying"));
+  // Token yoksa baştan error state'i ile başla
+  const [status, setStatus] = useState(() => token ? "loading" : "error");
+  const [message, setMessage] = useState(() => 
+    token ? t("verifyEmail.verifying") : t("verifyEmail.tokenNotFound")
+  );
 
   useEffect(() => {
+    // Token yoksa çık, zaten error state'indeyiz
+    if (!token) return;
+
     const verifyAccount = async () => {
       try {
-        // Backend'e token'ı gönder
         await publicRequest.post("/auth/verify", { token });
         
         setStatus("success");
         setMessage(t("verifyEmail.messageVerified"));
         
-        // 3 Saniye sonra login'e yönlendir
         setTimeout(() => navigate("/login"), 3000);
 
       } catch (err) {
         setStatus("error");
-        setMessage(err.response?.data?.message || t("verifyEmail.invalidOrExpired"));
+        const errorKey = err.response?.data?.message;
+        if (errorKey && (errorKey.startsWith('auth.') || errorKey.startsWith('verify.'))) {
+          setMessage(t(errorKey));
+        } else {
+          setMessage(errorKey || t("verifyEmail.invalidOrExpired"));
+        }
       }
     };
 
-    if (token) {
-      verifyAccount();
-    } else {
-        setStatus("error");
-        setMessage(t("verifyEmail.tokenNotFound"));
-    }
-  }, [token, navigate]);
+    verifyAccount();
+  }, [token, navigate, t]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-100 p-4 font-sans relative overflow-hidden pt-20">
