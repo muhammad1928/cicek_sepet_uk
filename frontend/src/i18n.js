@@ -13,7 +13,7 @@ import nl from "./locales/nl.json";
 
 // JSON dosyalarini guncellediginde bu surum numarasini degistir.
 // Bu islem, tarayicinin eski onbellegi silip yeni metinleri almasini zorlar.
-const APP_VERSION = "1.0.2"; 
+const APP_VERSION = "1.0.3"; 
 
 i18n
   .use(LanguageDetector) // Tarayıcı dilini algıla

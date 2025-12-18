@@ -6,7 +6,7 @@ const NotFoundPage = () => {
   const { t } = useTranslation();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center px-4">
-      <Seo title="Sayfa Bulunamadı" noindex={true} />
+      <Seo title="Fesfu Page Not Found" noindex={true} />
       
       <div className="text-9xl font-extrabold text-pink-200 select-none">404</div>
       <h1 className="text-3xl font-bold text-gray-800 -mt-12 mb-4 relative z-10">{t("notFound.title")}</h1>

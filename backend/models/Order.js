@@ -45,6 +45,12 @@ const OrderSchema = new mongoose.Schema({
       img: String,
       // İleride satıcı bazlı raporlama için vendor ID'sini buraya da ekleyebiliriz
       // ancak şu an product._id üzerinden populate ederek buluyoruz.
+      // YENİ: Seçilen Varyant Bilgisi
+      selectedVariant: {
+          size: String,   // "M", "L"
+          color: String,  // "Red", "Blue"
+          // İleride başka özellik gelirse buraya eklenir
+      }
     }
   ],
 

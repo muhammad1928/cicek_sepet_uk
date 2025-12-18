@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom"; 
 import Seo from "../components/Seo";
@@ -8,47 +8,34 @@ import { FaRegHeart, FaHeart, FaStore } from "react-icons/fa";
 import { FiShoppingCart, FiMinus, FiPlus } from "react-icons/fi";
 import { publicRequest } from "../requestMethods"; 
 import { useTranslation } from "react-i18next";
+import CategoryNav from "../components/CategoryNav";
 
+// --- DÜZELTME 1: HARİTA VERİSİNİ IMPORT ET ---
+import { CATEGORY_KEY_MAP } from "../data/categoryData"; 
 
 const HomePage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate(); 
+  
+  // --- STATE TANIMLAMALARI ---
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [loading, setLoading] = useState(true);
-  const [maxAlertProd, setMaxAlertProd] = useState(null); 
-
-  // Kategori anahtarları (Database'deki ve JSON dosyasındaki karşılıklar)
-  const CATEGORY_KEYS = ['all', 'birthday', 'anniversary', 'indoor', 'edible', 'designFlowers', 'rose', 'orchid', 'daisy'];
-
-  // İkon fonksiyonu (Key alır, İkon döner)
-  const getCategoryIcon = (key) => {
-    const icons = {
-      birthday: "🎂",
-      anniversary: "💍",
-      indoor: "🪴",
-      edible: "🍫",
-      designFlowers: "✨",
-      rose: "🌹",
-      orchid: "🌸",
-      daisy: "🌼",
-      all: "💐"
-    };
-    return icons[key] || "💐";
-  };
-
-  const [showCategoryBar, setShowCategoryBar] = useState(true);
-  const lastScrollY = useRef(0);
   
-  const categoryContainerRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const navigate = useNavigate(); 
-  const { cart, addToCart, increaseQuantity, decreaseQuantity, updateItemQuantity, removeFromCart, favorites, toggleFavorite, searchTerm } = useCart();
+  const [maxAlertProd, setMaxAlertProd] = useState(null); 
   const [itemToDelete, setItemToDelete] = useState(null);
 
+  const { cart, addToCart, increaseQuantity, decreaseQuantity, updateItemQuantity, removeFromCart, favorites, toggleFavorite, searchTerm } = useCart();
+
+  // --- DÜZELTME 2: ÇEVİRİ YARDIMCI FONKSİYONU ---
+  const getCatLabel = (key) => {
+    // Eğer key haritada varsa yolunu al, yoksa kendisini kullan
+    const mappedKey = CATEGORY_KEY_MAP[key] || key;
+    return t(`home.categories1.${mappedKey}`);
+  };
+
+  // --- VERİ ÇEKME ---
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -57,62 +44,99 @@ const HomePage = () => {
         const active = res.data.filter(p => p.stock > 0 && p.isActive === true);
         setProducts(active);
         setFilteredProducts(active);
-      } catch (err) { console.error("Ürün hatası:", err); } 
-      finally { setLoading(false); }
+      } catch (err) { 
+        console.error("Ürün hatası:", err); 
+      } finally { 
+        setLoading(false); 
+      }
     };
     fetchProducts();
   }, []);
 
+  // --- FİLTRELEME MANTIĞI ---
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < 60) {
-        setShowCategoryBar(true);
-        lastScrollY.current = currentScrollY;
-        return;
-      }
-      if (Math.abs(currentScrollY - lastScrollY.current) > 5) {
-        setShowCategoryBar(currentScrollY < lastScrollY.current);
-        lastScrollY.current = currentScrollY;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    let result = products;
 
-  useEffect(() => {
-  let result = products;
-  if (selectedCategory !== "all") {
-    result = result.filter(p => p.category === selectedCategory);
-  }
-  if (searchTerm) {
-    result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
-  }
-  setFilteredProducts(result);
+    if (selectedCategory !== "all") {
+      result = result.filter(p => p.category === selectedCategory);
+    }
+
+    if (searchTerm) {
+      result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+
+    setFilteredProducts(result);
   }, [selectedCategory, searchTerm, products]);
 
-  // Drag Functions
-  const handleMouseDown = (e) => { setIsDragging(true); setStartX(e.pageX - categoryContainerRef.current.offsetLeft); setScrollLeft(categoryContainerRef.current.scrollLeft); };
-  const handleMouseLeave = () => { setIsDragging(false); };
-  const handleMouseUp = () => { setIsDragging(false); };
-  const handleMouseMove = (e) => { if (!isDragging) return; e.preventDefault(); const x = e.pageX - categoryContainerRef.current.offsetLeft; const walk = (x - startX) * 1; categoryContainerRef.current.scrollLeft = scrollLeft - walk; };
-
+  // --- YARDIMCI FONKSİYONLAR ---
   const getCartItem = (id) => cart.find(item => item._id === id);
-  const triggerMaxAlert = (id) => { setMaxAlertProd(id); setTimeout(() => setMaxAlertProd(null), 1000); };
-  const handleDecrease = (e, product, currentQty) => { e.stopPropagation(); if (currentQty === 1) setItemToDelete(product); else decreaseQuantity(product._id, product.title); };
-  const handleIncrease = (e, product) => { e.stopPropagation(); const qty = getCartItem(product._id)?.quantity || 0; if (qty >= product.stock) { triggerMaxAlert(product._id); return; } increaseQuantity(product._id, product.title, product.stock); };
-  const handleInput = (e, product) => { e.stopPropagation(); const val = parseInt(e.target.value); if (isNaN(val) || val < 1) return; if (val > product.stock) { triggerMaxAlert(product._id); updateItemQuantity(product._id, product.stock, product.stock, product.title); } else { updateItemQuantity(product._id, val, product.stock, product.title); } };
-  const handleAddToCart = (e, product) => { e.stopPropagation(); addToCart(product, 1); };
-  const handleToggleFavorite = (e, id) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(id); };
-  const confirmDelete = () => { if (itemToDelete) { removeFromCart(itemToDelete._id, itemToDelete.title); setItemToDelete(null); } };
+  
+  const triggerMaxAlert = (id) => { 
+    setMaxAlertProd(id); 
+    setTimeout(() => setMaxAlertProd(null), 1000); 
+  };
+
+  const handleDecrease = (e, product, currentQty) => { 
+    e.stopPropagation(); 
+    if (currentQty === 1) setItemToDelete(product); 
+    else decreaseQuantity(product._id, product.title); 
+  };
+
+  const handleIncrease = (e, product) => { 
+    e.stopPropagation(); 
+    const qty = getCartItem(product._id)?.quantity || 0; 
+    if (qty >= product.stock) { 
+      triggerMaxAlert(product._id); 
+      return; 
+    } 
+    increaseQuantity(product._id, product.title, product.stock); 
+  };
+
+  const handleInput = (e, product) => { 
+    e.stopPropagation(); 
+    const val = parseInt(e.target.value); 
+    if (isNaN(val) || val < 1) return; 
+    
+    if (val > product.stock) { 
+      triggerMaxAlert(product._id); 
+      updateItemQuantity(product._id, product.stock, product.stock, product.title); 
+    } else { 
+      updateItemQuantity(product._id, val, product.stock, product.title); 
+    } 
+  };
+
+  const handleAddToCart = (e, product) => { 
+    e.stopPropagation(); 
+    addToCart(product, 1); 
+  };
+
+  const handleToggleFavorite = (e, id) => { 
+    e.preventDefault(); 
+    e.stopPropagation(); 
+    toggleFavorite(id); 
+  };
+
+  const confirmDelete = () => { 
+    if (itemToDelete) { 
+      removeFromCart(itemToDelete._id, itemToDelete.title); 
+      setItemToDelete(null); 
+    } 
+  };
+
+  const handleCategorySelect = (cat) => {
+    setSelectedCategory(cat);
+  };
 
   return (
     <div className="min-h-screen bg-pink-100 font-sans text-gray-800 relative">
       <Seo title={`${t('seo.homePage.homeTitle')} ${t('seo.homePage.locationTitle')}`} description={t('seo.homeDescription')} />
 
-      <style>{` .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } `}</style>
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
 
-      {/* HERO */}
+      {/* HERO SECTION */}
       <div className="pt-40 pb-12 text-center bg-gradient-to-b from-pink-50 via-white to-purple-100 px-4">
         <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight animate-fade-in drop-shadow-sm">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">{t('home.heroTitle')}</span>
@@ -122,49 +146,38 @@ const HomePage = () => {
         </p>
       </div>
 
-      {/* --- KATEGORİ BAR (DÜZELTİLDİ) --- */}
-      <div 
-        className={`fixed left-0 right-0 z-40 py-3 transition-all duration-500 ease-in-out transform ${showCategoryBar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"}`}
-        style={{ top: "60px" }} 
-      >
-        <div className="absolute inset-0 bg-white/60 backdrop-blur-md border-b border-gray-100 shadow-sm"></div>
-        <div className="max-w-7xl mx-auto px-4 relative">
-            <div 
-              ref={categoryContainerRef}
-              className="flex gap-3 overflow-x-auto no-scrollbar pb-1 cursor-grab active:cursor-grabbing select-none"
-              onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}
-            >
-            {CATEGORY_KEYS.map((key) => (
-              <button 
-                key={key} 
-                onClick={() => !isDragging && setSelectedCategory(key)}
-                className={`
-                  px-2 py-1 md:px-6 md:py-2.5 rounded-full 
-                  text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap flex items-center gap-2 border flex-shrink-0 select-none
-                  ${selectedCategory === key 
-                    ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-md border-transparent scale-105" 
-                    : "bg-white text-gray-600 border-gray-200 hover:border-pink-200 hover:text-pink-600 hover:shadow-sm"
-                  }
-                `}
-              >
-                {/* DÜZELTME 1: Çevrilmiş metni değil, doğrudan 'key'i gönderiyoruz. Böylece ikonlar doğru gelir. */}
-                <span className="text-lg pointer-events-none">{getCategoryIcon(key)}</span>
-                
-                {/* DÜZELTME 2: Yazı için translation çağrısı. Dil dosyanızda 'home.categories1.edible' vb. olduğundan emin olun. */}
-                <span className="pointer-events-none">{t(`home.categories1.${key}`)}</span>
-              </button>
-            ))}
-            </div>
-        </div>
-      </div>
+      <CategoryNav 
+        activeCategory={selectedCategory} 
+        onSelectCategory={handleCategorySelect} 
+      />
 
-      {/* LİSTE ALANI */}
+      {/* ÜRÜN LİSTESİ */}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 pb-24 pt-4">
-        {loading ? <ProductSkeleton /> : filteredProducts.length === 0 ? (
-          <div className="text-center text-gray-400 py-16 sm:py-24 animate-fade-in bg-white rounded-2xl sm:rounded-3xl border-2 border-dashed border-gray-200 mx-auto max-w-lg">
-             <div className="text-4xl sm:text-6xl mb-4 opacity-50 grayscale">🥀</div>
-             <p className="text-sm sm:text-lg font-medium text-gray-500">{t('home.notFound')}</p>
-             <button onClick={() => setSelectedCategory("all")} className="mt-4 sm:mt-6 text-white bg-gray-800 px-4 sm:px-6 py-2 rounded-full text-sm font-bold hover:bg-black transition shadow-lg">{t('home.showAll')}</button>
+        {loading ? (
+          <ProductSkeleton /> 
+        ) : filteredProducts.length === 0 ? (
+          <div className="col-span-full py-16 sm:py-24 px-4 flex justify-center animate-fade-in">
+            <div className="bg-white rounded-[2rem] shadow-xl p-8 sm:p-12 text-center max-w-2xl border border-pink-50 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-purple-100 rounded-full blur-[60px] opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-100 rounded-full blur-[60px] opacity-50"></div>
+              <div className="relative z-10">
+                <div className="text-6xl sm:text-7xl mb-6 animate-bounce-slow inline-block drop-shadow-md">🎁</div>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">
+                  {searchTerm ? (
+                    <span>{t('home.searchNotFoundTitle', 'Gizli Bir Hazine mi?')} 🕵️‍♀️</span>
+                  ) : (
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
+                      {t('home.categoryEmptyTitle', 'Harika Şeyler Yolda!')}
+                    </span>
+                  )}
+                </h3>
+                <p className="text-gray-500 text-base sm:text-lg mb-8 leading-relaxed font-medium max-w-lg mx-auto">
+                  {searchTerm 
+                    ? t('home.searchNotFoundDesc', 'Aradığınız kelimeyle eşleşen bir ürün bulamadık.') 
+                    : t('home.categoryEmptyDesc', 'Bu koleksiyon tükendi! Yeni ürünler hazırlanıyor.')}
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
@@ -181,22 +194,22 @@ const HomePage = () => {
                     style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   
-                  {/* Resim Alanı */}
+                  {/* Ürün Görseli */}
                   <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden flex-shrink-0">
                     <img 
                         src={product.img || "https://placehold.co/400"} 
                         alt={product.title} 
                         className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
                     />
+                    
+                    {/* --- DÜZELTME 3: KATEGORİ İSMİNİ GETCATLABEL İLE AL --- */}
                     {product.category && (
                     <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">
-                      {/* Burada da kategorinin doğru çevrilmesini sağlıyoruz */}
-                      {t(`home.categories1.${product.category}`)}
+                      {getCatLabel(product.category)}
                     </div>
                   )}
                   </div>
 
-                  {/* Favori Butonu */}
                   <button 
                     onClick={(e) => handleToggleFavorite(e, product._id)} 
                     className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 w-7 h-7 sm:w-10 sm:h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-md hover:scale-110 transition group/heart"
@@ -206,30 +219,22 @@ const HomePage = () => {
                     </span>
                   </button>
 
-                  {/* Kart İçeriği */}
                   <div className="p-2 sm:p-4 lg:p-5 flex-1 flex flex-col justify-between">
                     <div>
-                        {/* Vendor */}
                         <div className="text-[7px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5 sm:mb-1.5 flex items-center gap-0.5 sm:gap-1">
                           <FaStore className="text-gray-300 text-[8px] sm:text-xs" /> 
                           <span className="truncate">{vendorName}</span>
                         </div>
                         
-                        {/* Başlık */}
-                        <h3 
-                          className="text-[11px] sm:text-sm lg:text-base font-bold text-gray-900 mb-0.5 sm:mb-1 truncate leading-tight group-hover:text-pink-600 transition-colors" 
-                          title={product.title}
-                        >
+                        <h3 className="text-[11px] sm:text-sm lg:text-base font-bold text-gray-900 mb-0.5 sm:mb-1 truncate leading-tight group-hover:text-pink-600 transition-colors" title={product.title}>
                           {product.title}
                         </h3>
                         
-                        {/* Açıklama - Mobilde gizli */}
                         <p className="hidden sm:block text-xs text-gray-500 line-clamp-2 min-h-[2.5em] leading-relaxed">
                           {product.desc}
                         </p>
                     </div>
                     
-                    {/* Fiyat & Miktar */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-2 sm:mt-4 relative border-t border-gray-50 pt-2 sm:pt-3 gap-1.5 sm:gap-0">
                       <div className="flex flex-col">
                           <span className="text-[7px] sm:text-[9px] text-gray-400 font-bold uppercase tracking-widest">
@@ -250,33 +255,16 @@ const HomePage = () => {
                           <span className="xs:hidden sm:hidden">{t('common.add') || 'Add'}</span>
                         </button>
                       ) : (
-                        <div 
-                          className="flex items-center bg-gray-50 border border-pink-200 rounded-lg sm:rounded-xl overflow-hidden shadow-inner h-7 sm:h-9 w-full sm:w-28 justify-between px-0.5" 
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                           <button 
-                             onClick={(e) => handleDecrease(e, product, cartItem.quantity)} 
-                             className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold"
-                           >
+                        <div className="flex items-center bg-gray-50 border border-pink-200 rounded-lg sm:rounded-xl overflow-hidden shadow-inner h-7 sm:h-9 w-full sm:w-28 justify-between px-0.5" onClick={(e) => e.stopPropagation()}>
+                           <button onClick={(e) => handleDecrease(e, product, cartItem.quantity)} className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold">
                              <FiMinus size={12} className="sm:w-3.5 sm:h-3.5"/>
                            </button>
-                           
                            {maxAlertProd === product._id ? (
                              <span className="text-red-600 text-[9px] sm:text-[10px] font-black animate-pulse">MAX</span>
                            ) : (
-                             <input 
-                               type="number" 
-                               value={cartItem.quantity} 
-                               onClick={(e) => e.stopPropagation()} 
-                               onChange={(e) => handleInput(e, product)} 
-                               className="w-6 sm:w-8 text-center font-bold text-pink-700 bg-transparent outline-none text-xs sm:text-sm appearance-none" 
-                             />
+                             <input type="number" value={cartItem.quantity} onClick={(e) => e.stopPropagation()} onChange={(e) => handleInput(e, product)} className="w-6 sm:w-8 text-center font-bold text-pink-700 bg-transparent outline-none text-xs sm:text-sm appearance-none" />
                            )}
-                           
-                           <button 
-                             onClick={(e) => handleIncrease(e, product)} 
-                             className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold"
-                           >
+                           <button onClick={(e) => handleIncrease(e, product)} className="w-7 sm:w-8 h-6 sm:h-8 flex items-center justify-center text-gray-400 hover:text-pink-600 hover:bg-white rounded-md sm:rounded-lg transition font-bold">
                              <FiPlus size={12} className="sm:w-3.5 sm:h-3.5"/>
                            </button>
                         </div>
@@ -290,7 +278,15 @@ const HomePage = () => {
         )}
       </div>
 
-      {itemToDelete && <ConfirmModal title={`${itemToDelete.title.toUpperCase()} ${t('home.questionRemove')}`} message={`"${itemToDelete.title}" ${t('home.questionRemoveDesc')}`} isDanger={true} onConfirm={confirmDelete} onCancel={() => setItemToDelete(null)} />}
+      {itemToDelete && (
+        <ConfirmModal 
+          title={`${itemToDelete.title.toUpperCase()} ${t('home.questionRemove')}`} 
+          message={`"${itemToDelete.title}" ${t('home.questionRemoveDesc')}`} 
+          isDanger={true} 
+          onConfirm={confirmDelete} 
+          onCancel={() => setItemToDelete(null)} 
+        />
+      )}
     </div>
   );
 };

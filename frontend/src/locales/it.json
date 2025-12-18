@@ -19,6 +19,7 @@
     "logoutSuccess": "Disconnessione effettuata."
   },
   "common": {
+    "back": "Indietro",
     "serverError": "Si è verificato un errore del server. Riprova più tardi.",
     "loading": "Caricamento...",
     "error": "Si è verificato un errore.",
@@ -60,31 +61,144 @@
     "lastUpdated": "Ultimo aggiornamento",
     "print": "Stampa / Salva come PDF"
   },
+
   "home": {
-    "heroTitle": "Rendi felici i tuoi cari",
+    "heroTitle": "Rendi Felici i Tuoi Cari",
     "heroSubtitle": "Consegniamo i fiori più freschi e i regali più speciali di Londra a casa tua lo stesso giorno.",
     "categories": "Categorie",
-    "featured": "In evidenza",
+    "featured": "In Evidenza",
     "categories_sticky": "Categorie",
     "notFound": "Nessun prodotto trovato corrispondente ai tuoi criteri.",
-    "showAll": "Mostra tutti i prodotti",
+    "searchNotFoundTitle": "È un tesoro nascosto?",
+    "searchNotFoundDesc": "Non abbiamo trovato risultati per la tua ricerca, ma i nostri scaffali sono pieni di altre sorprese.",
+    "categoryEmptyTitle": "Grandi cose stanno arrivando!",
+    "categoryEmptyDesc": "Questa collezione è stata così amata che è andata esaurita! I nostri designer stanno preparando i prodotti più speciali e regali freschi proprio per te.",
+    "showAll": "Scopri tutti i prodotti",
+    "popularCategory": "Popolare: Compleanno 🎂",
     "homeAddToCart": "Aggiungi",
+    "allProducts": "Tutti i Prodotti",
+    "questionRemove": "RIMUOVERE?",
+    "questionRemoveDesc": " sarà rimosso dal carrello.",
+    "nav": {
+      "flowers": "Fiori e Piante",
+      "gift": "Regali",
+      "fashion": "Moda e Abbigliamento",
+      "edible": "Commestibili",
+      "other": "Altro"
+    },
     "categories1": {
       "all": "Tutti",
-      "birthday": "Compleanno",
-      "anniversary": "Anniversario",
-      "indoor": "Fiori da interno",
-      "edible": "Regali commestibili",
-      "rose": "Rose",
-      "orchid": "Orchidee",
-      "daisy": "Margherite",
-      "tulip": "Tulipani",
-      "unique": "Unici",
-      "designFlowers": "Fiori di design"
-    },
-    "questionRemove": "RIMUOVERE?",
-    "questionRemoveDesc": " verrà rimosso dal carrello."
+      "flowers": {
+        "bouquet": "Bouquet",
+        "special": "Fiori Speciali",
+        "rose": "Rose",
+        "orchid": "Orchidee",
+        "daisy": "Margherite",
+        "tulip": "Tulipani",
+        "designFlowers": "Fiori di Design",
+        "indoor_flowers": "Fiori da Interno",
+        "unique": "Unici"
+      },
+      "clothes": {
+        "women": "Donna",
+        "women_clothes": {
+          "dresses": "Vestiti",
+          "tops": "Top",
+          "bottoms": "Pantaloni e Gonne",
+          "skirts": "Gonne",
+          "tshirt": "T-Shirt",
+          "pants": "Pantaloni",
+          "shorts": "Shorts",
+          "casual": "Casual",
+          "formal": "Formale",
+          "lingerines": "Lingerie",
+          "sleepwear": "Pigiami",
+          "activeWear": "Abbigliamento Sportivo",
+          "hats": "Cappelli",
+          "watches": "Orologi",
+          "shirt": "Camicie",
+          "jacket": "Giacche e Cappotti",
+          "styles": "Stili",
+          "bag_women": "Borse Donna",
+          "parfume_women": "Profumo Donna",
+          "accessory": "Accessori"
+        },
+        "men": "Uomo",
+        "men_clothes": {
+          "shirts": "Camicie",
+          "pants": "Pantaloni",
+          "shorts": "Shorts",
+          "casual": "Casual",
+          "formal": "Formale",
+          "tops": "Top",
+          "bottoms": "Pantaloni",
+          "activeWear": "Abbigliamento Sportivo",
+          "suits": "Abiti",
+          "hoodies": "Felpe con Cappuccio",
+          "tshirt": "T-Shirt",
+          "jacket": "Giacche e Cappotti",
+          "sleepwear": "Pigiami",
+          "hats": "Cappelli",
+          "watches": "Orologi",
+          "Stiller": "Stili",
+          "bag_men": "Borse Uomo",
+          "parfume_men": "Profumo Uomo",
+          "underwear": "Intimo"
+        },
+        "baby": "Abbigliamento Neonato",
+        "baby_clothes": {
+          "bodysuits": "Body",
+          "rompers": "Tutine",
+          "sleepwear": "Pigiami",
+          "outerwear": "Abbigliamento Esterno",
+          "shoes": "Scarpe Neonato",
+          "accessories": "Accessori"
+        },
+        "kids": "Abbigliamento Bambini",
+        "kids_clothes": {
+          "tops": "Top",
+          "bottoms": "Pantaloni",
+          "dresses": "Vestiti",
+          "jackets": "Giacche",
+          "tshirts": "T-Shirt",
+          "pants": "Pantaloni",
+          "shorts": "Shorts",
+          "activeWear": "Abbigliamento Sportivo",
+          "sleepwear": "Pigiami",
+          "shoes": "Scarpe",
+          "accessories": "Accessori"
+        }
+      },
+      "gifts": {
+        "for_him": "Per Lui",
+        "for_her": "Per Lei",
+        "for_kids": "Per Bambini",
+        "personalized": "Regali Personalizzati",
+        "books": "Libri",
+        "crypto": "Prodotti Crypto",
+        "giftcard": "Carte Regalo",
+        "birthday": "Compleanno",
+        "anniversary": "Anniversario"
+      },
+      "edible": {
+        "cake": "Torte",
+        "cookies": "Biscotti",
+        "drinks": "Bevande",
+        "chocolate": "Cioccolato",
+        "fruit_basket": "Cesto di Frutta",
+        "chocolate_box": "Scatola di Cioccolatini",
+        "snack": "Snack"
+      },
+      "others": {
+        "proteinPowder": "Proteine in Polvere",
+        "tech": "Tecnologia",
+        "home_decor": "Decorazioni per la Casa",
+        "stationery": "Cancelleria",
+        "sports": "Attrezzatura Sportiva"
+      }
+    }
   },
+
   "seo": {
     "aboutUsPage": {
       "aboutTitle": "Chi siamo - Fesfu | Fiori e regali più freschi",
@@ -315,7 +429,7 @@
     "alreadyHaveAccount": "Hai già un account? Accedi"
   },
   "register": {
-    "passwordForbiddenChars": "La password contiene caratteri non consentiti. Rimuovi per favore: ' \" ` \\ ; -- { } < > |", 
+    "passwordForbiddenChars": "La password contiene caratteri non consentiti. Rimuovi per favore: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "La tua password non è abbastanza forte!",
     "notifyPasswordRequirements": "Per favore rispetta i requisiti della password.",
     "acceptTerms": "Per favore accetta il contratto!",
@@ -615,6 +729,21 @@
     "saveSettings": "Salva impostazioni"
   },
   "vendorProducts": {
+    "additionalCategories": "Mostra nelle altre categorie (Opzionale)",
+    "comment": "adminProductPage",
+    "title": "Prodotti",
+    "close": "Chiudi",
+    "calories": "Calorie",
+    "ingredients": "Ingredienti",
+    "addIngredientPlaceholder": "Aggiungi un nuovo ingrediente...",
+    "size": "Taglia",
+    "color": "Colore",
+    "variants": "Varianti",
+    "addVariant": "Aggiungi variante",
+    "noVariants": "Non sono ancora state aggiunte varianti per questo prodotto.",
+    "passive": "Disattivato",
+
+
     "birthday": "Compleanno",
     "product": "Prodotto",
     "active": "Attivato",
@@ -677,6 +806,7 @@
   },
   "profilePage": {
     "userInfo": {
+      "editProfile": "Modifica profilo",
       "profileUpdated": "Informazioni del profilo aggiornate!",
       "updateUnsucessfull": "Impossibile aggiornare il profilo. Per favore riprova.",
       "oldPassword": "Inserisci la tua vecchia password.",
@@ -720,28 +850,29 @@
       "cancelRequest": "Crea richiesta di cancellazione",
       "invoice": "Fattura"
     },
-    "adressBook": {
-      "adressUpdated": "Indirizzo aggiornato",
-      "adressAdded": "Indirizzo aggiunto",
-      "qDeteleAdress": "Eliminare l'indirizzo?",
-      "deleteAdressLabel": "L'indirizzo sarà eliminato permanentemente.",
-      "adressDeleted": "Indirizzo eliminato",
-      "myAdresses": "Indirizzi salvati",
+    "addressBook": {
+      "addressUpdated": "Indirizzo aggiornato",
+      "addressAdded": "Indirizzo aggiunto",
+      "qDeleteAddress": "Eliminare l'indirizzo?",
+      "deleteAddressLabel": "L'indirizzo con questo titolo verrà eliminato definitivamente.",
+      "addressDeleted": "Indirizzo eliminato",
+      "myAddresses": "Indirizzi salvati",
       "cancel": "Annulla",
-      "addNewAdress": "Aggiungi nuovo indirizzo",
-      "editAdress": "Modifica indirizzo",
-      "newAdressInfo": "Nuove informazioni indirizzo",
-      "adressTitle": "Titolo indirizzo",
-      "adressTitlePlaceholder": "Casa, Lavoro, Il mio amico",
-      "receipentName": "Nome destinatario",
-      "receipentNamePlaceholder": "Nome completo",
-      "receipentPhone": "Telefono destinatario",
-      "openAdress": "Indirizzo destinatario",
+      "addNewAddress": "Aggiungi nuovo indirizzo",
+      "editAddress": "Modifica indirizzo",
+      "newAddressInfo": "Nuove informazioni sull'indirizzo",
+      "addressTitle": "Titolo del destinatario",
+      "addressTitlePlaceholder": "Casa, Lavoro, Mio amico",
+      "recipientName": "Nome del destinatario",
+      "recipientNamePlaceholder": "Nome completo",
+      "recipientPhone": "Numero di telefono del destinatario",
+      "openAddress": "Indirizzo del destinatario",
+      "openAdressPlaceholder": "esempio: Blackfriars, London EC4V 6BJ, United Kingdom",
       "city": "Città",
       "postCode": "Codice postale",
       "saveChanges": "Salva modifiche",
-      "addAdress": "Salva indirizzo",
-      "noSavedAdresses": "Non hai ancora indirizzi salvati.",
+      "addAddress": "Salva indirizzo",
+      "noSavedAddresses": "Non hai ancora indirizzi salvati.",
       "edit": "Modifica",
       "delete": "Elimina"
     }

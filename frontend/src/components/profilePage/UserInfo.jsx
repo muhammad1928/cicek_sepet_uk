@@ -256,7 +256,7 @@ const UserInfo = ({ user }) => {
                 </div>
 
                 <div className="relative">
-                  <input type={showConfirmPass ? "text" : "password"} placeholder={t("common.repeatNewPassword")} required minLength={8} className={`${modernInputClass} bg-white ${!isMatch && passwords.confirmPass ? 'border-red-300 bg-red-50' : ''}`} onChange={handleConfirmPassChange} />
+                  <input type={showConfirmPass ? "text" : "password"} placeholder={t("profilePage.userInfo.repeatNewPassword")} required minLength={8} className={`${modernInputClass} bg-white ${!isMatch && passwords.confirmPass ? 'border-red-300 bg-red-50' : ''}`} onChange={handleConfirmPassChange} />
                   <button type="button" onClick={() => setShowConfirmPass(!showConfirmPass)} className="absolute right-4 top-4 text-gray-400 hover:text-purple-600">{showConfirmPass ? <FaEyeSlash/> : <FaEye/>}</button>
                 </div>
                 

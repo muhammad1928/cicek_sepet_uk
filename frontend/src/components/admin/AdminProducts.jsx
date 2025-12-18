@@ -1,128 +1,194 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
-import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX, FiMinusCircle, FiPlusCircle, FiCheckSquare, FiSquare, FiLink } from "react-icons/fi"; // FiLink eklendi
 import { useTranslation } from "react-i18next";
 
+// --- ORTAK VERİYİ IMPORT ET ---
+// Dosya yolunu kendi klasör yapına göre ayarla (örn: ../../data/categoryData)
+import { CATEGORY_GROUPS, CATEGORY_KEY_MAP } from "../../data/categoryData"; 
 
-// YENİ
-const CATEGORY_OPTIONS = [
-  { key: 'birthday', label: 'Birthday / Doğum Günü' },
-  { key: 'anniversary', label: 'Anniversary / Yıldönümü' },
-  { key: 'indoor', label: 'Indoor Flowers / İç Mekan' },
-  { key: 'edible', label: 'Edible Gifts / Yenilebilir' },
-  { key: 'designFlowers', label: 'Designer Flowers / Tasarım' },
-  { key: 'rose', label: 'Roses / Güller' },
-  { key: 'orchid', label: 'Orchids / Orkideler' },
-  { key: 'daisy', label: 'Daisies / Papatyalar' },
-];
 const AdminProducts = () => {
   const { t } = useTranslation();
   const { notify } = useCart();
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   
-  // Filtreleme ve Modal State'leri
   const [searchTerm, setSearchTerm] = useState("");
   const [editMode, setEditMode] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [confirmData, setConfirmData] = useState(null);
   
-  const initialForm = { title: "", price: "", desc: "", img: "", stock: 10, isActive: true, category: "birthday" };
+  // --- YENİ STATE: URL INPUT ---
+  const [imgUrlInput, setImgUrlInput] = useState("");
+
+  const initialForm = { 
+    title: "", price: "", desc: "", 
+    imgs: [], 
+    stock: 10, isActive: true, 
+    category: "birthday",
+    variants: [], 
+    tags: [], 
+    foodDetails: { calories: "", ingredients: [] },
+    tempIngredient: "" 
+  };
+  
   const [formData, setFormData] = useState(initialForm);
 
-  // Veri Çekme
   const fetchProducts = async () => {
     try {
-      // Vendor ve isBlocked bilgisini çekiyoruz (Admin Products)
       const res = await userRequest.get("/products"); 
       setProducts(res.data);
     } catch (err) { console.log(err); }
   };
   useEffect(() => { fetchProducts(); }, []);
 
-  // --- TOGGLE FONKSİYONU ---
+  const getCategoryType = (catKey) => {
+    const group = CATEGORY_GROUPS.find(g => g.options.includes(catKey));
+    return group ? group.type : "other";
+  };
+
+  const getCatLabel = (key) => {
+    const mappedKey = CATEGORY_KEY_MAP[key] || key;
+    return t(`home.categories1.${mappedKey}`);
+  };
+
+  const isFood = useMemo(() => getCategoryType(formData.category) === 'food', [formData.category]);
+  const isClothing = useMemo(() => getCategoryType(formData.category) === 'clothing', [formData.category]);
+
+  // --- HANDLERS ---
   const handleToggleStatus = async (product) => {
     try {
-      const newStatus = !product.isActive; // Mevcut durumun tersi
-      
-      // Backend'e gönder
-      await userRequest.put(`/products/${product._id}`, { 
-        isActive: newStatus 
-      });
-
-      notify(`Product ${newStatus ? 'Active' : 'Inactive'}`, "success");
-      
-      // Listeyi anında güncelle (Sayfa yenilemeden görmek için)
-      setProducts(prev => prev.map(p => 
-        p._id === product._id ? { ...p, isActive: newStatus } : p
-      ));
-
-    } catch (err) {
-      notify("Status could not be changed!", "error");
-    }
+      const newStatus = !product.isActive;
+      await userRequest.put(`/products/${product._id}`, { isActive: newStatus });
+      notify(`${t('common.success')}`, "success");
+      setProducts(prev => prev.map(p => p._id === product._id ? { ...p, isActive: newStatus } : p));
+    } catch (err) { notify(t('common.error'), "error"); }
   };
 
-  // --- FIX 2: GÜNCEL FORM DEĞİŞİMİ (CHECKBOX DAHİL) ---
   const handleChange = (e) => { 
     const { name, type, checked, value } = e.target;
-    // Checkbox'lar için 'checked' (boolean), diğerleri için 'value' (string) alıyoruz
-    const finalValue = type === "checkbox" ? checked : value;
-    setFormData({ ...formData, [name]: finalValue }); 
+    if (name === 'calories') {
+       setFormData(prev => ({...prev, foodDetails: { ...prev.foodDetails, calories: value }}));
+    } else {
+       const finalValue = type === "checkbox" ? checked : value;
+       setFormData({ ...formData, [name]: finalValue }); 
+    }
   };
   
+  const handleTagChange = (categoryKey) => {
+    setFormData(prev => {
+        const currentTags = prev.tags || [];
+        if (currentTags.includes(categoryKey)) {
+            return { ...prev, tags: currentTags.filter(t => t !== categoryKey) };
+        } else {
+            return { ...prev, tags: [...currentTags, categoryKey] };
+        }
+    });
+  };
+
+  // Resim Dosya Yükleme
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
-    setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await userRequest.post("/upload", data); setFormData((prev) => ({ ...prev, img: res.data })); notify("Image uploaded!", "success"); } 
-    catch { notify("Error", "error"); } finally { setUploading(false); }
+    if (formData.imgs.length >= 5) return notify("Max 5 images!", "warning");
+
+    setUploading(true); 
+    const data = new FormData(); 
+    data.append("file", file);
+    try { 
+        const res = await userRequest.post("/upload", data); 
+        setFormData((prev) => ({ ...prev, imgs: [...prev.imgs, res.data] })); 
+        notify("Image uploaded", "success"); 
+    } catch { notify(t('common.error'), "error"); } finally { setUploading(false); }
+  };
+
+  // --- YENİ FONKSİYON: URL EKLEME ---
+  const handleAddImageUrl = (e) => {
+    e.preventDefault(); // Form submit olmasın
+    if (!imgUrlInput) return;
+    if (formData.imgs.length >= 5) return notify("Max 5 images!", "warning");
+    
+    // Basit bir URL kontrolü eklenebilir ama zorunlu değil
+    setFormData(prev => ({ ...prev, imgs: [...prev.imgs, imgUrlInput] }));
+    setImgUrlInput(""); // Inputu temizle
+    notify("URL Image added", "success");
+  };
+
+  const removeImage = (index) => {
+    setFormData(prev => ({ ...prev, imgs: prev.imgs.filter((_, i) => i !== index) }));
+  };
+
+  const addIngredient = () => {
+    if (!formData.tempIngredient) return;
+    setFormData(prev => ({
+        ...prev,
+        foodDetails: { ...prev.foodDetails, ingredients: [...prev.foodDetails.ingredients, prev.tempIngredient] },
+        tempIngredient: ""
+    }));
+  };
+
+  const addVariant = () => {
+    setFormData(prev => ({ ...prev, variants: [...prev.variants, { size: "", color: "", stock: 1 }] }));
+  };
+
+  const updateVariant = (index, field, value) => {
+    const newVariants = [...formData.variants];
+    newVariants[index][field] = value;
+    setFormData(prev => ({ ...prev, variants: newVariants }));
+  };
+
+  const removeVariant = (index) => {
+    setFormData(prev => ({ ...prev, variants: prev.variants.filter((_, i) => i !== index) }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.price) return notify("Missing information", "warning");
+    if (!formData.title || !formData.price) return notify("Missing Info", "warning");
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const payload = { ...formData, vendor: user._id }; 
+      delete payload.tempIngredient;
 
       if (editMode) await userRequest.put(`/products/${editMode}`, payload);
       else await userRequest.post("/products", payload);
       
-      notify("Operation Successful!", "success"); 
+      notify(t('common.success'), "success"); 
       setFormData(initialForm); setShowForm(false); setEditMode(null); fetchProducts();
-    } catch { notify("Error", "error"); }
+    } catch { notify(t('common.error'), "error"); }
   };
 
-  
   const handleEditClick = (p) => { 
-    setFormData({ ...p, category: p.category || "birthday" }); 
+    setFormData({ 
+        ...initialForm, ...p, 
+        category: p.category || "birthday",
+        tags: p.tags || [],
+        imgs: p.imgs && p.imgs.length > 0 ? p.imgs : (p.img ? [p.img] : []),
+        foodDetails: p.foodDetails || { calories: "", ingredients: [] },
+        variants: p.variants || []
+    }); 
     setEditMode(p._id); setShowForm(true); window.scrollTo(0,0); 
   };
 
   const handleDeleteRequest = (id) => {
     setConfirmData({
-      isOpen: true, title: "Delete Product?", message: "This action cannot be undone.", isDanger: true,
+      isOpen: true, title: "Delete?", message: "Sure?", isDanger: true,
       action: async () => { try { await userRequest.delete(`/products/${id}`); notify("Deleted", "success"); fetchProducts(); } catch { notify("Error", "error"); } setConfirmData(null); }
     });
   };
 
   const filteredProducts = products.filter(p => {
     const term = searchTerm.toLowerCase();
-    const titleMatch = p.title.toLowerCase().includes(term);
-    const vendorMatch = p.vendor?.username?.toLowerCase().includes(term) || false;
-    return (titleMatch || vendorMatch);
+    return p.title.toLowerCase().includes(term) || (p.vendor?.username?.toLowerCase() || "").includes(term);
   });
 
   return (
     <div className="space-y-6 pt-2 max-w-7xl mx-auto animate-fade-in">
-      {/* Üst Bar */}
-      <AdminPanelHeader title="Ürünler" count={products.length}>
+      <AdminPanelHeader title="Products Management" count={products.length}>
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
           <input 
-            type="text" 
-            placeholder="Search Product or Vendor..." 
+            type="text" placeholder="Search..." 
             className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" 
             onChange={(e) => setSearchTerm(e.target.value)} 
           />
@@ -130,87 +196,183 @@ const AdminProducts = () => {
             onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} 
             className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}
           >
-            {showForm ? <><FiX /> Close</> : <><FiPlus /> Add</>}
+            {showForm ? <><FiX /> Close</> : <><FiPlus /> Add New</>}
           </button>
         </div>
       </AdminPanelHeader>
-      
 
-      {/* Form */}
+      {/* --- FORM ALANI --- */}
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-100 mb-6 animate-fade-in-down">
-          <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">{editMode ? "Düzenle" : "Yeni Ekle"}</h3>
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 md:grid-cols-2 gap-6">
+          <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">{editMode ? "Edit Product" : "Add New Product"}</h3>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
             <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Name</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded" /></div>
+            
             <div className="flex gap-2">
-                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Price</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
+                <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Price (£)</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
                 <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Stock</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded" /></div>
             </div>
-            <div>
-              <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Category</label>
-              <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white">
-                <option value="">Select Category</option>
-                {CATEGORY_OPTIONS.map(opt => (
-                  <option key={opt.key} value={opt.key}>{opt.label}</option>
+
+            {/* KATEGORİ SEÇİMİ */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Main Category</label>
+              <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white font-medium text-gray-700">
+                {CATEGORY_GROUPS.map((group, idx) => (
+                    <optgroup key={idx} label={group.label}>
+                        {group.options.map(optKey => (
+                            <option key={optKey} value={optKey}>{getCatLabel(optKey)}</option>
+                        ))}
+                    </optgroup>
                 ))}
               </select>
             </div>
-            <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Image</label><div className="flex gap-2 border p-2 rounded bg-gray-50"><label className="cursor-pointer flex items-center gap-2 bg-white border px-3 py-1 rounded text-xs font-bold text-gray-600 transition shadow-sm"><FiCamera /> {uploading?"...":"Select"}<input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/></label><input name="img" value={formData.img} onChange={handleChange} className="flex-1 text-xs outline-none bg-transparent" placeholder="URL" /></div></div>
+
+            {/* EK KATEGORİLER (TAGS) */}
+            <div className="md:col-span-2 border rounded-lg p-4 bg-gray-50">
+               <label className="block text-xs font-bold mb-3 uppercase text-gray-500">Additional Tags / Categories</label>
+               <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                  {CATEGORY_GROUPS.map((group, grpIdx) => (
+                      <div key={grpIdx}>
+                          <h5 className="text-xs font-extrabold text-blue-600 mb-2 uppercase border-b border-blue-100 pb-1">{group.label}</h5>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                             {group.options.map(optKey => {
+                                 const isMain = optKey === formData.category;
+                                 const isChecked = formData.tags?.includes(optKey);
+                                 if(isMain) return null;
+                                 return (
+                                     <div key={optKey} onClick={() => handleTagChange(optKey)} className={`flex items-center gap-2 p-1.5 rounded border cursor-pointer transition select-none text-sm ${isChecked ? 'bg-blue-100 border-blue-300' : 'bg-white hover:border-blue-300'}`}>
+                                          <div className={isChecked ? 'text-blue-600' : 'text-gray-300'}>{isChecked ? <FiCheckSquare/> : <FiSquare/>}</div>
+                                          <span className={`truncate ${isChecked ? 'font-bold text-blue-800' : 'text-gray-600'}`}>{getCatLabel(optKey)}</span>
+                                     </div>
+                                 )
+                             })}
+                          </div>
+                      </div>
+                  ))}
+               </div>
+            </div>
+
+            {/* --- RESİM ALANI (URL + UPLOAD) --- */}
+            <div>
+                <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Images (Max 5)</label>
+                
+                {/* URL INPUT KISMI */}
+                <div className="flex gap-2 mb-2">
+                   <input 
+                     type="text" 
+                     placeholder="Or paste image URL..." 
+                     value={imgUrlInput}
+                     onChange={(e) => setImgUrlInput(e.target.value)}
+                     className="flex-1 p-2 border rounded text-xs outline-none focus:border-pink-500"
+                   />
+                   <button 
+                     type="button" 
+                     onClick={handleAddImageUrl}
+                     disabled={!imgUrlInput}
+                     className="px-3 py-1 bg-gray-600 text-white rounded text-xs font-bold hover:bg-gray-700 disabled:opacity-50"
+                   >
+                     Add URL
+                   </button>
+                </div>
+
+                <div className="flex gap-2 border p-2 rounded bg-gray-50 overflow-x-auto">
+                    {formData.imgs.length < 5 && (
+                        <label className="cursor-pointer flex-shrink-0 w-16 h-16 flex flex-col items-center justify-center bg-white border border-dashed border-gray-400 rounded hover:bg-blue-50">
+                            {uploading ? <FiRefreshCw className="animate-spin"/> : <FiCamera size={20} className="text-gray-500"/>}
+                            <input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/>
+                        </label>
+                    )}
+                    {formData.imgs.map((img, idx) => (
+                        <div key={idx} className="relative w-16 h-16 flex-shrink-0 group">
+                            <img src={img} alt="p" className="w-full h-full object-cover rounded border" />
+                            <button type="button" onClick={() => removeImage(idx)} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5"><FiX size={12}/></button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="md:col-span-2"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Description</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-20" /></div>
             
-            {/* CHECKBOX DÜZELTİLDİ: 'checked' property'si doğru bind edildi. */}
             <div className="md:col-span-2 flex items-center gap-2 bg-gray-50 p-3 rounded border border-gray-200">
                 <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} id="active" className="w-5 h-5 accent-pink-600 cursor-pointer" />
-                <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Is this product active for sale?</label>
+                <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Active for sale?</label>
             </div>
+
+            {/* DİNAMİK ALANLAR (FOOD) */}
+            {isFood && (
+                <div className="md:col-span-2 bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-bold text-orange-700 mb-2 text-sm uppercase">Food Details</h4>
+                    <div className="mb-3">
+                        <label className="block text-xs font-bold mb-1 text-orange-800">Calories</label>
+                        <input name="calories" type="number" value={formData.foodDetails.calories} onChange={handleChange} className="w-full p-2 border border-orange-200 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-bold mb-1 text-orange-800">Ingredients</label>
+                        <div className="flex gap-2 mb-2">
+                            <input value={formData.tempIngredient} onChange={(e) => setFormData({...formData, tempIngredient: e.target.value})} className="w-full p-2 border border-orange-200 rounded" placeholder="Add ingredient..." />
+                            <button type="button" onClick={addIngredient} className="bg-orange-600 text-white px-3 rounded font-bold text-xs">Add</button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {formData.foodDetails.ingredients.map((ing, i) => (
+                                <span key={i} className="bg-white border border-orange-300 text-orange-800 px-2 py-1 rounded text-xs flex items-center gap-1 shadow-sm">
+                                    {ing} <button type="button" onClick={() => setFormData(prev => ({...prev, foodDetails: {...prev.foodDetails, ingredients: prev.foodDetails.ingredients.filter((_, x) => x !== i)}}))}><FiX/></button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* DİNAMİK ALANLAR (CLOTHING) */}
+            {isClothing && (
+                <div className="md:col-span-2 bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-bold text-purple-700 text-sm uppercase">Variants</h4>
+                        <button type="button" onClick={addVariant} className="text-xs bg-purple-600 text-white px-3 py-1 rounded flex items-center gap-1"><FiPlusCircle/> Add</button>
+                    </div>
+                    {formData.variants.map((variant, idx) => (
+                        <div key={idx} className="flex gap-2 mb-2 items-center">
+                            <input placeholder="Size" value={variant.size} onChange={(e) => updateVariant(idx, 'size', e.target.value)} className="w-1/3 p-2 border rounded text-xs" />
+                            <input placeholder="Color" value={variant.color} onChange={(e) => updateVariant(idx, 'color', e.target.value)} className="w-1/3 p-2 border rounded text-xs" />
+                            <input type="number" placeholder="Stk" value={variant.stock} onChange={(e) => updateVariant(idx, 'stock', e.target.value)} className="w-20 p-2 border rounded text-xs" />
+                            <button type="button" onClick={() => removeVariant(idx)} className="text-red-500"><FiMinusCircle size={18}/></button>
+                        </div>
+                    ))}
+                    {formData.variants.length === 0 && <p className="text-xs text-gray-500 italic">No variants.</p>}
+                </div>
+            )}
             
-            <button type="submit" className="bg-blue-600 text-white py-3 rounded-lg font-bold md:col-span-2 hover:bg-blue-700 transition shadow-md">Save</button>
+            <button type="submit" className="bg-blue-600 text-white py-3 rounded-lg font-bold md:col-span-2 hover:bg-blue-700 shadow-md">Save Product</button>
           </form>
         </div>
       )}
 
-      {/* Ürün Listesi */}
+      {/* LİSTELEME */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => {
-          const isVendorBlocked = product.vendor?.isBlocked;
-
+          const mainImage = (product.imgs && product.imgs.length > 0) ? product.imgs[0] : (product.img || "https://placehold.co/400");
           return (
-            <div key={product._id} className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col group hover:shadow-md transition relative ${isVendorBlocked ? "border-4 border-red-500 bg-red-50" : "border-gray-200"}`}>
-              
-              {/* HIZLI DURUM DEĞİŞTİRME (TOGGLE) */}
-              <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
-                {isVendorBlocked ? (
-                    <span className="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold animate-pulse cursor-not-allowed">⛔ VENDOR BLOCKED</span>
-                ) : (
-                    <button 
-                        onClick={() => handleToggleStatus(product)}
-                        className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-sm transition transform active:scale-95 ${product.isActive ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-500 text-white hover:bg-gray-600"}`}
-                        title="Click to Change Status"
-                    >
-                        {product.isActive ? "🟢 Active" : "⚫ Hidden"}
-                    </button>
-                )}
-                
-                {product.stock <= 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-1 rounded font-bold shadow">Sold Out</span>}
+            <div key={product._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col group hover:shadow-md transition relative">
+              <div className="absolute top-2 right-2 z-10">
+                 <button onClick={() => handleToggleStatus(product)} className={`text-[10px] px-3 py-1 rounded-full font-bold shadow-sm ${product.isActive ? "bg-green-500 text-white" : "bg-gray-500 text-white"}`}>
+                    {product.isActive ? "Active" : "Passive"}
+                 </button>
               </div>
-
               <div className="h-40 bg-gray-100 relative">
-                <img src={product.img || "https://placehold.co/400"} className={`w-full h-full object-cover object-top transition duration-500 ${!product.isActive ? "grayscale" : "group-hover:scale-105"}`} />
+                <img src={mainImage} className={`w-full h-full object-cover object-top transition duration-500 ${!product.isActive ? "grayscale" : "group-hover:scale-105"}`} alt={product.title} />
                 <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded shadow">
-                  {t(`home.categories1.${product.category}`) || product.category}
+                  {getCatLabel(product.category)}
                 </span>
               </div>
-
               <div className="p-4 flex-1 flex flex-col">
-                <div className="text-[10px] font-bold text-gray-400 uppercase mb-1 flex items-center gap-1">🏪 {product.vendor?.username || "Fesfu Flowers UK"}</div>
-                <h4 className="font-bold text-gray-800 mb-1 truncate" title={product.title}>{product.title}</h4>
-                <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-pink-600">£{product.price}</span><span className="text-xs text-gray-500 font-mono">ID: {product._id.slice(-4)}</span></div>
-
+                <div className="text-[10px] font-bold text-gray-400 uppercase mb-1">🏪 {product.vendor?.username}</div>
+                <h4 className="font-bold text-gray-800 mb-1 truncate">{product.title}</h4>
+                <div className="flex justify-between items-center mb-3"><span className="text-lg font-bold text-pink-600">£{product.price}</span></div>
                 <div className="mt-auto pt-2 border-t border-gray-200 flex justify-between items-center mb-3">
                   <span className="text-xs font-bold text-gray-500 uppercase">STOCK</span>
                   <QuickStockUpdate product={product} refresh={fetchProducts} />
                 </div>
-                
                 <div className="grid grid-cols-2 gap-2">
                   <button onClick={() => handleEditClick(product)} className="flex items-center justify-center gap-1 bg-blue-50 text-blue-600 text-xs py-2 rounded font-bold border border-blue-100 hover:bg-blue-100 transition"><FiEdit /> Edit</button>
                   <button onClick={() => handleDeleteRequest(product._id)} className="flex items-center justify-center gap-1 bg-red-50 text-red-600 text-xs py-2 rounded font-bold border border-red-100 hover:bg-red-100 transition"><FiTrash2 /> Delete</button>
@@ -220,13 +382,11 @@ const AdminProducts = () => {
           );
         })}
       </div>
-
       {confirmData && <ConfirmModal title={confirmData.title} message={confirmData.message} isDanger={confirmData.isDanger} onConfirm={confirmData.action} onCancel={() => setConfirmData(null)} />}
     </div>
   );
 };
 
-// YARDIMCI BİLEŞEN: HIZLI STOK GÜNCELLEME
 const QuickStockUpdate = ({ product, refresh }) => {
   const [stock, setStock] = useState(product.stock);
   const [loading, setLoading] = useState(false);
@@ -234,8 +394,8 @@ const QuickStockUpdate = ({ product, refresh }) => {
   const handleUpdate = async () => {
     if (Number(stock) === product.stock) return;
     setLoading(true);
-    try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stok güncellendi", "success"); refresh(); } 
-    catch { notify("Hata", "error"); } finally { setLoading(false); }
+    try { await userRequest.put(`/products/${product._id}`, { ...product, stock: Number(stock) }); notify("Stock updated", "success"); refresh(); } 
+    catch { notify("Error", "error"); } finally { setLoading(false); }
   };
   return (
     <div className="flex items-center gap-1">

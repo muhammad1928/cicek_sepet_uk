@@ -19,7 +19,8 @@
     "logoutSuccess": "Logged out successfully."
   },
   "common": {
-    "serverError": "Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.",
+    "back": "Back",
+    "serverError": "Server error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "An error occurred.",
     "success": "Success!",
@@ -61,6 +62,7 @@
     "print": "Print / Save PDF"
   },
 
+
   "home": {
     "heroTitle": "Make Your Loved Ones Happy",
     "heroSubtitle": "We deliver London's freshest flowers and most special gifts to your door the same day.",
@@ -68,24 +70,136 @@
     "featured": "Featured",
     "categories_sticky": "Categories",
     "notFound": "No products found matching your criteria.",
-    "showAll": "Show All Products",
+    "searchNotFoundTitle": "Is it a Hidden Gem?",
+    "searchNotFoundDesc": "We couldn't find a match for your search, but our store shelves are full of other surprises.",
+    "categoryEmptyTitle": "Great Things Are Coming!",
+    "categoryEmptyDesc": "This collection was so loved that it sold out! Our designers are currently preparing the most special products and fresh gifts just for you.",
+    "showAll": "Discover All Products",
+    "popularCategory": "Popular: Birthday 🎂",
     "homeAddToCart": "Add",
+    "allProducts": "All Products",
+    "questionRemove": "REMOVE?",
+    "questionRemoveDesc": " will be removed from cart.",
+    "nav": {
+      "flowers": "Flowers & Plants",
+      "gift": "Gifts",
+      "fashion": "Fashion & Clothing",
+      "edible": "Edible",
+      "other": "Other"
+    },
     "categories1": {
       "all": "All",
-      "birthday": "Birthday",
-      "anniversary": "Anniversary",
-      "indoor": "Indoor Flowers",
-      "edible": "Edible Gifts",
-      "rose": "Roses",
-      "orchid": "Orchids",
-      "daisy": "Daisies",
-      "tulip": "Tulips",
-      "unique": "Unique",
-      "designFlowers": "Designer Flowers"
-    },
-    "questionRemove": "REMOVE?",
-    "questionRemoveDesc": " will be removed from cart."
+      "flowers": {
+        "bouquet": "Bouquets",
+        "special": "Special Flowers",
+        "rose": "Roses",
+        "orchid": "Orchids",
+        "daisy": "Daisies",
+        "tulip": "Tulips",
+        "designFlowers": "Designer Flowers",
+        "indoor_flowers": "Indoor Flowers",
+        "unique": "Unique"
+      },
+      "clothes": {
+        "women": "Women",
+        "women_clothes": {
+          "dresses": "Dresses",
+          "tops": "Tops",
+          "bottoms": "Bottoms",
+          "skirts": "Skirts",
+          "tshirt": "T-Shirts",
+          "pants": "Pants",
+          "shorts": "Shorts",
+          "casual": "Casual",
+          "formal": "Formal",
+          "lingerines": "Lingerie",
+          "sleepwear": "Sleepwear",
+          "activeWear": "Activewear",
+          "hats": "Hats",
+          "watches": "Watches",
+          "shirt": "Shirts",
+          "jacket": "Jackets & Coats",
+          "styles": "Styles",
+          "bag_women": "Women's Bags",
+          "parfume_women": "Women's Perfume",
+          "accessory": "Accessories"
+        },
+        "men": "Men",
+        "men_clothes": {
+          "shirts": "Shirts",
+          "pants": "Pants",
+          "shorts": "Shorts",
+          "casual": "Casual",
+          "formal": "Formal",
+          "tops": "Tops",
+          "bottoms": "Bottoms",
+          "activeWear": "Activewear",
+          "suits": "Suits",
+          "hoodies": "Hoodies",
+          "tshirt": "T-Shirts",
+          "jacket": "Jackets & Coats",
+          "sleepwear": "Sleepwear",
+          "hats": "Hats",
+          "watches": "Watches",
+          "Stiller": "Styles",
+          "bag_men": "Men's Bags",
+          "parfume_men": "Men's Perfume",
+          "underwear": "Underwear"
+        },
+        "baby": "Baby Clothing",
+        "baby_clothes": {
+          "bodysuits": "Bodysuits",
+          "rompers": "Rompers",
+          "sleepwear": "Sleepwear",
+          "outerwear": "Outerwear",
+          "shoes": "Baby Shoes",
+          "accessories": "Accessories"
+        },
+        "kids": "Kids Clothing",
+        "kids_clothes": {
+          "tops": "Tops",
+          "bottoms": "Bottoms",
+          "dresses": "Dresses",
+          "jackets": "Jackets",
+          "tshirts": "T-Shirts",
+          "pants": "Pants",
+          "shorts": "Shorts",
+          "activeWear": "Activewear",
+          "sleepwear": "Sleepwear",
+          "shoes": "Shoes",
+          "accessories": "Accessories"
+        }
+      },
+      "gifts": {
+        "for_him": "For Him",
+        "for_her": "For Her",
+        "for_kids": "For Kids",
+        "personalized": "Personalized Gifts",
+        "books": "Books",
+        "crypto": "Crypto Products",
+        "giftcard": "Gift Cards",
+        "birthday": "Birthday",
+        "anniversary": "Anniversary"
+      },
+      "edible": {
+        "cake": "Cakes",
+        "cookies": "Cookies",
+        "drinks": "Drinks",
+        "chocolate": "Chocolate",
+        "fruit_basket": "Fruit Basket",
+        "chocolate_box": "Chocolate Box",
+        "snack": "Snacks"
+      },
+      "others": {
+        "proteinPowder": "Protein Powder",
+        "tech": "Technology",
+        "home_decor": "Home Decor",
+        "stationery": "Stationery",
+        "sports": "Sports Equipment"
+      }
+    }
   },
+
 
   "seo": {
     "aboutUsPage": {
@@ -330,7 +444,7 @@
   },
 
   "register": {
-    "passwordForbiddenChars": "Password contains forbidden characters. Please remove: ' \" ` \\ ; -- { } < > |",  
+    "passwordForbiddenChars": "Password contains forbidden characters. Please remove: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Your password is not strong enough!",
     "notifyPasswordRequirements": "Please meet the password requirements.",
     "acceptTerms": "Please accept the agreement!",
@@ -651,6 +765,19 @@
   },
 
   "vendorProducts": {
+    "additionalCategories": "Show in Other Categories (Optional)",
+    "comment": "adminProductPage",
+    "title": "Products",
+    "close": "Close",
+    "calories": "Calories",
+    "ingredients": "Ingredients",
+    "addIngredientPlaceholder": "Add a new ingredient...",
+    "size": "Size",
+    "color": "Color",
+    "variants": "Variants",
+    "addVariant": "Add Variant",
+    "noVariants": "No variants added for this product yet.",
+    "passive": "Deactivated",
     "birthday": "Birthday",
     "product": "Product",
     "active": "Activated",
@@ -716,6 +843,7 @@
 
   "profilePage": {
     "userInfo": {
+      "editProfile": "Edit Profile",
       "profileUpdated": "Profile information updated!",
       "updateUnsucessfull": "Profile could not be updated. Please try again.",
       "oldPassword": "Enter your old password.",
@@ -759,28 +887,29 @@
       "cancelRequest": "Create Cancellation Request",
       "invoice": "Invoice"
     },
-    "adressBook": {
-      "adressUpdated": "Address updated",
-      "adressAdded": "Address added",
-      "qDeteleAdress": "Delete Address?",
-      "deleteAdressLabel": "titled address will be permanently deleted.",
-      "adressDeleted": "Address deleted",
-      "myAdresses": "Saved Addresses",
+    "addressBook": {
+      "addressUpdated": "Address updated",
+      "addressAdded": "Address added",
+      "qDeleteAddress": "Delete address?",
+      "deleteAddressLabel": "The address with this title will be permanently deleted.",
+      "addressDeleted": "Address deleted",
+      "myAddresses": "Saved addresses",
       "cancel": "Cancel",
-      "addNewAdress": "Add New Address",
-      "editAdress": "Edit Address",
-      "newAdressInfo": "New Address Information",
-      "adressTitle": "Address Title",
-      "adressTitlePlaceholder": "Home, Work, My Friend",
-      "receipentName": "Recipient Name",
-      "receipentNamePlaceholder": "Full Name",
-      "receipentPhone": "Recipient Phone Number",
-      "openAdress": "Recipient Address",
+      "addNewAddress": "Add new address",
+      "editAddress": "Edit address",
+      "newAddressInfo": "New address information",
+      "addressTitle": "Recipient's title",
+      "addressTitlePlaceholder": "Home, Work, My Friend",
+      "recipientName": "Recipient's name",
+      "recipientNamePlaceholder": "Full name",
+      "recipientPhone": "Recipient's phone number",
+      "openAddress": "Recipient's address",
+      "openAdressPlaceholder": "example: Blackfriars, London EC4V 6BJ, United Kingdom",
       "city": "City",
-      "postCode": "Post Code",
-      "saveChanges": "Save Changes",
-      "addAdress": "Save Address",
-      "noSavedAdresses": "You don't have any saved addresses yet.",
+      "postCode": "Post code",
+      "saveChanges": "Save changes",
+      "addAddress": "Save address",
+      "noSavedAddresses": "You don't have any saved addresses yet.",
       "edit": "Edit",
       "delete": "Delete"
     }

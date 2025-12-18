@@ -12,7 +12,7 @@ const AddressBook = ({ user }) => {
   
   // Düzenleme State'leri
   const [editingId, setEditingId] = useState(null); 
-  const initialAddress = { title: "", recipientName: "", recipientPhone: "", address: "", city: "Londra", postcode: "" };
+  const initialAddress = { title: "", recipientName: "", recipientPhone: "", address: "", city: "London", postcode: "" };
   const [addressData, setAddressData] = useState(initialAddress);
   
   const [confirmData, setConfirmData] = useState(null);
@@ -134,7 +134,7 @@ const AddressBook = ({ user }) => {
 
                 <div className="md:col-span-2">
                    <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.openAddress")}</label>
-                   <textarea className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition h-24 resize-none" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
+                   <textarea placeholder={t("profilePage.adressBook.openAdressPlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition h-24 resize-none" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
                 </div>
 
                 <div>

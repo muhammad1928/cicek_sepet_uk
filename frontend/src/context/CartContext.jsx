@@ -1,96 +1,121 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from "react"; // useMemo eklendi
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { userRequest } from "../requestMethods"; // Merkezi Request Metotları
+import { userRequest } from "../requestMethods";
 
 const CartContext = createContext();
 
-const initialCart = JSON.parse(localStorage.getItem("cart")) || [];
-const initialFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
 export const CartProvider = ({ children }) => {
   const { t } = useTranslation();
-  // --- STATE TANIMLARI ---
-  const [cart, setCart] = useState(initialCart);
-  const [favorites, setFavorites] = useState(initialFavorites);
+
+  // --- 1. STATE TANIMLARI (Lazy Initialization ile Performans Artışı) ---
+  // LocalStorage her render'da okunmaz, sadece ilk yüklemede okunur.
+  const [cart, setCart] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("LocalStorage Cart Error:", error);
+      return [];
+    }
+  });
+
+  const [favorites, setFavorites] = useState(() => {
+    try {
+      const savedFavs = localStorage.getItem("favorites");
+      return savedFavs ? JSON.parse(savedFavs) : [];
+    } catch (error) {
+      console.error("LocalStorage Favorites Error:", error);
+      return [];
+    }
+  });
+
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [notificationType, setNotificationType] = useState("success");
   const [searchTerm, setSearchTerm] = useState("");
-  
-  // KRİTİK EKSİK: user objesi
   const [user, setUser] = useState(null);
 
-  // --- KULLANICI DURUMU SENKRONİZASYONU ---
-  // --- KULLANICI & FAVORİ SENKRONİZASYONU (GÜNCELLENDİ) ---
+  // --- 2. KULLANICI SENKRONİZASYONU ---
   useEffect(() => {
     const syncUserData = async () => {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUser(storedUser);
+      try {
+        const storedUserRaw = localStorage.getItem("user");
+        const storedUser = storedUserRaw ? JSON.parse(storedUserRaw) : null;
+        setUser(storedUser);
 
-      // EĞER KULLANICI VARSA FAVORİLERİ DB'DEN ÇEK
-      if (storedUser && storedUser._id && storedUser.accessToken) {
-        try {
-          const res = await userRequest.get(`/users/${storedUser._id}/favorites`);
-          setFavorites(res.data);
-          localStorage.setItem("favorites", JSON.stringify(res.data));
-        } catch (err) {
-          // Eğer 401 hatası alırsak (Token geçersizse) sessizce favorileri boşalt
-          // Zaten Axios Interceptor kullanıcıyı logout yapacak veya token yenileyecek.
-          if (err.response && err.response.status === 401) {
-             console.log("Oturum süresi dolmuş, favoriler yüklenemedi.");
-             // İsteğe bağlı: setFavorites([]); 
-          } else {
-             console.error("Favori çekme hatası:", err);
+        if (storedUser && storedUser._id) {
+          try {
+            const res = await userRequest.get(`/users/${storedUser._id}/favorites`);
+            setFavorites(res.data);
+            localStorage.setItem("favorites", JSON.stringify(res.data));
+          } catch (err) {
+            // Önemli Loglama Kısımı
+            if (err.response && err.response.status === 401) {
+              console.warn("Session expired for favorites (Token Invalid).");
+            } else {
+              console.error("Favorites Sync Failed:", err);
+            }
           }
         }
+      } catch (err) {
+        console.error("User Sync Parse Error:", err);
       }
     };
-    
+
     syncUserData();
+    
+    // Kullanıcı giriş/çıkış yaptığında tetiklenmesi için event listener
     window.addEventListener('user-change', syncUserData);
     return () => window.removeEventListener('user-change', syncUserData);
   }, []);
 
-  // Sepeti dışarıdan açmak için event listener
-  useEffect(() => {
-    const openCartHandler = () => {
-      setTimeout(() => setIsCartOpen(true), 500);
-    };
-    
-    window.addEventListener('open-cart', openCartHandler);
-    return () => window.removeEventListener('open-cart', openCartHandler);
-  }, []);
-
-  // --- KALICILIK (Persistence) ---
+  // --- 3. KALICILIK (LOCALSTORAGE) ---
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
-    // Miktar kontrolü (0 olanları temizle)
-    if (cart.some(item => item.quantity <= 0)) {
-      setCart(prev => prev.filter(item => item.quantity > 0));
-    }
+    // Geliştirme aşamasında sepeti konsolda görmek istersen:
+    // console.log("Sepet Güncellendi:", cart); 
   }, [cart]);
 
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // --- HESAPLAMALAR (useMemo ile Optimize) ---
-  const totalPrice = useMemo(() => {
-    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  }, [cart]);
+  // --- 4. YARDIMCI FONKSİYONLAR ---
+  
+  // Varyantlı ve Varyantsız Ürün ID Yönetimi
+  const generateCartItemId = (product, variant) => {
+    if (variant) {
+      // Örnek ID: 64a...f12-M-Red
+      return `${product._id}-${variant.size}-${variant.color}`;
+    }
+    return product._id;
+  };
 
-
-  // --- YARDIMCI FONKSİYONLAR ---
   const notify = (msg, type = "success") => {
     setNotification(msg);
     setNotificationType(type);
+    
+    // Bildirimi 3 saniye sonra otomatik temizle (Opsiyonel)
+    // setTimeout(() => setNotification(null), 3000);
   };
+  
   const closeNotification = () => setNotification(null);
 
-  // 1. EKLEME
-  const addToCart = (product, quantity = 1) => {
-    const existingItem = cart.find(item => item._id === product._id);
-    const itemStock = product.stock || Infinity;
+  // Toplam Fiyat Hesaplama (Güvenli)
+  const totalPrice = useMemo(() => {
+    return cart.reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0);
+  }, [cart]);
+
+  // --- 5. CART AKSİYONLARI ---
+
+  // EKLEME
+  const addToCart = (product, quantity = 1, selectedVariant = null) => {
+    const cartItemId = generateCartItemId(product, selectedVariant);
+    
+    // Stok Kontrolü: Varyant stoğu öncelikli, yoksa ürün stoğu, o da yoksa sonsuz.
+    const itemStock = selectedVariant?.stock ?? product.stock ?? Infinity;
+
+    const existingItem = cart.find(item => item.cartItemId === cartItemId);
 
     if (existingItem) {
       const newQuantity = existingItem.quantity + quantity;
@@ -98,105 +123,145 @@ export const CartProvider = ({ children }) => {
         notify(`${t('cartContext.maxStockReached')}: ${itemStock}`, 'error');
         return;
       }
-      setCart(cart.map(item => item._id === product._id ? { ...item, quantity: newQuantity } : item));
+      
+      setCart(prev => prev.map(item => 
+        item.cartItemId === cartItemId ? { ...item, quantity: newQuantity } : item
+      ));
     } else {
-      if (quantity > itemStock) { notify(`${t('cartContext.maxStockReached')}: ${itemStock}`, 'error'); return; }
-      setCart([...cart, { ...product, quantity }]);
+      if (quantity > itemStock) {
+        notify(`${t('cartContext.maxStockReached')}: ${itemStock}`, 'error');
+        return;
+      }
+
+      setCart(prev => [...prev, {
+        ...product,
+        cartItemId, // Kritik Benzersiz ID
+        quantity,
+        selectedVariant // Backend sipariş oluştururken lazım olabilir
+      }]);
     }
     notify(`${product.title} ${t('cartContext.added')}`, 'success');
   };
 
-  // 2. SİLME
-  const removeFromCart = (id, title) => {
-    setCart(cart.filter(item => item._id !== id));
+  // SİLME
+  const removeFromCart = (cartItemId, title) => {
+    setCart(prev => prev.filter(item => item.cartItemId !== cartItemId));
     if (title) notify(`${title} ${t('cartContext.removed')}`, 'error');
   };
 
-  // 3. TEMİZLEME
+  // TEMİZLEME
   const clearCart = () => {
     setCart([]);
     notify(t('cartContext.cartEmpty'), 'warning');
   };
 
-  // 4. ARTIRMA
-  const increaseQuantity = (id, title, stock) => {
-    setCart(cart.map(item => {
-      if (item._id === id) {
+  // MİKTAR ARTIRMA
+  const increaseQuantity = (cartItemId, title, stock) => {
+    setCart(prev => prev.map(item => {
+      if (item.cartItemId === cartItemId) {
         if (item.quantity + 1 > stock) {
           notify(`${t('cartContext.maxLimitReached')}`, 'error');
           return item;
         }
-        notify(`${title} ${t('cartContext.increased')}`, 'success'); 
+        notify(`${title} ${t('cartContext.increased')}`, 'success');
         return { ...item, quantity: item.quantity + 1 };
       }
       return item;
     }));
   };
 
-  // 5. AZALTMA
-  const decreaseQuantity = (id, title) => {
+  // MİKTAR AZALTMA
+  const decreaseQuantity = (cartItemId, title) => {
+    // Önce bildirimi verelim
     notify(`${title} ${t('cartContext.decreased')}`, 'warning');
-    setCart(cart.map(item => 
-      item._id === id ? { ...item, quantity: item.quantity - 1 } : item
-    ).filter(item => item.quantity > 0));
+    
+    setCart(prev => {
+      // Önce azalt, sonra 0 veya altındakileri filtrele
+      return prev.map(item => 
+        item.cartItemId === cartItemId ? { ...item, quantity: item.quantity - 1 } : item
+      ).filter(item => item.quantity > 0);
+    });
   };
 
-  // 6. GÜNCELLEME (Input)
-  const updateItemQuantity = (id, newQuantity, stock, title) => {
-      if (newQuantity > stock) { notify(`${t('cartContext.maxStockReached')} ${stock}`, 'error'); newQuantity = stock; }
-      if (newQuantity <= 0) { removeFromCart(id, title); return; }
-      
-      notify(`${title} ${t('cartContext.updated')}: ${newQuantity}`, 'success');
-      
-      setCart(cart.map(item => item._id === id ? { ...item, quantity: newQuantity } : item));
-  };
-  
-  // 7. FAVORİ EKLE/SİLME
-  const toggleFavorite = async (productId) => {
-  const isCurrentlyFav = favorites.includes(productId);
-  
-  if (user) {
-    try {
-      const res = await userRequest.put(`/users/${user._id}/favorites`, { productId });
-      setFavorites(res.data); 
-      notify(
-        isCurrentlyFav ? t('cartContext.deletedFromFavorites') + " ❌" : t('cartContext.addedToFavorites') + " ❤️", 
-        isCurrentlyFav ? "error" : "success"
-      );
-      return; 
-    } catch (e) {
-      notify(t('cartContext.favoritesNotUpdated'), "error");
-      return; 
+  // MANUEL GÜNCELLEME (Input ile)
+  const updateItemQuantity = (cartItemId, newQuantity, stock, title) => {
+    let quantityToSet = parseInt(newQuantity);
+
+    if (isNaN(quantityToSet)) return; // Sayı değilse işlem yapma
+
+    if (quantityToSet > stock) {
+      notify(`${t('cartContext.maxStockReached')} ${stock}`, 'error');
+      quantityToSet = stock;
     }
-  } 
 
-  // Misafir kullanıcı
-  let newFavorites;
-  if (isCurrentlyFav) {
-    newFavorites = favorites.filter(id => id !== productId);
-  } else {
-    newFavorites = [...favorites, productId];
-  }
-  setFavorites(newFavorites);
-  notify(
-    isCurrentlyFav ? t('cartContext.deletedFromFavorites') + " ❌" : t('cartContext.addedToFavorites') + " ❤️", 
-    isCurrentlyFav ? "error" : "success"
-  );
-};
+    if (quantityToSet <= 0) {
+      removeFromCart(cartItemId, title);
+      return;
+    }
+
+    notify(`${title} ${t('cartContext.updated')}: ${quantityToSet}`, 'success');
+    setCart(prev => prev.map(item => 
+      item.cartItemId === cartItemId ? { ...item, quantity: quantityToSet } : item
+    ));
+  };
+
+  // --- 6. FAVORİ İŞLEMLERİ ---
+  const toggleFavorite = async (productId) => {
+    const isCurrentlyFav = favorites.includes(productId);
+    let updatedFavorites;
+
+    // Optimistic UI Update (Anlık tepki için önce state'i güncelle)
+    if (isCurrentlyFav) {
+      updatedFavorites = favorites.filter(id => id !== productId);
+    } else {
+      updatedFavorites = [...favorites, productId];
+    }
+    setFavorites(updatedFavorites); // State hemen güncellendi
+
+    const msg = isCurrentlyFav ? t('cartContext.deletedFromFavorites') : t('cartContext.addedToFavorites');
+    const type = isCurrentlyFav ? "error" : "success";
+    notify(msg, type);
+
+    // Eğer kullanıcı giriş yapmışsa Backend'e gönder
+    if (user && user._id) {
+      try {
+        await userRequest.put(`/users/${user._id}/favorites`, { productId });
+        // Başarılı olursa zaten state güncel, bir şey yapmaya gerek yok.
+      } catch (e) {
+        console.error("Favorite Toggle Error:", e);
+        // Hata olursa işlemi geri al (Rollback)
+        setFavorites(favorites); 
+        notify(t('cartContext.favoritesNotUpdated'), "error");
+      }
+    }
+  };
 
   const isFavorite = (productId) => favorites.includes(productId);
-
 
   return (
     <CartContext.Provider
       value={{
-        cart, setCart, addToCart, removeFromCart, clearCart, 
-        increaseQuantity, decreaseQuantity, updateItemQuantity,
-        totalPrice, isCartOpen, setIsCartOpen, 
-        notify, notification, notificationType, closeNotification,
-        favorites, toggleFavorite, isFavorite,
-        searchTerm, setSearchTerm,
-        user, // User objesini tüm uygulamaya aç
+        cart,
+        setCart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        increaseQuantity,
+        decreaseQuantity,
+        updateItemQuantity,
+        totalPrice,
+        isCartOpen,
+        setIsCartOpen,
+        notify,
+        notification,
+        notificationType,
+        closeNotification,
+        favorites,
+        toggleFavorite,
+        isFavorite,
+        searchTerm,
+        setSearchTerm,
+        user,
       }}
     >
       {children}
@@ -204,4 +269,5 @@ export const CartProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => useContext(CartContext);

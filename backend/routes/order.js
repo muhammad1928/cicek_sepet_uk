@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Coupon = require('../models/Coupon');
 const sendEmail = require('../utils/sendEmail');
 const logActivity = require('../utils/logActivity');
-const emailTexts = require('../utils/emailTranslations'); // <--- ÇEVİRİ DOSYASI EKLENDİ
+const emailTexts = require('../utils/emailTranslations'); 
 const { 
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
@@ -23,7 +23,7 @@ const PRICING = {
 };
 
 // =============================================================================
-// 1. MÜŞTERİ MAİL ŞABLONU (DİNAMİK DİL DESTEKLİ)
+// 1. MAİL ŞABLONLARI (AYNI KALDI)
 // =============================================================================
 const createOrderEmail = (order, title, message, t) => {
   const subTotal = order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -34,6 +34,7 @@ const createOrderEmail = (order, title, message, t) => {
       <td style="padding: 12px; border-bottom: 1px solid #eee;">
         ${item.img ? `<img src="${item.img}" width="40" style="border-radius:4px; vertical-align: middle; margin-right: 10px;">` : ''}
         <strong>${item.title}</strong>
+        ${item.selectedVariant ? `<br/><span style="font-size:12px; color:#666;">(${item.selectedVariant.size} / ${item.selectedVariant.color})</span>` : ''}
       </td>
       <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
       <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">£${item.price.toFixed(2)}</td>
@@ -92,15 +93,15 @@ const createOrderEmail = (order, title, message, t) => {
   `;
 };
 
-// =============================================================================
-// 2. SATICI MAİL ŞABLONU (DİNAMİK DİL DESTEKLİ)
-// =============================================================================
 const createVendorEmail = (vendorData, orderId, deliveryFee, t) => {
   const vendorTotal = vendorData.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   const itemsHtml = vendorData.items.map(item => `
     <tr>
-      <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee;">
+        ${item.title}
+        ${item.selectedVariant ? `<br/><small>(${item.selectedVariant.size} - ${item.selectedVariant.color})</small>` : ''}
+      </td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">£${item.price.toFixed(2)}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">£${(item.price * item.quantity).toFixed(2)}</td>
@@ -140,7 +141,6 @@ const createVendorEmail = (vendorData, orderId, deliveryFee, t) => {
   `;
 };
 
-// --- SATICI İPTAL BİLDİRİM MAİLİ (DİNAMİK) ---
 const createVendorCancelEmail = (vendorName, orderId, t) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #fee2e2; border-radius: 8px; background-color: #fff5f5;">
@@ -153,7 +153,6 @@ const createVendorCancelEmail = (vendorName, orderId, t) => {
   `;
 };
 
-// --- KURYE İPTAL BİLDİRİM MAİLİ (DİNAMİK) ---
 const createCourierCancelEmail = (courierName, orderId, t) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px; border: 2px solid #dc2626; border-radius: 8px; background-color: #fef2f2;">
@@ -166,7 +165,7 @@ const createCourierCancelEmail = (courierName, orderId, t) => {
 
 
 // =============================================================================
-// 1. SİPARİŞ OLUŞTURMA (POST) - GÜVENLİ VE ÇOK DİLLİ
+// 2. SİPARİŞ OLUŞTURMA (POST) - VARYANT DESTEKLİ
 // =============================================================================
 router.post('/', async (req, res) => {
   const { items, sender, recipient, delivery, userId, couponCode, metaData, saveAddress, language } = req.body;
@@ -187,28 +186,55 @@ router.post('/', async (req, res) => {
       if (!product) {
         return res.status(404).json({ message: `Product not found: ${item.title}` });
       }
-      if (product.stock < item.quantity) {
-        return res.status(400).json({ message: `Insufficient stock: ${item.title}. Remaining: ${product.stock}` });
+
+      // --- STOK KONTROLÜ (KRİTİK GÜNCELLEME) ---
+      // Varyant varsa varyantın stoğuna bak, yoksa ana stoğa bak.
+      let hasStock = false;
+      let variantIndex = -1;
+
+      if (item.selectedVariant && product.variants && product.variants.length > 0) {
+          // Varyant bul
+          variantIndex = product.variants.findIndex(v => 
+              v.size === item.selectedVariant.size && v.color === item.selectedVariant.color
+          );
+
+          if (variantIndex > -1) {
+              if (product.variants[variantIndex].stock >= item.quantity) {
+                  hasStock = true;
+                  // STOK DÜŞ
+                  product.variants[variantIndex].stock -= item.quantity;
+              }
+          }
+      } else {
+          // Normal Ürün
+          if (product.stock >= item.quantity) {
+              hasStock = true;
+              // STOK DÜŞ
+              product.stock -= item.quantity;
+          }
+      }
+
+      if (!hasStock) {
+        return res.status(400).json({ message: `Insufficient stock for ${item.title}` });
       }
       
-      // Güvenli Fiyat
-      const price = product.price;
-      calculatedTotal += price * item.quantity;
-      rawTotal += price * item.quantity; // Ham tutar
-
-      // Stok Düşümü
-      product.stock -= item.quantity;
+      // Değişiklikleri Kaydet
       await product.save();
 
-      // Güvenli item listesi
+      // --- FİYAT VE LİSTELEME ---
+      const price = product.price;
+      calculatedTotal += price * item.quantity;
+      rawTotal += price * item.quantity; 
+
       finalItems.push({
         _id: product._id,
         title: product.title,
         price: price,
         quantity: item.quantity,
         img: product.img,
-        // Satıcı adı kaydediliyor (Raporlama için)
-        vendorName: product.vendor?.fullName || "Platform" 
+        vendorName: product.vendor?.fullName || "Platform",
+        // YENİ: Varyant bilgisini sipariş kaydına da ekle
+        selectedVariant: item.selectedVariant || null
       });
     }
 
@@ -218,20 +244,15 @@ router.post('/', async (req, res) => {
 
     if (couponCode) {
       const coupon = await Coupon.findOne({ code: couponCode });
-      
       if (coupon && coupon.isActive) {
-        // Tarih Kontrolü
         const now = new Date();
         const expiry = new Date(coupon.expiryDate);
         expiry.setHours(23, 59, 59, 999); 
-        if (now > expiry) {
-            // Süresi dolmuş ama siparişi engelleme, sadece indirimi uygulama
-        } else {
+        if (now <= expiry) {
             const isUsed = userId && coupon.usedBy.includes(userId);
             if (!isUsed) {
               discountAmount = (calculatedTotal * coupon.discountRate) / 100;
               if (coupon.includeDelivery) isFreeDelivery = true;
-              
               if (userId) {
                 coupon.usedBy.push(userId);
                 await coupon.save();
@@ -241,7 +262,6 @@ router.post('/', async (req, res) => {
       }
     }
 
-    // Tutar Hesaplama
     let priceAfterDiscount = calculatedTotal - discountAmount;
     let deliveryFee = 0;
     const deliveryType = delivery.deliveryType || 'standart';
@@ -264,7 +284,7 @@ router.post('/', async (req, res) => {
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const finalMetaData = { ...metaData, ip: clientIp };
 
-    // --- D) KULLANICI BİLGİLERİ ---
+    // --- D) KULLANICI GÜNCELLEME ---
     if (userId) {
       try {
          await User.findByIdAndUpdate(userId, { $set: { phone: sender.phone } });
@@ -290,12 +310,11 @@ router.post('/', async (req, res) => {
       sender, recipient, delivery,
       status: 'Sipariş Alındı',
       metaData: finalMetaData,
-      language: lang // <--- ÖNEMLİ: Siparişin dilini kaydet
+      language: lang
     });
 
     const savedOrder = await newOrder.save();
 
-    // Loglama
     if (userId) {
         await logActivity(userId, 'order_placed', req, { 
             orderId: savedOrder._id, 
@@ -303,11 +322,10 @@ router.post('/', async (req, res) => {
         });
     }
 
-    // --- F) MÜŞTERİYE MAİL (Dinamik Dil) ---
+    // --- F) MAİLLER ---
     const customerMailContent = createOrderEmail(savedOrder, t.orderSubject, `${t.orderTitle} ${sender.name}, ${t.orderMsg}`, t);
     sendEmail(sender.email, t.orderSubject, customerMailContent).catch(console.error);
 
-    // --- G) SATICILARA BİLDİRİM ---
     const vendorMap = new Map(); 
     for (const item of finalItems) {
         const prod = await Product.findById(item._id).populate('vendor');
@@ -316,12 +334,17 @@ router.post('/', async (req, res) => {
             if (!vendorMap.has(vId)) {
                 vendorMap.set(vId, { email: prod.vendor.email, name: prod.vendor.fullName, items: [] });
             }
-            vendorMap.get(vId).items.push({ title: item.title, quantity: item.quantity, price: item.price });
+            // Satıcıya da varyant bilgisini gönderelim
+            vendorMap.get(vId).items.push({ 
+                title: item.title, 
+                quantity: item.quantity, 
+                price: item.price,
+                selectedVariant: item.selectedVariant // <--- Eklendi
+            });
         }
     }
 
     for (const [id, data] of vendorMap) {
-        // Satıcıya da mail at (Kurye ücreti ve dil parametresiyle)
         const vendorMail = createVendorEmail(data, savedOrder._id, deliveryFee, t);
         sendEmail(data.email, t.newOrderSubject, vendorMail).catch(console.error);
     }
@@ -335,10 +358,10 @@ router.post('/', async (req, res) => {
 });
 
 // =============================================================================
-// 2. GET ROTALARI (LİSTELEME)
+// 3. GET VE PUT ROTALARI (LİSTELEME VE GÜNCELLEME)
 // =============================================================================
 
-// KULLANICININ SİPARİŞLERİ
+// KULLANICI
 router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
@@ -346,7 +369,7 @@ router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
   } catch (err) { res.status(500).json(err); }
 });
 
-// SATICININ SİPARİŞLERİ
+// SATICI
 router.get('/vendor/:vendorId', verifyTokenAndSeller, async (req, res) => {
   try {
     const vendorProducts = await Product.find({ vendor: req.params.vendorId }).select('_id');
@@ -356,7 +379,7 @@ router.get('/vendor/:vendorId', verifyTokenAndSeller, async (req, res) => {
   } catch (err) { res.status(500).json(err); }
 });
 
-// TÜM SİPARİŞLER (ADMIN)
+// ADMIN
 router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -364,14 +387,11 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
   } catch (err) { res.status(500).json(err); }
 });
 
-// =============================================================================
-// 3. DURUM GÜNCELLEME (PUT) & İPTAL YÖNETİMİ
-// =============================================================================
+// GÜNCELLEME (İPTAL VEYA DURUM DEĞİŞİKLİĞİ)
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { status, courierId, courierRejectionReason, cancellationReason } = req.body;
     
-    // Güvenlik Kontrolü
     if (req.user.role === 'customer' && status !== 'İptal Talebi') {
         return res.status(403).json({ message: "Unauthorized action." });
     }
@@ -389,24 +409,20 @@ router.put('/:id', verifyToken, async (req, res) => {
 
     const updatedOrder = await Order.findByIdAndUpdate(req.params.id, { $set: updateData }, { new: true });
 
-    // --- DİL SEÇİMİ (SİPARİŞİN DİLİNE GÖRE) ---
     const lang = updatedOrder.language || 'en';
     const t = emailTexts[lang] || emailTexts['en'];
 
-    // --- A) İPTAL İŞLEMLERİ (SATICI/KURYE BİLDİRİMİ) ---
+    // İPTAL BİLDİRİMLERİ
     if (status === "İptal") {
         const vendorSet = new Set(); 
         for (const item of updatedOrder.items) {
             const product = await Product.findById(item._id).populate('vendor');
             if (product && product.vendor && !vendorSet.has(product.vendor._id.toString())) {
                 vendorSet.add(product.vendor._id.toString());
-                // Satıcıya İptal Maili (Dinamik Dil)
                 const mailContent = createVendorCancelEmail(product.vendor.fullName, updatedOrder._id, t);
                 sendEmail(product.vendor.email, t.vendorCancelSubject, mailContent).catch(console.error);
             }
         }
-        
-        // Kuryeye Bildirim
         if (oldOrder.courierId) {
             const courier = await User.findById(oldOrder.courierId);
             if (courier) {
@@ -416,12 +432,11 @@ router.put('/:id', verifyToken, async (req, res) => {
         }
     }
     
-    // Loglama (İptal Talebi)
     if (status === "İptal Talebi" && updatedOrder.userId) {
         try { await logActivity(updatedOrder.userId, 'order_cancel_request', req, { orderId: updatedOrder._id, reason: cancellationReason }); } catch(e) {}
     }
 
-    // --- B) MÜŞTERİYE DURUM BİLDİRİMİ (DİNAMİK) ---
+    // MÜŞTERİ BİLDİRİMİ
     let subject = "";
     let msg = "";
 
@@ -434,7 +449,6 @@ router.put('/:id', verifyToken, async (req, res) => {
     }
 
     if (subject && updatedOrder.sender.email) {
-      // Müşteri Maili (Dinamik)
       const mailContent = createOrderEmail(updatedOrder, subject, msg, t);
       sendEmail(updatedOrder.sender.email, subject, mailContent).catch(console.error);
     }

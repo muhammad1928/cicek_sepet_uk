@@ -1,6 +1,6 @@
 {
   "auth": {
-     "passwordForbiddenChars": "Le mot de passe contient des caractères interdits",
+    "passwordForbiddenChars": "Le mot de passe contient des caractères interdits",
     "nameForbiddenChars": "Le nom contient des caractères interdits",
     "passwordWeak": "Le mot de passe ne répond pas aux exigences",
     "validationError": "Veuillez vérifier vos informations.",
@@ -19,6 +19,7 @@
     "logoutSuccess": "Déconnexion réussie."
   },
   "common": {
+    "back": "Retour",
     "serverError": "Une erreur serveur s'est produite. Veuillez réessayer plus tard.",
     "loading": "Chargement...",
     "error": "Une erreur s'est produite.",
@@ -43,7 +44,7 @@
     "accept": "J'accepte",
     "decline": "Refuser",
     "passwordRules": {
-       "rule1": "Au moins 8 caractères",
+      "rule1": "Au moins 8 caractères",
       "rule2": "Au moins une lettre majuscule",
       "rule3": "Au moins une lettre minuscule",
       "rule4": "Au moins un chiffre",
@@ -62,29 +63,140 @@
   },
 
   "home": {
-    "heroTitle": "Faites plaisir à vos proches",
+    "heroTitle": "Faites Plaisir à Vos Proches",
     "heroSubtitle": "Nous livrons les fleurs les plus fraîches et les cadeaux les plus spéciaux de Londres à votre porte le jour même.",
     "categories": "Catégories",
-    "featured": "En vedette",
+    "featured": "En Vedette",
     "categories_sticky": "Catégories",
     "notFound": "Aucun produit trouvé correspondant à vos critères.",
-    "showAll": "Afficher tous les produits",
+    "searchNotFoundTitle": "Est-ce un trésor caché ?",
+    "searchNotFoundDesc": "Nous n'avons pas trouvé de résultat pour votre recherche, mais nos rayons sont remplis d'autres surprises.",
+    "categoryEmptyTitle": "De grandes choses arrivent !",
+    "categoryEmptyDesc": "Cette collection a été tellement appréciée qu'elle est épuisée ! Nos designers préparent actuellement les produits les plus spéciaux et des cadeaux frais rien que pour vous.",
+    "showAll": "Découvrir tous les produits",
+    "popularCategory": "Populaire : Anniversaire 🎂",
     "homeAddToCart": "Ajouter",
+    "allProducts": "Tous les Produits",
+    "questionRemove": "SUPPRIMER ?",
+    "questionRemoveDesc": " sera supprimé du panier.",
+    "nav": {
+      "flowers": "Fleurs & Plantes",
+      "gift": "Cadeaux",
+      "fashion": "Mode & Vêtements",
+      "edible": "Comestibles",
+      "other": "Autres"
+    },
     "categories1": {
       "all": "Tous",
-      "birthday": "Anniversaire",
-      "anniversary": "Anniversaire de mariage",
-      "indoor": "Fleurs d'intérieur",
-      "edible": "Cadeaux comestibles",
-      "rose": "Roses",
-      "orchid": "Orchidées",
-      "daisy": "Marguerites",
-      "tulip": "Tulipes",
-      "unique": "Uniques",
-      "designFlowers": "Fleurs design"
-    },
-    "questionRemove": "SUPPRIMER ?",
-    "questionRemoveDesc": " sera supprimé du panier."
+      "flowers": {
+        "bouquet": "Bouquets",
+        "special": "Fleurs Spéciales",
+        "rose": "Roses",
+        "orchid": "Orchidées",
+        "daisy": "Marguerites",
+        "tulip": "Tulipes",
+        "designFlowers": "Fleurs Design",
+        "indoor_flowers": "Fleurs d'Intérieur",
+        "unique": "Uniques"
+      },
+      "clothes": {
+        "women": "Femme",
+        "women_clothes": {
+          "dresses": "Robes",
+          "tops": "Hauts",
+          "bottoms": "Bas",
+          "skirts": "Jupes",
+          "tshirt": "T-Shirts",
+          "pants": "Pantalons",
+          "shorts": "Shorts",
+          "casual": "Décontracté",
+          "formal": "Formel",
+          "lingerines": "Lingerie",
+          "sleepwear": "Vêtements de Nuit",
+          "activeWear": "Vêtements de Sport",
+          "hats": "Chapeaux",
+          "watches": "Montres",
+          "shirt": "Chemises",
+          "jacket": "Vestes & Manteaux",
+          "styles": "Styles",
+          "bag_women": "Sacs Femme",
+          "parfume_women": "Parfum Femme",
+          "accessory": "Accessoires"
+        },
+        "men": "Homme",
+        "men_clothes": {
+          "shirts": "Chemises",
+          "pants": "Pantalons",
+          "shorts": "Shorts",
+          "casual": "Décontracté",
+          "formal": "Formel",
+          "tops": "Hauts",
+          "bottoms": "Bas",
+          "activeWear": "Vêtements de Sport",
+          "suits": "Costumes",
+          "hoodies": "Sweats à Capuche",
+          "tshirt": "T-Shirts",
+          "jacket": "Vestes & Manteaux",
+          "sleepwear": "Vêtements de Nuit",
+          "hats": "Chapeaux",
+          "watches": "Montres",
+          "Stiller": "Styles",
+          "bag_men": "Sacs Homme",
+          "parfume_men": "Parfum Homme",
+          "underwear": "Sous-vêtements"
+        },
+        "baby": "Vêtements Bébé",
+        "baby_clothes": {
+          "bodysuits": "Bodies",
+          "rompers": "Barboteuses",
+          "sleepwear": "Pyjamas",
+          "outerwear": "Vêtements d'Extérieur",
+          "shoes": "Chaussures Bébé",
+          "accessories": "Accessoires"
+        },
+        "kids": "Vêtements Enfant",
+        "kids_clothes": {
+          "tops": "Hauts",
+          "bottoms": "Bas",
+          "dresses": "Robes",
+          "jackets": "Vestes",
+          "tshirts": "T-Shirts",
+          "pants": "Pantalons",
+          "shorts": "Shorts",
+          "activeWear": "Vêtements de Sport",
+          "sleepwear": "Pyjamas",
+          "shoes": "Chaussures",
+          "accessories": "Accessoires"
+        }
+      },
+      "gifts": {
+        "for_him": "Pour Lui",
+        "for_her": "Pour Elle",
+        "for_kids": "Pour Enfants",
+        "personalized": "Cadeaux Personnalisés",
+        "books": "Livres",
+        "crypto": "Produits Crypto",
+        "giftcard": "Cartes Cadeaux",
+        "birthday": "Anniversaire",
+        "anniversary": "Anniversaire de Mariage"
+      },
+      "edible": {
+        "cake": "Gâteaux",
+        "cookies": "Biscuits",
+        "drinks": "Boissons",
+        "chocolate": "Chocolat",
+        "fruit_basket": "Corbeille de Fruits",
+        "chocolate_box": "Boîte de Chocolats",
+        "snack": "Snacks"
+      },
+      "others": {
+        "proteinPowder": "Protéine en Poudre",
+        "tech": "Technologie",
+        "home_decor": "Décoration d'Intérieur",
+        "stationery": "Papeterie",
+        "sports": "Équipement Sportif"
+      }
+    }
   },
 
   "seo": {
@@ -621,6 +733,20 @@
     "saveSettings": "Enregistrer les paramètres"
   },
   "vendorProducts": {
+    "additionalCategories": "Afficher dans d'autres catégories (Facultatif)",
+    "comment": "adminProductPage",
+    "title": "Produits",
+    "close": "Fermer",
+    "calories": "Calories",
+    "ingredients": "Ingrédients",
+    "addIngredientPlaceholder": "Ajouter un nouvel ingrédient...",
+    "size": "Taille",
+    "color": "Couleur",
+    "variants": "Variantes",
+    "addVariant": "Ajouter une variante",
+    "noVariants": "Aucune variante ajoutée pour ce produit.",
+    "passive": "Désactivé",
+
     "birthday": "Anniversaire",
     "product": "Produit",
     "active": "Activé",
@@ -683,6 +809,7 @@
   },
   "profilePage": {
     "userInfo": {
+      "editProfile": "Modifier le profil",
       "profileUpdated": "Informations du profil mises à jour !",
       "updateUnsucessfull": "Le profil n'a pas pu être mis à jour. Veuillez réessayer.",
       "oldPassword": "Entrez votre ancien mot de passe.",
@@ -726,28 +853,29 @@
       "cancelRequest": "Créer une demande d'annulation",
       "invoice": "Facture"
     },
-    "adressBook": {
-      "adressUpdated": "Adresse mise à jour",
-      "adressAdded": "Adresse ajoutée",
-      "qDeteleAdress": "Supprimer l'adresse ?",
-      "deleteAdressLabel": "L'adresse intitulée sera supprimée définitivement.",
-      "adressDeleted": "Adresse supprimée",
-      "myAdresses": "Adresses enregistrées",
+    "addressBook": {
+      "addressUpdated": "Adresse mise à jour",
+      "addressAdded": "Adresse ajoutée",
+      "qDeleteAddress": "Supprimer l'adresse ?",
+      "deleteAddressLabel": "L'adresse avec ce titre sera définitivement supprimée.",
+      "addressDeleted": "Adresse supprimée",
+      "myAddresses": "Adresses enregistrées",
       "cancel": "Annuler",
-      "addNewAdress": "Ajouter une nouvelle adresse",
-      "editAdress": "Modifier l'adresse",
-      "newAdressInfo": "Nouvelles informations d'adresse",
-      "adressTitle": "Titre de l'adresse",
-      "adressTitlePlaceholder": "Maison, Travail, Mon ami",
-      "receipentName": "Nom du destinataire",
-      "receipentNamePlaceholder": "Nom complet",
-      "receipentPhone": "Numéro de téléphone du destinataire",
-      "openAdress": "Adresse du destinataire",
+      "addNewAddress": "Ajouter une nouvelle adresse",
+      "editAddress": "Modifier l'adresse",
+      "newAddressInfo": "Nouvelles informations d'adresse",
+      "addressTitle": "Titre du destinataire",
+      "addressTitlePlaceholder": "Maison, Travail, Mon ami",
+      "recipientName": "Nom du destinataire",
+      "recipientNamePlaceholder": "Nom complet",
+      "recipientPhone": "Numéro de téléphone du destinataire",
+      "openAddress": "Adresse du destinataire",
+      "openAdressPlaceholder": "exemple: Blackfriars, London EC4V 6BJ, United Kingdom",
       "city": "Ville",
       "postCode": "Code postal",
       "saveChanges": "Enregistrer les modifications",
-      "addAdress": "Enregistrer l'adresse",
-      "noSavedAdresses": "Vous n'avez pas encore d'adresses enregistrées.",
+      "addAddress": "Enregistrer l'adresse",
+      "noSavedAddresses": "Vous n'avez pas encore d'adresses enregistrées.",
       "edit": "Modifier",
       "delete": "Supprimer"
     }
