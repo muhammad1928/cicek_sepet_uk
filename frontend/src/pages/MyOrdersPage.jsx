@@ -5,11 +5,9 @@ import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import OrderTracker from "../components/OrderTracker";
 import InvoiceModal from "../components/InvoiceModal"; 
-// --- YENİ İPTAL MODALI ---
 import CancelModal from "../components/CancelModal"; 
 import { FiPackage, FiClock, FiMapPin, FiChevronDown, FiChevronUp, FiX, FiPrinter, FiAlertTriangle } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
-
 
 const MyOrdersPage = () => {
   const { t } = useTranslation();
@@ -46,11 +44,11 @@ const MyOrdersPage = () => {
 
   // --- AKSİYONLAR ---
 
-  // 1. İptal Butonuna Tıklanınca (ESKİ MODALI AÇMAZ, YENİYİ AÇAR)
+  // 1. İptal Butonuna Tıklanınca
   const handleCancelClick = (e, id) => {
     e.stopPropagation(); // Akordeonun kapanmasını önle
     setSelectedOrderId(id);
-    setShowCancelModal(true); // <--- SADECE YENİ MODAL
+    setShowCancelModal(true); 
   };
 
   // 2. İptal Talebini Gönder
@@ -138,31 +136,31 @@ const MyOrdersPage = () => {
                   {/* Sol: İkon ve No */}
                   <div className="flex items-center gap-4 w-full md:w-auto">
                     <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl shadow-inner">
-                       {order.status === 'Teslim Edildi' ? '🎁' : '📦'}
+                        {order.status === 'Teslim Edildi' ? '🌸' : '📦'}
                     </div>
                     <div>
-                       <div className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-0.5">{t("myOrders.orderNumber")}</div>
-                       <div className="text-lg font-bold text-gray-800 font-mono">#{order._id.slice(-8).toUpperCase()}</div>
-                       <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                         <FiClock /> {new Date(order.createdAt).toLocaleDateString()}
-                       </div>
+                        <div className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-0.5">{t("myOrders.orderNumber")}</div>
+                        <div className="text-lg font-bold text-gray-800 font-mono">#{order._id.slice(-8).toUpperCase()}</div>
+                        <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                          <FiClock /> {new Date(order.createdAt).toLocaleDateString()}
+                        </div>
                     </div>
                   </div>
 
                   {/* Orta: Tutar */}
                   <div className="text-center md:text-right w-full md:w-auto">
-                     <div className="text-sm font-bold text-gray-400 uppercase tracking-wide">{t("myOrders.orderAmount")}</div>
-                     <div className="text-xl font-extrabold text-pink-600">£{order.totalAmount.toFixed(2)}</div>
+                      <div className="text-sm font-bold text-gray-400 uppercase tracking-wide">{t("myOrders.orderAmount")}</div>
+                      <div className="text-xl font-extrabold text-pink-600">£{order.totalAmount.toFixed(2)}</div>
                   </div>
 
                   {/* Sağ: Durum ve Ok */}
                   <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                     <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${styles.badge}`}>
+                      <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${styles.badge}`}>
                         {order.status}
-                     </span>
-                     <span className={`text-gray-400 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                      </span>
+                      <span className={`text-gray-400 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
                         {isExpanded ? <FiChevronUp size={24} /> : <FiChevronDown size={24} />}
-                     </span>
+                      </span>
                   </div>
                 </div>
 
@@ -172,12 +170,12 @@ const MyOrdersPage = () => {
                     
                     {/* Sipariş Takip Çubuğu */}
                     <div className="mb-8 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                       <OrderTracker status={order.status} />
+                        <OrderTracker status={order.status} />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-8">
-                       {/* Ürün Listesi */}
-                       <div>
+                        {/* Ürün Listesi */}
+                        <div>
                           <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiPackage /> {t("myOrders.orderProducts")}</h4>
                           <div className="space-y-3">
                             {order.items.map((item, i) => (
@@ -186,57 +184,71 @@ const MyOrdersPage = () => {
                                 <div className="flex-1">
                                   <div className="font-bold text-gray-800 text-sm">{item.title}</div>
                                   <div className="text-xs text-gray-500">{t("myOrders.orderQuantity")}: {item.quantity}</div>
+                                  {item.selectedVariant && (
+                                      <div className="text-[10px] text-gray-400 font-bold bg-gray-50 inline-block px-1.5 rounded mt-1">
+                                          {item.selectedVariant.size} - {item.selectedVariant.color}
+                                      </div>
+                                  )}
                                 </div>
                                 <div className="font-bold text-gray-700">£{item.price.toFixed(2)}</div>
                               </div>
                             ))}
                           </div>
-                       </div>
+                        </div>
 
-                       {/* Teslimat Bilgileri */}
-                       <div>
+                        {/* Teslimat Bilgileri (GÜNCELLENEN KISIM) */}
+                        <div>
                           <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiMapPin /> {t("myOrders.delivery")}</h4>
                           <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-2 text-sm text-gray-700 shadow-sm">
                              <p><span className="font-bold">{t("myOrders.recipient")}:</span> {order.recipient.name}</p>
                              <p className="text-xs text-gray-500">{order.recipient.phone}</p>
-                             <p className="bg-gray-50 p-2 rounded border border-gray-100 mt-2 leading-relaxed">
-                                {order.recipient.address}<br/>
+                             
+                             <div className="bg-gray-50 p-2 rounded border border-gray-100 mt-2 leading-relaxed">
+                                {order.recipient.address || order.recipient.street} 
+                                {order.recipient.buildingNo ? ` No: ${order.recipient.buildingNo}` : ''}
+                                <br/>
+                                {/* Kat ve Daire Gösterimi */}
+                                {(order.recipient.floor || order.recipient.apartment) && (
+                                    <span className="block text-xs font-semibold text-gray-500 mb-1">
+                                        {order.recipient.floor && `Kat: ${order.recipient.floor} `} 
+                                        {order.recipient.apartment && `Daire: ${order.recipient.apartment}`}
+                                    </span>
+                                )}
                                 {order.recipient.city}, {order.recipient.postcode}
-                             </p>
+                             </div>
+
                              {order.delivery.cardMessage && (
                                <div className="mt-2 text-pink-600 italic bg-pink-50 p-2 rounded border border-pink-100 text-xs">
                                   💌 "{order.delivery.cardMessage}"
                                </div>
                              )}
                           </div>
-                       </div>
+                        </div>
                     </div>
                     
                     {/* BUTONLAR */}
                     <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap justify-end gap-3">
-                       {/* FATURA BUTONU */}
-                       <button 
+                        <button 
                           onClick={() => setSelectedInvoice(order)} 
                           className="flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition shadow-md"
-                       >
+                        >
                           <FiPrinter /> {t("myOrders.invoice")}
-                       </button>
+                        </button>
 
-                       {/* İPTAL TALEBİ BUTONU (Sadece Sipariş Alındı ise ve İptal Talebi yoksa) */}
-                       {order.status === "Sipariş Alındı" && (
-                         <button 
-                           onClick={(e) => handleCancelClick(e, order._id)} 
-                           className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-xl font-bold text-sm transition border border-transparent hover:border-red-100"
-                         >
-                           <FiX /> {t("myOrders.cancelOrderRequest")}
-                         </button>
-                       )}
-                       
-                       {order.status === "İptal Talebi" && (
-                          <span className="flex items-center gap-2 text-orange-600 bg-orange-50 px-4 py-2 rounded-xl font-bold text-sm border border-orange-100 animate-pulse">
-                            <FiAlertTriangle /> {t("myOrders.cancelRequestPending")}
-                          </span>
-                       )}
+                        {order.status === "Sipariş Alındı" && (
+                          <button 
+                            onClick={(e) => handleCancelClick(e, order._id)} 
+                            className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-5 py-2.5 rounded-xl font-bold text-sm transition border border-transparent hover:border-red-100"
+                          >
+                            <FiX /> {t("myOrders.cancelOrderRequest")}
+                          </button>
+                        )}
+                        
+                        {order.status === "İptal Talebi" && (
+                           <span className="flex items-center gap-2 text-orange-600 bg-orange-50 px-4 py-2 rounded-xl font-bold text-sm border border-orange-100 animate-pulse">
+                             <FiAlertTriangle /> {t("myOrders.cancelRequestPending")}
+                           </span>
+                        )}
                     </div>
 
                   </div>
@@ -247,7 +259,6 @@ const MyOrdersPage = () => {
         </div>
       </div>
 
-      {/* --- YENİ İPTAL MODALI (CancelModal) --- */}
       {showCancelModal && (
         <CancelModal 
           onClose={() => setShowCancelModal(false)} 
@@ -255,7 +266,6 @@ const MyOrdersPage = () => {
         />
       )}
 
-      {/* Fatura Modalı */}
       {selectedInvoice && <InvoiceModal order={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
 
     </div>

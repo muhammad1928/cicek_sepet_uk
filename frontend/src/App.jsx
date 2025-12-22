@@ -39,6 +39,7 @@ import VendorPage from "./pages/partner/VendorPage";
 import CourierPage from "./pages/partner/CourierPage";
 import AdminPage from "./pages/AdminPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage"; 
+import CartPage from "./pages/CartPage";
 
 // Bu ayar, tüm isteklerde (login, refresh, sync-favorites vb.) 
 // tarayıcının cookie'leri backend'e otomatik göndermesini sağlar.
@@ -87,7 +88,7 @@ function App() {
             <Toast />
             <Chatbot />
             
-            <div className="flex-1 pt-10 relative z-0">
+            <div className="flex-1 pt-8 relative z-0">
               <Routes>
                 {/* Müşteri Rotaları */}
                 <Route path="/" element={<HomePage />} />
@@ -103,6 +104,7 @@ function App() {
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/cart" element={<CartPage />} />
 
                 {/* Şifre İşlemleri */}
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />

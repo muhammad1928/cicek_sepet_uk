@@ -39,7 +39,7 @@ const TermsModal = ({ onClose, type, onAccept }) => {
 
           <div>
             <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.customers.third.title")}</h4>
-            <p>{t("termsModal.customers.third.desc")}</p>
+            <div dangerouslySetInnerHTML={{ __html: t("termsModal.customers.third.desc") }} />
           </div>
 
           <div>
@@ -68,7 +68,7 @@ const TermsModal = ({ onClose, type, onAccept }) => {
           <div>
             <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.courierAgreement.third.title")}</h4>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>{t("termsModal.courierAgreement.third.titleSub")}</li>
+              <li>{t("termsModal.courierAgreement.third.titlesub")}</li>
               <li>{t("termsModal.courierAgreement.third.desc")}</li>
             </ul>
           </div>
@@ -96,6 +96,11 @@ const TermsModal = ({ onClose, type, onAccept }) => {
           <div>
             <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.vendorAgreement.third.title")}</h4>
             <p>{t("termsModal.vendorAgreement.third.desc")}</p>
+          </div>
+
+           <div>
+            <h4 className="font-bold text-black uppercase mb-2">{t("termsModal.vendorAgreement.fourth.title")}</h4>
+            <p>{t("termsModal.vendorAgreement.fourth.desc")}</p>
           </div>
         </div>
       )

@@ -12,7 +12,9 @@ import { useTranslation } from "react-i18next";
 
 const OrderTracker = ({ status }) => {
   const { t } = useTranslation();   
+  
   // 1. HANGİ ADIMDAYIZ? (0-3 Arası)
+  // Backend'deki Türkçe statülere göre eşleştirme
   const getStepIndex = (s) => {
     switch(s) {
       case "Sipariş Alındı": return 0;
@@ -23,34 +25,38 @@ const OrderTracker = ({ status }) => {
 
       case "Kurye Yolda":     
       case "Dağıtımda":       
-      case "Yola Çıktı":
+      case "Yola Çıktı": // (Eski veri uyumluluğu için)
         return 2;
 
       case "Teslim Edildi": return 3;
+      
+      // İptal durumları için özel işlem return etmiyoruz, aşağıda handle ediyoruz
       default: return 0;
     }
   };
 
   const currentStep = getStepIndex(status);
 
-  // 2. DİNAMİK ADIMLAR (Duruma göre ikon ve yazı değişir)
+  // 2. DİNAMİK ADIMLAR
   const steps = [
     { 
-      label: "Sipariş Alındı", 
+      label: t("status.orderReceived") || "Sipariş Alındı", 
       icon: <FaClipboardList /> 
     },
     { 
       // Durum "Hazır" ise Kutu İkonu, değilse Çark İkonu
-      label: status === "Hazır" ? t("orderTracker.ready") : t("orderTracker.preparing"), 
+      label: status === "Hazır" ? (t("status.ready") || "Hazır") : (t("status.preparing") || "Hazırlanıyor"), 
       icon: status === "Hazır" ? <FaBoxOpen /> : <FaCogs className={status === 'Hazırlanıyor' ? "animate-spin-slow" : ""} /> 
     },
     { 
       // Kurye durumuna göre detaylı bilgi
-      label: status === "Kurye Yolda" ? t("orderTracker.courierToStore") : (status === "Dağıtımda" ? t("orderTracker.deliveryOnTheWay") : t("orderTracker.onTheWay")), 
+      label: status === "Kurye Yolda" 
+        ? (t("status.courierOnWay") || "Kurye Yolda") 
+        : (status === "Dağıtımda" ? (t("status.outForDelivery") || "Dağıtımda") : (t("status.onTheWay") || "Yola Çıktı")), 
       icon: status === "Kurye Yolda" ? <FaMotorcycle /> : (status === "Dağıtımda" ? <FaMapMarkedAlt /> : <FaShippingFast />)
     },
     { 
-      label: t("orderTracker.delivered"), 
+      label: t("status.delivered") || "Teslim Edildi", 
       icon: <FaHome /> 
     }
   ];
@@ -64,10 +70,10 @@ const OrderTracker = ({ status }) => {
         </div>
         <div>
           <h4 className={`font-bold ${status === "İptal" ? "text-red-800" : "text-orange-800"}`}>
-            {status === "İptal Talebi" ? t("orderTracker.cancellRequested") : t("orderTracker.cancelled")}
+            {status === "İptal Talebi" ? (t("status.cancelRequest") || "İptal Talebi") : (t("status.cancelled") || "İptal Edildi")}
           </h4>
           <p className={`text-sm ${status === "İptal" ? "text-red-600" : "text-orange-600"}`}>
-            {status === "İptal Talebi" ? t("orderTracker.cancelReqUnderReview") : t("orderTracker.orderCancelled")}
+            {status === "İptal Talebi" ? (t("status.cancelReqPending") || "Talebiniz inceleniyor...") : (t("status.orderCancelledMsg") || "Siparişiniz iptal edildi.")}
           </p>
         </div>
       </div>

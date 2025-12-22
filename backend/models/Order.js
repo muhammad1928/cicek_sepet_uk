@@ -11,20 +11,26 @@ const OrderSchema = new mongoose.Schema({
     email: { type: String, required: true }
   },
   
-  // --- 2. ALICI BİLGİLERİ ---
+  // --- 2. ALICI VE ADRES BİLGİLERİ (GÜNCELLENDİ) ---
   recipient: {
     name: { type: String, required: true },
     phone: { type: String, required: true },
-    address: { type: String, required: true },
-    city: { type: String, required: true },
-    postcode: { type: String, required: true }
+    
+    // Eski "address" tek satırdı, şimdi detaylandırıldı:
+    street: { type: String, required: true },      // Cadde/Sokak Adı
+    buildingNo: { type: String, required: true },  // Bina No
+    apartment: { type: String, default: "" },      // Daire No (Opsiyonel)
+    floor: { type: String, default: "" },          // Kat (Opsiyonel)
+    
+    postcode: { type: String, required: true },    // Posta Kodu
+    city: { type: String, required: true },        // Şehir (London vb.)
+    country: { type: String, required: true }      // Ülke (United Kingdom vb.)
   },
 
   // --- 3. TESLİMAT DETAYLARI ---
   delivery: {
     date: { type: Date, required: true },
     timeSlot: { type: String, default: "09:00 - 18:00" },
-    // --- YENİ ALAN: TESLİMAT TİPİ ---
     deliveryType: { 
         type: String, 
         enum: ['standart', 'next-day', 'same-day'], 
@@ -35,29 +41,33 @@ const OrderSchema = new mongoose.Schema({
     isAnonymous: { type: Boolean, default: false } // İsimsiz gönderim
   },
 
-  // --- 4. ÜRÜN LİSTESİ ---
+  // --- 4. ÜRÜN LİSTESİ (GÜNCELLENDİ) ---
   items: [
     {
-      _id: String,
+      _id: String,      // Ürün ID'si
       title: String,
       price: Number,    // Satış anındaki birim fiyat (Değişmez)
       quantity: Number,
       img: String,
-      // İleride satıcı bazlı raporlama için vendor ID'sini buraya da ekleyebiliriz
-      // ancak şu an product._id üzerinden populate ederek buluyoruz.
-      // YENİ: Seçilen Varyant Bilgisi
+      
+      // --- YENİ: VENDOR ID ---
+      // Admin panelinde siparişi dükkanlara göre ayırmak ve 
+      // Satıcı panelinde sadece kendi ürününü göstermek için şart.
+      vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
+      // Seçilen Varyant Bilgisi
       selectedVariant: {
           size: String,   // "M", "L"
           color: String,  // "Red", "Blue"
-          // İleride başka özellik gelirse buraya eklenir
+          stock: Number   // Opsiyonel: Satın alınan varyantın stok bilgisi (history için)
       }
     }
   ],
 
   // --- 5. FİNANSAL BİLGİLER ---
   totalAmount: { type: Number, required: true }, // Müşterinin ödediği son tutar
-  // --- YENİ: SATICI HAKEDİŞİ İÇİN HAM TUTAR ---
-  // (Kuponsuz, İndirimsiz, Orijinal Ürün Toplamı)
+  
+  // Satıcı hakedişi için ham tutar (Kuponsuz, İndirimsiz)
   rawTotal: { type: Number, default: 0 },
   
   deliveryFee: { type: Number, default: 0 },     // Kargo ücreti
@@ -71,7 +81,7 @@ const OrderSchema = new mongoose.Schema({
         'Hazırlanıyor',    // Satıcı onayladı
         'Hazır',           // Satıcı paketi hazırladı, kurye bekliyor
         'Kurye Yolda',     // Kurye işi aldı, mağazaya gidiyor
-        'Dağıtımda',       // Kurye ürünü aldı, müşteriye gidiyor (Eski adıyla: Yola Çıktı)
+        'Dağıtımda',       // Kurye ürünü aldı, müşteriye gidiyor
         'Teslim Edildi',   // İşlem tamam
         'İptal',           // İptal edildi
         'İptal Talebi'     // Müşteri iptal istedi, onay bekliyor
@@ -84,7 +94,7 @@ const OrderSchema = new mongoose.Schema({
 
   // --- 8. KURYE YÖNETİMİ ---
   courierId: { type: String }, // Siparişi taşıyan kuryenin ID'si
-  courierRejectionReason: { type: String }, // Eğer bir kurye işi reddederse (Opsiyonel)
+  courierRejectionReason: { type: String }, // Eğer bir kurye işi reddederse
 
   // --- 9. GÜVENLİK VE ANALİTİK (METADATA) ---
   metaData: {

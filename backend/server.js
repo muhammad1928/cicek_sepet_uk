@@ -24,6 +24,7 @@ const paymentRoute = require("./routes/payment");
 const uploadRoute = require("./routes/upload");
 const cookieParser = require("cookie-parser");
 const contactRoute = require("./routes/contact");
+const sitemapRoute = require("./routes/sitemap");
 // const webhookRoute = require("./routes/webhook"); // (İleride eklenecek)
 
 dotenv.config();
@@ -184,6 +185,7 @@ app.use("/api/coupons", couponRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/upload", uploadRoute);
 app.use("/api/contact", contactRoute);
+app.use("/", sitemapRoute);
 
 // ============================================================
 // ⚠️ GLOBAL HATA YAKALAYICI (TEK VE BİRLEŞİK)

@@ -3,11 +3,8 @@ import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
 import AdminPanelHeader from "./adminComponents/AdminPanelHeader";
-import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX, FiMinusCircle, FiPlusCircle, FiCheckSquare, FiSquare, FiLink } from "react-icons/fi"; // FiLink eklendi
+import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX, FiMinusCircle, FiPlusCircle, FiCheckSquare, FiSquare, FiLink, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
-
-// --- ORTAK VERİYİ IMPORT ET ---
-// Dosya yolunu kendi klasör yapına göre ayarla (örn: ../../data/categoryData)
 import { CATEGORY_GROUPS, CATEGORY_KEY_MAP } from "../../data/categoryData"; 
 
 const AdminProducts = () => {
@@ -21,8 +18,8 @@ const AdminProducts = () => {
   const [uploading, setUploading] = useState(false);
   const [confirmData, setConfirmData] = useState(null);
   
-  // --- YENİ STATE: URL INPUT ---
   const [imgUrlInput, setImgUrlInput] = useState("");
+  const [openCategoryGroup, setOpenCategoryGroup] = useState(null);
 
   const initialForm = { 
     title: "", price: "", desc: "", 
@@ -59,6 +56,7 @@ const AdminProducts = () => {
   const isClothing = useMemo(() => getCategoryType(formData.category) === 'clothing', [formData.category]);
 
   // --- HANDLERS ---
+
   const handleToggleStatus = async (product) => {
     try {
       const newStatus = !product.isActive;
@@ -89,7 +87,6 @@ const AdminProducts = () => {
     });
   };
 
-  // Resim Dosya Yükleme
   const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
     if (formData.imgs.length >= 5) return notify("Max 5 images!", "warning");
@@ -99,25 +96,29 @@ const AdminProducts = () => {
     data.append("file", file);
     try { 
         const res = await userRequest.post("/upload", data); 
-        setFormData((prev) => ({ ...prev, imgs: [...prev.imgs, res.data] })); 
+        // Düzeltme: Yeni resmi diziye eklerken spread operatörünü güvenli kullanıyoruz
+        const newImgUrl = res.data;
+        setFormData((prev) => ({ ...prev, imgs: [...prev.imgs, newImgUrl] })); 
         notify("Image uploaded", "success"); 
     } catch { notify(t('common.error'), "error"); } finally { setUploading(false); }
   };
 
-  // --- YENİ FONKSİYON: URL EKLEME ---
   const handleAddImageUrl = (e) => {
-    e.preventDefault(); // Form submit olmasın
+    e.preventDefault();
     if (!imgUrlInput) return;
     if (formData.imgs.length >= 5) return notify("Max 5 images!", "warning");
     
-    // Basit bir URL kontrolü eklenebilir ama zorunlu değil
     setFormData(prev => ({ ...prev, imgs: [...prev.imgs, imgUrlInput] }));
-    setImgUrlInput(""); // Inputu temizle
+    setImgUrlInput("");
     notify("URL Image added", "success");
   };
 
+  // Düzeltme: Filter fonksiyonu doğru, ancak render kısmındaki 'key' prop'u önemli.
   const removeImage = (index) => {
-    setFormData(prev => ({ ...prev, imgs: prev.imgs.filter((_, i) => i !== index) }));
+    setFormData(prev => {
+        const newImgs = prev.imgs.filter((_, i) => i !== index);
+        return { ...prev, imgs: newImgs };
+    });
   };
 
   const addIngredient = () => {
@@ -150,6 +151,11 @@ const AdminProducts = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const payload = { ...formData, vendor: user._id }; 
       delete payload.tempIngredient;
+      
+      // Eğer imgs dizisi boşsa, backend'e boş dizi gittiğinden emin olalım.
+      if (!payload.imgs || payload.imgs.length === 0) {
+          payload.imgs = []; 
+      }
 
       if (editMode) await userRequest.put(`/products/${editMode}`, payload);
       else await userRequest.post("/products", payload);
@@ -160,11 +166,20 @@ const AdminProducts = () => {
   };
 
   const handleEditClick = (p) => { 
+    // Düzeltme: imgs dizisini kopyalayarak alıyoruz (referans hatasını önlemek için)
+    // Eğer imgs yoksa ama tekil img varsa onu diziye çeviriyoruz.
+    let currentImgs = [];
+    if (p.imgs && p.imgs.length > 0) {
+        currentImgs = [...p.imgs];
+    } else if (p.img) {
+        currentImgs = [p.img];
+    }
+
     setFormData({ 
         ...initialForm, ...p, 
         category: p.category || "birthday",
         tags: p.tags || [],
-        imgs: p.imgs && p.imgs.length > 0 ? p.imgs : (p.img ? [p.img] : []),
+        imgs: currentImgs,
         foodDetails: p.foodDetails || { calories: "", ingredients: [] },
         variants: p.variants || []
     }); 
@@ -183,38 +198,32 @@ const AdminProducts = () => {
     return p.title.toLowerCase().includes(term) || (p.vendor?.username?.toLowerCase() || "").includes(term);
   });
 
+  const toggleGroup = (label) => {
+      setOpenCategoryGroup(openCategoryGroup === label ? null : label);
+  };
+
   return (
     <div className="space-y-6 pt-2 max-w-7xl mx-auto animate-fade-in">
       <AdminPanelHeader title="Products Management" count={products.length}>
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-          <input 
-            type="text" placeholder="Search..." 
-            className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" 
-            onChange={(e) => setSearchTerm(e.target.value)} 
-          />
-          <button 
-            onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} 
-            className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}
-          >
+          <input type="text" placeholder="Search..." className="px-4 py-2 border rounded-lg w-full md:w-64 outline-none focus:border-pink-500" onChange={(e) => setSearchTerm(e.target.value)} />
+          <button onClick={() => { setShowForm(!showForm); setEditMode(null); setFormData(initialForm); }} className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-1 transition ${showForm ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"}`}>
             {showForm ? <><FiX /> Close</> : <><FiPlus /> Add New</>}
           </button>
         </div>
       </AdminPanelHeader>
 
-      {/* --- FORM ALANI --- */}
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-100 mb-6 animate-fade-in-down">
           <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">{editMode ? "Edit Product" : "Add New Product"}</h3>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             <div><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Name</label><input name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded" /></div>
-            
             <div className="flex gap-2">
                 <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Price (£)</label><input name="price" type="number" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" /></div>
                 <div className="flex-1"><label className="block text-xs font-bold mb-1 uppercase text-gray-500">Stock</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded" /></div>
             </div>
 
-            {/* KATEGORİ SEÇİMİ */}
             <div className="md:col-span-2">
               <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Main Category</label>
               <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white font-medium text-gray-700">
@@ -228,54 +237,61 @@ const AdminProducts = () => {
               </select>
             </div>
 
-            {/* EK KATEGORİLER (TAGS) */}
             <div className="md:col-span-2 border rounded-lg p-4 bg-gray-50">
                <label className="block text-xs font-bold mb-3 uppercase text-gray-500">Additional Tags / Categories</label>
-               <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                  {CATEGORY_GROUPS.map((group, grpIdx) => (
-                      <div key={grpIdx}>
-                          <h5 className="text-xs font-extrabold text-blue-600 mb-2 uppercase border-b border-blue-100 pb-1">{group.label}</h5>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                             {group.options.map(optKey => {
-                                 const isMain = optKey === formData.category;
-                                 const isChecked = formData.tags?.includes(optKey);
-                                 if(isMain) return null;
-                                 return (
-                                     <div key={optKey} onClick={() => handleTagChange(optKey)} className={`flex items-center gap-2 p-1.5 rounded border cursor-pointer transition select-none text-sm ${isChecked ? 'bg-blue-100 border-blue-300' : 'bg-white hover:border-blue-300'}`}>
-                                          <div className={isChecked ? 'text-blue-600' : 'text-gray-300'}>{isChecked ? <FiCheckSquare/> : <FiSquare/>}</div>
-                                          <span className={`truncate ${isChecked ? 'font-bold text-blue-800' : 'text-gray-600'}`}>{getCatLabel(optKey)}</span>
-                                     </div>
-                                 )
-                             })}
+               <div className="space-y-2">
+                  {CATEGORY_GROUPS.map((group, grpIdx) => {
+                      const isOpen = openCategoryGroup === group.label;
+                      const selectedCount = group.options.filter(opt => formData.tags?.includes(opt)).length;
+
+                      return (
+                          <div key={grpIdx} className="bg-white border rounded-lg overflow-hidden transition-all">
+                              <div 
+                                onClick={() => toggleGroup(group.label)}
+                                className={`flex items-center justify-between p-3 cursor-pointer select-none transition ${isOpen ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50 text-gray-700'}`}
+                              >
+                                  <div className="flex items-center gap-2">
+                                      <span className="font-bold text-sm">{group.label}</span>
+                                      {selectedCount > 0 && (
+                                          <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                                              {selectedCount} Selected
+                                          </span>
+                                      )}
+                                  </div>
+                                  <div className="text-gray-400">
+                                      {isOpen ? <FiChevronUp/> : <FiChevronDown/>}
+                                  </div>
+                              </div>
+                              
+                              {isOpen && (
+                                  <div className="p-3 border-t bg-gray-50/50 animate-fade-in">
+                                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                          {group.options.map(optKey => {
+                                              const isMain = optKey === formData.category;
+                                              const isChecked = formData.tags?.includes(optKey);
+                                              if(isMain) return null;
+                                              return (
+                                                  <div key={optKey} onClick={() => handleTagChange(optKey)} className={`flex items-center gap-2 p-1.5 rounded border cursor-pointer transition select-none text-sm ${isChecked ? 'bg-blue-100 border-blue-300' : 'bg-white hover:border-blue-300'}`}>
+                                                      <div className={isChecked ? 'text-blue-600' : 'text-gray-300'}>{isChecked ? <FiCheckSquare/> : <FiSquare/>}</div>
+                                                      <span className={`truncate ${isChecked ? 'font-bold text-blue-800' : 'text-gray-600'}`}>{getCatLabel(optKey)}</span>
+                                                  </div>
+                                              )
+                                          })}
+                                      </div>
+                                  </div>
+                              )}
                           </div>
-                      </div>
-                  ))}
+                      );
+                  })}
                </div>
             </div>
 
-            {/* --- RESİM ALANI (URL + UPLOAD) --- */}
             <div>
                 <label className="block text-xs font-bold mb-1 uppercase text-gray-500">Images (Max 5)</label>
-                
-                {/* URL INPUT KISMI */}
                 <div className="flex gap-2 mb-2">
-                   <input 
-                     type="text" 
-                     placeholder="Or paste image URL..." 
-                     value={imgUrlInput}
-                     onChange={(e) => setImgUrlInput(e.target.value)}
-                     className="flex-1 p-2 border rounded text-xs outline-none focus:border-pink-500"
-                   />
-                   <button 
-                     type="button" 
-                     onClick={handleAddImageUrl}
-                     disabled={!imgUrlInput}
-                     className="px-3 py-1 bg-gray-600 text-white rounded text-xs font-bold hover:bg-gray-700 disabled:opacity-50"
-                   >
-                     Add URL
-                   </button>
+                   <input type="text" placeholder="Or paste image URL..." value={imgUrlInput} onChange={(e) => setImgUrlInput(e.target.value)} className="flex-1 p-2 border rounded text-xs outline-none focus:border-pink-500" />
+                   <button type="button" onClick={handleAddImageUrl} disabled={!imgUrlInput} className="px-3 py-1 bg-gray-600 text-white rounded text-xs font-bold hover:bg-gray-700 disabled:opacity-50">Add URL</button>
                 </div>
-
                 <div className="flex gap-2 border p-2 rounded bg-gray-50 overflow-x-auto">
                     {formData.imgs.length < 5 && (
                         <label className="cursor-pointer flex-shrink-0 w-16 h-16 flex flex-col items-center justify-center bg-white border border-dashed border-gray-400 rounded hover:bg-blue-50">
@@ -283,8 +299,9 @@ const AdminProducts = () => {
                             <input type="file" className="hidden" onChange={handleUpload} disabled={uploading}/>
                         </label>
                     )}
+                    {/* Düzeltme: key olarak sadece index değil, resim URL'ini de kullanıyoruz */}
                     {formData.imgs.map((img, idx) => (
-                        <div key={idx} className="relative w-16 h-16 flex-shrink-0 group">
+                        <div key={`${img}-${idx}`} className="relative w-16 h-16 flex-shrink-0 group">
                             <img src={img} alt="p" className="w-full h-full object-cover rounded border" />
                             <button type="button" onClick={() => removeImage(idx)} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5"><FiX size={12}/></button>
                         </div>
@@ -299,7 +316,6 @@ const AdminProducts = () => {
                 <label htmlFor="active" className="cursor-pointer font-bold text-gray-700 text-sm select-none">Active for sale?</label>
             </div>
 
-            {/* DİNAMİK ALANLAR (FOOD) */}
             {isFood && (
                 <div className="md:col-span-2 bg-orange-50 p-4 rounded-lg border border-orange-200">
                     <h4 className="font-bold text-orange-700 mb-2 text-sm uppercase">Food Details</h4>
@@ -324,7 +340,6 @@ const AdminProducts = () => {
                 </div>
             )}
 
-            {/* DİNAMİK ALANLAR (CLOTHING) */}
             {isClothing && (
                 <div className="md:col-span-2 bg-purple-50 p-4 rounded-lg border border-purple-200">
                     <div className="flex justify-between items-center mb-2">
@@ -348,7 +363,6 @@ const AdminProducts = () => {
         </div>
       )}
 
-      {/* LİSTELEME */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => {
           const mainImage = (product.imgs && product.imgs.length > 0) ? product.imgs[0] : (product.img || "https://placehold.co/400");

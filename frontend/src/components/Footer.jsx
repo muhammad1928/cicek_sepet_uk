@@ -66,9 +66,10 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-pink-500 transition flex items-center gap-2">
+                {/* GDPR Linki Düzeltildi */}
+                <Link to="/legal/privacy-policy" className="hover:text-pink-500 transition flex items-center gap-2">
                   <span>🛡️</span> {t("footer.col27")}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -109,9 +110,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaPhone /></div>
-                <span className="text-gray-400 group-hover:text-gray-300">+44 74 66428290</span>
+                <span className="text-gray-400 group-hover:text-gray-300">+44 74 6642 8290</span>
               </li>
-              <li><Link to="/contact" className="hover:text-pink-500 transition flex items-center gap-1"> {t("footer.col41")}</Link></li>
               <li className="flex items-center gap-3 group">
                 <div className="text-pink-500 group-hover:text-white transition"><FaEnvelope /></div>
                 <a href="mailto:info@fesfu.com" className="text-gray-400 hover:text-white transition">info@fesfu.com</a>

@@ -473,7 +473,7 @@ const CategoryNav = ({ onSelectCategory, activeCategory }) => {
                                     <FiArrowLeft size={14} className="text-slate-500 group-hover:text-pink-500"/>
                                 </div>
                                 <span className="tracking-wide whitespace-nowrap">
-                                    {selectedSubGroup ? t('common.back') || 'GERİ' : 'MENÜ'}
+                                    {selectedSubGroup ? t('common.back') || 'GERİ' : 'MENU'}
                                 </span>
                             </button>
 

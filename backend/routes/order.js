@@ -10,11 +10,9 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
   verifyTokenAndSeller,
-  verifyTokenAndWorker,
   verifyToken
 } = require('./verifyToken');
 
-// --- FİYATLANDIRMA SABİTLERİ ---
 const PRICING = {
     standart: 5.00,   
     nextDay: 9.99,    
@@ -23,7 +21,7 @@ const PRICING = {
 };
 
 // =============================================================================
-// 1. MAİL ŞABLONLARI (AYNI KALDI)
+// 1. MAİL ŞABLONLARI
 // =============================================================================
 const createOrderEmail = (order, title, message, t) => {
   const subTotal = order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -48,11 +46,9 @@ const createOrderEmail = (order, title, message, t) => {
       </div>
       <div style="padding: 30px;">
         <p style="font-size: 16px; color: #555; line-height: 1.5;">${message}</p>
-        
         <h3 style="color: #333; border-bottom: 2px solid #db2777; padding-bottom: 10px; margin-top: 30px;">
             ${t.orderSummaryTitle} <span style="font-size: 14px; color: #888; font-weight: normal;">(#${order._id.toString().slice(-8).toUpperCase()})</span>
         </h3>
-        
         <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px;">
           <thead>
             <tr style="background-color: #f9f9f9; color: #666;">
@@ -63,7 +59,6 @@ const createOrderEmail = (order, title, message, t) => {
           </thead>
           <tbody>${itemsHtml}</tbody>
         </table>
-
         <div style="text-align: right; margin-top: 20px; font-size: 14px;">
           <p style="margin: 5px 0; color: #666;">${t.subtotal}: <strong>£${subTotal.toFixed(2)}</strong></p>
           ${discountAmount > 0.01 ? `<p style="margin: 5px 0; color: #16a34a;">${t.discount}: <strong>-£${discountAmount.toFixed(2)}</strong></p>` : ''}
@@ -72,14 +67,12 @@ const createOrderEmail = (order, title, message, t) => {
             <p style="margin: 0; font-size: 22px; color: #db2777;"><strong>${t.total}: £${order.totalAmount.toFixed(2)}</strong></p>
           </div>
         </div>
-
         <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 25px; border: 1px solid #e2e8f0;">
           <p style="margin: 0; font-size: 14px; color: #334155;"><strong>📍 ${t.deliveryAddress}:</strong><br/>
           ${order.recipient.name}<br/>
-          ${order.recipient.address}, ${order.recipient.city}<br/>
+          ${order.recipient.street ? order.recipient.street : order.recipient.address}, ${order.recipient.city}<br/>
           ${order.recipient.phone}</p>
         </div>
-
         <div style="text-align: center; margin-top: 35px;">
           <a href="${process.env.CLIENT_URL}/my-orders" style="background-color: #db2777; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px;">
             ${t.trackOrderBtn}
@@ -95,7 +88,6 @@ const createOrderEmail = (order, title, message, t) => {
 
 const createVendorEmail = (vendorData, orderId, deliveryFee, t) => {
   const vendorTotal = vendorData.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-
   const itemsHtml = vendorData.items.map(item => `
     <tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee;">
@@ -116,7 +108,6 @@ const createVendorEmail = (vendorData, orderId, deliveryFee, t) => {
       <div style="padding: 25px;">
         <p style="font-size: 16px; color: #333;">Hello <b>${vendorData.name}</b>,</p>
         <p style="color: #555;">${t.newOrderMsg} (#${orderId.toString().slice(-8).toUpperCase()}).</p>
-        
         <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;">
           <thead>
              <tr style="background-color: #f3f4f6; color: #555;">
@@ -128,11 +119,9 @@ const createVendorEmail = (vendorData, orderId, deliveryFee, t) => {
           </thead>
           <tbody>${itemsHtml}</tbody>
         </table>
-        
         <div style="text-align: right; margin-top: 20px; font-size: 18px;">
            <p>${t.vendorEarnings}: <strong style="color: #4f46e5;">£${vendorTotal.toFixed(2)}</strong></p>
         </div>
-        
         <div style="text-align: center; margin-top: 30px;">
           <a href="${process.env.CLIENT_URL}/vendor" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">${t.vendorPanelBtn}</a>
         </div>
@@ -165,13 +154,12 @@ const createCourierCancelEmail = (courierName, orderId, t) => {
 
 
 // =============================================================================
-// 2. SİPARİŞ OLUŞTURMA (POST) - VARYANT DESTEKLİ
+// 2. SİPARİŞ OLUŞTURMA (POST)
 // =============================================================================
 router.post('/', async (req, res) => {
   const { items, sender, recipient, delivery, userId, couponCode, metaData, saveAddress, language } = req.body;
 
   try {
-    // --- DİL AYARI ---
     const lang = language || 'en';
     const t = emailTexts[lang] || emailTexts['en'];
 
@@ -187,13 +175,11 @@ router.post('/', async (req, res) => {
         return res.status(404).json({ message: `Product not found: ${item.title}` });
       }
 
-      // --- STOK KONTROLÜ (KRİTİK GÜNCELLEME) ---
-      // Varyant varsa varyantın stoğuna bak, yoksa ana stoğa bak.
+      // --- STOK KONTROLÜ ---
       let hasStock = false;
       let variantIndex = -1;
 
       if (item.selectedVariant && product.variants && product.variants.length > 0) {
-          // Varyant bul
           variantIndex = product.variants.findIndex(v => 
               v.size === item.selectedVariant.size && v.color === item.selectedVariant.color
           );
@@ -201,15 +187,12 @@ router.post('/', async (req, res) => {
           if (variantIndex > -1) {
               if (product.variants[variantIndex].stock >= item.quantity) {
                   hasStock = true;
-                  // STOK DÜŞ
                   product.variants[variantIndex].stock -= item.quantity;
               }
           }
       } else {
-          // Normal Ürün
           if (product.stock >= item.quantity) {
               hasStock = true;
-              // STOK DÜŞ
               product.stock -= item.quantity;
           }
       }
@@ -218,22 +201,23 @@ router.post('/', async (req, res) => {
         return res.status(400).json({ message: `Insufficient stock for ${item.title}` });
       }
       
-      // Değişiklikleri Kaydet
       await product.save();
 
-      // --- FİYAT VE LİSTELEME ---
       const price = product.price;
       calculatedTotal += price * item.quantity;
       rawTotal += price * item.quantity; 
+
+      // --- RESİM KONTROLÜ (GÜVENLİ) ---
+      // Önce product.img'ye bak, yoksa product.imgs dizisinin ilk elemanına bak.
+      const itemImage = product.img || (product.imgs && product.imgs.length > 0 ? product.imgs[0] : "");
 
       finalItems.push({
         _id: product._id,
         title: product.title,
         price: price,
         quantity: item.quantity,
-        img: product.img,
-        vendorName: product.vendor?.fullName || "Platform",
-        // YENİ: Varyant bilgisini sipariş kaydına da ekle
+        img: itemImage, // <-- Düzeltilen kısım
+        vendor: product.vendor, 
         selectedVariant: item.selectedVariant || null
       });
     }
@@ -280,11 +264,9 @@ router.post('/', async (req, res) => {
     }
     const finalTotalAmount = priceAfterDiscount + deliveryFee;
 
-    // --- C) METADATA VE IP ---
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const finalMetaData = { ...metaData, ip: clientIp };
 
-    // --- D) KULLANICI GÜNCELLEME ---
     if (userId) {
       try {
          await User.findByIdAndUpdate(userId, { $set: { phone: sender.phone } });
@@ -292,15 +274,23 @@ router.post('/', async (req, res) => {
              await User.findByIdAndUpdate(userId, { 
                  $addToSet: { savedAddresses: {
                     title: `${recipient.name} - ${recipient.city}`,
-                    recipientName: recipient.name, recipientPhone: recipient.phone,
-                    address: recipient.address, city: recipient.city, postcode: recipient.postcode
+                    recipientName: recipient.name, 
+                    recipientPhone: recipient.phone,
+                    address: recipient.address || recipient.street,
+                    street: recipient.street,
+                    buildingNo: recipient.buildingNo,
+                    apartment: recipient.apartment,
+                    floor: recipient.floor,
+                    city: recipient.city, 
+                    postcode: recipient.postcode,
+                    country: recipient.country
                  }} 
              });
          }
       } catch(e) { console.log("User update error:", e); }
     }
 
-    // --- E) SİPARİŞİ KAYDET ---
+    // --- SİPARİŞİ KAYDET ---
     const newOrder = new Order({
       userId,
       items: finalItems,
@@ -322,25 +312,37 @@ router.post('/', async (req, res) => {
         });
     }
 
-    // --- F) MAİLLER ---
+    // --- MAİLLER ---
     const customerMailContent = createOrderEmail(savedOrder, t.orderSubject, `${t.orderTitle} ${sender.name}, ${t.orderMsg}`, t);
     sendEmail(sender.email, t.orderSubject, customerMailContent).catch(console.error);
 
+    // 2. ADMİN'E (SANA) GİDEN MAİL - [YENİ EKLENEN KISIM] 🚨
+    // .env dosyanda ADMIN_EMAIL varsa ona, yoksa info@fesfu.com'a gönderir.
+    const adminEmail = process.env.ADMIN_EMAIL || 'info@fesfu.com';
+    const adminSubject = `[ADMIN] Yeni Sipariş Var! (#${savedOrder._id.toString().slice(-6)})`;
+    
+    // Admin'e de müşteriye giden detaylı formatın aynısını atıyoruz ki her şeyi gör.
+    sendEmail(adminEmail, adminSubject, customerMailContent).catch(err => console.error("Admin Mail Error:", err.message));
+
+    // satici mailleri
     const vendorMap = new Map(); 
     for (const item of finalItems) {
-        const prod = await Product.findById(item._id).populate('vendor');
-        if (prod && prod.vendor) {
-            const vId = prod.vendor._id.toString();
+        if (item.vendor) {
+            const vId = item.vendor.toString();
             if (!vendorMap.has(vId)) {
-                vendorMap.set(vId, { email: prod.vendor.email, name: prod.vendor.fullName, items: [] });
+                const vendorUser = await User.findById(item.vendor);
+                if (vendorUser) {
+                    vendorMap.set(vId, { email: vendorUser.email, name: vendorUser.fullName, items: [] });
+                }
             }
-            // Satıcıya da varyant bilgisini gönderelim
-            vendorMap.get(vId).items.push({ 
-                title: item.title, 
-                quantity: item.quantity, 
-                price: item.price,
-                selectedVariant: item.selectedVariant // <--- Eklendi
-            });
+            if(vendorMap.has(vId)) {
+                vendorMap.get(vId).items.push({ 
+                    title: item.title, 
+                    quantity: item.quantity, 
+                    price: item.price,
+                    selectedVariant: item.selectedVariant 
+                });
+            }
         }
     }
 
@@ -358,7 +360,7 @@ router.post('/', async (req, res) => {
 });
 
 // =============================================================================
-// 3. GET VE PUT ROTALARI (LİSTELEME VE GÜNCELLEME)
+// 3. GET VE PUT ROTALARI
 // =============================================================================
 
 // KULLANICI
@@ -372,22 +374,37 @@ router.get('/find/:userId', verifyTokenAndAuthorization, async (req, res) => {
 // SATICI
 router.get('/vendor/:vendorId', verifyTokenAndSeller, async (req, res) => {
   try {
-    const vendorProducts = await Product.find({ vendor: req.params.vendorId }).select('_id');
-    const vendorProductIds = vendorProducts.map(p => p._id.toString());
-    const orders = await Order.find({ "items._id": { $in: vendorProductIds } }).sort({ createdAt: -1 });
-    res.status(200).json(orders);
+    const orders = await Order.find({
+      "items.vendor": req.params.vendorId 
+    }).sort({ createdAt: -1 });
+
+    const sanitizedOrders = orders.map((order) => {
+      const orderDoc = order.toObject();
+      orderDoc.items = orderDoc.items.filter(
+        (item) => item.vendor && item.vendor.toString() === req.params.vendorId
+      );
+      if (orderDoc.items.length > 0) {
+          orderDoc.vendorTotal = orderDoc.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      }
+      return orderDoc;
+    });
+
+    const finalOrders = sanitizedOrders.filter(o => o.items.length > 0);
+    res.status(200).json(finalOrders);
   } catch (err) { res.status(500).json(err); }
 });
 
 // ADMIN
 router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const orders = await Order.find()
+        .sort({ createdAt: -1 })
+        .populate('items.vendor', 'username shopName'); 
     res.status(200).json(orders);
   } catch (err) { res.status(500).json(err); }
 });
 
-// GÜNCELLEME (İPTAL VEYA DURUM DEĞİŞİKLİĞİ)
+// GÜNCELLEME
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { status, courierId, courierRejectionReason, cancellationReason } = req.body;
@@ -412,15 +429,16 @@ router.put('/:id', verifyToken, async (req, res) => {
     const lang = updatedOrder.language || 'en';
     const t = emailTexts[lang] || emailTexts['en'];
 
-    // İPTAL BİLDİRİMLERİ
     if (status === "İptal") {
         const vendorSet = new Set(); 
         for (const item of updatedOrder.items) {
-            const product = await Product.findById(item._id).populate('vendor');
-            if (product && product.vendor && !vendorSet.has(product.vendor._id.toString())) {
-                vendorSet.add(product.vendor._id.toString());
-                const mailContent = createVendorCancelEmail(product.vendor.fullName, updatedOrder._id, t);
-                sendEmail(product.vendor.email, t.vendorCancelSubject, mailContent).catch(console.error);
+            if (item._id) {
+                const product = await Product.findById(item._id).populate('vendor');
+                if (product && product.vendor && !vendorSet.has(product.vendor._id.toString())) {
+                    vendorSet.add(product.vendor._id.toString());
+                    const mailContent = createVendorCancelEmail(product.vendor.fullName, updatedOrder._id, t);
+                    sendEmail(product.vendor.email, t.vendorCancelSubject, mailContent).catch(console.error);
+                }
             }
         }
         if (oldOrder.courierId) {
@@ -436,7 +454,6 @@ router.put('/:id', verifyToken, async (req, res) => {
         try { await logActivity(updatedOrder.userId, 'order_cancel_request', req, { orderId: updatedOrder._id, reason: cancellationReason }); } catch(e) {}
     }
 
-    // MÜŞTERİ BİLDİRİMİ
     let subject = "";
     let msg = "";
 

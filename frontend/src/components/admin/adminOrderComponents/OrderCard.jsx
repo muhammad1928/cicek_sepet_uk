@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick }) => {
   const [showMetaData, setShowMetaData] = useState(false);
   const { t } = useTranslation();
-  // Durum Stilleri
+  
   const getStatusStyle = (status) => {
     switch(status) {
       case "Sipariş Alındı": return { border: "border-l-blue-500", badge: "bg-blue-100 text-blue-700", icon: <FiClock/> };
@@ -26,11 +26,19 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
   const vendors = [...new Set(order.items.map(i => i.vendorName || "Bilinmiyor"))];
   const vendorDisplay = vendors.length > 1 ? "Çoklu Mağaza" : vendors[0];
 
-  // Finansal Analiz (Zarar Hesabı)
+  // Finansal Analiz
   const rawTotal = order.rawTotal || order.items.reduce((acc, i) => acc + (i.price * i.quantity), 0);
   const realCost = rawTotal + order.deliveryFee;
   const isLoss = (realCost > order.totalAmount) && order.status !== "İptal";
   const lossAmount = realCost - order.totalAmount;
+
+  // --- ÜRÜNLERİ GRUPLA ---
+  const groupedItems = order.items.reduce((groups, item) => {
+      const vName = item.vendorName || "Platform";
+      if (!groups[vName]) groups[vName] = [];
+      groups[vName].push(item);
+      return groups;
+  }, {});
 
   return (
     <div 
@@ -40,10 +48,10 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
         ${isExpanded ? 'ring-2 ring-blue-100 scale-[1.005]' : 'border-gray-200'}
       `}
     >
-      {/* --- ÜST ÖZET (TIKLANABİLİR) --- */}
+      {/* --- ÜST ÖZET --- */}
       <div className="p-6 flex flex-col lg:flex-row items-center justify-between gap-6" onClick={onToggle}>
         
-        {/* Sol: İkon ve ID */}
+        {/* Sol */}
         <div className="flex items-center gap-5 w-full lg:w-auto">
           <div className={`p-4 rounded-2xl transition-colors ${isExpanded ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
             {isExpanded ? <FiChevronUp size={24}/> : <FiChevronDown size={24}/>}
@@ -62,7 +70,7 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
           </div>
         </div>
 
-        {/* Orta: Mağaza */}
+        {/* Orta */}
         <div className="hidden md:flex flex-col items-center">
             <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Satıcı / {t("adminComponents.adminOrderComp.orderCard.vendor")}</div>
             <div className="flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-1.5 rounded-lg font-bold text-sm border border-purple-100">
@@ -70,7 +78,7 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
             </div>
         </div>
 
-        {/* Sağ: Tutar ve Durum */}
+        {/* Sağ */}
         <div className="flex items-center gap-6 w-full lg:w-auto justify-between lg:justify-end">
           <div className="text-right">
             <div className="text-xs text-gray-400 font-bold uppercase">{t("adminComponents.adminOrderComp.orderCard.total")}</div>
@@ -90,12 +98,12 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
         </div>
       </div>
 
-      {/* --- ALT DETAY (AKORDEON) --- */}
+      {/* --- ALT DETAY --- */}
       {isExpanded && (
         <div className="border-t border-gray-100 bg-gray-50/50 p-6 lg:p-8 cursor-default animate-fade-in" onClick={(e) => e.stopPropagation()}>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {/* 1. Alıcı & Gönderen */}
+            {/* Alıcı & Gönderen */}
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2"><FiUser /> {t("adminComponents.adminOrderComp.orderCard.senderReceiver")}</h4>
               <div className="bg-white p-5 rounded-2xl border border-gray-200 text-sm shadow-sm">
@@ -108,12 +116,20 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
               </div>
             </div>
             
-            {/* 2. Teslimat */}
+            {/* Teslimat */}
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2"><FiMapPin /> {t("adminComponents.adminOrderComp.orderCard.delivery")}</h4>
               <div className="bg-white p-5 rounded-2xl border border-gray-200 text-sm shadow-sm h-full">
                 <p className="font-medium text-gray-800 text-lg">{order.recipient.city}</p>
-                <p className="text-gray-600 leading-relaxed">{order.recipient.address}</p>
+                <p className="text-gray-600 leading-relaxed">
+                    {order.recipient.street ? order.recipient.street : order.recipient.address} {order.recipient.buildingNo}
+                </p>
+                {(order.recipient.floor || order.recipient.apartment) && (
+                    <p className="text-gray-500 text-xs font-medium">
+                        {order.recipient.floor && `Kat: ${order.recipient.floor} `} 
+                        {order.recipient.apartment && `Daire: ${order.recipient.apartment}`}
+                    </p>
+                )}
                 <p className="text-xs text-gray-400 mt-2 font-mono bg-gray-50 inline-block px-2 py-1 rounded">{order.recipient.postcode}</p>
                 <div className="mt-4 pt-3 border-t border-gray-100 flex gap-3 text-xs font-bold text-blue-600">
                   <span className="bg-blue-50 px-3 py-1.5 rounded-lg">📅 {new Date(order.delivery.date).toLocaleDateString()}</span>
@@ -122,7 +138,7 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
               </div>
             </div>
 
-            {/* 3. Notlar & Finans */}
+            {/* Notlar & Finans */}
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">📝 {t("adminComponents.adminOrderComp.orderCard.notesAndFinance")}</h4>
               <div className="flex flex-col gap-3 h-full">
@@ -145,23 +161,35 @@ const OrderCard = ({ order, isExpanded, onToggle, onStatusChange, onInvoiceClick
             </div>
           </div>
 
-          {/* Ürün Listesi */}
+          {/* Ürün Listesi (MAĞAZALARA GÖRE GRUPLU) */}
           <div className="mt-8">
             <h4 className="text-xs font-bold text-gray-400 uppercase mb-3 flex items-center gap-2"><FiBox /> {t("adminComponents.adminOrderComp.orderCard.products")}</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {order.items.map((item, i) => (
-                <div key={i} className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm hover:border-blue-300 transition relative group">
-                  <img src={item.img} className="w-16 h-16 rounded-xl object-cover border border-gray-100 shadow-sm" alt={item.title} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold text-gray-800 truncate">{item.title}</div>
-                    <div className="text-[10px] text-purple-600 bg-purple-50 px-2 py-0.5 rounded w-fit mt-1 font-bold">{item.vendorName || "Platform"}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-gray-500 font-bold bg-gray-100 px-2 py-1 rounded mb-1">x{item.quantity}</div>
-                    <div className="font-bold text-pink-600">£{item.price}</div>
-                  </div>
-                </div>
-              ))}
+            <div className="space-y-4">
+                {Object.keys(groupedItems).map((vendorName, vIndex) => (
+                    <div key={vIndex} className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                        {/* Dükkan Başlığı */}
+                        <div className="bg-gray-50 px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+                            <span className="text-sm font-bold text-gray-700 flex items-center gap-2"><FiShoppingBag className="text-purple-500"/> {vendorName}</span>
+                            <span className="text-xs bg-white border px-2 py-0.5 rounded text-gray-500">{groupedItems[vendorName].length} Items</span>
+                        </div>
+                        {/* Dükkan Ürünleri */}
+                        <div className="p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {groupedItems[vendorName].map((item, i) => (
+                                <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition">
+                                    <img src={item.img} className="w-12 h-12 rounded-lg object-cover border border-gray-100" alt={item.title} />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-sm font-bold text-gray-800 truncate">{item.title}</div>
+                                        {item.selectedVariant && <div className="text-[10px] text-gray-500">{item.selectedVariant.size} / {item.selectedVariant.color}</div>}
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-xs text-gray-500 font-bold">x{item.quantity}</div>
+                                        <div className="font-bold text-pink-600 text-sm">£{item.price}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
           </div>
 

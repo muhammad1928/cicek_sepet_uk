@@ -2,11 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
-import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX, FiMinusCircle, FiPlusCircle, FiCheckSquare, FiSquare, FiLink } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiCamera, FiRefreshCw, FiSearch, FiPlus, FiX, FiMinusCircle, FiPlusCircle, FiCheckSquare, FiSquare, FiLink, FiChevronDown, FiChevronUp } from "react-icons/fi"; 
 import { useTranslation } from "react-i18next";
-
-// --- ORTAK VERİYİ IMPORT ET ---
-// Dosya yolunu kendi klasör yapına göre ayarla (örn: ../../data/categoryData)
 import { CATEGORY_GROUPS, CATEGORY_KEY_MAP } from "../../data/categoryData"; 
 
 const VendorProducts = ({ user }) => {
@@ -20,8 +17,8 @@ const VendorProducts = ({ user }) => {
   const [editMode, setEditMode] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
   
-  // --- YENİ STATE: URL INPUT ---
   const [imgUrlInput, setImgUrlInput] = useState("");
+  const [openCategoryGroup, setOpenCategoryGroup] = useState(null);
 
   const initialForm = { 
     title: "", price: "", desc: "", 
@@ -62,7 +59,6 @@ const VendorProducts = ({ user }) => {
   const isFood = useMemo(() => getCategoryType(formData.category) === 'food', [formData.category]);
   const isClothing = useMemo(() => getCategoryType(formData.category) === 'clothing', [formData.category]);
 
-  // --- HANDLERS ---
   const handleChange = (e) => { 
     const { name, type, checked, value } = e.target;
     if (name === 'calories') {
@@ -93,14 +89,15 @@ const VendorProducts = ({ user }) => {
     data.append("file", file);
     try { 
         const res = await userRequest.post("/upload", data); 
-        setFormData((prev) => ({ ...prev, imgs: [...prev.imgs, res.data] })); 
+        // Düzeltme: Yeni URL'i güvenli ekleme
+        const newImgUrl = res.data;
+        setFormData((prev) => ({ ...prev, imgs: [...prev.imgs, newImgUrl] })); 
         notify(t('vendorProducts.pictureLoaded') + " 🖼️", "success"); 
     } 
     catch { notify(t('vendorProducts.pictureNotLoaded'), "error"); } 
     finally { setUploading(false); }
   };
 
-  // --- YENİ FONKSİYON: URL EKLEME ---
   const handleAddImageUrl = (e) => {
     e.preventDefault();
     if (!imgUrlInput) return;
@@ -108,11 +105,15 @@ const VendorProducts = ({ user }) => {
     
     setFormData(prev => ({ ...prev, imgs: [...prev.imgs, imgUrlInput] }));
     setImgUrlInput("");
-    notify(t('vendorProducts.pictureLoaded') + " 🔗", "success"); // Link ikonu
+    notify(t('vendorProducts.pictureLoaded') + " 🔗", "success");
   };
 
+  // Düzeltme: Silme işlemi
   const removeImage = (index) => {
-    setFormData(prev => ({ ...prev, imgs: prev.imgs.filter((_, i) => i !== index) }));
+    setFormData(prev => {
+        const newImgs = prev.imgs.filter((_, i) => i !== index);
+        return { ...prev, imgs: newImgs };
+    });
   };
 
   const addIngredient = () => {
@@ -145,6 +146,10 @@ const VendorProducts = ({ user }) => {
       const payload = { ...formData, vendor: user._id };
       delete payload.tempIngredient;
       
+      // Eğer imgs dizisi boşsa, backend'e boş dizi gittiğinden emin olalım.
+      if (!payload.imgs || payload.imgs.length === 0) {
+          payload.imgs = []; 
+      }
       if(editMode) await userRequest.put(`/products/${editMode}`, payload);
       else await userRequest.post("/products", payload);
 
@@ -166,11 +171,19 @@ const VendorProducts = ({ user }) => {
   };
 
   const handleEditClick = (p) => { 
+    // Düzeltme: Dizi kopyalama (Referans koparma)
+    let currentImgs = [];
+    if (p.imgs && p.imgs.length > 0) {
+        currentImgs = [...p.imgs];
+    } else if (p.img) {
+        currentImgs = [p.img];
+    }
+
     setFormData({ 
         ...initialForm, ...p, 
         category: p.category || "birthday",
         tags: p.tags || [],
-        imgs: p.imgs && p.imgs.length > 0 ? p.imgs : (p.img ? [p.img] : []),
+        imgs: currentImgs,
         foodDetails: p.foodDetails || { calories: "", ingredients: [] },
         variants: p.variants || []
     }); 
@@ -191,10 +204,13 @@ const VendorProducts = ({ user }) => {
 
   const filteredProducts = products.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
+  const toggleGroup = (label) => {
+    setOpenCategoryGroup(openCategoryGroup === label ? null : label);
+  };
+
   return (
     <div className="space-y-6 max-w-6xl mx-auto animate-fade-in">
       
-      {/* ÜST BAR */}
       <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 sticky top-20 z-20 gap-4">
         <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
           {t('vendorProducts.myProducts')} <span className="text-sm bg-pink-100 text-pink-600 px-2 py-1 rounded-full">{filteredProducts.length}</span>
@@ -202,24 +218,15 @@ const VendorProducts = ({ user }) => {
         
         <div className="flex gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:flex-none">
-            <input 
-              type="text" placeholder={t('vendorProducts.searchPlaceholder')} 
-              className="pl-9 pr-4 py-2 border rounded-lg w-full outline-none focus:border-pink-500 transition"
-              onChange={(e) => setSearchTerm(e.target.value)} 
-            />
+            <input type="text" placeholder={t('vendorProducts.searchPlaceholder')} className="pl-9 pr-4 py-2 border rounded-lg w-full outline-none focus:border-pink-500 transition" onChange={(e) => setSearchTerm(e.target.value)} />
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          
-          <button 
-            onClick={handleAddNewClick} 
-            className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-2 transition ${showForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-pink-600 hover:bg-pink-700'}`}
-          >
+          <button onClick={handleAddNewClick} className={`px-4 py-2 rounded-lg font-bold text-white flex items-center gap-2 transition ${showForm ? 'bg-gray-500 hover:bg-gray-600' : 'bg-pink-600 hover:bg-pink-700'}`}>
             {showForm ? <><FiX /> {t('vendorProducts.cancel')}</> : <><FiPlus /> {t('vendorProducts.addNew')}</>}
           </button>
         </div>
       </div>
 
-      {/* FORM ALANI */}
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-pink-100 animate-fade-in-down mb-6">
           <h3 className="font-bold text-lg text-gray-700 mb-4 border-b pb-2">{editMode ? t('vendorProducts.editProduct') : t('vendorProducts.addNew')}</h3>
@@ -231,7 +238,6 @@ const VendorProducts = ({ user }) => {
                <div className="flex-1"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.stock')}</label><input name="stock" type="number" value={formData.stock} onChange={handleChange} className="w-full p-2 border rounded outline-none focus:border-pink-500" /></div>
              </div>
              
-             {/* KATEGORİ SEÇİMİ */}
              <div className="md:col-span-2">
                <label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.category')}</label>
                <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded bg-white outline-none focus:border-pink-500 text-gray-700">
@@ -245,57 +251,64 @@ const VendorProducts = ({ user }) => {
                </select>
              </div>
 
-             {/* TAG SEÇİMİ */}
              <div className="md:col-span-2 border rounded-lg p-3 bg-pink-50/30">
                 <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">{t('vendorProducts.additionalCategories') || "Tags & Categories"}</label>
-                <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                   {CATEGORY_GROUPS.map((group, grpIdx) => (
-                      <div key={grpIdx}>
-                         <h5 className="text-[11px] font-extrabold text-pink-600 mb-1 uppercase border-b border-pink-100 pb-1">{group.label}</h5>
-                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                           {group.options.map(optKey => {
-                             const isMain = optKey === formData.category;
-                             const isChecked = formData.tags?.includes(optKey);
-                             if(isMain) return null;
-                             return (
-                                 <div key={optKey} onClick={() => handleTagChange(optKey)} className={`flex items-center gap-2 p-1.5 rounded border cursor-pointer transition select-none text-xs ${isChecked ? 'bg-pink-100 border-pink-300' : 'bg-white hover:border-pink-300'}`}>
-                                      <div className={isChecked ? 'text-pink-600' : 'text-gray-300'}>{isChecked ? <FiCheckSquare/> : <FiSquare/>}</div>
-                                      <span className={`truncate ${isChecked ? 'font-bold text-pink-800' : 'text-gray-600'}`}>{getCatLabel(optKey)}</span>
-                                 </div>
-                             )
-                           })}
-                         </div>
-                      </div>
-                   ))}
+                <div className="space-y-2">
+                   {CATEGORY_GROUPS.map((group, grpIdx) => {
+                      const isOpen = openCategoryGroup === group.label;
+                      const selectedCount = group.options.filter(opt => formData.tags?.includes(opt)).length;
+
+                      return (
+                          <div key={grpIdx} className="bg-white border rounded-lg overflow-hidden transition-all shadow-sm">
+                             <div 
+                                onClick={() => toggleGroup(group.label)}
+                                className={`flex items-center justify-between p-3 cursor-pointer select-none transition ${isOpen ? 'bg-pink-50 text-pink-700' : 'hover:bg-gray-50 text-gray-700'}`}
+                              >
+                                  <div className="flex items-center gap-2">
+                                      <span className="font-bold text-xs">{group.label}</span>
+                                      {selectedCount > 0 && (
+                                          <span className="bg-pink-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                                              {selectedCount} Selected
+                                          </span>
+                                      )}
+                                  </div>
+                                  <div className="text-gray-400">
+                                      {isOpen ? <FiChevronUp/> : <FiChevronDown/>}
+                                  </div>
+                              </div>
+                              
+                              {isOpen && (
+                                  <div className="p-3 border-t bg-gray-50/50 animate-fade-in">
+                                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                        {group.options.map(optKey => {
+                                          const isMain = optKey === formData.category;
+                                          const isChecked = formData.tags?.includes(optKey);
+                                          if(isMain) return null;
+                                          return (
+                                              <div key={optKey} onClick={() => handleTagChange(optKey)} className={`flex items-center gap-2 p-1.5 rounded border cursor-pointer transition select-none text-xs ${isChecked ? 'bg-pink-100 border-pink-300' : 'bg-white hover:border-pink-300'}`}>
+                                                  <div className={isChecked ? 'text-pink-600' : 'text-gray-300'}>{isChecked ? <FiCheckSquare/> : <FiSquare/>}</div>
+                                                  <span className={`truncate ${isChecked ? 'font-bold text-pink-800' : 'text-gray-600'}`}>{getCatLabel(optKey)}</span>
+                                              </div>
+                                          )
+                                        })}
+                                      </div>
+                                  </div>
+                              )}
+                          </div>
+                      );
+                   })}
                 </div>
              </div>
 
-             {/* --- RESİM YÜKLEME (URL + UPLOAD) --- */}
              <div className="md:col-span-2 border p-3 rounded bg-gray-50 border-dashed border-gray-300">
                 <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">{t('vendorProducts.image')} (Max 5)</label>
-                
-                {/* URL INPUT */}
                 <div className="flex gap-2 mb-3">
                    <div className="relative flex-1">
                         <FiLink className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input 
-                            type="text" 
-                            placeholder={t('vendorProducts.pasteUrl') || "Paste image URL..."}
-                            value={imgUrlInput}
-                            onChange={(e) => setImgUrlInput(e.target.value)}
-                            className="w-full pl-8 p-2 border rounded text-xs outline-none focus:border-pink-500 bg-white"
-                        />
+                        <input type="text" placeholder={t('vendorProducts.pasteUrl') || "Paste image URL..."} value={imgUrlInput} onChange={(e) => setImgUrlInput(e.target.value)} className="w-full pl-8 p-2 border rounded text-xs outline-none focus:border-pink-500 bg-white" />
                    </div>
-                   <button 
-                     type="button" 
-                     onClick={handleAddImageUrl}
-                     disabled={!imgUrlInput}
-                     className="px-4 py-1 bg-pink-600 text-white rounded text-xs font-bold hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
-                   >
-                     {t('common.add') || "Add"}
-                   </button>
+                   <button type="button" onClick={handleAddImageUrl} disabled={!imgUrlInput} className="px-4 py-1 bg-pink-600 text-white rounded text-xs font-bold hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition">{t('common.add') || "Add"}</button>
                 </div>
-
                 <div className="flex gap-4 overflow-x-auto pb-2">
                     {formData.imgs.length < 5 && (
                         <label className="flex-shrink-0 w-20 h-20 flex flex-col items-center justify-center bg-white border border-gray-300 rounded cursor-pointer hover:bg-pink-50 transition">
@@ -304,8 +317,9 @@ const VendorProducts = ({ user }) => {
                             <input type="file" className="hidden" onChange={handleUpload} accept="image/*" disabled={uploading} />
                         </label>
                     )}
+                    {/* Düzeltme: Key propu */}
                     {formData.imgs.map((img, idx) => (
-                        <div key={idx} className="relative w-20 h-20 flex-shrink-0 group">
+                        <div key={`${img}-${idx}`} className="relative w-20 h-20 flex-shrink-0 group">
                             <img src={img} className="w-full h-full object-cover rounded border" alt="preview" />
                             <button type="button" onClick={() => removeImage(idx)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md opacity-80 hover:opacity-100 transition"><FiX size={12}/></button>
                         </div>
@@ -315,7 +329,6 @@ const VendorProducts = ({ user }) => {
 
              <div className="md:col-span-2"><label className="text-xs font-bold text-gray-500 uppercase mb-1">{t('vendorProducts.description')}</label><textarea name="desc" value={formData.desc} onChange={handleChange} className="w-full p-2 border rounded h-24 outline-none focus:border-pink-500" /></div>
              
-             {/* DİNAMİK ALANLAR (FOOD) */}
              {isFood && (
                 <div className="md:col-span-2 bg-orange-50 p-4 rounded-lg border border-orange-200 animate-fade-in">
                     <h4 className="font-bold text-orange-700 mb-2 text-sm uppercase">{t('admin.food.title') || "Food Details"}</h4>
@@ -340,7 +353,6 @@ const VendorProducts = ({ user }) => {
                 </div>
              )}
 
-             {/* DİNAMİK ALANLAR (CLOTHING) */}
              {isClothing && (
                 <div className="md:col-span-2 bg-purple-50 p-4 rounded-lg border border-purple-200 animate-fade-in">
                     <div className="flex justify-between items-center mb-2">
@@ -371,7 +383,6 @@ const VendorProducts = ({ user }) => {
         </div>
       )}
 
-      {/* LİSTE */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map(p => (
           <div key={p._id} className={`rounded-2xl border shadow-sm overflow-hidden transition-all duration-300 group relative flex flex-col ${getCardStyle(p.stock, p.isActive)}`}>

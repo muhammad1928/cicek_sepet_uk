@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { userRequest } from "../../requestMethods";
 import { useCart } from "../../context/CartContext";
 import ConfirmModal from "../ConfirmModal";
-import { FiEdit, FiTrash2, FiPlus, FiMapPin, FiX } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiPlus, FiX } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 const AddressBook = ({ user }) => {
@@ -12,7 +12,17 @@ const AddressBook = ({ user }) => {
   
   // Düzenleme State'leri
   const [editingId, setEditingId] = useState(null); 
-  const initialAddress = { title: "", recipientName: "", recipientPhone: "", address: "", city: "London", postcode: "" };
+  const initialAddress = { 
+      title: "", 
+      recipientName: "", 
+      recipientPhone: "", 
+      address: "", 
+      buildingNo: "", // Yeni
+      floor: "",      // Yeni
+      apartment: "",  // Yeni
+      city: "London", 
+      postcode: "" 
+  };
   const [addressData, setAddressData] = useState(initialAddress);
   
   const [confirmData, setConfirmData] = useState(null);
@@ -48,8 +58,11 @@ const AddressBook = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // address alanı yerine street ve buildingNo kontrolü yapabiliriz veya address hala backendde birleştiriliyorsa ona göre.
+    // Ancak yeni yapıda street ve buildingNo ayrı. address alanını 'street' olarak kullanıyorsan sorun yok.
     if (!addressData.title || !addressData.address) return notify("Eksik bilgi!", "warning");
     try {
+      // Backend'e gönderirken yeni alanları da gönderdiğinden emin ol (Backend modelini güncellemiştik)
       if (editingId) { 
         await userRequest.put(`/users/${user._id}/addresses/${editingId}`, addressData); 
         notify(`${t("profilePage.adressBook.adressUpdated")} ✅`, "success"); 
@@ -57,7 +70,7 @@ const AddressBook = ({ user }) => {
         await userRequest.post(`/users/${user._id}/addresses`, addressData); 
         notify(`${t("profilePage.adressBook.adressAdded")} ✅`, "success"); 
       }
-      handleCancel(); // İşlem bitince kapat
+      handleCancel(); 
       fetchAddresses();
     } catch(e){ notify(`${t("common.error")}`, "error"); }
   };
@@ -86,10 +99,8 @@ const AddressBook = ({ user }) => {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           {t("profilePage.adressBook.myAdresses")}
-          {/* {t("adressBook.addressBook")} <FiMapPin className="text-pink-600" /> */}
         </h2>
         
-        {/* AÇ/KAPA BUTONU (MODERN) */}
         <button 
           onClick={() => showForm ? handleCancel() : openForm()} 
           className={`
@@ -108,7 +119,6 @@ const AddressBook = ({ user }) => {
       {showForm && (
         <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 mb-8 relative animate-fade-in-down">
             
-            {/* ÇARPI İKONU KALDIRILDI - Sadece Başlık Var */}
             <div className="mb-6 border-b border-gray-100 pb-4">
                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                  {editingId ? <FiEdit className="text-blue-500"/> : <FiPlus className="text-green-500"/>}
@@ -119,12 +129,12 @@ const AddressBook = ({ user }) => {
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
                    <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.addressTitle")}</label>
-                   <input placeholder={t("profilePage.adressBook.adressTitlePlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
+                   <input placeholder="Ev, İş vb." className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition" value={addressData.title} onChange={e=>setAddressData({...addressData, title:e.target.value})} required />
                 </div>
                 
                 <div>
                    <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.recipientName")}</label>
-                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" placeholder={t("profilePage.adressBook.recipientNamePlaceholder")} value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
+                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" placeholder="Ad Soyad" value={addressData.recipientName} onChange={e=>setAddressData({...addressData, recipientName:e.target.value})} />
                 </div>
                 
                 <div>
@@ -132,9 +142,27 @@ const AddressBook = ({ user }) => {
                    <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.recipientPhone} onChange={e=>setAddressData({...addressData, recipientPhone:e.target.value})} />
                 </div>
 
+                {/* --- DETAYLI ADRES ALANLARI --- */}
                 <div className="md:col-span-2">
-                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("profilePage.adressBook.openAddress")}</label>
-                   <textarea placeholder={t("profilePage.adressBook.openAdressPlaceholder")} className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition h-24 resize-none" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("cartSidebarComponents.CheckoutForm.street") || "Street / Road"}</label>
+                   {/* 'address' alanını street olarak kullanıyoruz */}
+                   <input placeholder="Baker Street" className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.address} onChange={e=>setAddressData({...addressData, address:e.target.value})} required />
+                </div>
+
+                <div>
+                   <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("cartSidebarComponents.CheckoutForm.buildingNo") || "Building No"}</label>
+                   <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.buildingNo} onChange={e=>setAddressData({...addressData, buildingNo:e.target.value})} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("cartSidebarComponents.CheckoutForm.floor") || "Floor"}</label>
+                        <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.floor} onChange={e=>setAddressData({...addressData, floor:e.target.value})} />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase ml-1 mb-1 block">{t("cartSidebarComponents.CheckoutForm.apartment") || "Flat No"}</label>
+                        <input className="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-pink-500 transition" value={addressData.apartment} onChange={e=>setAddressData({...addressData, apartment:e.target.value})} />
+                    </div>
                 </div>
 
                 <div>
@@ -178,7 +206,6 @@ const AddressBook = ({ user }) => {
           {addresses.map((addr) => (
             <div key={addr._id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition group relative overflow-hidden">
               
-              {/* Sol Çizgi */}
               <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-pink-500 to-purple-500"></div>
               
               <div className="pl-4 pr-8">
@@ -189,26 +216,21 @@ const AddressBook = ({ user }) => {
                  <p className="text-xs text-gray-400 mb-3">{addr.recipientPhone}</p>
                  
                  <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-200 leading-relaxed">
-                    {addr.address} <br/> 
+                    {/* ADRES DETAY GÖSTERİMİ */}
+                    <span className="font-bold">{addr.address}</span> 
+                    {addr.buildingNo ? ` No: ${addr.buildingNo}` : ''}
+                    <br/>
+                    {addr.floor ? `Kat: ${addr.floor}` : ''} {addr.apartment ? ` Daire: ${addr.apartment}` : ''}
+                    <br/>
                     <span className="font-bold text-pink-600">{addr.city}, {addr.postcode}</span>
                  </div>
               </div>
               
-              {/* Düzenle / Sil Butonları */}
               <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button 
-                    onClick={() => openForm(addr)} 
-                    className="text-blue-500 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition" 
-                    title={t('profilePage.adressBook.edit')}
-                  >
+                  <button onClick={() => openForm(addr)} className="text-blue-500 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition" title={t('profilePage.adressBook.edit')}>
                     <FiEdit size={16} />
                   </button>
-                  
-                  <button 
-                    onClick={() => handleDeleteRequest(addr._id, addr.title)} 
-                    className="text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition" 
-                    title={t('profilePage.adressBook.delete')}
-                  >
+                  <button onClick={() => handleDeleteRequest(addr._id, addr.title)} className="text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition" title={t('profilePage.adressBook.delete')}>
                     <FiTrash2 size={16} />
                   </button>
               </div>

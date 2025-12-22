@@ -61,8 +61,6 @@
     "lastUpdated": "Last Updated",
     "print": "Print / Save PDF"
   },
-
-
   "home": {
     "heroTitle": "Make Your Loved Ones Happy",
     "heroSubtitle": "We deliver London's freshest flowers and most special gifts to your door the same day.",
@@ -72,7 +70,7 @@
     "notFound": "No products found matching your criteria.",
     "searchNotFoundTitle": "Is it a Hidden Gem?",
     "searchNotFoundDesc": "We couldn't find a match for your search, but our store shelves are full of other surprises.",
-    "categoryEmptyTitle": "Great Things Are Coming!",
+    "categoryEmptyTitle": "Great Flowers Are Coming!",
     "categoryEmptyDesc": "This collection was so loved that it sold out! Our designers are currently preparing the most special products and fresh gifts just for you.",
     "showAll": "Discover All Products",
     "popularCategory": "Popular: Birthday 🎂",
@@ -199,53 +197,54 @@
       }
     }
   },
-
-
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "About Us - Fesfu | Freshest Flowers and Gifts",
-      "aboutDescription": "Discover the story, mission and values of Fesfu. We are dedicated to providing our customers with the highest quality flower and gift experience. We make a difference with fast delivery and excellent customer service."
+      "aboutTitle": "About Us - Fesfu UK | London's Premier Marketplace",
+      "aboutDescription": "From a local florist to London's fastest online marketplace. We deliver flowers, tech, fashion, and gourmet food with same-day delivery service."
     },
     "homePage": {
-      "homeTitle": "Fresh Flowers and Special Gifts - Fesfu London",
-      "locationTitle": "London - Freshest Flowers and Special Gifts | Fesfu",
-      "homeDescription": "We deliver London's freshest flowers and special gifts to your door the same day. Discover perfect gift options for birthdays, anniversaries, marriage proposals and other special moments."
+      "homeTitle": "Fesfu UK | Same Day Delivery Marketplace - London",
+      "locationTitle": "Shop Flowers, Tech & Gifts in London | Fesfu UK",
+      "homeDescription": "London's favorite marketplace. Shop fresh flowers, electronics, books, fashion, and gifts. Order by 18:00 for guaranteed same-day delivery."
     },
     "contactPage": {
-      "contactTitle": "Contact - Fesfu | Get in Touch",
-      "contactDescription": "Contact us for your questions, suggestions or complaints. At Fesfu, we are always happy to help. You can use different contact channels to reach us."
+      "contactTitle": "Contact Us | Fesfu Customer Support 24/7",
+      "contactDescription": "Need help with your order? Contact Fesfu support team for inquiries about deliveries, returns, or becoming a vendor. We are here to help."
     },
     "faqPage": {
-      "faqTitle": "Frequently Asked Questions - Fesfu",
-      "faqDescription": "Discover frequently asked questions about Fesfu. Learn about ordering, delivery, return policy and other important topics. Find quick and easy answers to your questions."
+      "faqTitle": "Help & FAQ - Fesfu Marketplace UK",
+      "faqDescription": "Find quick answers about delivery times, return policies for electronics & perishables, and payment methods. Your guide to shopping on Fesfu."
     },
     "favouritesPage": {
-      "title": "My Favourites - Fesfu | Products You Like",
-      "description": "Save your favourites and easily access your favourite flowers, gifts and other products. With Fesfu, you can buy your favourite products with one click."
+      "title": "My Wishlist | Fesfu - Save for Later",
+      "description": "Curate your perfect shopping list. Save your favourite flowers, gadgets, books, and fashion items to buy later with a single click."
     },
     "legalPage": {
-      "title": "Legal Information - Fesfu | Privacy Policy and Terms of Use",
-      "description": "Learn detailed information about Fesfu's privacy policy, terms of use and cookie policy. Learn how your personal data is protected and your rights when using our platform.",
-      "hakkindaDetayliBilgi": "detailed information about."
+      "title": "Legal & Privacy Policy | Fesfu UK",
+      "description": "Transparent terms for a fair marketplace. Read about our privacy policy, consumer rights, and refund rules for digital and perishable goods.",
+      "detailedInfo": "detailed information about."
     },
     "myOrdersPage": {
-      "title": "My Orders - Fesfu | Order Tracking and History",
-      "description": "View your past orders, review order details and track the status of your orders. Easily manage all your orders with Fesfu."
+      "title": "Track My Order | Fesfu UK",
+      "description": "View order history and track live deliveries. Check the status of your flower bouquet, electronics, or fashion items in real-time."
     },
     "registerCourierPage": {
-      "title": "Courier Application - Fesfu | Become a Courier",
-      "description": "Join Fesfu's courier program and earn extra income with flexible working hours. Learn about the courier application process and apply now."
+      "title": "Courier Jobs London | Join Fesfu Delivery Team",
+      "description": "Drive with Fesfu. Earn competitive income delivering flowers, food, and parcels across London. Flexible hours, instant payouts. Apply now."
     },
     "registerPage": {
-      "title": "Register - Fesfu | Create New Account",
-      "description": "Register with Fesfu and get access to the freshest flowers and special gifts. Start shopping now with a quick and easy registration process."
+      "title": "Sign Up | Join Fesfu Marketplace",
+      "description": "Create a free account to unlock exclusive deals. Shop thousands of products from local and global brands with fast checkout and secure payment."
     },
     "vendorRegistrationPage": {
-      "title": "Vendor Application - Fesfu | Open Your Store",
-      "description": "Open your store on the Fesfu platform and reach a wide customer base. Learn about the vendor application process and apply now."
+      "title": "Sell on Fesfu | Become a Vendor Partner",
+      "description": "Grow your business with Fesfu. Reach millions of London customers selling flowers, electronics, food, or fashion. Low commissions, high support."
+    },
+    "productDetailPage": {
+      "defaultTitle": "Shop Online | Fesfu UK Marketplace",
+      "defaultDescription": "Browse our exclusive collection. Fast delivery within London and secure payment options."
     }
   },
-
   "admin": {
     "dashboard": "Dashboard",
     "yonetimMerkezi": "Management Centre",
@@ -256,7 +255,6 @@
     "orders": "Orders",
     "coupons": "Coupons"
   },
-
   "contact": {
     "contactUs": "Contact Us",
     "infoTest": "We are here for your questions, suggestions or complaints.",
@@ -274,10 +272,9 @@
     "newMessage": "Send New Message",
     "errorMessage": "An error occurred while sending the message. Please try again."
   },
-
   "about": {
     "ourStory": "Our Story",
-    "ourMission": "We Deliver Happiness",
+    "ourMission": "We Deliver Happiness Right on Time",
     "ourHistory": "Founded in London in 2024, Fesfu UK set out to deliver the freshest flowers and most special gifts to your loved ones. Our aim is not just to deliver a product, but to help you express your feelings in the best way by shortening distances.",
     "sameDayDelivery": "Same Day Delivery",
     "sameDayDeliverySub": "For orders placed before 18:00 within London.",
@@ -289,12 +286,6 @@
     "whyChooseUsSub": "We combine our global experience with local touches. We support local florists while providing corporate service quality. Our courier team delivers your flowers carefully, gently and with a smile.",
     "comment": "add information about couriers and shops later and update about us page"
   },
-
-  "FAQ": {
-    "faqTitle": "Frequently Asked Questions",
-    "faqDescription": "What you wonder."
-  },
-
   "favorites": {
     "favoritesTitle": "My Favourites",
     "favoritesDescription": "We keep your favourite products here.",
@@ -302,7 +293,6 @@
     "favoritesEmptyDesc": "You haven't added any products to your favourites list yet. How about discovering the freshest flowers and gifts?",
     "favoritesExploreProducts": "Explore Products"
   },
-
   "forgotPassword": {
     "notifyMessageSent": "Email sent! 📩",
     "notifyUserNotFound": "User not found",
@@ -318,54 +308,70 @@
     "tryAgain": "Try Again",
     "returnToLogin": "← Return to Login"
   },
-
   "legal": {
-    "legalTitle": "Cookie Policy",
+    "legalTitle": "Legal & Promises",
+    "pageNotFound": "Document Not Found",
+    "pageNotFoundDesc": "The legal document you are looking for has been moved or updated.",
+    "backToHome": "Back to Home",
+    "backToHome2": "Fesfu Legal Department",
+
     "privacyPolicy": {
-      "legalPageContentTitle": "Privacy Policy",
-      "first": "1. Data Controller",
-      "firstDesc": "As Fesfu UK, we attach maximum importance to the security of your personal data within the scope of the Personal Data Protection Law No. 6698 (KVKK) and the European General Data Protection Regulation (GDPR).",
+      "legalPageContentTitle": "Privacy & Data Protection",
+      "first": "1. Data Controller & Your Trust",
+      "firstDesc": "Fesfu UK operates in full compliance with the UK Data Protection Act 2018 and UK GDPR. We value the trust you place in us to deliver your emotions, and we are committed to protecting your personal data.",
       "second": "2. Collected Data and Purposes",
       "secondDesc": {
-        "part1": "Identity and Contact: Your name, surname, email and phone number are processed for order confirmation and invoice transactions.",
-        "part2": "Delivery Information: The recipient's address and contact information are shared with the Courier and the relevant Store (Vendor) for the purpose of delivering the order.",
-        "part3": "Transaction Security: IP address and device information are stored for fraud detection and legal obligations."
+        "part1": "Identity & Contact: Name, email, and phone number are processed strictly for order fulfillment, digital receipts, and delivery updates.",
+        "part2": "Delivery Information: Recipient details are shared ONLY with our vetted Courier Team and the specific Vendor fulfilling your order.",
+        "part3": "Transaction Security: IP address and device data are logged to prevent fraud and ensure a secure shopping environment."
       },
       "third": "3. Payment Security",
-      "thirdDesc": "Your credit card information is never stored on our servers. Payment transactions are carried out directly by the global payment infrastructure Stripe via SSL certified encrypted connection."
+      "thirdDesc": "We do NOT store credit card details. All payments are processed via Stripe's encrypted infrastructure, ensuring bank-level security with 3D Secure."
     },
+
     "termsOfUse": {
-      "title": "Distance Sales Agreement",
-      "first": "1. Parties",
-      "firstDesc": "This agreement has been concluded between the BUYER who places an order through the platform and the SELLER (Store) who supplies the product, with the mediation of Fesfu UK.",
-      "second": "2. Right of Withdrawal Exception (Important)",
-      "secondDesc": "ATTENTION: According to the regulation; \"In contracts for the delivery of goods that can spoil quickly or whose expiry date may pass\" (Fresh Flowers, Chocolate, Cake, etc.) THE RIGHT OF WITHDRAWAL CANNOT BE USED.",
-      "secondDesc_part2": "However, if the product is damaged, wilted or completely different from the image at the time of delivery, the buyer can refuse delivery and request a return.",
-      "third": "3. Delivery Process",
-      "thirdDesc": "Orders are delivered on the date and time range selected by the buyer. The platform is responsible for delays except for force majeure (weather conditions, traffic accidents, etc.)."
+      "title": "Terms of Service & Happiness Guarantee",
+      "first": "1. Parties & Role of Platform",
+      "firstDesc": "This agreement is between you (BUYER) and the Vendor, facilitated by Fesfu UK acting as a COMMERCIAL AGENT. We ensure transparency and quality in every transaction.",
+      "second": "2. Returns, Refunds & Our Promise",
+      "secondDesc": "RETURN POLICY BY CATEGORY:",
+      "secondDesc_part2": "A) PERISHABLE GOODS (Flowers, Food): Legally, the Right of Withdrawal does not apply. HOWEVER, if your order arrives damaged or withered, please contact us within 24 HOURS with a photo. We will verify with the Vendor and make it right (Refund or Re-delivery).",
+      "secondDesc_part3": "B) DURABLE GOODS (Electronics, Books): You have the legal right to return these items within 14 days of delivery. Items must be unused, in original packaging, and resellable.",
+      "third": "3. Delivery & Cut-off Times",
+      "thirdDesc": "For 'Same Day Delivery' in London, orders must be placed before 18:00. While we strive for perfection, Fesfu is not liable for delays caused by extreme force majeure events (e.g., severe weather), though we will always communicate with you."
     },
+
     "termsOfCookies": {
       "title": "Cookie Policy",
       "firstTerm": "1. What is a Cookie?",
-      "firstTermDesc": "Cookies are small text files that are saved to your browser by the websites you visit and help us remember you. Some cookies are mandatory for our site to work.",
-      "secondTerm": "2. What Cookies Do We Use?",
+      "firstTermDesc": "Cookies are small text files saved to your browser. We use them to make your shopping experience smooth, keep your surprise gifts in the cart, and ensure the site works fast.",
+      "secondTerm": "2. Types of Cookies We Use",
       "secondTermDesc": {
         "first": "Essential Cookies",
-        "firstDesc": "They are necessary to remember the products in your cart, to log into your account and for payment security. These cannot be turned off.",
+        "firstDesc": "Strictly necessary for payment processing and secure login. Without these, the shop cannot work.",
         "second": "Functional Cookies",
-        "secondDesc": "They are used for your language preferences, address records and features like \"Remember Me\".",
-        "third": "Analytical Cookies",
-        "thirdDesc": "They help us improve our service by anonymously analysing how you use our site (which pages you visit)."
+        "firstDesc": "Remember your preferences (Language, Currency) to save you time.",
+        "third": "Performance & Analytics",
+        "thirdDesc": "Help us understand which products you love most, allowing us to improve our service."
       },
-      "thirdTerm": "3. How Do I Manage Cookies?",
-      "thirdTermDesc": "You can delete or block cookies at any time from your browser's settings menu. However, blocking essential cookies may disrupt the functioning of cart and payment functions."
+      "thirdTerm": "3. Managing Cookies",
+      "thirdTermDesc": "You can manage cookies via browser settings. Blocking essential cookies may prevent you from completing your order."
     },
-    "pageNotFound": "Page Not Found",
-    "pageNotFoundDesc": "The content you are looking for does not exist.",
-    "backToHome": "← Back to Home",
-    "backToHome2": "Fesfu UK Legal Team"
-  },
 
+    "membershipAgreement": {
+      "title": "Membership Agreement",
+      "first": "1. Scope of Agreement",
+      "firstDesc": "By creating an account on Fesfu UK, you agree to these terms. You must be at least 18 years old to become a member.",
+      "second": "2. User Responsibilities",
+      "secondDesc": {
+        "part1": "Account Security: You are responsible for keeping your password confidential. Fesfu is not liable for unauthorized access due to weak passwords.",
+        "part2": "Accuracy: You declare that all information (Name, Address, Phone) provided during registration is accurate and up-to-date.",
+        "part3": "Prohibited Conduct: Users cannot manipulate prices, use bots, or attempt to hack the platform. Such actions will result in an immediate ban."
+      },
+      "third": "3. Termination of Account",
+      "thirdDesc": "Fesfu reserves the right to suspend accounts that violate these terms, engage in fraud, or abuse the refund policy."
+    }
+  },
   "myOrders": {
     "notifyCancelRequestSent": "Your cancellation request has been received.",
     "caseOrderLoading": "Loading your orders...",
@@ -384,12 +390,10 @@
     "cancelOrderRequest": "Create Cancellation Request",
     "cancelOrderRequestPending": "Your cancellation request is being reviewed."
   },
-
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you are trying to access may have been removed, renamed, or temporarily unavailable."
   },
-
   "productDetail": {
     "loginBeforeComment": "You must log in to comment!",
     "commentEmpty": "Please write a comment.",
@@ -404,12 +408,11 @@
     "firstComment": "No comments yet. Be the first to comment!",
     "similarProducts": "You May Also Like"
   },
-
   "profile": {
     "title": "My Account",
+    "badges":" Badges",
     "profileGreetings": "Welcome, you can manage your profile and orders from here."
   },
-
   "registerCourier": {
     "driverLicenseSuccess": "Your driving licence has been uploaded successfully!",
     "uploadError": "Upload error.",
@@ -442,7 +445,6 @@
     "btn3": "Submit Application",
     "alreadyHaveAccount": "Already have an account? Log In"
   },
-
   "register": {
     "passwordForbiddenChars": "Password contains forbidden characters. Please remove: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Your password is not strong enough!",
@@ -452,14 +454,13 @@
     "joinUs": "Join Us",
     "createAccount": "Create an account quickly",
     "securityMeasures": "Security Requirements",
-    "userAgrement1": "I have read the User Agreement ",
-    "userAgrement2": "and I accept.",
+    "userAgrement1": "I accept the ",
+    "userAgrement2": "Membership Agreement & Privacy Policy.",
     "btn1": "Saving...",
     "btn2": "Create Account",
     "alreadyAccount1": "Already have an account?",
     "alreadyAccount2": "Log In"
-  },
-
+  },  
   "vendor": {
     "receivedOrders": "Received Orders",
     "notifyAdressSaved": "Location saved to address",
@@ -489,7 +490,6 @@
     "btn2": "Create Account",
     "btn3": "Submit Application"
   },
-
   "resetPassword": {
     "passwordInvalid": "Password requirements not met.",
     "resetPasswordSuccess": "Your password has been changed successfully! You can log in.",
@@ -502,7 +502,6 @@
     "resettingPassword": "Updating...",
     "resetPassword": "Update Password"
   },
-
   "store": {
     "storeNotFound": "Store Not Found",
     "storeNotFoundDesc": "The store you are looking for does not exist or may have been removed.",
@@ -519,7 +518,6 @@
     "secureShopping1": "Secure Shopping",
     "secureShopping2": "All purchases you make from this store are under Fesfu UK guarantee."
   },
-
   "success": {
     "orderSuccess": "Your order has been received successfully!",
     "errorWhileOrder": "A problem occurred while saving the order. Please contact support.",
@@ -539,7 +537,6 @@
     "deliveryTime": "Delivery Time",
     "allOrders": "View All My Orders"
   },
-
   "verificationPending": {
     "header2": "Check Your Email",
     "message1": "We have sent you a verification link for your account security. You are almost there to join us!",
@@ -549,7 +546,6 @@
     "goToLogin": "Go to Login Page",
     "loginWithAnother": "Log In with Another Account (Log Out)"
   },
-
   "verifyEmail": {
     "messageVerified": "Your account has been verified successfully! You can log in.",
     "verifying": "Verifying...",
@@ -558,14 +554,12 @@
     "great": "Great!",
     "login": "Log In"
   },
-
   "verify": {
     "verifying": "Your account is being verified...",
     "unsucessfull": "Verification failed. Link is invalid or expired.",
     "waitingMessage": "Please wait, your transaction is being processed.",
     "success": "Congratulations!"
   },
-
   "cartContext": {
     "maxStockReached": "Insufficient stock! Maximum",
     "added": "added to cart!",
@@ -579,71 +573,72 @@
     "addedToFavorites": "added to favourites",
     "favoritesNotUpdated": "Favourite could not be updated. Please log in again."
   },
-
   "termsModal": {
-    "agree": "I Have Read and Accept",
+    "agree": "I have read and agree to these Terms",
+    "close": "Close",
+
     "customers": {
-      "title": "Distance Sales and Service Agreement",
+      "title": "Distance Sales & Marketplace Services Agreement",
       "first": {
-        "title": "1. INTRODUCTION AND PARTIES",
-        "desc": "These Terms and Conditions govern the sale of goods made to you (\"Buyer\") by the Seller through the Platform. By placing an order, you agree to be bound by these terms under the Consumer Rights Act 2015."
+        "title": "1. INTRODUCTION & ROLE OF PLATFORM",
+        "desc": "These Terms govern the purchase of goods via Fesfu UK ('Platform'). Fesfu acts as a COMMERCIAL AGENT (Intermediary) for third-party Vendors. By placing an order, you acknowledge that the contract of sale is formed directly between you (Buyer) and the Vendor, facilitated by Fesfu. We are responsible for transaction processing and delivery coordination."
       },
       "second": {
-        "title": "2. DELIVERY POLICY",
-        "desc": "We aim to deliver products within the time slot selected at checkout. If the buyer is not at the address, due to the nature of perishable products (flowers/food), the courier may leave the package in a \"safe place\" or with a neighbour (UK standard practice)."
+        "title": "2. DELIVERY & LIABILITY",
+        "desc": "We aim to deliver within the selected time slot. For perishable goods (flowers/food), if the recipient is unavailable, the courier may leave the item in a 'Safe Place' or with a neighbor (Standard UK Practice). Fesfu is not liable for failed deliveries due to incorrect addresses provided by the Buyer."
       },
       "third": {
-        "title": "3. CANCELLATION AND RETURN POLICY",
-        "desc": "Under the Consumer Contracts Regulations 2013, consumers generally have a 14-day right of withdrawal. HOWEVER: Perishable Product Exception: For goods that can spoil quickly or whose expiry date passes quickly (fresh flowers, plants, food products), there is <strong>NO RIGHT OF CANCELLATION/WITHDRAWAL. Under the Consumer Rights Act 2015, if products are not as described or are of insufficient quality at the time of delivery (e.g. crushed flowers), you have the right to a refund or exchange. You must notify us within 24 hours of delivery with photographic evidence."
+        "title": "3. CANCELLATION & RETURN POLICY (MIXED GOODS)",
+        "desc": "Under the Consumer Contracts Regulations 2013, rights vary by category: <br><strong>A) Perishable Goods (Flowers, Food):</strong> NO Right of Withdrawal exists unless the item arrives damaged/defective. <br><strong>B) Durable Goods (Electronics, Books, Fashion):</strong> You have a statutory right to cancel within 14 days. Items must be returned unused in original packaging. <br><strong>Defective Items:</strong> Under the Consumer Rights Act 2015, if any item is not as described, you are entitled to a refund/replacement if reported within 24 hours with photographic evidence."
       },
       "fifth": {
-        "title": "5. PRIVACY AND DATA PROTECTION",
-        "desc": "Your personal data (Name, Address, Phone) is processed in full compliance with UK GDPR and Data Protection Act 2018. Data is shared only with the Seller and Courier for the purpose of completing your order."
+        "title": "4. DATA PROTECTION & PRIVACY",
+        "desc": "Your personal data (Name, Address) is processed in strict compliance with the UK GDPR and Data Protection Act 2018. It is shared strictly with the relevant Vendor and Courier solely for the purpose of order fulfillment. We never sell your data to third parties."
       }
     },
+
     "courierAgreement": {
       "title": "Independent Courier Service Agreement",
       "first": {
-        "title": "1. WORKING METHOD",
-        "desc": "The Courier agrees to provide services as \"Self-Employed\", as an Independent Contractor. This agreement does not make the Courier an employee, worker or partner of the Platform. You are responsible for your own taxes and National Insurance (NI) payments."
+        "title": "1. INDEPENDENT CONTRACTOR STATUS",
+        "desc": "The Courier agrees to provide services as a self-employed 'Independent Contractor'. This agreement does NOT create an employer-employee relationship. You are solely responsible for your own taxes (HMRC Self Assessment) and National Insurance contributions."
       },
       "second": {
-        "title": "2. SERVICE STANDARDS",
-        "desc": "The Courier must take utmost care to preserve the aesthetic integrity of perishable products (flowers, cakes). Deliveries must be completed within the specified time slots."
+        "title": "2. SERVICE STANDARDS & CARE",
+        "desc": "The Courier must exercise maximum care to maintain the integrity of goods (especially fragile flowers or electronics). Deliveries must be completed within the assigned time windows. Proof of Delivery (Photo/Signature) is mandatory for all high-value items."
       },
       "third": {
-        "title": "3. DATA PROTECTION (GDPR - CRIMINAL OFFENCE)",
+        "title": "3. DATA PROTECTION & CRIMINAL LIABILITY (GDPR)",
         "titlesub": "STRICT CONFIDENTIALITY NOTICE",
-        "desc": "Customer data (address, phone) transmitted to you is ONLY for delivery purposes. Under the Data Protection Act 2018; recording this data, calling/texting the customer for reasons other than delivery, or sharing it with others is a CRIMINAL OFFENCE. If detected, the contract will be terminated and legal action will be initiated."
+        "desc": "Customer data (Address, Phone) provided to you is for DELIVERY PURPOSES ONLY. Under the Data Protection Act 2018; saving this data, contacting the customer for personal reasons, or sharing it with others is a CRIMINAL OFFENCE. Any breach will result in immediate contract termination and legal prosecution."
       }
     },
+
     "vendorAgreement": {
-      "title": "Vendor Partnership Agreement",
+      "title": "Vendor Partnership & Marketplace Agreement",
       "first": {
-        "title": "1. PARTIES AND PURPOSE",
-        "desc": "This Agreement is between the Platform and the Vendor (Supplier). The Vendor grants the Platform the right to list and sell its products. Legal ownership of the products remains with the Vendor until the sale is completed."
+        "title": "1. PARTIES & PURPOSE",
+        "desc": "This Agreement permits the Vendor to list and sell products on the Fesfu Marketplace. The Vendor retains legal ownership of goods until the point of sale. The Vendor warrants that they are a legal business entity authorized to sell these goods in the UK."
       },
       "second": {
-        "title": "2. COMMISSION AND PAYMENTS",
-        "desc": "The Platform charges a commission of 10% + VAT on the gross value of each order. Payments are made weekly. The Platform reserves the right to withhold payment in case of suspicious transactions or high return rates."
+        "title": "2. COMMISSION & PAYMENTS",
+        "desc": "Fesfu charges a commission fee (e.g., 10% + VAT) on the gross value of each confirmed order. Payouts are processed weekly. Fesfu reserves the right to withhold payments in cases of high dispute rates, suspected fraud, or breach of terms."
       },
       "third": {
-        "title": "3. PRODUCT LIABILITY AND COMPLIANCE",
-        "desc": "The Vendor guarantees that all goods sold comply with the Sale of Goods Act 1979 and (if selling food) UK Food Safety standards. The cost of returns due to poor quality products, incorrect packaging or image mismatch belongs to the Vendor."
+        "title": "3. PRODUCT LIABILITY & COMPLIANCE",
+        "desc": "The Vendor guarantees that all listed goods comply with the Sale of Goods Act 1979 and (for food) UK Food Safety Standards. The Vendor is solely liable for costs arising from returns due to poor quality, incorrect description, or lack of conformity. Fesfu accepts no liability for the safety/quality of Vendor products."
       },
       "fourth": {
-        "title": "4. DATA PROTECTION (GDPR)",
-        "desc": "The Vendor will process customer data in compliance with UK GDPR and Data Protection Act 2018. Data will only be used for the purpose of processing orders."
+        "title": "4. DATA PROCESSING (GDPR)",
+        "desc": "The Vendor agrees to process customer data solely for order fulfillment in accordance with UK GDPR. Using customer data for direct marketing (spam) without explicit consent is strictly prohibited and grounds for immediate ban."
       }
     }
   },
-
   "secureImage": {
     "uploading": "Uploading...",
     "uploadSuccess": "Uploaded Successfully!",
     "wasNotVisible": "Could Not Be Displayed"
   },
-
   "orderTracker": {
     "ready": "Ready (Awaiting Courier)",
     "preparing": "Preparing",
@@ -656,16 +651,13 @@
     "cancelReqUnderReview": "Your request is being reviewed by customer service.",
     "orderCancelled": "This order has been cancelled."
   },
-
   "locationPicker": {
     "locationOnMap": "Click on the Map to Select Location"
   },
-
   "cookieBanner": {
     "detailedInfo": "Detailed Information",
     "cookiesAgreement": "We use cookies to provide you with a better shopping experience. By continuing to the site, you are deemed to have accepted the use of cookies."
   },
-
   "footer": {
     "col1": "We deliver London's freshest flowers and most special gifts to your loved ones the same day. We deliver happiness.",
     "col21": "Corporate",
@@ -686,13 +678,11 @@
     "col52": "Distance Sales Agreement",
     "col53": "Cookie Policy"
   },
-
   "confirmModal": {
     "cancel": "Cancel",
     "yes": "Yes,",
     "confirm": "Confirm"
   },
-
   "chatBot": {
     "greeting": "Hello! I'm Fesfu Assistant 🌸 How can I help you?",
     "greetingResponse": "Hello! 🌸 I can provide you with information about orders, flower care or vendor transactions.",
@@ -700,7 +690,6 @@
     "send": "Send",
     "welcomeBack": "Welcome back! How can I help you?"
   },
-
   "cartSidebar": {
     "applyCode": "Enter code",
     "appliedSuccess": "Coupon applied successfully!",
@@ -716,7 +705,6 @@
     "allWillBeRemoved": "all products will be removed from cart.",
     "loginRequired": "Please login to proceed to checkout"
   },
-
   "cancelModal": {
     "inputReason": "Please specify a valid reason.",
     "cancelRequest": "Cancellation Request",
@@ -725,7 +713,6 @@
     "cancel": "Cancel",
     "submitRequest": "Submit Request"
   },
-
   "badgeDisplay": {
     "admin": "Admin",
     "vendor": "Verified Store",
@@ -744,7 +731,6 @@
     "bestSeller": "Best Seller",
     "starStore": "Star Store"
   },
-
   "vendorSettings": {
     "logo": "Logo",
     "banner": "Banner",
@@ -763,7 +749,6 @@
     "phone": "Contact Phone",
     "saveSettings": "Save Settings"
   },
-
   "vendorProducts": {
     "additionalCategories": "Show in Other Categories (Optional)",
     "comment": "adminProductPage",
@@ -818,7 +803,6 @@
     "stockUpdated": "Stock updated!",
     "selectCategory": "Select Category"
   },
-
   "vendorOrders": {
     "updated": "Updated",
     "orders": "Incoming Orders",
@@ -831,7 +815,6 @@
     "courierToStore": "Courier Going to Store",
     "deliveryOnTheWay": "Delivery On The Way"
   },
-
   "vendorDashboard": {
     "store": "Store Summary",
     "totalSales": "Total Sales",
@@ -840,7 +823,6 @@
     "welcome": "Welcome,",
     "welcome2": "Your store is currently active. You can track your orders from the 'Orders' tab, print invoices and deliver to the courier."
   },
-
   "profilePage": {
     "userInfo": {
       "editProfile": "Edit Profile",
@@ -914,7 +896,6 @@
       "delete": "Delete"
     }
   },
-
   "cartSidebarComponents": {
     "cartItemsList": {
       "empty": "Your cart is empty."
@@ -983,7 +964,6 @@
       "deliveryInfo": "Delivery Information"
     }
   },
-
   "adminComponents": {
     "adminOrderComp": {
       "orderCard": {
@@ -1079,7 +1059,6 @@
     },
     "comment": "Admin NOT FINISHED"
   },
-
   "navbar": {
     "searchPlaceholder": "Search Flowers, Chocolate, Gifts...",
     "myAccount": "My Account",
@@ -1101,5 +1080,41 @@
     "noAccount1": "Don't have an account?",
     "noAccount2": "Register Now",
     "backToHome": "← Back to Home"
+  },
+  "FAQ": {
+    "faqTitle": "Frequently Asked Questions",
+    "faqDescription": "Find answers to your questions about orders, delivery, and payment.",
+    "items": [
+      {
+        "q": "How can I track my order?",
+        "a": "You can track the instant status of your order from the 'My Orders' menu after logging in."
+      },
+      {
+        "q": "Which areas do you deliver to?",
+        "a": "We currently deliver only within London."
+      },
+      {
+        "q": "Is there same day delivery?",
+        "a": "Yes, orders placed before 18:00 are delivered the same day."
+      },
+      {
+        "q": "Are the flowers and products fresh?",
+        "a": "Yes, fresh flowers are sourced daily from the auction every morning, and perishable foods are prepared fresh."
+      },
+      {
+        "q": "What are the payment methods?",
+        "a": "You can pay securely via Credit/Debit Card (secured by Stripe infrastructure)."
+      }
+    ]
+  },
+  "features": {
+    "title1": "Same Day Delivery",
+    "desc1": "Order by 18:00 in London, we deliver today.",
+    "title2": "Secure Payment",
+    "desc2": "100% secure payments via Stripe infrastructure.",
+    "title3": "Premium Experience",
+    "desc3": "Carefully prepared packages and gift notes.",
+    "title4": "Live Tracking",
+    "desc4": "Watch your courier arrive at the door."
   }
 }

@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# --- Yönetim Panelleri (Gizli) ---
+Disallow: /admin
+Disallow: /vendor
+Disallow: /courier
+Disallow: /partner-application
+
+# --- Kullanıcı Özel Sayfaları (Gizli) ---
+Disallow: /profile
+Disallow: /my-orders
+Disallow: /favorites
+Disallow: /success
+Disallow: /verification-pending
+
+# --- Kimlik Doğrulama ve Güvenlik ---
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify
+
+# --- Sepet ve Ödeme (Standart Koruma) ---
+Disallow: /cart
+Disallow: /checkout
+
+# --- Backend API ---
+Disallow: /api/
+
+# --- Sitemap ---
+Sitemap: https://fesfu.co.uk/sitemap.xml

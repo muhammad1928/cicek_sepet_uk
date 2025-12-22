@@ -71,7 +71,7 @@
     "notFound": "Aucun produit trouvé correspondant à vos critères.",
     "searchNotFoundTitle": "Est-ce un trésor caché ?",
     "searchNotFoundDesc": "Nous n'avons pas trouvé de résultat pour votre recherche, mais nos rayons sont remplis d'autres surprises.",
-    "categoryEmptyTitle": "De grandes choses arrivent !",
+    "categoryEmptyTitle": "De magnifiques fleurs arrivent !",
     "categoryEmptyDesc": "Cette collection a été tellement appréciée qu'elle est épuisée ! Nos designers préparent actuellement les produits les plus spéciaux et des cadeaux frais rien que pour vous.",
     "showAll": "Découvrir tous les produits",
     "popularCategory": "Populaire : Anniversaire 🎂",
@@ -201,46 +201,50 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "À propos - Fesfu | Fleurs et cadeaux les plus frais",
-      "aboutDescription": "Découvrez l'histoire, la mission et les valeurs de Fesfu. Nous nous engageons à offrir à nos clients la meilleure expérience en matière de fleurs et de cadeaux. Nous faisons la différence avec une livraison rapide et un excellent service client."
+      "aboutTitle": "À Propos - Fesfu UK | La Marketplace de Référence à Londres",
+      "aboutDescription": "D'un fleuriste local à la marketplace en ligne la plus rapide de Londres. Nous livrons fleurs, technologie, mode et gastronomie avec livraison le jour même."
     },
     "homePage": {
-      "homeTitle": "Fleurs fraîches et cadeaux spéciaux - Fesfu Londres",
-      "locationTitle": "Londres - Fleurs les plus fraîches et cadeaux spéciaux | Fesfu",
-      "homeDescription": "Nous livrons les fleurs les plus fraîches et les cadeaux spéciaux de Londres le jour même à votre porte. Découvrez des options de cadeaux parfaites pour les anniversaires, les anniversaires de mariage, les demandes en mariage et autres occasions spéciales."
+      "homeTitle": "Fesfu UK | Marketplace Livraison le Jour Même - Londres",
+      "locationTitle": "Achetez Fleurs, Tech et Cadeaux à Londres | Fesfu UK",
+      "homeDescription": "La marketplace préférée de Londres. Achetez fleurs fraîches, électronique, livres, mode et cadeaux. Commandez avant 18h00 pour livraison garantie le jour même."
     },
     "contactPage": {
-      "contactTitle": "Contact - Fesfu | Contactez-nous",
-      "contactDescription": "Contactez-nous pour vos questions, suggestions ou réclamations. Chez Fesfu, nous sommes toujours heureux de vous aider. Vous pouvez utiliser différents canaux de contact pour nous joindre."
+      "contactTitle": "Contactez-Nous | Support Client Fesfu 24/7",
+      "contactDescription": "Besoin d'aide avec votre commande ? Contactez l'équipe support Fesfu pour vos questions sur les livraisons, retours ou devenir vendeur. Nous sommes là pour vous aider."
     },
     "faqPage": {
-      "faqTitle": "Questions fréquentes - Fesfu",
-      "faqDescription": "Découvrez les questions fréquentes sur Fesfu. Informez-vous sur les commandes, la livraison, la politique de retour et autres sujets importants. Trouvez des réponses rapides et faciles à vos questions."
+      "faqTitle": "Aide et FAQ - Fesfu Marketplace UK",
+      "faqDescription": "Trouvez des réponses rapides sur les délais de livraison, les politiques de retour pour l'électronique et les périssables, et les méthodes de paiement. Votre guide shopping sur Fesfu."
     },
     "favouritesPage": {
-      "title": "Mes favoris - Fesfu | Vos produits préférés",
-      "description": "Enregistrez vos favoris et accédez facilement à vos fleurs, cadeaux et autres produits préférés. Avec Fesfu, achetez vos produits préférés en un clic."
+      "title": "Ma Liste de Souhaits | Fesfu - Sauvegarder pour Plus Tard",
+      "description": "Créez votre liste d'achats parfaite. Sauvegardez vos fleurs, gadgets, livres et articles de mode préférés pour les acheter plus tard en un seul clic."
     },
     "legalPage": {
-      "title": "Informations légales - Fesfu | Politique de confidentialité et conditions d'utilisation",
-      "description": "Obtenez des informations détaillées sur la politique de confidentialité, les conditions d'utilisation et la politique de cookies de Fesfu. Découvrez comment vos données personnelles sont protégées et vos droits lors de l'utilisation de notre plateforme.",
-      "hakkindaDetayliBilgi": "informations détaillées sur."
+      "title": "Mentions Légales et Politique de Confidentialité | Fesfu UK",
+      "description": "Des conditions transparentes pour une marketplace équitable. Lisez notre politique de confidentialité, les droits des consommateurs et les règles de remboursement pour les biens numériques et périssables.",
+      "detailedInfo": "informations détaillées sur."
     },
     "myOrdersPage": {
-      "title": "Mes commandes - Fesfu | Suivi et historique des commandes",
-      "description": "Consultez vos commandes passées, examinez les détails des commandes et suivez le statut de vos commandes. Gérez facilement toutes vos commandes avec Fesfu."
+      "title": "Suivre Ma Commande | Fesfu UK",
+      "description": "Consultez l'historique des commandes et suivez les livraisons en direct. Vérifiez l'état de votre bouquet, électronique ou articles de mode en temps réel."
     },
     "registerCourierPage": {
-      "title": "Candidature coursier - Fesfu | Devenez coursier",
-      "description": "Rejoignez le programme de coursier de Fesfu et gagnez un revenu supplémentaire avec des horaires flexibles. Informez-vous sur le processus de candidature et postulez maintenant."
+      "title": "Emplois Livreur Londres | Rejoignez l'Équipe de Livraison Fesfu",
+      "description": "Conduisez avec Fesfu. Gagnez un revenu compétitif en livrant fleurs, nourriture et colis à travers Londres. Horaires flexibles, paiements instantanés. Postulez maintenant."
     },
     "registerPage": {
-      "title": "Inscription - Fesfu | Créer un nouveau compte",
-      "description": "Inscrivez-vous sur Fesfu et accédez aux fleurs les plus fraîches et aux cadeaux spéciaux. Commencez vos achats immédiatement avec un processus d'inscription rapide et facile."
+      "title": "Inscription | Rejoignez la Marketplace Fesfu",
+      "description": "Créez un compte gratuit pour débloquer des offres exclusives. Achetez des milliers de produits de marques locales et mondiales avec paiement rapide et sécurisé."
     },
     "vendorRegistrationPage": {
-      "title": "Candidature vendeur - Fesfu | Ouvrez votre boutique",
-      "description": "Ouvrez votre boutique sur la plateforme Fesfu et atteignez une large clientèle. Informez-vous sur le processus de candidature vendeur et postulez maintenant."
+      "title": "Vendez sur Fesfu | Devenez Vendeur Partenaire",
+      "description": "Développez votre activité avec Fesfu. Atteignez des millions de clients londoniens en vendant fleurs, électronique, nourriture ou mode. Faibles commissions, support élevé."
+    },
+    "productDetailPage": {
+      "defaultTitle": "Achetez en Ligne | Fesfu UK Marketplace",
+      "defaultDescription": "Découvrez notre collection exclusive. Livraison rapide à Londres et options de paiement sécurisées."
     }
   },
 
@@ -289,8 +293,29 @@
   },
 
   "FAQ": {
-    "faqTitle": "Questions fréquentes",
-    "faqDescription": "Vos questions."
+    "faqTitle": "Questions Fréquentes",
+    "faqDescription": "Trouvez des réponses à vos questions sur les commandes, la livraison et le paiement.",
+    "items": [{
+        "q": "Comment puis-je suivre ma commande ?",
+        "a": "Vous pouvez suivre l'état instantané de votre commande depuis le menu 'Mes Commandes' après vous être connecté."
+      },
+      {
+        "q": "Dans quelles zones livrez-vous ?",
+        "a": "Nous livrons actuellement uniquement dans Londres."
+      },
+      {
+        "q": "Y a-t-il une livraison le même jour ?",
+        "a": "Oui, les commandes passées avant 18h00 sont livrées le même jour."
+      },
+      {
+        "q": "Les fleurs et les produits sont-ils frais ?",
+        "a": "Oui, les fleurs fraîches sont achetées quotidiennement aux enchères chaque matin, et les aliments périssables sont préparés frais."
+      },
+      {
+        "q": "Quels sont les modes de paiement ?",
+        "a": "Vous pouvez payer en toute sécurité par Carte de Crédit/Débit (sécurisé par l'infrastructure Stripe)."
+      }
+    ]
   },
   "favorites": {
     "favoritesTitle": "Mes favoris",
@@ -315,50 +340,64 @@
     "returnToLogin": "← Retour à la connexion"
   },
   "legal": {
-    "legalTitle": "Politique de cookies",
+    "legalTitle": "Juridique & Promesses",
+    "pageNotFound": "Document Non Trouvé",
+    "pageNotFoundDesc": "Le document juridique que vous recherchez a été déplacé ou mis à jour.",
+    "backToHome": "Retour à l'Accueil",
+    "backToHome2": "Département Juridique Fesfu",
     "privacyPolicy": {
-      "legalPageContentTitle": "Politique de confidentialité",
-      "first": "1. Responsable des données",
-      "firstDesc": "En tant que Fesfu UK, nous accordons la plus grande importance à la sécurité de vos données personnelles dans le cadre du RGPD (Règlement général sur la protection des données).",
-      "second": "2. Données collectées et finalités",
+      "legalPageContentTitle": "Confidentialité & Protection des Données",
+      "first": "1. Responsable du Traitement & Votre Confiance",
+      "firstDesc": "Fesfu UK opère en pleine conformité avec le UK Data Protection Act 2018 et le UK GDPR. Nous apprécions la confiance que vous nous accordez pour livrer vos émotions, et nous nous engageons à protéger vos données personnelles.",
+      "second": "2. Données Collectées et Finalités",
       "secondDesc": {
-        "part1": "Identité et contact : Votre nom, prénom, e-mail et numéro de téléphone sont traités pour la confirmation de commande et la facturation.",
-        "part2": "Informations de livraison : L'adresse et les coordonnées du destinataire sont partagées avec le coursier et la boutique concernée (vendeur) pour la livraison.",
-        "part3": "Sécurité des transactions : L'adresse IP et les informations sur l'appareil sont conservées pour la détection de fraude et les obligations légales."
+        "part1": "Identité & Contact : Nom, email et numéro de téléphone sont traités strictement pour l'exécution des commandes, les reçus numériques et les mises à jour de livraison.",
+        "part2": "Informations de Livraison : Les coordonnées du destinataire sont partagées UNIQUEMENT avec notre Équipe de Coursiers vérifiée et le Vendeur spécifique qui exécute votre commande.",
+        "part3": "Sécurité des Transactions : L'adresse IP et les données de l'appareil sont enregistrées pour prévenir la fraude et garantir un environnement d'achat sécurisé."
       },
-      "third": "3. Sécurité des paiements",
-      "thirdDesc": "Vos informations de carte de crédit ne sont jamais stockées sur nos serveurs. Les transactions de paiement sont effectuées directement par l'infrastructure de paiement mondiale Stripe via une connexion cryptée certifiée SSL."
+      "third": "3. Sécurité des Paiements",
+      "thirdDesc": "Nous NE stockons PAS les données de carte de crédit. Tous les paiements sont traités via l'infrastructure cryptée de Stripe, garantissant une sécurité de niveau bancaire avec 3D Secure."
     },
     "termsOfUse": {
-      "title": "Contrat de vente à distance",
-      "first": "1. Parties",
-      "firstDesc": "Ce contrat est conclu entre l'ACHETEUR qui passe commande via la plateforme et le VENDEUR (boutique) qui fournit le produit, avec Fesfu UK comme intermédiaire.",
-      "second": "2. Exception au droit de rétractation (Important)",
-      "secondDesc": "ATTENTION : Conformément à la réglementation, le droit de rétractation NE PEUT PAS être exercé pour les \"contrats de livraison de biens susceptibles de se détériorer ou de se périmer rapidement\" (fleurs fraîches, chocolat, gâteau, etc.).",
-      "secondDesc_part2": "Cependant, si le produit est endommagé, fané ou complètement différent de l'image au moment de la livraison, l'acheteur peut refuser la livraison et demander un retour.",
-      "third": "3. Processus de livraison",
-      "thirdDesc": "Les commandes sont livrées à la date et au créneau horaire choisis par l'acheteur. Sauf cas de force majeure (intempéries, accident de circulation, etc.), la plateforme est responsable des retards."
+      "title": "Conditions d'Utilisation & Garantie de Satisfaction",
+      "first": "1. Parties & Rôle de la Plateforme",
+      "firstDesc": "Cet accord est entre vous (ACHETEUR) et le Vendeur, facilité par Fesfu UK agissant comme AGENT COMMERCIAL. Nous garantissons transparence et qualité dans chaque transaction.",
+      "second": "2. Retours, Remboursements & Notre Promesse",
+      "secondDesc": "POLITIQUE DE RETOUR PAR CATÉGORIE :",
+      "secondDesc_part2": "A) BIENS PÉRISSABLES (Fleurs, Nourriture) : Légalement, le Droit de Rétractation ne s'applique pas. CEPENDANT, si votre commande arrive endommagée ou fanée, veuillez nous contacter dans les 24 HEURES avec une photo. Nous vérifierons avec le Vendeur et rectifierons (Remboursement ou Relivraison).",
+      "secondDesc_part3": "B) BIENS DURABLES (Électronique, Livres) : Vous avez le droit légal de retourner ces articles dans les 14 jours suivant la livraison. Les articles doivent être inutilisés, dans leur emballage d'origine et revendables.",
+      "third": "3. Livraison & Heures Limites",
+      "thirdDesc": "Pour la 'Livraison le Même Jour' à Londres, les commandes doivent être passées avant 18h00. Bien que nous visions la perfection, Fesfu n'est pas responsable des retards causés par des événements de force majeure extrêmes (ex. intempéries), mais nous communiquerons toujours avec vous."
     },
     "termsOfCookies": {
-      "title": "Politique de cookies",
-      "firstTerm": "1. Qu'est-ce qu'un cookie ?",
-      "firstTermDesc": "Les cookies sont de petits fichiers texte enregistrés dans votre navigateur par les sites web que vous visitez et qui nous aident à vous reconnaître. Certains cookies sont nécessaires au fonctionnement de notre site.",
-      "secondTerm": "2. Quels cookies utilisons-nous ?",
+      "title": "Politique de Cookies",
+      "firstTerm": "1. Qu'est-ce qu'un Cookie ?",
+      "firstTermDesc": "Les cookies sont de petits fichiers texte enregistrés dans votre navigateur. Nous les utilisons pour rendre votre expérience d'achat fluide, garder vos cadeaux surprises dans le panier et assurer que le site fonctionne rapidement.",
+      "secondTerm": "2. Types de Cookies que Nous Utilisons",
       "secondTermDesc": {
-        "first": "Cookies nécessaires",
-        "firstDesc": "Nécessaires pour mémoriser les produits dans votre panier, vous connecter à votre compte et assurer la sécurité des paiements. Ils ne peuvent pas être désactivés.",
-        "second": "Cookies fonctionnels",
-        "secondDesc": "Utilisés pour vos préférences linguistiques, vos adresses enregistrées et des fonctionnalités comme \"Se souvenir de moi\".",
-        "third": "Cookies analytiques",
-        "thirdDesc": "Nous aident à améliorer notre service en analysant anonymement comment vous utilisez notre site (quelles pages vous consultez)."
+        "first": "Cookies Essentiels",
+        "firstDesc": "Strictement nécessaires pour le traitement des paiements et la connexion sécurisée. Sans ceux-ci, la boutique ne peut pas fonctionner.",
+        "second": "Cookies Fonctionnels",
+        "secondDesc": "Mémorisent vos préférences (Langue, Devise) pour vous faire gagner du temps.",
+        "third": "Performance & Analyse",
+        "thirdDesc": "Nous aident à comprendre quels produits vous aimez le plus, nous permettant d'améliorer notre service."
       },
-      "thirdTerm": "3. Comment gérer les cookies ?",
-      "thirdTermDesc": "Vous pouvez supprimer ou bloquer les cookies à tout moment depuis le menu des paramètres de votre navigateur. Cependant, bloquer les cookies nécessaires peut perturber les fonctions de panier et de paiement."
+      "thirdTerm": "3. Gestion des Cookies",
+      "thirdTermDesc": "Vous pouvez gérer les cookies via les paramètres du navigateur. Bloquer les cookies essentiels peut vous empêcher de finaliser votre commande."
     },
-    "pageNotFound": "Page non trouvée",
-    "pageNotFoundDesc": "Le contenu que vous recherchez n'existe pas.",
-    "backToHome": "← Retour à l'accueil",
-    "backToHome2": "Fesfu UK Legal Team"
+    "membershipAgreement": {
+      "title": "Accord d'Adhésion",
+      "first": "1. Portée de l'Accord",
+      "firstDesc": "En créant un compte sur Fesfu UK, vous acceptez ces conditions. Vous devez avoir au moins 18 ans pour devenir membre.",
+      "second": "2. Responsabilités de l'Utilisateur",
+      "secondDesc": {
+        "part1": "Sécurité du Compte : Vous êtes responsable de garder votre mot de passe confidentiel. Fesfu n'est pas responsable des accès non autorisés dus à des mots de passe faibles.",
+        "part2": "Exactitude : Vous déclarez que toutes les informations (Nom, Adresse, Téléphone) fournies lors de l'inscription sont exactes et à jour.",
+        "part3": "Conduite Interdite : Les utilisateurs ne peuvent pas manipuler les prix, utiliser des bots ou tenter de pirater la plateforme. De telles actions entraîneront un bannissement immédiat."
+      },
+      "third": "3. Résiliation du Compte",
+      "thirdDesc": "Fesfu se réserve le droit de suspendre les comptes qui violent ces conditions, commettent une fraude ou abusent de la politique de remboursement."
+    }
   },
   "myOrders": {
     "notifyCancelRequestSent": "Votre demande d'annulation a été reçue.",
@@ -398,6 +437,7 @@
   },
   "profile": {
     "title": "Mon compte",
+    "badges":" Badges ",
     "profileGreetings": "Bienvenue, vous pouvez gérer votre profil et vos commandes ici."
   },
   "registerCourier": {
@@ -433,20 +473,20 @@
     "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous"
   },
   "register": {
-    "passwordForbiddenChars": "Le mot de passe contient des caractères interdits. Veuillez supprimer: ' \" ` \\ ; -- { } < > |",
+    "passwordForbiddenChars": "Le mot de passe contient des caractères interdits. Veuillez supprimer : ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Votre mot de passe n'est pas assez fort !",
     "notifyPasswordRequirements": "Veuillez respecter les exigences du mot de passe.",
-    "acceptTerms": "Veuillez accepter le contrat !",
+    "acceptTerms": "Veuillez accepter l'accord !",
     "registrationFailed": "L'inscription a échoué. Veuillez réessayer.",
-    "joinUs": "Rejoignez-nous",
+    "joinUs": "Rejoignez-Nous",
     "createAccount": "Créez un compte rapidement",
-    "securityMeasures": "Exigences de sécurité",
-    "userAgrement1": "J'ai lu et j'accepte ",
-    "userAgrement2": "le contrat d'utilisation.",
+    "securityMeasures": "Exigences de Sécurité",
+    "userAgrement1": "J'accepte l'",
+    "userAgrement2": "Accord d'Adhésion et Politique de Confidentialité.",
     "btn1": "Enregistrement...",
-    "btn2": "Créer un compte",
+    "btn2": "Créer un Compte",
     "alreadyAccount1": "Vous avez déjà un compte ?",
-    "alreadyAccount2": "Connectez-vous"
+    "alreadyAccount2": "Se Connecter"
   },
   "vendor": {
     "receivedOrders": "Commandes entrantes",
@@ -561,59 +601,60 @@
     "favoritesNotUpdated": "Le favori n'a pas pu être mis à jour. Veuillez vous reconnecter."
   },
   "termsModal": {
-    "agree": "J'ai lu, j'accepte",
+    "agree": "J'ai lu et j'accepte ces Conditions",
+    "close": "Fermer",
     "customers": {
-      "title": "Contrat de vente et de service à distance",
+      "title": "Contrat de Vente à Distance et Services de la Marketplace",
       "first": {
-        "title": "1. INTRODUCTION ET PARTIES",
-        "desc": "Ces conditions générales régissent la vente de biens qui vous est faite (\"Acheteur\") par le Vendeur via la Plateforme. En passant commande, vous acceptez d'être lié par ces conditions conformément au Consumer Rights Act 2015."
+        "title": "1. INTRODUCTION ET RÔLE DE LA PLATEFORME",
+        "desc": "Ces Conditions régissent l'achat de biens via Fesfu UK ('Plateforme'). Fesfu agit en tant qu'AGENT COMMERCIAL (Intermédiaire) pour les Vendeurs tiers. En passant une commande, vous reconnaissez que le contrat de vente est conclu directement entre vous (Acheteur) et le Vendeur, facilité par Fesfu. Nous sommes responsables du traitement des transactions et de la coordination des livraisons."
       },
       "second": {
-        "title": "2. POLITIQUE DE LIVRAISON",
-        "desc": "Nous visons à livrer les produits dans le créneau horaire sélectionné lors du paiement. Si l'acheteur n'est pas à l'adresse, le coursier peut laisser le colis dans un \"endroit sûr\" ou chez un voisin en raison de la nature périssable des produits (fleurs/nourriture) (pratique standard au Royaume-Uni)."
+        "title": "2. LIVRAISON ET RESPONSABILITÉ",
+        "desc": "Nous visons à livrer dans le créneau horaire sélectionné. Pour les biens périssables (fleurs/nourriture), si le destinataire n'est pas disponible, le coursier peut laisser l'article dans un 'Lieu Sûr' ou chez un voisin (Pratique standard au Royaume-Uni). Fesfu n'est pas responsable des livraisons échouées en raison d'adresses incorrectes fournies par l'Acheteur."
       },
       "third": {
-        "title": "3. POLITIQUE D'ANNULATION ET DE RETOUR",
-        "desc": "Conformément aux Consumer Contracts Regulations 2013, les consommateurs ont généralement un droit de rétractation de 14 jours. CEPENDANT : Exception pour les produits périssables : Il n'y a PAS DE DROIT D'ANNULATION/RÉTRACTATION pour les biens susceptibles de se détériorer ou de se périmer rapidement (fleurs fraîches, plantes, produits alimentaires). En vertu du Consumer Rights Act 2015, si les produits ne sont pas conformes à la description à la livraison ou sont de qualité insuffisante (par ex. fleurs écrasées), vous avez droit à un remboursement ou un échange. Vous devez nous en informer avec preuves photo dans les 24 heures suivant la livraison."
+        "title": "3. POLITIQUE D'ANNULATION ET DE RETOUR (BIENS MIXTES)",
+        "desc": "Selon les Consumer Contracts Regulations 2013, les droits varient selon la catégorie : <br><strong>A) Biens Périssables (Fleurs, Nourriture) :</strong> AUCUN Droit de Rétractation n'existe sauf si l'article arrive endommagé/défectueux. <br><strong>B) Biens Durables (Électronique, Livres, Mode) :</strong> Vous avez le droit légal d'annuler dans les 14 jours. Les articles doivent être retournés non utilisés dans leur emballage d'origine. <br><strong>Articles Défectueux :</strong> Selon le Consumer Rights Act 2015, si un article ne correspond pas à la description, vous avez droit à un remboursement/remplacement si signalé dans les 24 heures avec preuve photographique."
       },
       "fifth": {
-        "title": "5. CONFIDENTIALITÉ ET PROTECTION DES DONNÉES",
-        "desc": "Vos données personnelles (nom, adresse, téléphone) sont traitées en pleine conformité avec le RGPD britannique et le Data Protection Act 2018. Les données sont partagées uniquement avec le Vendeur et le Coursier pour traiter votre commande."
+        "title": "4. PROTECTION DES DONNÉES ET CONFIDENTIALITÉ",
+        "desc": "Vos données personnelles (Nom, Adresse) sont traitées en stricte conformité avec le UK GDPR et le Data Protection Act 2018. Elles sont partagées strictement avec le Vendeur et le Coursier concernés uniquement dans le but de l'exécution de la commande. Nous ne vendons jamais vos données à des tiers."
       }
     },
     "courierAgreement": {
-      "title": "Contrat de service de coursier indépendant",
+      "title": "Contrat de Service de Coursier Indépendant",
       "first": {
-        "title": "1. MODE DE TRAVAIL",
-        "desc": "Le coursier accepte de fournir des services en tant que \"Travailleur indépendant\" (Self-Employed), en tant qu'entrepreneur indépendant. Ce contrat ne fait pas du coursier un employé, un travailleur ou un partenaire de la Plateforme. Vous êtes responsable de vos propres impôts et cotisations sociales (NI)."
+        "title": "1. STATUT DE PRESTATAIRE INDÉPENDANT",
+        "desc": "Le Coursier accepte de fournir des services en tant que 'Prestataire Indépendant' travailleur autonome. Cet accord NE crée PAS de relation employeur-employé. Vous êtes seul responsable de vos propres impôts (HMRC Self Assessment) et cotisations d'assurance nationale."
       },
       "second": {
-        "title": "2. NORMES DE SERVICE",
-        "desc": "Le coursier doit faire preuve de la plus grande attention pour préserver l'intégrité esthétique des produits périssables (fleurs, gâteaux). Les livraisons doivent être effectuées dans les délais indiqués."
+        "title": "2. NORMES DE SERVICE ET SOIN",
+        "desc": "Le Coursier doit exercer le plus grand soin pour maintenir l'intégrité des marchandises (en particulier les fleurs fragiles ou l'électronique). Les livraisons doivent être effectuées dans les créneaux horaires assignés. La Preuve de Livraison (Photo/Signature) est obligatoire pour tous les articles de haute valeur."
       },
       "third": {
-        "title": "3. PROTECTION DES DONNÉES (RGPD - INFRACTION PÉNALE)",
+        "title": "3. PROTECTION DES DONNÉES ET RESPONSABILITÉ PÉNALE (RGPD)",
         "titlesub": "AVIS DE CONFIDENTIALITÉ STRICTE",
-        "desc": "Les données clients (adresse, téléphone) qui vous sont fournies sont UNIQUEMENT destinées à la livraison. En vertu du Data Protection Act 2018, il est INTERDIT d'enregistrer ces données, de contacter le client pour une raison autre que la livraison ou de les partager avec d'autres. En cas de découverte, le contrat sera résilié et des poursuites judiciaires seront engagées."
+        "desc": "Les données client (Adresse, Téléphone) qui vous sont fournies sont UNIQUEMENT POUR DES FINS DE LIVRAISON. Selon le Data Protection Act 2018 ; enregistrer ces données, contacter le client pour des raisons personnelles, ou les partager avec d'autres est une INFRACTION PÉNALE. Toute violation entraînera la résiliation immédiate du contrat et des poursuites judiciaires."
       }
     },
     "vendorAgreement": {
-      "title": "Contrat de partenariat commercial vendeur",
+      "title": "Accord de Partenariat Vendeur et Marketplace",
       "first": {
         "title": "1. PARTIES ET OBJET",
-        "desc": "Ce contrat est conclu entre la Plateforme et le Vendeur (Fournisseur). Le Vendeur accorde à la Plateforme le droit de lister et de vendre ses produits. La propriété légale des produits appartient au Vendeur jusqu'à la vente."
+        "desc": "Cet Accord permet au Vendeur de lister et vendre des produits sur la Marketplace Fesfu. Le Vendeur conserve la propriété légale des biens jusqu'au point de vente. Le Vendeur garantit qu'il est une entité commerciale légale autorisée à vendre ces biens au Royaume-Uni."
       },
       "second": {
         "title": "2. COMMISSION ET PAIEMENTS",
-        "desc": "La Plateforme prélève une commission de 10% + TVA (VAT) sur la valeur brute de chaque commande. Les paiements sont effectués chaque semaine. La Plateforme se réserve le droit de suspendre les paiements en cas de transactions suspectes ou de taux de retour élevés."
+        "desc": "Fesfu facture une commission (ex. 10% + TVA) sur la valeur brute de chaque commande confirmée. Les paiements sont traités chaque semaine. Fesfu se réserve le droit de retenir les paiements en cas de taux de litiges élevés, de fraude suspectée ou de violation des conditions."
       },
       "third": {
         "title": "3. RESPONSABILITÉ PRODUIT ET CONFORMITÉ",
-        "desc": "Le Vendeur garantit que tous les biens vendus sont conformes au Sale of Goods Act 1979 et (en cas de vente de nourriture) aux normes britanniques de sécurité alimentaire. Le coût des retours dus à des produits de mauvaise qualité, un emballage incorrect ou une non-conformité avec les images est à la charge du Vendeur."
+        "desc": "Le Vendeur garantit que tous les biens listés sont conformes au Sale of Goods Act 1979 et (pour les aliments) aux Normes de Sécurité Alimentaire du Royaume-Uni. Le Vendeur est seul responsable des coûts découlant des retours pour mauvaise qualité, description incorrecte ou défaut de conformité. Fesfu n'accepte aucune responsabilité pour la sécurité/qualité des produits du Vendeur."
       },
       "fourth": {
-        "title": "4. PROTECTION DES DONNÉES (RGPD)",
-        "desc": "Le Vendeur traitera les données clients conformément au RGPD britannique et au Data Protection Act 2018. Les données seront utilisées uniquement pour le traitement des commandes."
+        "title": "4. TRAITEMENT DES DONNÉES (RGPD)",
+        "desc": "Le Vendeur accepte de traiter les données clients uniquement pour l'exécution des commandes conformément au UK GDPR. L'utilisation des données clients pour le marketing direct (spam) sans consentement explicite est strictement interdite et constitue un motif de bannissement immédiat."
       }
     }
   },
@@ -1064,5 +1105,15 @@
     "noAccount1": "Vous n'avez pas de compte ?",
     "noAccount2": "Inscrivez-vous maintenant",
     "backToHome": "← Retour à l'accueil"
+  },
+  "features": {
+    "title1": "Livraison le Jour Même",
+    "desc1": "Commandez avant 18h00 à Londres, nous livrons aujourd'hui.",
+    "title2": "Paiement Sécurisé",
+    "desc2": "Paiements 100% sécurisés via l'infrastructure Stripe.",
+    "title3": "Expérience Premium",
+    "desc3": "Emballages soigneusement préparés et cartes cadeaux.",
+    "title4": "Suivi en Direct",
+    "desc4": "Regardez votre livreur arriver à votre porte."
   }
 }

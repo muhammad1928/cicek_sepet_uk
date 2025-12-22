@@ -9,6 +9,7 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require('./verifyToken'); // GÜVENLİK İMPORTU
+
 // =============================================================================
 // CLOUDINARY AYARLARI
 // =============================================================================
@@ -35,8 +36,9 @@ const deleteFromCloudinary = async (url) => {
   }
 };
 
-
+// =============================================================================
 // 9. TÜM KULLANICILARI GETİR (ADMİN)
+// =============================================================================
 router.get('/', verifyTokenAndAdmin, async (req, res) => {
   try {
     const users = await User.find()
@@ -135,7 +137,7 @@ router.post('/:id/sync-favorites', verifyTokenAndAuthorization, async (req, res)
 });
 
 // =============================================================================
-// 4. ADRES YÖNETİMİ
+// 4. ADRES YÖNETİMİ (GÜNCELLENDİ: KAT VE DAİRE BİLGİSİ İLE)
 // =============================================================================
 
 // 4.1 ADRESLERİ GETİR
@@ -152,23 +154,35 @@ router.get('/:id/addresses', verifyTokenAndAuthorization, async (req, res) => {
 router.post('/:id/addresses', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const userId = req.params.id;
-    const newAddress = req.body;
+    // Gelen veriyi ayrıştır (Yeni alanlar dahil)
+    const { 
+        title, recipientName, recipientPhone, 
+        street, buildingNo, floor, apartment, 
+        city, postcode, country, address 
+    } = req.body;
 
-    // Aynı adres var mı kontrol et
-    const userWithAddress = await User.findOne({
-      _id: userId,
-      savedAddresses: {
-        $elemMatch: {
-          address: newAddress.address,
-          city: newAddress.city,
-          postcode: newAddress.postcode
-        }
-      }
-    });
+    // Aynı adres var mı kontrol et (Basit kontrol: title benzersiz olmalı)
+    const user = await User.findById(userId);
+    const exists = user.savedAddresses.some(addr => addr.title === title);
 
-    if (userWithAddress) {
-      return res.status(200).json({ message: "Adres zaten kayıtlı, tekrar eklenmedi." });
+    if (exists) {
+      return res.status(400).json({ message: "Bu başlıkta bir adres zaten kayıtlı." });
     }
+
+    const newAddress = {
+        title,
+        recipientName,
+        recipientPhone,
+        // Yeni detaylı alanlar:
+        street: street || address, // Geriye dönük uyumluluk
+        buildingNo: buildingNo || "",
+        floor: floor || "",
+        apartment: apartment || "",
+        city: city || "London",
+        postcode: postcode || "",
+        country: country || "United Kingdom",
+        address: address || street // Geriye dönük uyumluluk
+    };
 
     await User.findByIdAndUpdate(userId, {
       $push: { savedAddresses: newAddress }
@@ -188,7 +202,11 @@ router.post('/:id/addresses', verifyTokenAndAuthorization, async (req, res) => {
 // 4.3 ADRES GÜNCELLE
 router.put('/:id/addresses/:addressId', verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const { title, recipientName, recipientPhone, address, city, postcode } = req.body;
+    const { 
+        title, recipientName, recipientPhone, 
+        street, buildingNo, floor, apartment, 
+        city, postcode, country, address 
+    } = req.body;
 
     await User.updateOne(
       { _id: req.params.id, "savedAddresses._id": req.params.addressId },
@@ -197,9 +215,14 @@ router.put('/:id/addresses/:addressId', verifyTokenAndAuthorization, async (req,
           "savedAddresses.$.title": title,
           "savedAddresses.$.recipientName": recipientName,
           "savedAddresses.$.recipientPhone": recipientPhone,
-          "savedAddresses.$.address": address,
+          "savedAddresses.$.street": street || address,
+          "savedAddresses.$.buildingNo": buildingNo,
+          "savedAddresses.$.floor": floor,
+          "savedAddresses.$.apartment": apartment,
           "savedAddresses.$.city": city,
-          "savedAddresses.$.postcode": postcode
+          "savedAddresses.$.postcode": postcode,
+          "savedAddresses.$.country": country,
+          "savedAddresses.$.address": address || street
         }
       }
     );
@@ -235,19 +258,15 @@ router.put('/:id/favorites', verifyTokenAndAuthorization, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         
-        // Ürün zaten favoride mi?
-        // (toString() ekleyerek ID karşılaştırmasını garantiye alıyoruz)
         const index = user.favorites.findIndex(fav => fav.toString() === productId);
         
         let actionType = '';
 
         if (index === -1) {
-            // Ekle
             user.favorites.push(productId);
             actionType = 'add_favorite';
             await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: 1 } });
         } else {
-            // Çıkar
             user.favorites.splice(index, 1);
             actionType = 'remove_favorite';
             await Product.findByIdAndUpdate(productId, { $inc: { favoritesCount: -1 } });
@@ -255,12 +274,10 @@ router.put('/:id/favorites', verifyTokenAndAuthorization, async (req, res) => {
 
         await user.save();
 
-        // Loglama
         try {
-           await logActivity(req.params.id, actionType, req, { productId });
+            await logActivity(req.params.id, actionType, req, { productId });
         } catch(e) {}
 
-        // ÖNEMLİ: Sadece ID listesini döndür
         res.status(200).json(user.favorites);
         
     } catch (err) { 
@@ -320,7 +337,7 @@ router.post('/:id/apply', verifyTokenAndAuthorization, async (req, res) => {
   try {
     const { requestedRole, ...applicationData } = req.body;
 
-    // Satıcı başvurusu - Vergi No kontrolü (findOne ile optimize)
+    // Satıcı başvurusu - Vergi No kontrolü
     if (requestedRole === 'vendor' && applicationData.taxNumber) {
       const existingVendor = await User.findOne({
         _id: { $ne: req.params.id },
@@ -332,7 +349,7 @@ router.post('/:id/apply', verifyTokenAndAuthorization, async (req, res) => {
       }
     }
 
-    // Kurye başvurusu - Ehliyet No kontrolü (findOne ile optimize)
+    // Kurye başvurusu - Ehliyet No kontrolü
     if (requestedRole === 'courier' && applicationData.licenseNumber) {
       const existingCourier = await User.findOne({
         _id: { $ne: req.params.id },
@@ -374,10 +391,11 @@ router.get('/vendor-profile/:id',  async (req, res) => {
   }
 });
 
+// =============================================================================
+// ADMIN İŞLEMLERİ (YETKİ: SADECE ADMİN)
+// =============================================================================
 
-
-
-// 10. ROL DEĞİŞTİR (ADMİN)
+// 10. ROL DEĞİŞTİR
 router.put('/:id/role', verifyTokenAndAdmin, async (req, res) => {
   try {
     const { role } = req.body;
@@ -393,7 +411,7 @@ router.put('/:id/role', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// 11. ENGELLE / AÇ (ADMİN)
+// 11. ENGELLE / AÇ
 router.put('/:id/block', verifyTokenAndAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -412,7 +430,7 @@ router.put('/:id/block', verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// 12. BAŞVURU ONAYLA / REDDET (ADMİN)
+// 12. BAŞVURU ONAYLA / REDDET
 router.put('/:id/application-status', verifyTokenAndAdmin, async (req, res) => {
   try {
     const { status, reason } = req.body;
@@ -488,7 +506,5 @@ router.put('/:id/application-status', verifyTokenAndAdmin, async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-
 
 module.exports = router;

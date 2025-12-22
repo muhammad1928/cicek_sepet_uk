@@ -5,6 +5,7 @@ Frontend/
 │   │   ├── favicon-16x16.png
 │   │   ├── favicon-32x32.png
 │   │   └── favicon.ico
+│   ├── robots.txt
 │   └── vite.svg
 │
 ├── src/
@@ -12,6 +13,7 @@ Frontend/
 │   │
 │   │
 │   ├── data/
+│   │   ├──  regions.js
 │   │   └──  categoryData.js
 │   │
 │   ├── components/
@@ -64,6 +66,13 @@ Frontend/
 │   │   │   ├── VendorProducts.jsx
 │   │   │   └── VendorSettings.jsx
 │   │   │
+│   │   ├── productDetails/
+│   │   │   ├── ProductActions.jsx
+│   │   │   ├── ProductGallery.jsx
+│   │   │   ├── ProductInfo.jsx
+│   │   │   ├── PeoductReview.jsx
+│   │   │   └── RelatedProducts.jsx
+│   │   │
 │   │   ├── BadgeDisplay.jsx
 │   │   ├── CancelModal.jsx
 │   │   ├── CartSidebar.jsx
@@ -71,6 +80,7 @@ Frontend/
 │   │   ├── Chatbot.jsx
 │   │   ├── ConfirmModal.jsx
 │   │   ├── CookieBanner.jsx
+│   │   ├── Features.jsx
 │   │   ├── Footer.jsx
 │   │   ├── InvoiceModal.jsx
 │   │   ├── Loading.jsx
@@ -136,6 +146,7 @@ Frontend/
 │   ├── main.jsx
 │   └── requestMethods.js
 │
+├── index.html
 └── package.json (Proje kök dizinindeki)
 
 
@@ -159,6 +170,7 @@ backend/
 │   ├── stats.js             # Admin paneli için istatistikler
 │   ├── upload.js            # Resim yükleme işlemleri (Cloudinary/S3 vb.)
 │   ├── users.js             # Kullanıcı profili yönetimi
+│   ├── sitemap.js           # 
 │   └── verifyToken.js       # Güvenlik katmanı (Middleware - JWT kontrolü)
 │
 ├── utils/                   # Yardımcı Araçlar ve Fonksiyonlar
@@ -175,3 +187,7 @@ backend/
 ├── package-lock.json        # Kütüphane versiyon kilit dosyası
 ├── package.json             # Proje ayarları ve bağımlılıklar
 └── server.js                # ANA GİRİŞ DOSYASI (Uygulamayı başlatan dosya)
+
+
+
+https://visa.vfsglobal.com/tur/tr/fra/login

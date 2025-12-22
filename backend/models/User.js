@@ -5,7 +5,7 @@ const ActivitySchema = new mongoose.Schema({
   action: {
     type: String,
     required: true
-  }, // 'login', 'register', 'password_change', 'search', 'view_product', 'add_to_cart'
+  },
   date: {
     type: Date,
     default: Date.now
@@ -21,11 +21,26 @@ const ActivitySchema = new mongoose.Schema({
     city: String,
     country: String
   },
-  details: Object // Ekstra veri (Örn: Aranan kelime, Değişen alanlar)
+  details: Object 
 });
 
+// Alt Şema: Kayıtlı Adresler (GÜNCELLENDİ)
+const AddressSchema = new mongoose.Schema({
+    title: String,
+    recipientName: String,
+    recipientPhone: String,
+    // Detaylı adres alanları eklendi
+    address: String, // Geriye dönük uyumluluk için (Street olarak kullanılabilir)
+    street: String,
+    buildingNo: String,
+    floor: String,
+    apartment: String,
+    city: String,
+    postcode: String,
+    country: String
+}, { _id: true }); // Her adresin kendi ID'si olsun
+
 const UserSchema = new mongoose.Schema({
-  // Username BURADA OLMAMALI!
   fullName: {
     type: String,
     required: true
@@ -49,22 +64,11 @@ const UserSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    // 👇 BURASI ÇOK ÖNEMLİ: Desteklediğin 8 dilin hepsini buraya yazmalısın.
-    // Veritabanı bu listede olmayan bir şey gelirse hata verir.
     enum: ["en", "tr", "de", "fr", "es", "it", "ar", "ru"],
-
     default: "en",
-
-    // 👇 BU "SET" FONKSİYONU HAYAT KURTARIR:
-    // Tarayıcıdan 'en-US', 'tr-TR', 'fr-CA' gibi tireli kod gelse bile
-    // bunu otomatikman 'en', 'tr', 'fr' haline getirir.
     set: function (lang) {
       if (!lang) return 'en';
-      // Tireden sonrasını at (en-US -> en)
       const cleanLang = lang.split('-')[0].toLowerCase();
-
-      // KONTROL: Eğer gelen dil (örn: 'jp') senin 8 dilin arasında yoksa
-      // sistemi çökertmek yerine varsayılan olarak 'en' yap.
       const supportedLanguages = ["en", "tr", "de", "fr", "es", "it", "ar", "ru"];
       return supportedLanguages.includes(cleanLang) ? cleanLang : 'en';
     }
@@ -74,14 +78,8 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product'
   }],
-  savedAddresses: [{
-    title: String,
-    recipientName: String,
-    recipientPhone: String,
-    address: String,
-    city: String,
-    postcode: String
-  }],
+  // savedAddresses artık alt şema kullanıyor
+  savedAddresses: [AddressSchema],
   badges: [{
     icon: String,
     label: String,

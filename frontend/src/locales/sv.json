@@ -71,7 +71,7 @@
     "notFound": "Inga produkter hittades som matchar dina kriterier.",
     "searchNotFoundTitle": "Är det en dold skatt?",
     "searchNotFoundDesc": "Vi kunde inte hitta något som matchade din sökning, men våra hyllor är fulla av andra överraskningar.",
-    "categoryEmptyTitle": "Fantastiska saker är på väg!",
+    "categoryEmptyTitle": "Fantastiska blommor är på väg!",
     "categoryEmptyDesc": "Den här kollektionen var så älskad att den blev slutsåld! Våra designers förbereder just nu de mest speciella produkterna och fräscha presenter just för dig.",
     "showAll": "Upptäck alla produkter",
     "popularCategory": "Populärt: Födelsedag 🎂",
@@ -201,59 +201,50 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Om oss - Fesfu | Fräschaste blommor och presenter",
-      "aboutDescription": "Upptäck Fesfus historia, mission och värderingar. Vi är dedikerade till att erbjuda våra kunder den bästa blomster- och presentupplevelsen. Vi gör skillnad med snabb leverans och utmärkt kundservice."
+      "aboutTitle": "Om Oss - Fesfu UK | Londons Främsta Marknadsplats",
+      "aboutDescription": "Från en lokal blomsterhandlare till Londons snabbaste onlinemarknadsplats. Vi levererar blommor, teknik, mode och gourmetmat med leverans samma dag."
     },
     "homePage": {
-      "homeTitle": "Färska blommor och specialpresenter - Fesfu London",
-      "locationTitle": "London - Fräschaste blommor och specialpresenter | Fesfu",
-      "homeDescription": "Vi levererar Londons fräschaste blommor och specialpresenter samma dag till din dörr. Upptäck perfekta presentalternativ för födelsedagar, årsdagar, frierier och andra speciella tillfällen.",
-      "categories": {
-        "all": "Alla",
-        "birthday": "Födelsedag",
-        "anniversary": "Årsdag",
-        "indoor": "Inomhusblommor",
-        "edible": "Ätbara presenter",
-        "rose": "Rosor",
-        "orchid": "Orkidéer",
-        "daisy": "Prästkragar",
-        "tulip": "Tulpaner",
-        "unique": "Unika",
-        "designFlowers": "Designblommor"
-      }
+      "homeTitle": "Fesfu UK | Marknadsplats med Leverans Samma Dag - London",
+      "locationTitle": "Handla Blommor, Teknik & Presenter i London | Fesfu UK",
+      "homeDescription": "Londons favoritmarknadsplats. Handla färska blommor, elektronik, böcker, mode och presenter. Beställ före 18:00 för garanterad leverans samma dag."
     },
     "contactPage": {
-      "contactTitle": "Kontakt - Fesfu | Kontakta oss",
-      "contactDescription": "Kontakta oss för frågor, förslag eller klagomål. På Fesfu hjälper vi alltid gärna till. Du kan använda olika kontaktkanaler för att nå oss."
+      "contactTitle": "Kontakta Oss | Fesfu Kundsupport 24/7",
+      "contactDescription": "Behöver du hjälp med din beställning? Kontakta Fesfus supportteam för frågor om leveranser, returer eller att bli säljare. Vi finns här för att hjälpa."
     },
     "faqPage": {
-      "faqTitle": "Vanliga frågor - Fesfu",
-      "faqDescription": "Upptäck vanliga frågor om Fesfu. Få information om beställning, leverans, returpolicy och andra viktiga ämnen. Hitta snabba och enkla svar på dina frågor."
+      "faqTitle": "Hjälp & Vanliga Frågor - Fesfu Marknadsplats UK",
+      "faqDescription": "Hitta snabba svar om leveranstider, returpolicyer för elektronik och färskvaror samt betalningsmetoder. Din guide till shopping på Fesfu."
     },
     "favouritesPage": {
-      "title": "Mina favoriter - Fesfu | Dina favoritprodukter",
-      "description": "Spara dina favoriter och få enkel tillgång till dina favoritblommor, presenter och andra produkter. Med Fesfu kan du köpa dina favoritprodukter med ett klick."
+      "title": "Min Önskelista | Fesfu - Spara till Senare",
+      "description": "Skapa din perfekta shoppinglista. Spara dina favoritblommor, prylar, böcker och modeartiklar för att köpa senare med ett enda klick."
     },
     "legalPage": {
-      "title": "Juridisk information - Fesfu | Integritetspolicy och användarvillkor",
-      "description": "Få detaljerad information om Fesfus integritetspolicy, användarvillkor och cookiepolicy. Lär dig hur dina personuppgifter skyddas och dina rättigheter när du använder vår plattform.",
-      "hakkindaDetayliBilgi": "detaljerad information om."
+      "title": "Juridik & Integritetspolicy | Fesfu UK",
+      "description": "Transparenta villkor för en rättvis marknadsplats. Läs om vår integritetspolicy, konsumenträttigheter och återbetalningsregler för digitala varor och färskvaror.",
+      "detailedInfo": "detaljerad information om."
     },
     "myOrdersPage": {
-      "title": "Mina beställningar - Fesfu | Orderspårning och historik",
-      "description": "Se dina tidigare beställningar, granska orderdetaljer och spåra statusen för dina beställningar. Hantera alla dina beställningar enkelt med Fesfu."
+      "title": "Spåra Min Beställning | Fesfu UK",
+      "description": "Se orderhistorik och spåra leveranser live. Kontrollera statusen på din blombukett, elektronik eller modeartiklar i realtid."
     },
     "registerCourierPage": {
-      "title": "Budansökan - Fesfu | Bli bud",
-      "description": "Gå med i Fesfus budprogram och tjäna extra inkomst med flexibla arbetstider. Lär dig om ansökningsprocessen och ansök nu."
+      "title": "Kurirjobb London | Gå med i Fesfus Leveransteam",
+      "description": "Kör med Fesfu. Tjäna konkurrenskraftig inkomst genom att leverera blommor, mat och paket över hela London. Flexibla tider, omedelbar utbetalning. Ansök nu."
     },
     "registerPage": {
-      "title": "Registrera dig - Fesfu | Skapa nytt konto",
-      "description": "Registrera dig på Fesfu och få tillgång till de fräschaste blommorna och specialpresenterna. Börja handla direkt med en snabb och enkel registreringsprocess."
+      "title": "Registrera Dig | Gå med på Fesfu Marknadsplats",
+      "description": "Skapa ett gratis konto för att låsa upp exklusiva erbjudanden. Handla tusentals produkter från lokala och globala varumärken med snabb utcheckning och säker betalning."
     },
     "vendorRegistrationPage": {
-      "title": "Säljaransökan - Fesfu | Öppna din butik",
-      "description": "Öppna din butik på Fesfu-plattformen och nå en bred kundbas. Lär dig om ansökningsprocessen för säljare och ansök nu."
+      "title": "Sälj på Fesfu | Bli Säljarpartner",
+      "description": "Väx ditt företag med Fesfu. Nå miljontals Londonkunder genom att sälja blommor, elektronik, mat eller mode. Låga provisioner, högt stöd."
+    },
+    "productDetailPage": {
+      "defaultTitle": "Handla Online | Fesfu UK Marknadsplats",
+      "defaultDescription": "Utforska vår exklusiva kollektion. Snabb leverans inom London och säkra betalningsalternativ."
     }
   },
 
@@ -301,8 +292,29 @@
   },
 
   "FAQ": {
-    "faqTitle": "Vanliga frågor",
-    "faqDescription": "Dina frågor."
+    "faqTitle": "Vanliga Frågor",
+    "faqDescription": "Hitta svar på dina frågor om beställningar, leverans och betalning.",
+    "items": [{
+        "q": "Hur kan jag spåra min beställning?",
+        "a": "Du kan spåra den aktuella statusen för din beställning från menyn 'Mina Beställningar' efter inloggning."
+      },
+      {
+        "q": "Vilka områden levererar ni till?",
+        "a": "Vi levererar för närvarande endast inom London."
+      },
+      {
+        "q": "Finns det leverans samma dag?",
+        "a": "Ja, beställningar som görs före 18:00 levereras samma dag."
+      },
+      {
+        "q": "Är blommorna och produkterna färska?",
+        "a": "Ja, färska blommor köps dagligen från auktionen varje morgon, och lättfördärvliga livsmedel tillagas färskt."
+      },
+      {
+        "q": "Vilka betalningsmetoder finns?",
+        "a": "Du kan betala säkert via Kredit-/Betalkort (säkrat av Stripe-infrastruktur)."
+      }
+    ]
   },
   "favorites": {
     "favoritesTitle": "Mina favoriter",
@@ -327,50 +339,64 @@
     "returnToLogin": "← Tillbaka till inloggning"
   },
   "legal": {
-    "legalTitle": "Cookiepolicy",
+    "legalTitle": "Juridiskt & Löften",
+    "pageNotFound": "Dokument Hittades Inte",
+    "pageNotFoundDesc": "Det juridiska dokumentet du letar efter har flyttats eller uppdaterats.",
+    "backToHome": "Tillbaka till Startsidan",
+    "backToHome2": "Fesfu Juridisk Avdelning",
     "privacyPolicy": {
-      "legalPageContentTitle": "Integritetspolicy",
-      "first": "1. Personuppgiftsansvarig",
-      "firstDesc": "Som Fesfu UK lägger vi största vikt vid säkerheten för dina personuppgifter inom ramen för GDPR (General Data Protection Regulation).",
-      "second": "2. Insamlade uppgifter och ändamål",
+      "legalPageContentTitle": "Integritet & Dataskydd",
+      "first": "1. Personuppgiftsansvarig & Ditt Förtroende",
+      "firstDesc": "Fesfu UK verkar i full överensstämmelse med UK Data Protection Act 2018 och UK GDPR. Vi värdesätter det förtroende du ger oss för att leverera dina känslor, och vi är engagerade i att skydda dina personuppgifter.",
+      "second": "2. Insamlade Uppgifter och Ändamål",
       "secondDesc": {
-        "part1": "Identitet och kontakt: Ditt namn, efternamn, e-post och telefonnummer behandlas för orderbekräftelse och fakturering.",
-        "part2": "Leveransinformation: Mottagarens adress och kontaktuppgifter delas med bud och relevant butik (säljare) för leverans.",
-        "part3": "Transaktionssäkerhet: IP-adress och enhetsinformation sparas för bedrägeridetektering och juridiska skyldigheter."
+        "part1": "Identitet & Kontakt: Namn, e-post och telefonnummer behandlas strikt för orderhantering, digitala kvitton och leveransuppdateringar.",
+        "part2": "Leveransinformation: Mottagaruppgifter delas ENDAST med vårt granskade Kurirteam och den specifika Leverantören som utför din beställning.",
+        "part3": "Transaktionssäkerhet: IP-adress och enhetsdata loggas för att förhindra bedrägeri och säkerställa en säker shoppingmiljö."
       },
       "third": "3. Betalningssäkerhet",
-      "thirdDesc": "Din kreditkortsinformation lagras aldrig på våra servrar. Betalningstransaktioner utförs direkt av den globala betalningsinfrastrukturen Stripe via SSL-certifierad krypterad anslutning."
+      "thirdDesc": "Vi lagrar INTE kreditkortsuppgifter. Alla betalningar behandlas via Stripes krypterade infrastruktur, vilket säkerställer säkerhet på banknivå med 3D Secure."
     },
     "termsOfUse": {
-      "title": "Distansförsäljningsavtal",
-      "first": "1. Parter",
-      "firstDesc": "Detta avtal ingås mellan KÖPAREN som lägger en beställning via plattformen och SÄLJAREN (butiken) som levererar produkten, med Fesfu UK som mellanhand.",
-      "second": "2. Undantag från ångerrätt (Viktigt)",
-      "secondDesc": "OBS: Enligt förordningen kan ångerrätten INTE användas för \"avtal om leverans av varor som snabbt kan försämras eller vars utgångsdatum snabbt kan passera\" (färska blommor, choklad, tårta etc.).",
-      "secondDesc_part2": "Men om produkten är skadad, vissnad eller helt annorlunda än bilden vid leverans kan köparen avvisa leveransen och begära retur.",
-      "third": "3. Leveransprocess",
-      "thirdDesc": "Beställningar levereras på det datum och tidsintervall som köparen valt. Förutom force majeure (dåligt väder, trafikolycka etc.) är plattformen ansvarig för förseningar."
+      "title": "Användarvillkor & Lyckogaranti",
+      "first": "1. Parter & Plattformens Roll",
+      "firstDesc": "Detta avtal är mellan dig (KÖPARE) och Leverantören, faciliterat av Fesfu UK som agerar som KOMMERSIELL AGENT. Vi säkerställer transparens och kvalitet i varje transaktion.",
+      "second": "2. Returer, Återbetalningar & Vårt Löfte",
+      "secondDesc": "RETURPOLICY PER KATEGORI:",
+      "secondDesc_part2": "A) LÄTTFÖRDÄRVLIGA VAROR (Blommor, Mat): Juridiskt gäller inte ångerrätten. DOCK, om din beställning anländer skadad eller vissnad, vänligen kontakta oss inom 24 TIMMAR med ett foto. Vi kommer att verifiera med Leverantören och rätta till det (Återbetalning eller Omleverans).",
+      "secondDesc_part3": "B) HÅLLBARA VAROR (Elektronik, Böcker): Du har laglig rätt att returnera dessa varor inom 14 dagar efter leverans. Varor måste vara oanvända, i originalförpackning och återförsäljningsbara.",
+      "third": "3. Leverans & Stopptider",
+      "thirdDesc": "För 'Samma Dag Leverans' i London måste beställningar göras före 18:00. Även om vi strävar efter perfektion, är Fesfu inte ansvarig för förseningar orsakade av extrema force majeure-händelser (t.ex. svårt väder), men vi kommer alltid att kommunicera med dig."
     },
     "termsOfCookies": {
       "title": "Cookiepolicy",
-      "firstTerm": "1. Vad är cookies?",
-      "firstTermDesc": "Cookies är små textfiler som sparas i din webbläsare av webbplatser du besöker och hjälper oss att komma ihåg dig. Vissa cookies är nödvändiga för att vår webbplats ska fungera.",
-      "secondTerm": "2. Vilka cookies använder vi?",
+      "firstTerm": "1. Vad är en Cookie?",
+      "firstTermDesc": "Cookies är små textfiler som sparas i din webbläsare. Vi använder dem för att göra din shoppingupplevelse smidig, behålla dina överraskningspresenter i varukorgen och säkerställa att webbplatsen fungerar snabbt.",
+      "secondTerm": "2. Typer av Cookies Vi Använder",
       "secondTermDesc": {
-        "first": "Nödvändiga cookies",
-        "firstDesc": "Krävs för att komma ihåg produkter i din varukorg, logga in på ditt konto och betalningssäkerhet. Dessa kan inte stängas av.",
-        "second": "Funktionella cookies",
-        "secondDesc": "Används för språkpreferenser, sparade adresser och funktioner som \"Kom ihåg mig\".",
-        "third": "Analytiska cookies",
-        "thirdDesc": "Hjälper oss att förbättra vår service genom att anonymt analysera hur du använder vår webbplats (vilka sidor du tittar på)."
+        "first": "Nödvändiga Cookies",
+        "firstDesc": "Strikt nödvändiga för betalningshantering och säker inloggning. Utan dessa kan butiken inte fungera.",
+        "second": "Funktionella Cookies",
+        "secondDesc": "Kommer ihåg dina preferenser (Språk, Valuta) för att spara tid.",
+        "third": "Prestanda & Analys",
+        "thirdDesc": "Hjälper oss att förstå vilka produkter du gillar mest, så att vi kan förbättra vår service."
       },
-      "thirdTerm": "3. Hur hanterar jag cookies?",
-      "thirdTermDesc": "Du kan radera eller blockera cookies när som helst från din webbläsares inställningsmeny. Men att blockera nödvändiga cookies kan störa varukorg- och betalningsfunktioner."
+      "thirdTerm": "3. Hantera Cookies",
+      "thirdTermDesc": "Du kan hantera cookies via webbläsarinställningar. Att blockera nödvändiga cookies kan hindra dig från att slutföra din beställning."
     },
-    "pageNotFound": "Sidan hittades inte",
-    "pageNotFoundDesc": "Innehållet du söker finns inte.",
-    "backToHome": "← Tillbaka till startsidan",
-    "backToHome2": "Fesfu UK Legal Team"
+    "membershipAgreement": {
+      "title": "Medlemsavtal",
+      "first": "1. Avtalets Omfattning",
+      "firstDesc": "Genom att skapa ett konto på Fesfu UK godkänner du dessa villkor. Du måste vara minst 18 år gammal för att bli medlem.",
+      "second": "2. Användarens Ansvar",
+      "secondDesc": {
+        "part1": "Kontosäkerhet: Du ansvarar för att hålla ditt lösenord konfidentiellt. Fesfu är inte ansvarig för obehörig åtkomst på grund av svaga lösenord.",
+        "part2": "Korrekthet: Du intygar att all information (Namn, Adress, Telefon) som anges vid registrering är korrekt och uppdaterad.",
+        "part3": "Förbjudet Beteende: Användare får inte manipulera priser, använda botar eller försöka hacka plattformen. Sådana handlingar resulterar i omedelbar avstängning."
+      },
+      "third": "3. Avslutande av Konto",
+      "thirdDesc": "Fesfu förbehåller sig rätten att stänga av konton som bryter mot dessa villkor, ägnar sig åt bedrägeri eller missbrukar återbetalningspolicyn."
+    }
   },
   "myOrders": {
     "notifyCancelRequestSent": "Din avbokningsförfrågan har mottagits.",
@@ -410,6 +436,7 @@
   },
   "profile": {
     "title": "Mitt konto",
+    "badges":" Mina märken",
     "profileGreetings": "Välkommen, du kan hantera din profil och beställningar här."
   },
   "registerCourier": {
@@ -448,17 +475,17 @@
     "passwordForbiddenChars": "Lösenordet innehåller förbjudna tecken. Vänligen ta bort: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Ditt lösenord är inte tillräckligt starkt!",
     "notifyPasswordRequirements": "Vänligen uppfyll lösenordskraven.",
-    "acceptTerms": "Vänligen godkänn avtalet!",
+    "acceptTerms": "Vänligen acceptera avtalet!",
     "registrationFailed": "Registreringen misslyckades. Vänligen försök igen.",
-    "joinUs": "Gå med oss",
+    "joinUs": "Gå Med Oss",
     "createAccount": "Skapa ett konto snabbt",
     "securityMeasures": "Säkerhetskrav",
-    "userAgreement1": "Jag har läst och accepterar ",
-    "userAgreement2": "användaravtalet.",
+    "userAgrement1": "Jag accepterar ",
+    "userAgrement2": "Medlemsavtal & Integritetspolicy.",
     "btn1": "Sparar...",
-    "btn2": "Skapa konto",
+    "btn2": "Skapa Konto",
     "alreadyAccount1": "Har du redan ett konto?",
-    "alreadyAccount2": "Logga in"
+    "alreadyAccount2": "Logga In"
   },
   "vendor": {
     "receivedOrders": "Inkommande beställningar",
@@ -573,59 +600,60 @@
     "favoritesNotUpdated": "Favorit kunde inte uppdateras. Vänligen logga in igen."
   },
   "termsModal": {
-    "agree": "Jag har läst, jag accepterar",
+    "agree": "Jag har läst och godkänner dessa villkor",
+    "close": "Stäng",
     "customers": {
-      "title": "Distansförsäljnings- och serviceavtal",
+      "title": "Avtal om Distansförsäljning & Marknadsplatstjänster",
       "first": {
-        "title": "1. INTRODUKTION OCH PARTER",
-        "desc": "Dessa villkor reglerar försäljningen av varor till dig (\"Köparen\") av Säljaren via Plattformen. Genom att lägga en beställning samtycker du till att vara bunden av dessa villkor enligt Consumer Rights Act 2015."
+        "title": "1. INTRODUKTION & PLATTFORMENS ROLL",
+        "desc": "Dessa villkor reglerar köp av varor via Fesfu UK ('Plattformen'). Fesfu agerar som KOMMERSIELL AGENT (Förmedlare) för tredjepartsleverantörer. Genom att lägga en beställning bekräftar du att köpeavtalet ingås direkt mellan dig (Köparen) och Leverantören, med Fesfu som förmedlare. Vi ansvarar för transaktionshantering och leveranskoordinering."
       },
       "second": {
-        "title": "2. LEVERANSPOLICY",
-        "desc": "Vi strävar efter att leverera produkter inom det tidsintervall som valts vid betalning. Om köparen inte är på adressen kan budet lämna paketet på en \"säker plats\" eller hos en granne på grund av produkternas (blommor/mat) förgängliga natur (brittisk standardpraxis)."
+        "title": "2. LEVERANS & ANSVAR",
+        "desc": "Vi strävar efter att leverera inom valt tidsfönster. För lättfördärvliga varor (blommor/mat), om mottagaren inte är tillgänglig, kan kuriren lämna varan på en 'Säker Plats' eller hos en granne (Standard brittisk praxis). Fesfu ansvarar inte för misslyckade leveranser på grund av felaktiga adresser som angivits av Köparen."
       },
       "third": {
-        "title": "3. AVBOKNINGS- OCH RETURPOLICY",
-        "desc": "Enligt Consumer Contracts Regulations 2013 har konsumenter vanligtvis 14 dagars ångerrätt. DOCK: Undantag för förgängliga produkter: Det finns INGEN AVBOKNINGS/ÅNGERRÄTT för varor som snabbt kan försämras eller vars utgångsdatum snabbt kan passera (färska blommor, växter, livsmedelsprodukter). Enligt Consumer Rights Act 2015, om produkterna inte är som beskrivna vid leverans eller är av otillräcklig kvalitet (t.ex. krossade blommor), har du rätt till återbetalning eller byte. Du måste meddela oss med fotodokumentation inom 24 timmar efter leverans."
+        "title": "3. AVBESTÄLLNINGS- & RETURPOLICY (BLANDADE VAROR)",
+        "desc": "Enligt Consumer Contracts Regulations 2013 varierar rättigheterna efter kategori: <br><strong>A) Lättfördärvliga Varor (Blommor, Mat):</strong> INGEN ångerrätt finns om inte varan anländer skadad/defekt. <br><strong>B) Hållbara Varor (Elektronik, Böcker, Mode):</strong> Du har lagstadgad rätt att avbeställa inom 14 dagar. Varor måste returneras oanvända i originalförpackning. <br><strong>Defekta Varor:</strong> Enligt Consumer Rights Act 2015, om någon vara inte motsvarar beskrivningen, har du rätt till återbetalning/ersättning om det rapporteras inom 24 timmar med fotografiskt bevis."
       },
       "fifth": {
-        "title": "5. INTEGRITET OCH DATASKYDD",
-        "desc": "Dina personuppgifter (namn, adress, telefon) behandlas i full överensstämmelse med UK GDPR och Data Protection Act 2018. Data delas endast med Säljaren och Budet för att slutföra din beställning."
+        "title": "4. DATASKYDD & INTEGRITET",
+        "desc": "Dina personuppgifter (Namn, Adress) behandlas i strikt överensstämmelse med UK GDPR och Data Protection Act 2018. De delas endast med relevant Leverantör och Kurir enbart i syfte att fullgöra beställningen. Vi säljer aldrig dina uppgifter till tredje part."
       }
     },
     "courierAgreement": {
-      "title": "Oberoende budserviceavtal",
+      "title": "Avtal för Oberoende Kurirtjänst",
       "first": {
-        "title": "1. ARBETSSÄTT",
-        "desc": "Budet samtycker till att tillhandahålla tjänster som \"Egenföretagare\" (Self-Employed), som oberoende entreprenör. Detta avtal gör inte Budet till anställd, arbetare eller partner till Plattformen. Du är ansvarig för dina egna skatter och socialförsäkringsavgifter (NI)."
+        "title": "1. STATUS SOM OBEROENDE UPPDRAGSTAGARE",
+        "desc": "Kuriren samtycker till att tillhandahålla tjänster som egenföretagare och 'Oberoende Uppdragstagare'. Detta avtal skapar INTE ett arbetsgivare-arbetstagare-förhållande. Du är ensam ansvarig för dina egna skatter (HMRC Self Assessment) och socialförsäkringsavgifter."
       },
       "second": {
-        "title": "2. SERVICESTANDARDER",
-        "desc": "Budet måste visa största omsorg för att bevara den estetiska integriteten hos förgängliga produkter (blommor, tårtor). Leveranser måste slutföras inom angivna tidsramar."
+        "title": "2. SERVICESTANDARDER & OMSORG",
+        "desc": "Kuriren måste utöva maximal omsorg för att upprätthålla varornas integritet (särskilt ömtåliga blommor eller elektronik). Leveranser måste slutföras inom tilldelade tidsfönster. Leveransbevis (Foto/Signatur) är obligatoriskt för alla högt värderade varor."
       },
       "third": {
-        "title": "3. DATASKYDD (GDPR - BROTTSLIGT)",
+        "title": "3. DATASKYDD & STRAFFRÄTTSLIGT ANSVAR (GDPR)",
         "titlesub": "STRIKT SEKRETESSMEDDELANDE",
-        "desc": "Kunddata (adress, telefon) som tillhandahålls dig är ENDAST för leveransändamål. Enligt Data Protection Act 2018 är det BROTTSLIGT att registrera dessa uppgifter, kontakta kunden av någon anledning utanför leverans eller dela med andra. Vid upptäckt kommer avtalet att sägas upp och rättsliga åtgärder kommer att vidtas."
+        "desc": "Kunddata (Adress, Telefon) som tillhandahålls dig är ENDAST för LEVERANSÄNDAMÅL. Enligt Data Protection Act 2018; att spara dessa uppgifter, kontakta kunden av personliga skäl, eller dela dem med andra är ett BROTT. Varje överträdelse kommer att resultera i omedelbar avtalsuppsägning och rättsliga åtgärder."
       }
     },
     "vendorAgreement": {
-      "title": "Säljares affärspartnerskapsavtal",
+      "title": "Leverantörspartnerskap & Marknadsplatsavtal",
       "first": {
-        "title": "1. PARTER OCH SYFTE",
-        "desc": "Detta avtal är mellan Plattformen och Säljaren (Leverantören). Säljaren ger Plattformen rätten att lista och sälja sina produkter. Juridisk äganderätt till produkterna tillhör Säljaren tills försäljning sker."
+        "title": "1. PARTER & SYFTE",
+        "desc": "Detta Avtal tillåter Leverantören att lista och sälja produkter på Fesfu Marknadsplatsen. Leverantören behåller juridisk äganderätt till varorna fram till försäljningstillfället. Leverantören garanterar att de är en juridisk affärsenhet auktoriserad att sälja dessa varor i Storbritannien."
       },
       "second": {
-        "title": "2. PROVISION OCH BETALNINGAR",
-        "desc": "Plattformen tar ut 10% + moms (VAT) provision på bruttovärdet av varje beställning. Betalningar görs veckovis. Plattformen förbehåller sig rätten att hålla inne betalning vid misstänkta transaktioner eller höga returfrekvenser."
+        "title": "2. PROVISION & BETALNINGAR",
+        "desc": "Fesfu tar ut en provisionsavgift (t.ex. 10% + moms) på bruttovärdet av varje bekräftad beställning. Utbetalningar behandlas veckovis. Fesfu förbehåller sig rätten att hålla inne betalningar vid höga tvistfrekvenser, misstänkt bedrägeri eller brott mot villkoren."
       },
       "third": {
-        "title": "3. PRODUKTANSVAR OCH EFTERLEVNAD",
-        "desc": "Säljaren garanterar att alla sålda varor överensstämmer med Sale of Goods Act 1979 och (vid försäljning av livsmedel) brittiska livsmedelssäkerhetsstandarder. Kostnaden för returer på grund av produkter av låg kvalitet, felaktig förpackning eller avvikelse från bilder bärs av Säljaren."
+        "title": "3. PRODUKTANSVAR & EFTERLEVNAD",
+        "desc": "Leverantören garanterar att alla listade varor uppfyller Sale of Goods Act 1979 och (för livsmedel) brittiska livsmedelssäkerhetsstandarder. Leverantören är ensam ansvarig för kostnader som uppstår från returer på grund av dålig kvalitet, felaktig beskrivning eller bristande överensstämmelse. Fesfu accepterar inget ansvar för säkerheten/kvaliteten på Leverantörens produkter."
       },
       "fourth": {
-        "title": "4. DATASKYDD (GDPR)",
-        "desc": "Säljaren kommer att behandla kunddata i enlighet med UK GDPR och Data Protection Act 2018. Data kommer endast att användas för orderbehandling."
+        "title": "4. DATABEHANDLING (GDPR)",
+        "desc": "Leverantören samtycker till att behandla kunddata enbart för orderuppfyllelse i enlighet med UK GDPR. Användning av kunddata för direktmarknadsföring (spam) utan uttryckligt samtycke är strängt förbjudet och grund för omedelbar avstängning."
       }
     }
   },
@@ -1076,5 +1104,15 @@
     "noAccount1": "Har du inget konto?",
     "noAccount2": "Registrera dig nu",
     "backToHome": "← Tillbaka till startsidan"
+  },
+  "features": {
+    "title1": "Leverans Samma Dag",
+    "desc1": "Beställ före 18:00 i London, vi levererar idag.",
+    "title2": "Säker Betalning",
+    "desc2": "100% säkra betalningar via Stripe-infrastruktur.",
+    "title3": "Premiumupplevelse",
+    "desc3": "Omsorgsfullt förberedda paket och presentkort.",
+    "title4": "Livespårning",
+    "desc4": "Se din kurir anlända till dörren."
   }
 }

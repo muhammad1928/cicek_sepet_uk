@@ -19,7 +19,7 @@ const RegisterPage = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [touchedFields, setTouchedFields] = useState({});
 
-  // Şifre Kuralları - GÜNCELLENDİ
+  // Şifre Kuralları
   const [rules, setRules] = useState({
     length: false, upper: false, lower: false, number: false, special: false, noForbidden: true
   });
@@ -184,7 +184,7 @@ const RegisterPage = () => {
           )}
           </div>
 
-          {/* Sözleşme */}
+          {/* Sözleşme - GÜNCELLENDİ */}
           <div className="flex items-center gap-2 pt-1 px-1">
             <input 
               type="checkbox" 
@@ -194,6 +194,7 @@ const RegisterPage = () => {
               className="w-3.5 h-3.5 accent-pink-600 cursor-pointer rounded" 
             />
             <label htmlFor="terms" className="text-[11px] text-gray-600 select-none cursor-pointer">
+              {t("register.userAgrement1")}
               <span 
                 className="text-pink-600 font-bold hover:underline mr-1" 
                 onClick={(e) => { 
@@ -201,9 +202,8 @@ const RegisterPage = () => {
                   setShowTerms(true); 
                 }}
               >
-                {t("register.userAgrement1")}
+                {t("register.userAgrement2")}
               </span> 
-              {t("register.userAgrement2")}
             </label>
           </div>
 
@@ -225,12 +225,12 @@ const RegisterPage = () => {
 
       </div>
 
-      {/* Modal */}
+      {/* Modal - type="customer" olarak güncellendi */}
       {showTerms && (
         <TermsModal 
           onClose={() => setShowTerms(false)} 
           onAccept={() => setAcceptedTerms(true)} 
-          type="user" 
+          type="customer" 
         />
       )}
 
@@ -238,7 +238,7 @@ const RegisterPage = () => {
   );
 };
 
-// RuleItem güncellendi - tehlikeli için kırmızı uyarı
+// RuleItem
 const RuleItem = ({ label, valid, isDanger = false }) => (
   <div className={`flex items-center gap-1 overflow-hidden transition-all duration-500 ease-in-out ${valid && !isDanger ? "max-h-0 opacity-0 -translate-y-2" : "max-h-6 opacity-100 translate-y-0"}`}>
     <span className={`font-bold text-xs ${isDanger ? "text-red-600" : "text-red-500"}`}>•</span> 

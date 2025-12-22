@@ -9,6 +9,7 @@ import { FiShoppingCart, FiMinus, FiPlus } from "react-icons/fi";
 import { publicRequest } from "../requestMethods"; 
 import { useTranslation } from "react-i18next";
 import CategoryNav from "../components/CategoryNav";
+import Features from "../components/Features"; // <-- YENİ IMPORT
 
 // --- DÜZELTME 1: HARİTA VERİSİNİ IMPORT ET ---
 import { CATEGORY_KEY_MAP } from "../data/categoryData"; 
@@ -137,7 +138,7 @@ const HomePage = () => {
       `}</style>
 
       {/* HERO SECTION */}
-      <div className="pt-40 pb-12 text-center bg-gradient-to-b from-pink-50 via-white to-purple-100 px-4">
+      <div className="pt-24 pb-12 text-center bg-gradient-to-b from-pink-50 via-white to-purple-100 px-4">
         <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight animate-fade-in drop-shadow-sm">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">{t('home.heroTitle')}</span>
         </h1>
@@ -146,6 +147,9 @@ const HomePage = () => {
         </p>
       </div>
 
+      <Features />
+
+      {/* ÖZELLİKLER BÖLÜMÜ - YENİ EKLENEN KISIM */}  
       <CategoryNav 
         activeCategory={selectedCategory} 
         onSelectCategory={handleCategorySelect} 
@@ -161,7 +165,7 @@ const HomePage = () => {
               <div className="absolute top-0 right-0 w-40 h-40 bg-purple-100 rounded-full blur-[60px] opacity-50"></div>
               <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-100 rounded-full blur-[60px] opacity-50"></div>
               <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 animate-bounce-slow inline-block drop-shadow-md">🎁</div>
+                <div className="text-6xl sm:text-7xl mb-6 animate-bounce-slow inline-block drop-shadow-md">🌸</div>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">
                   {searchTerm ? (
                     <span>{t('home.searchNotFoundTitle', 'Gizli Bir Hazine mi?')} 🕵️‍♀️</span>

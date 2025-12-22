@@ -66,7 +66,7 @@ const InvoiceModal = ({ order, onClose }) => {
           {/* Şirket ve Fatura Bilgileri */}
           <div className="flex justify-between items-start mb-10 border-b-2 border-gray-800 pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Fesfu Flowers UK</h1> {/* Page name */} {/* page information */}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Fesfu Flowers UK</h1>
               <p className="text-gray-600">123 Oxford Street</p>
               <p className="text-gray-600">London, W1D 1BS</p>
               <p className="text-gray-600">United Kingdom</p>
@@ -76,7 +76,6 @@ const InvoiceModal = ({ order, onClose }) => {
               <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">INVOICE</h2>
               <p className="mt-2 font-bold text-lg">#{order._id.slice(-8).toUpperCase()}</p>
               
-              {/* --- TARİH BİLGİLERİ (GÜNCELLENDİ) --- */}
               <div className="mt-2 text-gray-600 text-xs space-y-1">
                 <p>
                   <span className="font-bold">Order Date:</span> <br/>
@@ -87,22 +86,35 @@ const InvoiceModal = ({ order, onClose }) => {
                   {formatDate(order.delivery.date)}
                 </p>
               </div>
-              {/* --------------------------------------- */}
             </div>
           </div>
 
-          {/* Adresler */}
+          {/* Adresler (GÜNCELLENDİ) */}
           <div className="flex justify-between mb-10 gap-8">
+            {/* Fatura Adresi (Gönderen) */}
             <div className="w-1/2">
               <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Bill To:</h3>
               <p className="font-bold text-base text-gray-900">{order.sender.name}</p>
               <p>{order.sender.email}</p>
               <p>{order.sender.phone}</p>
             </div>
+            
+            {/* Teslimat Adresi (Alıcı) */}
             <div className="w-1/2 text-right">
               <h3 className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider">Ship To:</h3>
               <p className="font-bold text-base text-gray-900">{order.recipient.name}</p>
-              <p>{order.recipient.address}</p>
+              
+              {/* Detaylı Adres Gösterimi */}
+              <p>
+                  {order.recipient.address || order.recipient.street} {order.recipient.buildingNo ? `No: ${order.recipient.buildingNo}` : ''}
+              </p>
+              {(order.recipient.floor || order.recipient.apartment) && (
+                  <p>
+                      {order.recipient.floor && `Floor: ${order.recipient.floor}`}
+                      {order.recipient.floor && order.recipient.apartment && ", "}
+                      {order.recipient.apartment && `Flat: ${order.recipient.apartment}`}
+                  </p>
+              )}
               <p>{order.recipient.city}, {order.recipient.postcode}</p>
               <p>{order.recipient.phone}</p>
             </div>
@@ -113,7 +125,7 @@ const InvoiceModal = ({ order, onClose }) => {
             <thead>
               <tr className="bg-gray-100 text-gray-600 uppercase text-xs border-b border-gray-300">
                 <th className="py-3 px-2 text-left w-1/2">Product / Service</th>
-                <th className="py-3 px-2 text-center">Quantity</th>
+                <th className="py-3 px-2 text-center">Qty</th>
                 <th className="py-3 px-2 text-right">Unit Price</th>
                 <th className="py-3 px-2 text-right">Amount</th>
               </tr>
@@ -121,7 +133,14 @@ const InvoiceModal = ({ order, onClose }) => {
             <tbody>
               {order.items.map((item, i) => (
                 <tr key={i} className="border-b border-gray-100 last:border-0">
-                  <td className="py-3 px-2 font-medium">{item.title}</td>
+                  <td className="py-3 px-2 font-medium">
+                      {item.title}
+                      {item.selectedVariant && (
+                          <div className="text-[10px] text-gray-500 font-normal">
+                              ({item.selectedVariant.size} / {item.selectedVariant.color})
+                          </div>
+                      )}
+                  </td>
                   <td className="py-3 px-2 text-center">{item.quantity}</td>
                   <td className="py-3 px-2 text-right">£{item.price.toFixed(2)}</td>
                   <td className="py-3 px-2 text-right font-bold">£{(item.price * item.quantity).toFixed(2)}</td>

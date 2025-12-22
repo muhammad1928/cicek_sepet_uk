@@ -71,7 +71,7 @@
     "categories_sticky": "Kategoriler",
     "searchNotFoundTitle": "Gizli Bir Hazine mi?",
     "searchNotFoundDesc": "Aradığınız kelimeyle eşleşen bir ürün bulamadık ama mağazamızın diğer rafları sürprizlerle dolu.",
-    "categoryEmptyTitle": "Harika Şeyler Yolda!",
+    "categoryEmptyTitle": "Muhteşem Çiçekler Geliyor!",
     "categoryEmptyDesc": "Bu koleksiyon o kadar çok sevildi ki stoklar tükendi! Tasarımcılarımız şu an sizin için en özel ürünleri ve taze hediyeleri hazırlıyor.",
     "showAll": "Tüm Ürünleri Keşfet",
     "popularCategory": "Popüler: Doğum Günü 🎂",
@@ -202,46 +202,50 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Hakkımızda - Fesfu | En Taze Çiçekler ve Hediyeler",
-      "aboutDescription": "Fesfu'nin hikayesini, misyonunu ve değerlerini keşfedin. Müşterilerimize en kaliteli çiçek ve hediye deneyimini sunmaya kendimizi adadık. Hızlı teslimat ve mükemmel müşteri hizmeti ile fark yaratıyoruz."
+      "aboutTitle": "Hakkımızda - Fesfu UK | Londra'nın Önde Gelen Pazaryeri",
+      "aboutDescription": "Yerel bir çiçekçiden Londra'nın en hızlı online pazaryerine. Çiçek, teknoloji, moda ve gurme yiyecekleri aynı gün teslimat hizmetiyle ulaştırıyoruz."
     },
     "homePage": {
-      "homeTitle": "Taze Çiçekler ve Özel Hediyeler - Fesfu Londra",
-      "locationTitle": "Londra - En Taze Çiçekler ve Özel Hediyeler | Fesfu",
-      "homeDescription": "Londra'nın en taze çiçekleri ve özel hediyelerini aynı gün kapınıza teslim ediyoruz. Doğum günü, yıldönümü, evlilik teklifleri ve diğer özel anlar için mükemmel hediye seçeneklerini keşfedin."
+      "homeTitle": "Fesfu UK | Aynı Gün Teslimat Pazaryeri - Londra",
+      "locationTitle": "Londra'da Çiçek, Teknoloji ve Hediye Alışverişi | Fesfu UK",
+      "homeDescription": "Londra'nın favori pazaryeri. Taze çiçekler, elektronik, kitaplar, moda ve hediyeler. 18:00'e kadar sipariş verin, aynı gün teslimat garantisi."
     },
     "contactPage": {
-      "contactTitle": "İletişim - Fesfu | Bize Ulaşın",
-      "contactDescription": "Sorularınız, önerileriniz veya şikayetleriniz için bizimle iletişime geçin. Fesfu olarak her zaman yardımcı olmaktan memnuniyet duyarız. Bize ulaşmak için farklı iletişim kanallarını kullanabilirsiniz."
+      "contactTitle": "Bize Ulaşın | Fesfu Müşteri Desteği 7/24",
+      "contactDescription": "Siparişinizle ilgili yardıma mı ihtiyacınız var? Teslimat, iade veya satıcı olmak hakkında sorularınız için Fesfu destek ekibiyle iletişime geçin. Yardıma hazırız."
     },
     "faqPage": {
-      "faqTitle": "Sıkça Sorulan Sorular - Fesfu",
-      "faqDescription": "Fesfu hakkında sıkça sorulan soruları keşfedin. Sipariş verme, teslimat, iade politikası ve diğer önemli konularda bilgi edinin. Sorularınıza hızlı ve kolay cevaplar bulun."
+      "faqTitle": "Yardım ve SSS - Fesfu Pazaryeri UK",
+      "faqDescription": "Teslimat süreleri, elektronik ve bozulabilir ürünler için iade politikaları ve ödeme yöntemleri hakkında hızlı cevaplar bulun. Fesfu'da alışveriş rehberiniz."
     },
     "favouritesPage": {
-      "title": "Favorilerim - Fesfu | Beğendiğiniz Ürünler",
-      "description": "Favorilerinizi saklayın ve en beğendiğiniz çiçekler, hediyeler ve diğer ürünleri kolayca erişin. Fesfu ile en sevdiğiniz ürünleri tek tıkla satın alabilirsiniz."
+      "title": "Favorilerim | Fesfu - Sonra İçin Kaydet",
+      "description": "Mükemmel alışveriş listenizi oluşturun. Favori çiçeklerinizi, teknoloji ürünlerinizi, kitaplarınızı ve moda ürünlerinizi tek tıkla satın almak için kaydedin."
     },
     "legalPage": {
-      "title": "Hukuki Bilgiler - Fesfu | Gizlilik Politikası ve Kullanım Şartları",
-      "description": "Fesfu'nin gizlilik politikası, kullanım şartları ve çerez politikası hakkında detaylı bilgi edinin. Kişisel verilerinizin nasıl korunduğunu ve platformumuzu kullanırken haklarınızı öğrenin.",
-      "hakkindaDetayliBilgi": "hakkında detaylı bilgi."
+      "title": "Yasal Bilgiler ve Gizlilik Politikası | Fesfu UK",
+      "description": "Adil bir pazaryeri için şeffaf koşullar. Gizlilik politikamızı, tüketici haklarını ve dijital ile bozulabilir ürünler için iade kurallarını okuyun.",
+      "detailedInfo": "hakkında detaylı bilgi."
     },
     "myOrdersPage": {
-      "title": "Siparişlerim - Fesfu | Sipariş Takibi ve Geçmişi",
-      "description": "Geçmiş siparişlerinizi görüntüleyin, sipariş detaylarını inceleyin ve siparişlerinizin durumunu takip edin. Fesfu ile tüm siparişlerinizi kolayca yönetin."
+      "title": "Siparişimi Takip Et | Fesfu UK",
+      "description": "Sipariş geçmişinizi görüntüleyin ve canlı teslimatları takip edin. Çiçek buketinizin, elektronik veya moda ürünlerinizin durumunu anlık olarak kontrol edin."
     },
     "registerCourierPage": {
-      "title": "Kurye Başvurusu - Fesfu | Kurye Olun",
-      "description": "Fesfu'nin kurye programına katılın ve esnek çalışma saatleri ile ek gelir elde edin. Kurye başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+      "title": "Londra Kurye İş İlanları | Fesfu Teslimat Ekibine Katılın",
+      "description": "Fesfu ile sür. Londra genelinde çiçek, yiyecek ve paket teslim ederek rekabetçi gelir elde edin. Esnek saatler, anında ödemeler. Hemen başvurun."
     },
     "registerPage": {
-      "title": "Kayıt Ol - Fesfu | Yeni Hesap Oluştur",
-      "description": "Fesfu'ne kayıt olun ve en taze çiçekler ile özel hediyelere erişim sağlayın. Hızlı ve kolay kayıt süreci ile hemen alışverişe başlayın."
+      "title": "Kayıt Ol | Fesfu Pazaryerine Katılın",
+      "description": "Özel fırsatların kilidini açmak için ücretsiz hesap oluşturun. Hızlı ödeme ve güvenli ödeme ile yerel ve global markalardan binlerce ürün alışverişi yapın."
     },
     "vendorRegistrationPage": {
-      "title": "Satıcı Başvurusu - Fesfu | Mağazanızı Açın",
-      "description": "Fesfu platformunda mağazanızı açın ve geniş müşteri kitlesine ulaşın. Satıcı başvuru süreci hakkında bilgi edinin ve hemen başvurun."
+      "title": "Fesfu'da Sat | Satıcı Ortağı Olun",
+      "description": "İşinizi Fesfu ile büyütün. Çiçek, elektronik, yiyecek veya moda satarak milyonlarca Londra müşterisine ulaşın. Düşük komisyon, yüksek destek."
+    },
+    "productDetailPage": {
+      "defaultTitle": "Online Alışveriş | Fesfu UK Pazaryeri",
+      "defaultDescription": "Özel koleksiyonumuzu keşfedin. Londra içi hızlı teslimat ve güvenli ödeme seçenekleri."
     }
   },
 
@@ -292,8 +296,30 @@
 
   "FAQ": {
     "faqTitle": "Sıkça Sorulan Sorular",
-    "faqDescription": "Merak ettikleriniz."
+    "faqDescription": "Siparişler, teslimat ve ödeme hakkındaki sorularınızın cevaplarını bulun.",
+    "items": [{
+        "q": "Siparişimi nasıl takip edebilirim?",
+        "a": "Giriş yaptıktan sonra 'Siparişlerim' menüsünden siparişinizin anlık durumunu takip edebilirsiniz."
+      },
+      {
+        "q": "Hangi bölgelere teslimat yapıyorsunuz?",
+        "a": "Şu anda yalnızca Londra içinde teslimat yapıyoruz."
+      },
+      {
+        "q": "Aynı gün teslimat var mı?",
+        "a": "Evet, saat 18:00'den önce verilen siparişler aynı gün teslim edilir."
+      },
+      {
+        "q": "Çiçekler ve ürünler taze mi?",
+        "a": "Evet, taze çiçekler her sabah açık artırmadan günlük olarak temin edilir ve çabuk bozulan gıdalar taze olarak hazırlanır."
+      },
+      {
+        "q": "Ödeme yöntemleri nelerdir?",
+        "a": "Kredi/Banka Kartı ile güvenle ödeme yapabilirsiniz (Stripe altyapısı ile güvence altında)."
+      }
+    ]
   },
+
   "favorites": {
     "favoritesTitle": "Favorilerim",
     "favoritesDescription": "Beğendiğiniz ürünleri burada saklıyoruz.",
@@ -317,50 +343,64 @@
     "returnToLogin": "← Giriş Sayfasına Dön"
   },
   "legal": {
-    "legalTitle": "Çerez Politikası",
+    "legalTitle": "Yasal & Sözler",
+    "pageNotFound": "Belge Bulunamadı",
+    "pageNotFoundDesc": "Aradığınız yasal belge taşınmış veya güncellenmiş.",
+    "backToHome": "Ana Sayfaya Dön",
+    "backToHome2": "Fesfu Hukuk Departmanı",
     "privacyPolicy": {
-      "legalPageContentTitle": "Gizlilik Politikası",
-      "first": "1. Veri Sorumlusu",
-      "firstDesc": "Fesfu UK olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin güvenliğine maksimum önem veriyoruz.",
+      "legalPageContentTitle": "Gizlilik & Veri Koruma",
+      "first": "1. Veri Sorumlusu & Güveniniz",
+      "firstDesc": "Fesfu UK, UK Data Protection Act 2018 ve UK GDPR ile tam uyum içinde faaliyet göstermektedir. Duygularınızı iletmemiz için bize duyduğunuz güvene değer veriyoruz ve kişisel verilerinizi korumaya kararlıyız.",
       "second": "2. Toplanan Veriler ve Amaçları",
       "secondDesc": {
-        "part1": "Kimlik ve İletişim: Ad, soyad, e-posta ve telefon numaranız; sipariş onayı ve fatura işlemleri için işlenir.",
-        "part2": "Teslimat Bilgisi: Alıcının adresi ve iletişim bilgileri, siparişin teslimi amacıyla Kurye ve ilgili Mağaza (Satıcı) ile paylaşılır.",
-        "part3": "İşlem Güvenliği: IP adresi ve cihaz bilgileri, dolandırıcılık tespiti ve yasal yükümlülükler için saklanır."
+        "part1": "Kimlik & İletişim: Ad, e-posta ve telefon numarası yalnızca sipariş yerine getirme, dijital fişler ve teslimat güncellemeleri için işlenir.",
+        "part2": "Teslimat Bilgileri: Alıcı bilgileri YALNIZCA doğrulanmış Kurye Ekibimiz ve siparişinizi yerine getiren belirli Satıcı ile paylaşılır.",
+        "part3": "İşlem Güvenliği: IP adresi ve cihaz verileri, dolandırıcılığı önlemek ve güvenli bir alışveriş ortamı sağlamak için kaydedilir."
       },
       "third": "3. Ödeme Güvenliği",
-      "thirdDesc": "Kredi kartı bilgileriniz sunucularımızda asla saklanmaz. Ödeme işlemleri, SSL sertifikalı şifreli bağlantı üzerinden doğrudan global ödeme altyapısı Stripe tarafından gerçekleştirilir."
+      "thirdDesc": "Kredi kartı bilgilerini SAKLAMIYORUZ. Tüm ödemeler, 3D Secure ile banka düzeyinde güvenlik sağlayan Stripe'ın şifreli altyapısı üzerinden işlenir."
     },
     "termsOfUse": {
-      "title": "Mesafeli Satış Sözleşmesi",
-      "first": "1. Taraflar",
-      "firstDesc": "İşbu sözleşme, platform üzerinden sipariş veren ALICI ile ürünü tedarik eden SATICI (Mağaza) arasında, Fesfu UK arabuluculuğunda akdedilmiştir.",
-      "second": "2. Cayma Hakkı İstisnası (Önemli)",
-      "secondDesc": "DİKKAT: Yönetmelik gereği; \"Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmelerde\" (Canlı Çiçek, Çikolata, Pasta vb.) CAYMA HAKKI KULLANILAMAZ.",
-      "secondDesc_part2": "Ancak ürün; teslimat anında hasarlı, solmuş veya görselden tamamen farklı ise, alıcı teslimatı kabul etmeyerek iade talep edebilir.",
-      "third": "3. Teslimat Süreci",
-      "thirdDesc": "Siparişler, alıcının seçtiği tarih ve saat aralığında teslim edilir. Mücbir sebepler (hava muhalefeti, trafik kazası vb.) dışında gecikmelerden platform sorumludur."
+      "title": "Hizmet Şartları & Mutluluk Garantisi",
+      "first": "1. Taraflar & Platformun Rolü",
+      "firstDesc": "Bu sözleşme, TİCARİ ACENTE olarak hareket eden Fesfu UK tarafından kolaylaştırılan siz (ALICI) ve Satıcı arasındadır. Her işlemde şeffaflık ve kalite sağlıyoruz.",
+      "second": "2. İadeler, Geri Ödemeler & Sözümüz",
+      "secondDesc": "KATEGORİYE GÖRE İADE POLİTİKASI:",
+      "secondDesc_part2": "A) ÇABUK BOZULAN ÜRÜNLER (Çiçekler, Yiyecekler): Yasal olarak, Cayma Hakkı geçerli değildir. ANCAK, siparişiniz hasarlı veya solmuş olarak gelirse, lütfen bir fotoğrafla 24 SAAT içinde bizimle iletişime geçin. Satıcı ile doğrulayacağız ve düzelteceğiz (Geri Ödeme veya Yeniden Teslimat).",
+      "secondDesc_part3": "B) DAYANIKLI ÜRÜNLER (Elektronik, Kitaplar): Bu ürünleri teslimattan sonraki 14 gün içinde iade etme yasal hakkınız vardır. Ürünler kullanılmamış, orijinal ambalajında ve yeniden satılabilir olmalıdır.",
+      "third": "3. Teslimat & Son Sipariş Saatleri",
+      "thirdDesc": "Londra'da 'Aynı Gün Teslimat' için siparişler 18:00'den önce verilmelidir. Mükemmellik için çabalasak da, Fesfu aşırı mücbir sebep olaylarından (örn. şiddetli hava koşulları) kaynaklanan gecikmelerden sorumlu değildir, ancak her zaman sizinle iletişim halinde olacağız."
     },
     "termsOfCookies": {
       "title": "Çerez Politikası",
       "firstTerm": "1. Çerez Nedir?",
-      "firstTermDesc": "Çerezler, ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen ve sizi hatırlamamıza yarayan küçük metin dosyalarıdır. Sitemizin çalışması için bazı çerezler zorunludur.",
-      "secondTerm": "2. Hangi Çerezleri Kullanıyoruz?",
+      "firstTermDesc": "Çerezler, tarayıcınıza kaydedilen küçük metin dosyalarıdır. Bunları alışveriş deneyiminizi sorunsuz hale getirmek, sürpriz hediyelerinizi sepette tutmak ve sitenin hızlı çalışmasını sağlamak için kullanıyoruz.",
+      "secondTerm": "2. Kullandığımız Çerez Türleri",
       "secondTermDesc": {
-        "first": "Zorunlu Çerezler",
-        "firstDesc": "Sepetinizdeki ürünleri hatırlamak, hesabınıza giriş yapabilmeniz ve ödeme güvenliği için gereklidir. Bunlar kapatılamaz.",
+        "first": "Temel Çerezler",
+        "firstDesc": "Ödeme işleme ve güvenli giriş için kesinlikle gereklidir. Bunlar olmadan mağaza çalışamaz.",
         "second": "İşlevsel Çerezler",
-        "secondDesc": "Dil tercihleriniz, adres kayıtlarınız ve \"Beni Hatırla\" gibi özellikler için kullanılır.",
-        "third": "Analitik Çerezler",
-        "thirdDesc": "Sitemizi nasıl kullandığınızı (hangi sayfalara baktığınızı) anonim olarak analiz ederek hizmetimizi geliştirmemize yardımcı olur."
+        "secondDesc": "Size zaman kazandırmak için tercihlerinizi (Dil, Para Birimi) hatırlar.",
+        "third": "Performans & Analiz",
+        "thirdDesc": "En çok hangi ürünleri sevdiğinizi anlamamıza yardımcı olur, hizmetimizi geliştirmemizi sağlar."
       },
-      "thirdTerm": "3. Çerezleri Nasıl Yönetirim?",
-      "thirdTermDesc": "Tarayıcınızın ayarlar menüsünden çerezleri dilediğiniz zaman silebilir veya engelleyebilirsiniz. Ancak zorunlu çerezleri engellemek, sepet ve ödeme fonksiyonlarının çalışmasını bozabilir."
+      "thirdTerm": "3. Çerezleri Yönetme",
+      "thirdTermDesc": "Çerezleri tarayıcı ayarları üzerinden yönetebilirsiniz. Temel çerezleri engellemek, siparişinizi tamamlamanızı engelleyebilir."
     },
-    "pageNotFound": "Sayfa Bulunamadı",
-    "pageNotFoundDesc": "Aradığınız içerik mevcut değil.",
-    "backToHome": "← Ana Sayfaya Dön",
-    "backToHome2": "Fesfu UK Legal Team"
+    "membershipAgreement": {
+      "title": "Üyelik Sözleşmesi",
+      "first": "1. Sözleşmenin Kapsamı",
+      "firstDesc": "Fesfu UK'de hesap oluşturarak bu şartları kabul edersiniz. Üye olmak için en az 18 yaşında olmalısınız.",
+      "second": "2. Kullanıcı Sorumlulukları",
+      "secondDesc": {
+        "part1": "Hesap Güvenliği: Şifrenizi gizli tutmaktan siz sorumlusunuz. Fesfu, zayıf şifreler nedeniyle yetkisiz erişimden sorumlu değildir.",
+        "part2": "Doğruluk: Kayıt sırasında sağlanan tüm bilgilerin (Ad, Adres, Telefon) doğru ve güncel olduğunu beyan edersiniz.",
+        "part3": "Yasaklı Davranış: Kullanıcılar fiyatları manipüle edemez, bot kullanamaz veya platformu hacklemeye çalışamaz. Bu tür eylemler derhal yasaklamayla sonuçlanır."
+      },
+      "third": "3. Hesabın Sonlandırılması",
+      "thirdDesc": "Fesfu, bu şartları ihlal eden, dolandırıcılık yapan veya iade politikasını suistimal eden hesapları askıya alma hakkını saklı tutar."
+    }
   },
   "myOrders": {
     "notifyCancelRequestSent": "İptal talebiniz başarıyla alındı.",
@@ -400,6 +440,7 @@
   },
   "profile": {
     "title": "Hesabım",
+    "badges":" Rozetlerim",
     "profileGreetings": "Hoşgeldiniz, profilinizi ve siparişlerinizi buradan yönetebilirsiniz."
   },
   "registerCourier": {
@@ -438,17 +479,17 @@
     "passwordForbiddenChars": "Şifre yasaklı karakterler içeriyor. Lütfen şunları kaldırın: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Şifreniz yeterince güçlü değil!",
     "notifyPasswordRequirements": "Lütfen şifre gereksinimlerini karşılayın.",
-    "acceptTerms": "Lütfen sözleşmeyi onaylayın!",
+    "acceptTerms": "Lütfen sözleşmeyi kabul edin!",
     "registrationFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin.",
-    "joinUs": "Aramıza Katılın",
+    "joinUs": "Bize Katılın",
     "createAccount": "Hızlıca hesap oluşturun",
     "securityMeasures": "Güvenlik Gereksinimleri",
-    "userAgrement1": "Kullanıcı Sözleşmesini ",
-    "userAgrement2": "okudum ve kabul ediyorum.",
+    "userAgrement1": "",
+    "userAgrement2": "Üyelik Sözleşmesi ve Gizlilik Politikasını kabul ediyorum.",
     "btn1": "Kaydediliyor...",
     "btn2": "Hesap Oluştur",
     "alreadyAccount1": "Zaten hesabınız var mı?",
-    "alreadyAccount2": "Giriş Yapın"
+    "alreadyAccount2": "Giriş Yap"
   },
   "vendor": {
     "receivedOrders": "Gelen Siparişler",
@@ -563,59 +604,60 @@
     "favoritesNotUpdated": "Favori güncellenemedi. Lütfen tekrar giriş yapın."
   },
   "termsModal": {
-    "agree": "Okudum, Kabul Ediyorum",
+    "agree": "Bu Şartları okudum ve kabul ediyorum",
+    "close": "Kapat",
     "customers": {
-      "title": "Mesafeli Satış ve Hizmet Sözleşmesi",
+      "title": "Mesafeli Satış ve Pazar Yeri Hizmetleri Sözleşmesi",
       "first": {
-        "title": "1. GİRİŞ VE TARAFLAR",
-        "desc": "Bu Hüküm ve Koşullar, Satıcı tarafından Platform aracılığıyla size (\"Alıcı\") yapılan mal satışını düzenler. Sipariş vererek, 2015 Tüketici Hakları Yasası uyarınca bu şartlara bağlı kalmayı kabul edersiniz."
+        "title": "1. GİRİŞ VE PLATFORMUN ROLÜ",
+        "desc": "Bu Şartlar, Fesfu UK ('Platform') üzerinden mal satın alımını düzenler. Fesfu, üçüncü taraf Satıcılar için TİCARİ ACENTE (Aracı) olarak hareket eder. Sipariş vererek, satış sözleşmesinin Fesfu tarafından kolaylaştırılarak doğrudan sizinle (Alıcı) ve Satıcı arasında kurulduğunu kabul edersiniz. İşlem işleme ve teslimat koordinasyonundan sorumluyuz."
       },
       "second": {
-        "title": "2. TESLİMAT POLİTİKASI",
-        "desc": " Ürünleri ödeme sırasında seçilen zaman aralığında teslim etmeyi hedefliyoruz. Alıcı adreste değilse, bozulabilir ürünlerin (çiçek/gıda) doğası gereği kurye paketi \"güvenli bir yere\" veya komşuya bırakabilir (İngiltere standart uygulamasıdır)."
+        "title": "2. TESLİMAT VE SORUMLULUK",
+        "desc": "Seçilen zaman diliminde teslimatı hedefliyoruz. Çabuk bozulan ürünler (çiçekler/yiyecekler) için, alıcı müsait değilse, kurye ürünü 'Güvenli Bir Yere' veya bir komşuya bırakabilir (Standart İngiltere uygulaması). Fesfu, Alıcı tarafından sağlanan yanlış adresler nedeniyle başarısız olan teslimatlardan sorumlu değildir."
       },
       "third": {
-        "title": "3. İPTAL VE İADE POLİTİKASI",
-        "desc": "Consumer Contracts Regulations 2013 uyarınca tüketicilerin genelde 14 günlük cayma hakkı vardır. ANCAK: Bozulabilir Ürün İstisnası: Çabuk bozulabilen veya son kullanma tarihi hızla geçen mallar (taze çiçekler, bitkiler, gıda ürünleri) için <strong>İPTAL/CAYMA HAKKI YOKTUR. Consumer Rights Act 2015 kapsamında, ürünler teslimat anında tarif edildiği gibi değilse veya kalitesi yetersizse (örn. ezilmiş çiçekler), para iadesi veya değişim hakkınız vardır. Teslimattan sonraki 24 saat içinde fotoğraflı kanıtla bize bildirmeniz gerekir."
+        "title": "3. İPTAL VE İADE POLİTİKASI (KARMA ÜRÜNLER)",
+        "desc": "Consumer Contracts Regulations 2013 kapsamında, haklar kategoriye göre değişir: <br><strong>A) Çabuk Bozulan Ürünler (Çiçekler, Yiyecekler):</strong> Ürün hasarlı/kusurlu gelmediği sürece Cayma Hakkı YOKTUR. <br><strong>B) Dayanıklı Ürünler (Elektronik, Kitaplar, Moda):</strong> 14 gün içinde iptal etme yasal hakkınız vardır. Ürünler kullanılmamış olarak orijinal ambalajında iade edilmelidir. <br><strong>Kusurlu Ürünler:</strong> Consumer Rights Act 2015 kapsamında, herhangi bir ürün tanımlandığı gibi değilse, fotoğraflı kanıtla 24 saat içinde bildirilirse iade/değişim hakkınız vardır."
       },
       "fifth": {
-        "title": "5. GİZLİLİK VE VERİ KORUMA",
-        "desc": "Kişisel verileriniz (Ad, Adres, Telefon), UK GDPR ve Data Protection Act 2018 ile tam uyumlu olarak işlenir. Veriler, yalnızca siparişinizi tamamlamak amacıyla Satıcı ve Kurye ile paylaşılır."
+        "title": "4. VERİ KORUMA VE GİZLİLİK",
+        "desc": "Kişisel verileriniz (Ad, Adres) UK GDPR ve Data Protection Act 2018'e tam uygunluk içinde işlenir. Yalnızca sipariş yerine getirme amacıyla ilgili Satıcı ve Kurye ile paylaşılır. Verilerinizi asla üçüncü taraflara satmıyoruz."
       }
     },
     "courierAgreement": {
-      "title": "Bağımsız Kurye Hizmet Sözleşmesi",
+      "title": "Bağımsız Kurye Hizmeti Sözleşmesi",
       "first": {
-        "title": "1. ÇALIŞMA ŞEKLİ",
-        "desc": "Kurye, hizmetleri \"Serbest Meslek Sahibi\" (Self-Employed) statüsünde, Bağımsız Yüklenici (Independent Contractor) olarak sunmayı kabul eder. Bu sözleşme Kurye'yi Platformun çalışanı, işçisi veya ortağı yapmaz. Kendi vergilerinizden ve Ulusal Sigorta (NI) ödemelerinizden siz sorumlusunuz."
+        "title": "1. BAĞIMSIZ YÜKLENİCİ STATÜSÜ",
+        "desc": "Kurye, serbest meslek sahibi 'Bağımsız Yüklenici' olarak hizmet vermeyi kabul eder. Bu sözleşme işveren-çalışan ilişkisi OLUŞTURMAZ. Kendi vergilerinizden (HMRC Self Assessment) ve Ulusal Sigorta katkılarınızdan yalnızca siz sorumlusunuz."
       },
       "second": {
-        "title": "2. HİZMET STANDARTLARI",
-        "desc": "Kurye, bozulabilir ürünlerin (çiçek, pasta) estetik bütünlüğünü korumak için azami özeni göstermelidir. Teslimatlar belirtilen zaman dilimlerinde tamamlanmalıdır."
+        "title": "2. HİZMET STANDARTLARI VE ÖZEN",
+        "desc": "Kurye, malların bütünlüğünü korumak için azami özeni göstermelidir (özellikle kırılgan çiçekler veya elektronik). Teslimatlar atanan zaman dilimlerinde tamamlanmalıdır. Yüksek değerli tüm ürünler için Teslimat Kanıtı (Fotoğraf/İmza) zorunludur."
       },
       "third": {
-        "title": "3. VERİ KORUMA (GDPR - SUÇ TEŞKİLİ)",
-        "titlesub": "KESİN GİZLİLİK BİLDİRİMİ",
-        "desc": "Size iletilen müşteri verileri (adres, telefon) SADECE teslimat amaçlıdır. Data Protection Act 2018 uyarınca; bu verileri kaydetmek, teslimat harici bir sebeple müşteriyi aramak/mesaj atmak veya başkasıyla paylaşmak SUÇTUR. Tespiti halinde sözleşme feshedilir ve yasal işlem başlatılır."
+        "title": "3. VERİ KORUMA VE CEZAİ SORUMLULUK (GDPR)",
+        "titlesub": "SIKI GİZLİLİK BİLDİRİMİ",
+        "desc": "Size sağlanan müşteri verileri (Adres, Telefon) YALNIZCA TESLİMAT AMAÇLIDIR. Data Protection Act 2018 kapsamında; bu verileri kaydetmek, müşteriyle kişisel nedenlerle iletişime geçmek veya başkalarıyla paylaşmak CEZA GEREKTİREN BİR SUÇTUR. Herhangi bir ihlal, derhal sözleşme feshi ve yasal kovuşturma ile sonuçlanacaktır."
       }
     },
     "vendorAgreement": {
-      "title": "Satıcı İş Ortaklığı Sözleşmesi",
+      "title": "Satıcı Ortaklığı ve Pazar Yeri Sözleşmesi",
       "first": {
         "title": "1. TARAFLAR VE AMAÇ",
-        "desc": "Bu Sözleşme, Platform ile Satıcı (Tedarikçi) arasındadır. Satıcı, Platforma ürünlerini listeleme ve satma hakkı verir. Ürünlerin yasal mülkiyeti satış gerçekleşene kadar Satıcı'ya aittir."
+        "desc": "Bu Sözleşme, Satıcının Fesfu Pazar Yerinde ürün listelemesine ve satmasına izin verir. Satıcı, satış noktasına kadar malların yasal mülkiyetini elinde tutar. Satıcı, Birleşik Krallık'ta bu malları satmaya yetkili yasal bir ticari kuruluş olduğunu garanti eder."
       },
       "second": {
         "title": "2. KOMİSYON VE ÖDEMELER",
-        "desc": "Platform, her siparişin brüt değeri üzerinden %10 + KDV (VAT) oranında komisyon alır.Ödemeler haftalık olarak yapılır. Platform, şüpheli işlem veya yüksek iade oranları durumunda ödemeyi bekletme hakkını saklı tutar."
+        "desc": "Fesfu, her onaylanmış siparişin brüt değeri üzerinden bir komisyon ücreti (örn. %10 + KDV) alır. Ödemeler haftalık olarak işlenir. Fesfu, yüksek anlaşmazlık oranları, şüpheli dolandırıcılık veya şartların ihlali durumlarında ödemeleri askıya alma hakkını saklı tutar."
       },
       "third": {
-        "title": "3. ÜRÜN SORUMLULUĞU VE UYUMLULUK",
-        "desc": "Satıcı, satılan tüm malların Sale of Goods Act 1979 (Mal Satış Yasası) ve (gıda satıyorsa) Birleşik Krallık Gıda Güvenliği standartlarına uygun olduğunu garanti eder. Kalitesiz ürün, yanlış paketleme veya görselle uyuşmazlıktan kaynaklanan iadelerin maliyeti Satıcı'ya aittir."
+        "title": "3. ÜRÜN SORUMLULUĞU VE UYUM",
+        "desc": "Satıcı, listelenen tüm malların Sale of Goods Act 1979'a ve (gıda için) Birleşik Krallık Gıda Güvenliği Standartlarına uygun olduğunu garanti eder. Satıcı, düşük kalite, yanlış tanımlama veya uyumsuzluk nedeniyle iadelerden kaynaklanan maliyetlerden tek başına sorumludur. Fesfu, Satıcı ürünlerinin güvenliği/kalitesi için hiçbir sorumluluk kabul etmez."
       },
       "fourth": {
-        "title": "4. VERİ KORUMA (GDPR)",
-        "desc": "Satıcı, müşteri verilerini UK GDPR ve Data Protection Act 2018 ile uyumlu olarak işleyecektir. Veriler yalnızca siparişlerin işlenmesi amacıyla kullanılacaktır."
+        "title": "4. VERİ İŞLEME (GDPR)",
+        "desc": "Satıcı, müşteri verilerini yalnızca UK GDPR'a uygun olarak sipariş yerine getirme amacıyla işlemeyi kabul eder. Açık izin olmadan müşteri verilerinin doğrudan pazarlama (spam) için kullanılması kesinlikle yasaktır ve derhal yasaklama gerekçesidir."
       }
     }
   },
@@ -1067,5 +1109,15 @@
     "noAccount1": "Hesabınız yok mu?",
     "noAccount2": "Hemen Kayıt Olun",
     "backToHome": "← Ana Sayfaya Dön"
+  },
+  "features": {
+    "title1": "Aynı Gün Teslimat",
+    "desc1": "Londra'da 18:00'e kadar sipariş verin, bugün teslim edelim.",
+    "title2": "Güvenli Ödeme",
+    "desc2": "Stripe altyapısı ile %100 güvenli ödemeler.",
+    "title3": "Premium Deneyim",
+    "desc3": "Özenle hazırlanmış paketler ve hediye notları.",
+    "title4": "Canlı Takip",
+    "desc4": "Kuryenizin kapınıza gelişini izleyin."
   }
 }

@@ -4,31 +4,35 @@ import { useTranslation } from "react-i18next";
 
 const VendorDashboard = ({ user }) => {
   const { t } = useTranslation();
-  const [stats, setStats] = useState({ totalSales: 0, orderCount: 0, productCount: 0 });
+  // State yapısını backend'den gelecek yeni veri formatına hazırladık
+  const [stats, setStats] = useState({ 
+      totalSales: 0, 
+      orderCount: 0, 
+      productCount: 0,
+      totalEarnings: 0 // Yeni eklenen (Net Kazanç)
+  });
   
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 1. Ürün Sayısı (Eski yöntem devam ediyor, sorun yok)
         const prodRes = await userRequest.get(`/products/vendor/${user._id}`);
-        const ordRes = await userRequest.get(`/orders/vendor/${user._id}`);
         
-        // Ciro Hesabı: Sadece kendi ürünlerinin ham fiyatı üzerinden
-        const totalSales = ordRes.data.reduce((acc, order) => {
-           // Bu siparişteki satıcının ürünlerini bul
-           // Not: Backend'de ürünlere vendor populate yapmazsak filtreleyemeyiz.
-           // Basitlik için: order.totalAmount üzerinden gidiyoruz (Komisyon hariç mantığı eklenebilir)
-           // Ancak en doğrusu sipariş item'larını döngüyle kontrol etmektir.
-           return acc + order.totalAmount; 
-        }, 0);
+        // 2. İstatistikler (YENİ ENDPOINT)
+        // Backend'de yazdığımız '/vendor-summary' endpointi, satıcının sadece kendi ürünlerini
+        // toplayarak net ciroyu ve sipariş sayısını hesaplayıp döndürüyor.
+        const statsRes = await userRequest.get(`/stats/vendor-summary/${user._id}`);
         
         setStats({
-          totalSales,
-          orderCount: ordRes.data.length,
-          productCount: prodRes.data.length
+          totalSales: statsRes.data.totalEarnings, // Backend doğru hesaplayıp gönderiyor
+          orderCount: statsRes.data.totalOrders,   // Sipariş sayısı
+          productCount: prodRes.data.length,       // Ürün sayısı
+          totalEarnings: statsRes.data.totalEarnings
         });
+
       } catch (err) { console.log(err); }
     };
-    fetchData();
+    if (user?._id) fetchData();
   }, [user]);
 
   return (
@@ -56,6 +60,7 @@ const VendorDashboard = ({ user }) => {
 
 const StatCard = ({ icon, title, value, color }) => (
   <div className={`bg-white p-6 rounded-2xl shadow-sm border border-${color}-100 flex items-center gap-4`}>
+    {/* Tailwind dinamik class'ları bazen derlemede sorun olabilir, garanti olsun diye inline style veya tam class adı yazılabilir ama senin yapını bozmuyorum */}
     <div className={`w-14 h-14 bg-${color}-100 text-${color}-600 rounded-full flex items-center justify-center text-2xl`}>{icon}</div>
     <div>
       <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">{title}</div>

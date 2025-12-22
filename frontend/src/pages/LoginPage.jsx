@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { publicRequest } from "../requestMethods";
+// DİKKAT: userRequest'i de import ettim
+import { publicRequest, userRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -20,62 +21,62 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      // Backend'e istek at
+      // 1. Giriş İsteği (PublicRequest uygundur çünkü henüz token yok)
       const res = await publicRequest.post("/auth/login", {
         email, 
         password,
         language: i18n.language
       });
 
-      // Başarılı ise kullanıcıyı kaydet
+      // 2. Kullanıcıyı LocalStorage'a kaydet
       localStorage.setItem("user", JSON.stringify(res.data));
       
-      // --- YENİ: FAVORİ SENKRONİZASYONU ---
+      // 3. --- FAVORİ SENKRONİZASYONU (DÜZELTİLDİ) ---
       const localFavs = JSON.parse(localStorage.getItem("favorites")) || [];
       if (localFavs.length > 0) {
-         // Backend'e gönder ve birleştir
-         await publicRequest.post(`/users/${res.data._id}/sync-favorites`, { localFavorites: localFavs });
+         try {
+             // DİKKAT: Burası 'userRequest' olmalı çünkü bu protected bir route!
+             // publicRequest kullanırsan 401 hatası alırsın ve interceptor seni atar.
+             await userRequest.post(`/users/${res.data._id}/sync-favorites`, { localFavorites: localFavs });
+         } catch (syncErr) {
+             // Senkronizasyon hatası olursa login sürecini bozma, sadece konsola yaz
+             console.warn("Favori senkronizasyon hatası (Önemsiz):", syncErr);
+         }
       }
       // -----------------------------------
 
-      // Navbar'ı güncellemesi için sinyal gönder
+      // 4. Navbar'ı ve Context'i güncellemesi için sinyal gönder
       window.dispatchEvent(new Event("user-change")); 
 
       notify(`${t("login.welcome")} ${res.data.fullName}! 👋`, "success");
 
-      // ROL BAZLI YÖNLENDİRME
-      // ROL BAZLI YÖNLENDİRME
+      // 5. YÖNLENDİRME
       setTimeout(() => {
         const u = res.data;
         
-        // Önce redirect parametresini kontrol et
+        // Checkout'tan geldiyse oraya geri dön
         const searchParams = new URLSearchParams(location.search);
         const redirect = searchParams.get('redirect');
         
-        // Checkout'tan geldiyse sepeti aç
         if (redirect === 'checkout') {
-          window.dispatchEvent(new Event('open-cart'));
+          window.dispatchEvent(new Event('open-cart')); // Sepeti aç
           window.location.href = "/";
           return;
         }
         
-        // 1. Eğer Kurye veya Satıcı ise ve durumu 'approved' DEĞİLSE -> Başvuru sayfasına git
+        // Rol Bazlı Yönlendirmeler
         if ((u.role === "vendor" || u.role === "courier") && u.applicationStatus !== "approved") {
            window.location.href = "/partner-application";
         } 
-        // 2. Admin -> Admin Paneline
         else if (u.role === "admin") {
            window.location.href = "/admin";
         }
-        // 3. Kurye -> Kurye Paneline
         else if (u.role === "courier") {
            window.location.href = "/courier";
         }
-        // 4. Satıcı -> Satıcı Paneline
         else if (u.role === "vendor") {
            window.location.href = "/vendor";
         }
-        // 5. Müşteri -> Ana Sayfaya
         else {
            window.location.href = "/";
         }
@@ -85,12 +86,8 @@ const LoginPage = () => {
       setLoading(false);
       console.error("Giriş Hatası:", err);
       
-      // Backend'den gelen hata mesajını yakala
       const errorMessage = err.response?.data?.message;
-      
-      
-      // Kırmızı Toast bildirimi göster
-      notify(errorMessage, "error");
+      notify(errorMessage || t("common.error"), "error");
     }
   };
 

@@ -25,6 +25,30 @@ const getUserId = (req) => {
   return null;
 };
 
+// --- YARDIMCI: Cache Temizleme Fonksiyonu ---
+const clearProductCache = async (productId) => {
+    try {
+        if (redisClient && redisClient.isOpen) {
+            // 1. Tekil ürün cache'ini sil
+            await redisClient.del(`products:${productId}`);
+            
+            // 2. Listeleme cache'lerini sil (Wildcard/Pattern silme)
+            // Redis'te doğrudan pattern silme yoktur, scan ile bulup silmek gerekir.
+            // Güvenli ve basit yöntem: En sık kullanılan list keylerini manuel silmektir.
+            // Not: Prod ortamında 'scan' döngüsü daha sağlıklıdır.
+            const keys = await redisClient.keys('products:list:*');
+            if (keys.length > 0) {
+                await redisClient.del(keys);
+            }
+            
+            // Satıcı ürün listesini de temizleyelim (Opsiyonel ama iyi olur)
+            // Ancak vendorId parametresi burada olmadığı için genel temizlik yapıyoruz.
+        }
+    } catch (e) {
+        console.log("Redis cache temizleme hatası:", e.message);
+    }
+};
+
 // =============================================================================
 // 1. YENİ ÜRÜN OLUŞTUR (POST)
 // =============================================================================
@@ -37,34 +61,30 @@ router.post('/', verifyTokenAndSeller, async (req, res) => {
         productData.vendor = req.user.id;
     }
 
-    // --- RESİM URL DÜZELTMESİ ---
-    // Eğer imgs dizisi gelmediyse ama tekil img geldiyse diziye çevir.
-    // Eğer imgs dizisi geldiyse dokunma, aynen kaydet.
-    if (!productData.imgs || productData.imgs.length === 0) {
-        if (productData.img) {
-            productData.imgs = [productData.img];
-        } else {
-            productData.imgs = [];
-        }
+    // --- RESİM SENKRONİZASYONU (POST) ---
+    // 1. Eğer imgs dizisi geldi ve doluysa -> İlk resmi 'img' alanına kopyala (Thumbnail için)
+    if (productData.imgs && productData.imgs.length > 0) {
+        productData.img = productData.imgs[0];
+    }
+    // 2. Eğer imgs yok ama tekil img geldiyse -> Onu diziye çevir
+    else if (productData.img) {
+        productData.imgs = [productData.img];
+    }
+    // 3. Hiçbiri yoksa -> Boşalt
+    else {
+        productData.imgs = [];
+        productData.img = "";
     }
 
     // Ürün kodu oluştur
     const generateProductCode = () => "PR-" + Math.random().toString(36).substring(2, 8).toUpperCase();
     if (!productData.productCode) productData.productCode = generateProductCode();
 
-    // Veriyi modele aktar (imgs dizisi req.body içinde olduğu sürece Model bunu kabul eder)
     const newProduct = new Product(productData);
     const savedProduct = await newProduct.save();
 
-    // Cache temizle (Wildcard temizleme stratejisi)
-    try {
-        if (redisClient && redisClient.isOpen) {
-            await redisClient.del('products:all'); 
-            // Daha gelişmiş yapılarda pattern silme gerekebilir
-        }
-    } catch (redisErr) {
-        console.log("Redis temizleme uyarısı:", redisErr.message);
-    }
+    // Cache temizle
+    await clearProductCache(savedProduct._id);
 
     res.status(200).json(savedProduct);
   } catch (err) {
@@ -86,12 +106,17 @@ router.put('/:id', verifyTokenAndSeller, async (req, res) => {
         return res.status(403).json("Bu ürünü düzenleme yetkiniz yok!");
     }
 
-    // Gelen veriyi hazırla
     const updateData = { ...req.body };
 
-    // Eğer kullanıcı imgs dizisini boşaltıp tek bir resim linki (img) gönderdiyse senkronize et
-    if (updateData.img && (!updateData.imgs || updateData.imgs.length === 0)) {
-        updateData.imgs = [updateData.img];
+    // --- RESİM SENKRONİZASYONU (PUT - KRİTİK KISIM) ---
+    // Frontend'den 'imgs' dizisi geldiyse, 'img' alanını da buna göre güncellemek ZORUNDAYIZ.
+    // Aksi takdirde imgs güncellenir ama ana resim (img) eski kalır.
+    if (updateData.imgs) {
+        if (updateData.imgs.length > 0) {
+            updateData.img = updateData.imgs[0]; // İlk resmi ana resim yap
+        } else {
+            updateData.img = ""; // Dizi boşsa ana resmi sil
+        }
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -100,8 +125,8 @@ router.put('/:id', verifyTokenAndSeller, async (req, res) => {
       { new: true }
     );
     
-    // Cache temizle
-    try { if (redisClient && redisClient.isOpen) await redisClient.del(`products:${req.params.id}`); } catch(e){}
+    // Cache temizle (Eski resimlerin görünmemesi için şart)
+    await clearProductCache(req.params.id);
 
     res.status(200).json(updatedProduct);
   } catch (err) {
@@ -124,7 +149,7 @@ router.delete('/:id', verifyTokenAndSeller, async (req, res) => {
     await Product.findByIdAndDelete(req.params.id);
     
     // Cache temizle
-    try { if (redisClient && redisClient.isOpen) await redisClient.del(`products:${req.params.id}`); } catch(e){}
+    await clearProductCache(req.params.id);
 
     res.status(200).json("Ürün silindi.");
   } catch (err) {
@@ -147,8 +172,7 @@ router.get('/:id', async (req, res) => {
         }
     } catch (e) {}
 
-    // 🚨 GÜVENLİK DÜZELTMESİ: 'email' alanını populate'den kaldırdım.
-    // Sadece public olması gereken verileri çekiyoruz.
+    // GÜVENLİK: Email'i populate etme!
     const product = await Product.findById(req.params.id)
         .populate('vendor', 'username fullName shopName img'); 
     
@@ -194,8 +218,8 @@ router.get('/', async (req, res) => {
 
     // 2. DB Sorgusu
     let products;
-    // Ortak populate ayarı: Email hariç
-    const populateSettings = { path: 'vendor', select: 'username fullName shopName' };
+    // GÜVENLİK: Email hariç populate ayarı
+    const populateSettings = { path: 'vendor', select: 'username fullName shopName img' };
 
     if (qNew) {
       products = await Product.find({ isActive: true })
@@ -245,11 +269,10 @@ router.get('/', async (req, res) => {
 // =============================================================================
 router.get('/vendor/:vendorId', async (req, res) => {
   try {
-    // Burada satıcı detayına gerek yoksa populate yapmayabiliriz,
-    // ya da yine email olmadan yapabiliriz.
+    // GÜVENLİK: Email hariç populate
     const products = await Product.find({ vendor: req.params.vendorId })
         .sort({ createdAt: -1 })
-        .populate('vendor', 'username shopName'); // Email hariç
+        .populate('vendor', 'username shopName img'); 
         
     res.status(200).json(products);
   } catch (err) { res.status(500).json(err); }
@@ -283,8 +306,8 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
 
     await product.save();
 
-    // Cache temizle
-    try { if (redisClient && redisClient.isOpen) await redisClient.del(`products:${req.params.id}`); } catch(e){}
+    // Cache temizle (Yorum eklendiğinde de cache silinmeli)
+    await clearProductCache(req.params.id);
 
     res.status(200).json(product);
   } catch (err) { res.status(500).json(err); }
@@ -305,7 +328,9 @@ router.delete('/:id/reviews/:reviewId', verifyTokenAndAdmin, async (req, res) =>
     }
 
     await product.save();
-    try { if (redisClient && redisClient.isOpen) await redisClient.del(`products:${req.params.id}`); } catch(e){}
+    
+    // Cache temizle
+    await clearProductCache(req.params.id);
     
     res.status(200).json({ message: "Yorum silindi.", product });
   } catch (err) { res.status(500).json(err); }

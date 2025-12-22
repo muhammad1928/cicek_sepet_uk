@@ -71,7 +71,7 @@
     "notFound": "Keine Produkte gefunden, die Ihren Kriterien entsprechen.",
     "searchNotFoundTitle": "Ist es ein versteckter Schatz?",
     "searchNotFoundDesc": "Wir konnten keine Übereinstimmung für Ihre Suche finden, aber unsere Regale sind voller anderer Überraschungen.",
-    "categoryEmptyTitle": "Großartiges kommt!",
+    "categoryEmptyTitle": "Wunderschöne Blumen blühen!",
     "categoryEmptyDesc": "Diese Kollektion war so beliebt, dass sie ausverkauft ist! Unsere Designer bereiten gerade die speziellsten Produkte und frische Geschenke nur für Sie vor.",
     "showAll": "Alle Produkte entdecken",
     "popularCategory": "Beliebt: Geburtstag 🎂",
@@ -201,46 +201,50 @@
 
   "seo": {
     "aboutUsPage": {
-      "aboutTitle": "Über uns - Fesfu | Frischeste Blumen und Geschenke",
-      "aboutDescription": "Entdecken Sie die Geschichte, Mission und Werte von Fesfu. Wir widmen uns der Bereitstellung der höchsten Qualität an Blumen und Geschenkerlebnissen für unsere Kunden. Wir machen den Unterschied mit schneller Lieferung und exzellentem Kundenservice."
+      "aboutTitle": "Über Uns - Fesfu UK | Londons Führender Marktplatz",
+      "aboutDescription": "Von einem lokalen Blumenladen zum schnellsten Online-Marktplatz Londons. Wir liefern Blumen, Technik, Mode und Gourmet-Essen mit Lieferung am selben Tag."
     },
     "homePage": {
-      "homeTitle": "Frische Blumen und besondere Geschenke - Fesfu London",
-      "locationTitle": "London - Frischeste Blumen und besondere Geschenke | Fesfu",
-      "homeDescription": "Wir liefern Londons frischeste Blumen und besondere Geschenke noch am selben Tag zu Ihrer Tür. Entdecken Sie perfekte Geschenkoptionen für Geburtstage, Jahrestage, Heiratsanträge und andere besondere Momente."
+      "homeTitle": "Fesfu UK | Marktplatz mit Lieferung am Selben Tag - London",
+      "locationTitle": "Kaufen Sie Blumen, Technik & Geschenke in London | Fesfu UK",
+      "homeDescription": "Londons beliebtester Marktplatz. Kaufen Sie frische Blumen, Elektronik, Bücher, Mode und Geschenke. Bestellen Sie bis 18:00 Uhr für garantierte Lieferung am selben Tag."
     },
     "contactPage": {
-      "contactTitle": "Kontakt - Fesfu | Kontaktieren Sie uns",
-      "contactDescription": "Kontaktieren Sie uns bei Fragen, Anregungen oder Beschwerden. Bei Fesfu helfen wir Ihnen gerne. Sie können verschiedene Kontaktkanäle nutzen, um uns zu erreichen."
+      "contactTitle": "Kontakt | Fesfu Kundenservice 24/7",
+      "contactDescription": "Brauchen Sie Hilfe bei Ihrer Bestellung? Kontaktieren Sie das Fesfu-Support-Team für Fragen zu Lieferungen, Rücksendungen oder um Verkäufer zu werden. Wir sind hier, um zu helfen."
     },
     "faqPage": {
-      "faqTitle": "Häufig gestellte Fragen - Fesfu",
-      "faqDescription": "Entdecken Sie häufig gestellte Fragen über Fesfu. Erfahren Sie mehr über Bestellungen, Lieferung, Rückgaberichtlinien und andere wichtige Themen. Finden Sie schnelle und einfache Antworten auf Ihre Fragen."
+      "faqTitle": "Hilfe & FAQ - Fesfu Marktplatz UK",
+      "faqDescription": "Finden Sie schnelle Antworten zu Lieferzeiten, Rückgaberichtlinien für Elektronik und verderbliche Waren sowie Zahlungsmethoden. Ihr Leitfaden zum Einkaufen auf Fesfu."
     },
     "favouritesPage": {
-      "title": "Meine Favoriten - Fesfu | Produkte, die Ihnen gefallen",
-      "description": "Speichern Sie Ihre Favoriten und greifen Sie einfach auf Ihre Lieblingsblumen, Geschenke und andere Produkte zu. Mit Fesfu können Sie Ihre Lieblingsprodukte mit einem Klick kaufen."
+      "title": "Meine Wunschliste | Fesfu - Für Später Speichern",
+      "description": "Erstellen Sie Ihre perfekte Einkaufsliste. Speichern Sie Ihre Lieblingsblumen, Gadgets, Bücher und Modeartikel, um sie später mit einem Klick zu kaufen."
     },
     "legalPage": {
-      "title": "Rechtliche Informationen - Fesfu | Datenschutzrichtlinie und Nutzungsbedingungen",
-      "description": "Erfahren Sie detaillierte Informationen über die Datenschutzrichtlinie, Nutzungsbedingungen und Cookie-Richtlinie von Fesfu. Erfahren Sie, wie Ihre persönlichen Daten geschützt werden und Ihre Rechte bei der Nutzung unserer Plattform.",
-      "hakkindaDetayliBilgi": "detaillierte Informationen über."
+      "title": "Rechtliches & Datenschutz | Fesfu UK",
+      "description": "Transparente Bedingungen für einen fairen Marktplatz. Lesen Sie unsere Datenschutzrichtlinie, Verbraucherrechte und Erstattungsregeln für digitale und verderbliche Waren.",
+      "detailedInfo": "detaillierte Informationen über."
     },
     "myOrdersPage": {
-      "title": "Meine Bestellungen - Fesfu | Bestellverfolgung und Verlauf",
-      "description": "Sehen Sie Ihre vergangenen Bestellungen ein, überprüfen Sie Bestelldetails und verfolgen Sie den Status Ihrer Bestellungen. Verwalten Sie alle Ihre Bestellungen einfach mit Fesfu."
+      "title": "Meine Bestellung Verfolgen | Fesfu UK",
+      "description": "Bestellverlauf anzeigen und Lieferungen live verfolgen. Überprüfen Sie den Status Ihres Blumenstraußes, Ihrer Elektronik oder Modeartikel in Echtzeit."
     },
     "registerCourierPage": {
-      "title": "Kurierbewerbung - Fesfu | Werden Sie Kurier",
-      "description": "Treten Sie dem Kurierprogramm von Fesfu bei und verdienen Sie zusätzliches Einkommen mit flexiblen Arbeitszeiten. Erfahren Sie mehr über den Bewerbungsprozess für Kuriere und bewerben Sie sich jetzt."
+      "title": "Kurier-Jobs London | Treten Sie dem Fesfu-Lieferteam Bei",
+      "description": "Fahren Sie mit Fesfu. Verdienen Sie wettbewerbsfähiges Einkommen durch Lieferung von Blumen, Essen und Paketen in ganz London. Flexible Arbeitszeiten, sofortige Auszahlungen. Jetzt bewerben."
     },
     "registerPage": {
-      "title": "Registrieren - Fesfu | Neues Konto erstellen",
-      "description": "Registrieren Sie sich bei Fesfu und erhalten Sie Zugang zu den frischesten Blumen und besonderen Geschenken. Beginnen Sie jetzt mit einem schnellen und einfachen Registrierungsprozess einzukaufen."
+      "title": "Registrieren | Treten Sie dem Fesfu Marktplatz Bei",
+      "description": "Erstellen Sie ein kostenloses Konto, um exklusive Angebote freizuschalten. Kaufen Sie Tausende von Produkten lokaler und globaler Marken mit schnellem Checkout und sicherer Zahlung."
     },
     "vendorRegistrationPage": {
-      "title": "Verkäuferbewerbung - Fesfu | Eröffnen Sie Ihren Shop",
-      "description": "Eröffnen Sie Ihren Shop auf der Fesfu-Plattform und erreichen Sie einen breiten Kundenstamm. Erfahren Sie mehr über den Bewerbungsprozess für Verkäufer und bewerben Sie sich jetzt."
+      "title": "Auf Fesfu Verkaufen | Werden Sie Verkäuferpartner",
+      "description": "Erweitern Sie Ihr Geschäft mit Fesfu. Erreichen Sie Millionen von Londoner Kunden durch den Verkauf von Blumen, Elektronik, Lebensmitteln oder Mode. Niedrige Provisionen, hoher Support."
+    },
+    "productDetailPage": {
+      "defaultTitle": "Online Einkaufen | Fesfu UK Marktplatz",
+      "defaultDescription": "Entdecken Sie unsere exklusive Kollektion. Schnelle Lieferung innerhalb Londons und sichere Zahlungsoptionen."
     }
   },
 
@@ -289,8 +293,29 @@
   },
 
   "FAQ": {
-    "faqTitle": "Häufig gestellte Fragen",
-    "faqDescription": "Was Sie wissen möchten."
+    "faqTitle": "Häufig Gestellte Fragen",
+    "faqDescription": "Finden Sie Antworten auf Ihre Fragen zu Bestellungen, Lieferung und Zahlung.",
+    "items": [{
+        "q": "Wie kann ich meine Bestellung verfolgen?",
+        "a": "Sie können den aktuellen Status Ihrer Bestellung im Menü 'Meine Bestellungen' nach der Anmeldung verfolgen."
+      },
+      {
+        "q": "In welche Gebiete liefern Sie?",
+        "a": "Wir liefern derzeit nur innerhalb von London."
+      },
+      {
+        "q": "Gibt es Lieferung am selben Tag?",
+        "a": "Ja, Bestellungen vor 18:00 Uhr werden am selben Tag geliefert."
+      },
+      {
+        "q": "Sind die Blumen und Produkte frisch?",
+        "a": "Ja, frische Blumen werden täglich jeden Morgen von der Auktion bezogen, und verderbliche Lebensmittel werden frisch zubereitet."
+      },
+      {
+        "q": "Welche Zahlungsmethoden gibt es?",
+        "a": "Sie können sicher per Kredit-/Debitkarte bezahlen (gesichert durch Stripe-Infrastruktur)."
+      }
+    ]
   },
 
   "favorites": {
@@ -318,50 +343,64 @@
   },
 
   "legal": {
-    "legalTitle": "Cookie-Richtlinie",
+    "legalTitle": "Rechtliches & Versprechen",
+    "pageNotFound": "Dokument Nicht Gefunden",
+    "pageNotFoundDesc": "Das gesuchte rechtliche Dokument wurde verschoben oder aktualisiert.",
+    "backToHome": "Zurück zur Startseite",
+    "backToHome2": "Fesfu Rechtsabteilung",
     "privacyPolicy": {
-      "legalPageContentTitle": "Datenschutzrichtlinie",
-      "first": "1. Datenverantwortlicher",
-      "firstDesc": "Als Fesfu UK legen wir höchsten Wert auf die Sicherheit Ihrer persönlichen Daten im Rahmen des Datenschutzgesetzes Nr. 6698 (KVKK) und der Europäischen Datenschutz-Grundverordnung (DSGVO).",
-      "second": "2. Gesammelte Daten und Zwecke",
+      "legalPageContentTitle": "Datenschutz & Datensicherheit",
+      "first": "1. Verantwortlicher & Ihr Vertrauen",
+      "firstDesc": "Fesfu UK arbeitet in voller Übereinstimmung mit dem UK Data Protection Act 2018 und der UK GDPR. Wir schätzen das Vertrauen, das Sie in uns setzen, um Ihre Emotionen zu übermitteln, und wir verpflichten uns, Ihre persönlichen Daten zu schützen.",
+      "second": "2. Erhobene Daten und Zwecke",
       "secondDesc": {
-        "part1": "Identität und Kontakt: Ihr Name, Nachname, E-Mail und Telefonnummer werden für Bestellbestätigungen und Rechnungstransaktionen verarbeitet.",
-        "part2": "Lieferinformationen: Die Adresse und Kontaktinformationen des Empfängers werden mit dem Kurier und dem entsprechenden Geschäft (Verkäufer) zum Zweck der Lieferung der Bestellung geteilt.",
-        "part3": "Transaktionssicherheit: IP-Adresse und Geräteinformationen werden zur Betrugserkennung und für gesetzliche Verpflichtungen gespeichert."
+        "part1": "Identität & Kontakt: Name, E-Mail und Telefonnummer werden ausschließlich für die Auftragsabwicklung, digitale Quittungen und Lieferupdates verarbeitet.",
+        "part2": "Lieferinformationen: Empfängerdaten werden NUR mit unserem geprüften Kurierteam und dem spezifischen Verkäufer geteilt, der Ihre Bestellung ausführt.",
+        "part3": "Transaktionssicherheit: IP-Adresse und Gerätedaten werden protokolliert, um Betrug zu verhindern und eine sichere Einkaufsumgebung zu gewährleisten."
       },
       "third": "3. Zahlungssicherheit",
-      "thirdDesc": "Ihre Kreditkarteninformationen werden niemals auf unseren Servern gespeichert. Zahlungstransaktionen werden direkt über die globale Zahlungsinfrastruktur Stripe über eine SSL-zertifizierte verschlüsselte Verbindung durchgeführt."
+      "thirdDesc": "Wir speichern KEINE Kreditkartendaten. Alle Zahlungen werden über die verschlüsselte Infrastruktur von Stripe abgewickelt, was Sicherheit auf Bankniveau mit 3D Secure gewährleistet."
     },
     "termsOfUse": {
-      "title": "Fernabsatzvertrag",
-      "first": "1. Parteien",
-      "firstDesc": "Dieser Vertrag wurde zwischen dem KÄUFER, der über die Plattform bestellt, und dem VERKÄUFER (Geschäft), der das Produkt liefert, unter Vermittlung von Fesfu UK geschlossen.",
-      "second": "2. Ausnahme vom Widerrufsrecht (Wichtig)",
-      "secondDesc": "ACHTUNG: Gemäß der Verordnung; \"Bei Verträgen über die Lieferung von Waren, die schnell verderben können oder deren Verfallsdatum überschritten werden kann\" (Frische Blumen, Schokolade, Kuchen usw.) KANN DAS WIDERRUFSRECHT NICHT AUSGEÜBT WERDEN.",
-      "secondDesc_part2": "Wenn das Produkt jedoch zum Zeitpunkt der Lieferung beschädigt, verwelkt oder völlig anders als das Bild ist, kann der Käufer die Lieferung ablehnen und eine Rückgabe beantragen.",
-      "third": "3. Lieferprozess",
-      "thirdDesc": "Bestellungen werden zum vom Käufer gewählten Datum und Zeitraum geliefert. Die Plattform ist für Verzögerungen verantwortlich, außer bei höherer Gewalt (Wetterbedingungen, Verkehrsunfälle usw.)."
+      "title": "Nutzungsbedingungen & Zufriedenheitsgarantie",
+      "first": "1. Parteien & Rolle der Plattform",
+      "firstDesc": "Diese Vereinbarung besteht zwischen Ihnen (KÄUFER) und dem Verkäufer, vermittelt durch Fesfu UK als HANDELSVERTRETER. Wir gewährleisten Transparenz und Qualität bei jeder Transaktion.",
+      "second": "2. Rückgaben, Erstattungen & Unser Versprechen",
+      "secondDesc": "RÜCKGABERICHTLINIE NACH KATEGORIE:",
+      "secondDesc_part2": "A) VERDERBLICHE WAREN (Blumen, Lebensmittel): Rechtlich gilt das Widerrufsrecht nicht. JEDOCH, wenn Ihre Bestellung beschädigt oder verwelkt ankommt, kontaktieren Sie uns bitte innerhalb von 24 STUNDEN mit einem Foto. Wir werden mit dem Verkäufer verifizieren und es in Ordnung bringen (Erstattung oder Neulieferung).",
+      "secondDesc_part3": "B) HALTBARE WAREN (Elektronik, Bücher): Sie haben das gesetzliche Recht, diese Artikel innerhalb von 14 Tagen nach Lieferung zurückzugeben. Artikel müssen unbenutzt, in Originalverpackung und wiederverkaufbar sein.",
+      "third": "3. Lieferung & Annahmezeiten",
+      "thirdDesc": "Für 'Lieferung am selben Tag' in London müssen Bestellungen vor 18:00 Uhr aufgegeben werden. Obwohl wir nach Perfektion streben, ist Fesfu nicht haftbar für Verzögerungen durch extreme höhere Gewalt (z.B. schweres Wetter), wir werden jedoch immer mit Ihnen kommunizieren."
     },
     "termsOfCookies": {
       "title": "Cookie-Richtlinie",
       "firstTerm": "1. Was ist ein Cookie?",
-      "firstTermDesc": "Cookies sind kleine Textdateien, die von den von Ihnen besuchten Websites in Ihrem Browser gespeichert werden und uns helfen, Sie zu erkennen. Einige Cookies sind für das Funktionieren unserer Website obligatorisch.",
-      "secondTerm": "2. Welche Cookies verwenden wir?",
+      "firstTermDesc": "Cookies sind kleine Textdateien, die in Ihrem Browser gespeichert werden. Wir verwenden sie, um Ihr Einkaufserlebnis reibungslos zu gestalten, Ihre Überraschungsgeschenke im Warenkorb zu behalten und sicherzustellen, dass die Website schnell funktioniert.",
+      "secondTerm": "2. Arten von Cookies, die wir verwenden",
       "secondTermDesc": {
-        "first": "Essentielle Cookies",
-        "firstDesc": "Sie sind notwendig, um die Produkte in Ihrem Warenkorb zu speichern, sich in Ihr Konto einzuloggen und für die Zahlungssicherheit. Diese können nicht deaktiviert werden.",
+        "first": "Wesentliche Cookies",
+        "firstDesc": "Strikt notwendig für Zahlungsabwicklung und sichere Anmeldung. Ohne diese kann der Shop nicht funktionieren.",
         "second": "Funktionale Cookies",
-        "secondDesc": "Sie werden für Ihre Spracheinstellungen, Adressdatensätze und Funktionen wie \"Angemeldet bleiben\" verwendet.",
-        "third": "Analytische Cookies",
-        "thirdDesc": "Sie helfen uns, unseren Service zu verbessern, indem sie anonym analysieren, wie Sie unsere Website nutzen (welche Seiten Sie besuchen)."
+        "secondDesc": "Merken sich Ihre Präferenzen (Sprache, Währung), um Ihnen Zeit zu sparen.",
+        "third": "Leistung & Analyse",
+        "thirdDesc": "Helfen uns zu verstehen, welche Produkte Sie am meisten lieben, damit wir unseren Service verbessern können."
       },
-      "thirdTerm": "3. Wie verwalte ich Cookies?",
-      "thirdTermDesc": "Sie können Cookies jederzeit über das Einstellungsmenü Ihres Browsers löschen oder blockieren. Das Blockieren essentieller Cookies kann jedoch die Funktion des Warenkorbs und der Zahlungsfunktionen beeinträchtigen."
+      "thirdTerm": "3. Cookies verwalten",
+      "thirdTermDesc": "Sie können Cookies über die Browsereinstellungen verwalten. Das Blockieren wesentlicher Cookies kann Sie daran hindern, Ihre Bestellung abzuschließen."
     },
-    "pageNotFound": "Seite nicht gefunden",
-    "pageNotFoundDesc": "Der gesuchte Inhalt existiert nicht.",
-    "backToHome": "← Zurück zur Startseite",
-    "backToHome2": "Fesfu UK Rechtsteam"
+    "membershipAgreement": {
+      "title": "Mitgliedschaftsvereinbarung",
+      "first": "1. Geltungsbereich der Vereinbarung",
+      "firstDesc": "Durch die Erstellung eines Kontos bei Fesfu UK stimmen Sie diesen Bedingungen zu. Sie müssen mindestens 18 Jahre alt sein, um Mitglied zu werden.",
+      "second": "2. Benutzerverantwortlichkeiten",
+      "secondDesc": {
+        "part1": "Kontosicherheit: Sie sind dafür verantwortlich, Ihr Passwort vertraulich zu halten. Fesfu haftet nicht für unbefugten Zugriff aufgrund schwacher Passwörter.",
+        "part2": "Richtigkeit: Sie erklären, dass alle bei der Registrierung angegebenen Informationen (Name, Adresse, Telefon) korrekt und aktuell sind.",
+        "part3": "Verbotenes Verhalten: Benutzer dürfen keine Preise manipulieren, Bots verwenden oder versuchen, die Plattform zu hacken. Solche Handlungen führen zu einer sofortigen Sperrung."
+      },
+      "third": "3. Kündigung des Kontos",
+      "thirdDesc": "Fesfu behält sich das Recht vor, Konten zu sperren, die gegen diese Bedingungen verstoßen, Betrug begehen oder die Erstattungsrichtlinie missbrauchen."
+    }
   },
 
   "myOrders": {
@@ -405,6 +444,7 @@
 
   "profile": {
     "title": "Mein Konto",
+    "badges":" Abzeichen",
     "profileGreetings": "Willkommen, Sie können Ihr Profil und Ihre Bestellungen von hier aus verwalten."
   },
 
@@ -442,18 +482,18 @@
   },
 
   "register": {
-    "passwordForbiddenChars": "Das Passwort enthält verbotene Zeichen. Bitte entferne: ' \" ` \\ ; -- { } < > |",
+    "passwordForbiddenChars": "Das Passwort enthält verbotene Zeichen. Bitte entfernen Sie: ' \" ` \\ ; -- { } < > |",
     "passwordWeak": "Ihr Passwort ist nicht stark genug!",
     "notifyPasswordRequirements": "Bitte erfüllen Sie die Passwortanforderungen.",
     "acceptTerms": "Bitte akzeptieren Sie die Vereinbarung!",
     "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "joinUs": "Treten Sie uns bei",
+    "joinUs": "Werden Sie Mitglied",
     "createAccount": "Erstellen Sie schnell ein Konto",
     "securityMeasures": "Sicherheitsanforderungen",
-    "userAgrement1": "Ich habe die Benutzervereinbarung gelesen ",
-    "userAgrement2": "und akzeptiere sie.",
-    "btn1": "Wird gespeichert...",
-    "btn2": "Konto erstellen",
+    "userAgrement1": "Ich akzeptiere die ",
+    "userAgrement2": "Mitgliedschaftsvereinbarung & Datenschutzrichtlinie.",
+    "btn1": "Speichern...",
+    "btn2": "Konto Erstellen",
     "alreadyAccount1": "Haben Sie bereits ein Konto?",
     "alreadyAccount2": "Anmelden"
   },
@@ -579,59 +619,60 @@
   },
 
   "termsModal": {
-    "agree": "Ich habe gelesen und akzeptiere",
+    "agree": "Ich habe diese Bedingungen gelesen und stimme ihnen zu",
+    "close": "Schließen",
     "customers": {
-      "title": "Fernabsatz- und Dienstleistungsvertrag",
+      "title": "Fernabsatz- & Marktplatz-Dienstleistungsvereinbarung",
       "first": {
-        "title": "1. EINFÜHRUNG UND PARTEIEN",
-        "desc": "Diese Allgemeinen Geschäftsbedingungen regeln den Verkauf von Waren, die Ihnen (\"Käufer\") vom Verkäufer über die Plattform gemacht werden. Mit der Bestellung stimmen Sie zu, an diese Bedingungen gemäß dem Verbraucherrechtsgesetz 2015 gebunden zu sein."
+        "title": "1. EINLEITUNG & ROLLE DER PLATTFORM",
+        "desc": "Diese Bedingungen regeln den Kauf von Waren über Fesfu UK ('Plattform'). Fesfu handelt als HANDELSVERTRETER (Vermittler) für Drittanbieter. Mit Ihrer Bestellung bestätigen Sie, dass der Kaufvertrag direkt zwischen Ihnen (Käufer) und dem Verkäufer geschlossen wird, vermittelt durch Fesfu. Wir sind verantwortlich für die Transaktionsabwicklung und Lieferkoordination."
       },
       "second": {
-        "title": "2. LIEFERRICHTLINIE",
-        "desc": "Wir zielen darauf ab, Produkte innerhalb des bei der Kasse ausgewählten Zeitfensters zu liefern. Wenn der Käufer nicht an der Adresse ist, kann der Kurier das Paket aufgrund der Natur verderblicher Produkte (Blumen/Lebensmittel) an einem \"sicheren Ort\" oder beim Nachbarn hinterlassen (UK-Standardpraxis)."
+        "title": "2. LIEFERUNG & HAFTUNG",
+        "desc": "Wir bemühen uns, innerhalb des gewählten Zeitfensters zu liefern. Bei verderblichen Waren (Blumen/Lebensmittel), wenn der Empfänger nicht erreichbar ist, kann der Kurier den Artikel an einem 'Sicheren Ort' oder bei einem Nachbarn hinterlassen (Übliche britische Praxis). Fesfu haftet nicht für fehlgeschlagene Lieferungen aufgrund falscher vom Käufer angegebener Adressen."
       },
       "third": {
-        "title": "3. STORNIERUNG UND RÜCKGABERICHTLINIE",
-        "desc": "Gemäß den Verbrauchervertragsverordnungen 2013 haben Verbraucher in der Regel ein 14-tägiges Widerrufsrecht. JEDOCH: Ausnahme für verderbliche Produkte: Für Waren, die schnell verderben können oder deren Verfallsdatum schnell abläuft (frische Blumen, Pflanzen, Lebensmittelprodukte), gibt es <strong>KEIN STORNIERUNG/WIDERRUFSRECHT. Gemäß dem Verbraucherrechtsgesetz 2015 haben Sie das Recht auf Erstattung oder Umtausch, wenn Produkte zum Zeitpunkt der Lieferung nicht wie beschrieben oder von unzureichender Qualität sind (z.B. zerdrückte Blumen). Sie müssen uns innerhalb von 24 Stunden nach der Lieferung mit fotografischen Beweisen benachrichtigen."
+        "title": "3. STORNIERUNG & RÜCKGABERICHTLINIE (GEMISCHTE WAREN)",
+        "desc": "Gemäß den Consumer Contracts Regulations 2013 variieren die Rechte je nach Kategorie: <br><strong>A) Verderbliche Waren (Blumen, Lebensmittel):</strong> KEIN Widerrufsrecht besteht, es sei denn, der Artikel kommt beschädigt/defekt an. <br><strong>B) Langlebige Waren (Elektronik, Bücher, Mode):</strong> Sie haben ein gesetzliches Recht, innerhalb von 14 Tagen zu stornieren. Artikel müssen unbenutzt in Originalverpackung zurückgesandt werden. <br><strong>Defekte Artikel:</strong> Gemäß dem Consumer Rights Act 2015, wenn ein Artikel nicht der Beschreibung entspricht, haben Sie Anspruch auf Erstattung/Ersatz, wenn dies innerhalb von 24 Stunden mit Fotonachweis gemeldet wird."
       },
       "fifth": {
-        "title": "5. DATENSCHUTZ UND DATENSICHERHEIT",
-        "desc": "Ihre persönlichen Daten (Name, Adresse, Telefon) werden in voller Übereinstimmung mit UK DSGVO und Datenschutzgesetz 2018 verarbeitet. Daten werden nur mit dem Verkäufer und Kurier zum Zweck der Abwicklung Ihrer Bestellung geteilt."
+        "title": "4. DATENSCHUTZ & PRIVATSPHÄRE",
+        "desc": "Ihre personenbezogenen Daten (Name, Adresse) werden in strikter Übereinstimmung mit der UK GDPR und dem Data Protection Act 2018 verarbeitet. Sie werden ausschließlich mit dem relevanten Verkäufer und Kurier geteilt, nur zum Zweck der Auftragserfüllung. Wir verkaufen Ihre Daten niemals an Dritte."
       }
     },
     "courierAgreement": {
-      "title": "Unabhängiger Kurier-Dienstleistungsvertrag",
+      "title": "Unabhängiger Kurierdienst-Vertrag",
       "first": {
-        "title": "1. ARBEITSMETHODE",
-        "desc": "Der Kurier stimmt zu, Dienstleistungen als \"Selbstständiger\", als unabhängiger Auftragnehmer zu erbringen. Diese Vereinbarung macht den Kurier nicht zu einem Mitarbeiter, Arbeiter oder Partner der Plattform. Sie sind für Ihre eigenen Steuern und Sozialversicherungsbeiträge (NI) verantwortlich."
+        "title": "1. STATUS ALS UNABHÄNGIGER AUFTRAGNEHMER",
+        "desc": "Der Kurier stimmt zu, Dienstleistungen als selbstständiger 'Unabhängiger Auftragnehmer' zu erbringen. Diese Vereinbarung begründet KEIN Arbeitgeber-Arbeitnehmer-Verhältnis. Sie sind allein verantwortlich für Ihre eigenen Steuern (HMRC Self Assessment) und Sozialversicherungsbeiträge."
       },
       "second": {
-        "title": "2. SERVICESTANDARDS",
-        "desc": "Der Kurier muss größte Sorgfalt walten lassen, um die ästhetische Integrität verderblicher Produkte (Blumen, Kuchen) zu bewahren. Lieferungen müssen innerhalb der festgelegten Zeitfenster abgeschlossen werden."
+        "title": "2. SERVICESTANDARDS & SORGFALT",
+        "desc": "Der Kurier muss größte Sorgfalt walten lassen, um die Unversehrtheit der Waren zu gewährleisten (insbesondere zerbrechliche Blumen oder Elektronik). Lieferungen müssen innerhalb der zugewiesenen Zeitfenster abgeschlossen werden. Ein Zustellnachweis (Foto/Unterschrift) ist für alle hochwertigen Artikel obligatorisch."
       },
       "third": {
-        "title": "3. DATENSCHUTZ (DSGVO - STRAFTAT)",
-        "titlesub": "STRENGE VERTRAULICHKEITSMITTEILUNG",
-        "desc": "Kundendaten (Adresse, Telefon), die Ihnen übermittelt werden, dienen NUR Lieferzwecken. Gemäß dem Datenschutzgesetz 2018; das Aufzeichnen dieser Daten, das Anrufen/Texten des Kunden aus anderen Gründen als der Lieferung oder das Teilen mit anderen ist eine STRAFTAT. Bei Entdeckung wird der Vertrag gekündigt und rechtliche Schritte eingeleitet."
+        "title": "3. DATENSCHUTZ & STRAFRECHTLICHE HAFTUNG (DSGVO)",
+        "titlesub": "STRIKTE VERTRAULICHKEITSMITTEILUNG",
+        "desc": "Kundendaten (Adresse, Telefon), die Ihnen zur Verfügung gestellt werden, sind NUR FÜR LIEFERZWECKE bestimmt. Gemäß dem Data Protection Act 2018 ist das Speichern dieser Daten, das Kontaktieren des Kunden aus persönlichen Gründen oder das Teilen mit anderen eine STRAFTAT. Jeder Verstoß führt zur sofortigen Vertragsbeendigung und strafrechtlichen Verfolgung."
       }
     },
     "vendorAgreement": {
-      "title": "Verkäufer-Partnerschaftsvertrag",
+      "title": "Verkäufer-Partnerschafts- & Marktplatz-Vereinbarung",
       "first": {
-        "title": "1. PARTEIEN UND ZWECK",
-        "desc": "Diese Vereinbarung besteht zwischen der Plattform und dem Verkäufer (Lieferant). Der Verkäufer gewährt der Plattform das Recht, seine Produkte aufzulisten und zu verkaufen. Das rechtliche Eigentum an den Produkten verbleibt beim Verkäufer, bis der Verkauf abgeschlossen ist."
+        "title": "1. PARTEIEN & ZWECK",
+        "desc": "Diese Vereinbarung erlaubt dem Verkäufer, Produkte auf dem Fesfu-Marktplatz zu listen und zu verkaufen. Der Verkäufer behält das rechtliche Eigentum an den Waren bis zum Verkaufszeitpunkt. Der Verkäufer garantiert, dass er eine rechtmäßige Geschäftseinheit ist, die zum Verkauf dieser Waren im Vereinigten Königreich berechtigt ist."
       },
       "second": {
-        "title": "2. PROVISION UND ZAHLUNGEN",
-        "desc": "Die Plattform erhebt eine Provision von 10% + MwSt. auf den Bruttowert jeder Bestellung. Zahlungen erfolgen wöchentlich. Die Plattform behält sich das Recht vor, Zahlungen bei verdächtigen Transaktionen oder hohen Rücksendequoten zurückzuhalten."
+        "title": "2. PROVISION & ZAHLUNGEN",
+        "desc": "Fesfu erhebt eine Provisionsgebühr (z.B. 10% + MwSt.) auf den Bruttowert jeder bestätigten Bestellung. Auszahlungen werden wöchentlich bearbeitet. Fesfu behält sich das Recht vor, Zahlungen bei hohen Streitraten, Betrugsverdacht oder Vertragsverletzung einzubehalten."
       },
       "third": {
-        "title": "3. PRODUKTHAFTUNG UND KONFORMITÄT",
-        "desc": "Der Verkäufer garantiert, dass alle verkauften Waren dem Warenverkaufsgesetz 1979 und (bei Lebensmittelverkauf) den britischen Lebensmittelsicherheitsstandards entsprechen. Die Kosten für Rücksendungen aufgrund von Produkten schlechter Qualität, falscher Verpackung oder Bildabweichung gehen zu Lasten des Verkäufers."
+        "title": "3. PRODUKTHAFTUNG & COMPLIANCE",
+        "desc": "Der Verkäufer garantiert, dass alle gelisteten Waren dem Sale of Goods Act 1979 und (für Lebensmittel) den britischen Lebensmittelsicherheitsstandards entsprechen. Der Verkäufer ist allein haftbar für Kosten, die durch Rücksendungen aufgrund schlechter Qualität, falscher Beschreibung oder mangelnder Konformität entstehen. Fesfu übernimmt keine Haftung für die Sicherheit/Qualität der Verkäuferprodukte."
       },
       "fourth": {
-        "title": "4. DATENSCHUTZ (DSGVO)",
-        "desc": "Der Verkäufer wird Kundendaten in Übereinstimmung mit UK DSGVO und Datenschutzgesetz 2018 verarbeiten. Daten werden nur für die Bearbeitung von Bestellungen verwendet."
+        "title": "4. DATENVERARBEITUNG (DSGVO)",
+        "desc": "Der Verkäufer stimmt zu, Kundendaten ausschließlich zur Auftragserfüllung gemäß UK GDPR zu verarbeiten. Die Verwendung von Kundendaten für Direktmarketing (Spam) ohne ausdrückliche Zustimmung ist streng verboten und Grund für sofortige Sperrung."
       }
     }
   },
@@ -1100,5 +1141,15 @@
     "noAccount1": "Sie haben noch kein Konto?",
     "noAccount2": "Jetzt registrieren",
     "backToHome": "← Zurück zur Startseite"
+  },
+  "features": {
+    "title1": "Lieferung am Selben Tag",
+    "desc1": "Bestellen Sie bis 18:00 Uhr in London, wir liefern noch heute.",
+    "title2": "Sichere Zahlung",
+    "desc2": "100% sichere Zahlungen über die Stripe-Infrastruktur.",
+    "title3": "Premium-Erlebnis",
+    "desc3": "Sorgfältig vorbereitete Pakete und Geschenkkarten.",
+    "title4": "Live-Verfolgung",
+    "desc4": "Verfolgen Sie Ihren Kurier bis zur Haustür."
   }
 }
