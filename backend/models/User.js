@@ -1,28 +1,5 @@
 const mongoose = require('mongoose');
 
-// Alt Şema: Aktivite Detayları
-const ActivitySchema = new mongoose.Schema({
-  action: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  },
-  ip: String,
-  deviceInfo: {
-    userAgent: String,
-    browser: String,
-    os: String,
-    deviceType: String
-  },
-  location: {
-    city: String,
-    country: String
-  },
-  details: Object 
-});
 
 // Alt Şema: Kayıtlı Adresler (GÜNCELLENDİ)
 const AddressSchema = new mongoose.Schema({
@@ -73,7 +50,7 @@ const UserSchema = new mongoose.Schema({
       return supportedLanguages.includes(cleanLang) ? cleanLang : 'en';
     }
   },
-  activityLog: [ActivitySchema],
+  
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product'

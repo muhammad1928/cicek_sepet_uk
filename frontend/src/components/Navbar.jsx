@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX, FiMenu } from "react-icons/fi";
+import { userRequest } from "../requestMethods"; 
 
 // Alt Bileşenler
 import SearchBar from "./navbar/SearchBar";
@@ -15,7 +16,7 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   
-  const navigate = useNavigate();
+  // navigate kaldırıldı, çünkü window.location.href kullanıyoruz.
   const { clearCart } = useCart();
 
   useEffect(() => {
@@ -32,14 +33,34 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    clearCart();
-    localStorage.removeItem("user");
-    setUser(null);
-    window.dispatchEvent(new Event("user-change"));
-    navigate("/");
-    setIsMobileMenuOpen(false);
-    window.location.reload();
+  // --- SMOOTH LOGOUT ---
+  const handleLogout = async () => {
+    try {
+        // 1. Backend Cookie Temizliği
+        try {
+            await userRequest.post("/auth/logout");
+        } catch (err) {
+            console.error("Logout backend error:", err);
+        }
+
+        // 2. Yapay Gecikme (UX için)
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // 3. Frontend Temizliği
+        clearCart();
+        localStorage.removeItem("user");
+        localStorage.removeItem("favorites");
+        setUser(null);
+        setIsMobileMenuOpen(false);
+
+        // 4. Tam Sayfa Yenileme (En Temiz Yöntem)
+        // navigate("/") yerine bunu kullanıyoruz çünkü Context ve State'leri tamamen sıfırlar.
+        window.location.href = "/";
+
+    } catch (error) {
+        localStorage.removeItem("user");
+        window.location.href = "/";
+    }
   };
 
   return (
@@ -85,10 +106,9 @@ const Navbar = () => {
           <LanguageSelector />
 
           {/* HAMBURGER BUTONU */}
-          {/* DEĞİŞİKLİK: 'ml-2' silindi, 'mr-2' eklendi. Sağdan boşluk vererek sola (içeri) ittik. */}
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-            className="md:hidden p-2 text-gray-600 hover:text-pink-600 transition z-50"
+            className="md:hidden p-2 text-gray-600 hover:text-pink-600 transition z-50 mr-2"
           >
             {isMobileMenuOpen ? <FiX className="text-2xl" /> : <FiMenu className="text-2xl" />}
           </button>

@@ -1,58 +1,63 @@
 const mongoose = require('mongoose');
 
 const LogSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }, // Login değilse null olabilir
-  action: { type: String, required: true }, // Örn: "view_product", "add_to_cart"
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }, 
+  action: { type: String, required: true }, 
   
   // --- KİMLİK & GÜVENLİK ---
-  ip: { type: String },     // Hashlenmiş (Maskelenmiş) IP
-  sessionID: { type: String }, // Misafir kullanıcı takibi için (varsa)
+  ip: { type: String }, 
+  sessionID: { type: String }, 
 
-  // --- LOKASYON (IP'den türetilen) ---
+  // --- LOKASYON ---
   geo: {
-    country: String, // TR, UK, DE
-    city: String,    // Istanbul, London
-    region: String,  // 34, ENG
-    ll: [Number]     // Enlem/Boylam (Harita ısı haritası için)
+    country: String, 
+    city: String, 
+    region: String, 
+    ll: [Number] 
   },
 
-  // --- CİHAZ & TEKNOLOJİ ---
+  // --- CİHAZ & TEKNOLOJİ (DÜZELTİLEN KISIM) ---
   device: {
-    type: String,   // Mobile, Tablet, Desktop, Bot
-    vendor: String, // Apple, Samsung
-    model: String   // iPhone, Galaxy S10
+    // Mongoose'da alan ismine 'type' dersen karışır. 
+    // Bu yüzden { type: String } şeklinde sarmalamamız gerekir.
+    type: { type: String }, 
+    vendor: String, 
+    model: String 
   },
+  
   os: {
-    name: String,    // Windows, iOS, Android
-    version: String  // 10, 14.2
+    name: String, 
+    version: String 
   },
   browser: {
-    name: String,   // Chrome, Safari
-    version: String // 90.0.4430
+    name: String, 
+    version: String 
   },
-  userAgent: String, // Raw data (Yedek)
+  userAgent: String, 
 
-  // --- TRAFİK KAYNAĞI (PAZARLAMA) ---
-  referrer: String, // Sitemize nereden geldi? (Google, Facebook, Direct)
-  utm: {            // Reklam linki parametreleri
-    source: String, // utm_source (google, newsletter)
-    medium: String, // utm_medium (cpc, email)
-    campaign: String// utm_campaign (yaz_indirimleri)
+  // --- TRAFİK KAYNAĞI ---
+  referrer: String, 
+  utm: { 
+    source: String, 
+    medium: String, 
+    campaign: String
   },
 
   // --- İSTEK DETAYLARI ---
   request: {
-    method: String, // GET, POST
-    url: String,    // /api/products/123
+    method: String, 
+    url: String, 
   },
 
-  // --- İŞLEM ÖZEL VERİSİ ---
-  // { productId: "...", cartTotal: 500, errorMsg: "..." }
   metadata: { type: mongoose.Schema.Types.Mixed },
 
 }, { 
-  timestamps: true, // createdAt zamanı otomatik eklenir
-  expireAfterSeconds: 31536000 // 1 Yıl sonra sil (Opsiyonel)
+  timestamps: true, 
+  expireAfterSeconds: 31536000 
 });
+
+// İndeksler (Performans İçin)
+LogSchema.index({ action: 1 });
+LogSchema.index({ createdAt: 1 });
 
 module.exports = mongoose.model('Log', LogSchema);

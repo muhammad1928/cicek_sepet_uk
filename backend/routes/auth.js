@@ -428,16 +428,37 @@ router.post('/reset-password', async (req, res) => {
 });
 
 // =============================================================================
-// 7. ÇIKIŞ YAP (LOGOUT)
+// 7. ÇIKIŞ YAP (LOGOUT) - GÜNCELLENDİ
 // =============================================================================
-router.post("/logout", (req, res) => {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
-  }).status(200).json({
-    message: "auth.logoutSuccess"
-  });
+router.post("/logout", async (req, res) => {
+  try {
+    // 1. Çıkış yapan kullanıcıyı bulmaya çalış (Refresh Token'dan)
+    const refreshToken = req.cookies.refreshToken;
+    
+    if (refreshToken) {
+      // Token'ı çöz ve kullanıcı ID'sini al
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_SEC, async (err, decoded) => {
+        if (!err && decoded && decoded.id) {
+          // LOGLAMA İŞLEMİ BURADA YAPILIYOR
+          await logActivity(decoded.id, 'logout', req);
+        }
+      });
+    }
+
+    // 2. Çerezleri Temizle
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+    }).status(200).json({
+      message: "auth.logoutSuccess"
+    });
+
+  } catch (err) {
+    // Hata olsa bile kullanıcıyı çıkış yaptır, log hatası işlemi bozmasın
+    console.error("Logout Log Error:", err);
+    res.clearCookie("refreshToken").status(200).json({ message: "auth.logoutSuccess" });
+  }
 });
 
 module.exports = router;

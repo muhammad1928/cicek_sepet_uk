@@ -1,10 +1,23 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FiHeart, FiLogOut } from "react-icons/fi";
+import { FiHeart, FiLogOut, FiLoader } from "react-icons/fi"; // FiLoader ekledik
 import { FaStore, FaMotorcycle, FaUserShield } from "react-icons/fa";
 
 const UserActions = ({ user, handleLogout }) => {
   const { t } = useTranslation();
+  const [isLoggingOut, setIsLoggingOut] = useState(false); // Loading state
+
+  const onLogoutClick = async () => {
+      setIsLoggingOut(true);
+      // Kullanıcıya hissettirmek için minimal gecikme (isteğe bağlı)
+      // await new Promise(resolve => setTimeout(resolve, 500)); 
+      
+      // Asıl logout fonksiyonunu çağır
+      await handleLogout(); 
+      // isLoggingOut(false) yapmaya gerek yok çünkü sayfa yönlenecek/yenilenecek
+  };
+
   const userInitial = user?.fullName ? user.fullName[0].toUpperCase() : user?.username ? user.username[0].toUpperCase() : "U";
 
   if (!user) {
@@ -37,7 +50,14 @@ const UserActions = ({ user, handleLogout }) => {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
       </Link>
-      <button onClick={handleLogout} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition"><FiLogOut className="text-xl" /></button>
+      
+      <button 
+        onClick={onLogoutClick} 
+        disabled={isLoggingOut}
+        className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isLoggingOut ? <FiLoader className="text-xl animate-spin text-red-500" /> : <FiLogOut className="text-xl" />}
+      </button>
     </>
   );
 };

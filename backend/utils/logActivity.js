@@ -1,95 +1,78 @@
-const Log = require('../models/Log');
+const Log = require('../models/Log'); // Dosya adının disktekiyle AYNI olduğundan emin ol (Büyük/Küçük harf)
 const crypto = require('crypto');
 const geoip = require('geoip-lite');
-const UAParser = require('ua-parser-js'); // Modern kütüphane
+const UAParser = require('ua-parser-js'); 
+const mongoose = require('mongoose');
 
-/**
- * Gelişmiş Loglama Fonksiyonu (Modern Kütüphaneler ile)
- */
 const logActivity = async (userId, action, req, metadata = {}) => {
   try {
-    // 1. IP ADRESİNİ YAKALA
-    const rawIp = (req.headers['x-forwarded-for'] || '').split(',')[0] || req.socket.remoteAddress || '';
+    // Header Kontrolü
+    const headers = req.headers || {};
+    const rawIp = (headers['x-forwarded-for'] || '').split(',')[0] || req.socket?.remoteAddress || '0.0.0.0';
     
-    // 2. GDPR UYUMLULUĞU: IP HASHLEME
-    // Salt (tuz) olarak JWT_SEC kullanıyoruz ki hash tahmin edilemesin.
-    const secret = process.env.JWT_SEC || 'fallback_secret_key';
+    // IP Hash
+    const secret = process.env.JWT_SEC || 'secret';
     const hashedIp = crypto.createHash('sha256').update(rawIp + secret).digest('hex');
 
-    // 3. COĞRAFİ KONUM BULMA
+    // Geo Location
     const geoLookup = geoip.lookup(rawIp);
     const geoData = {
-        country: geoLookup ? geoLookup.country : 'Unknown',
-        city: geoLookup ? geoLookup.city : 'Unknown',
-        region: geoLookup ? geoLookup.region : 'Unknown',
-        ll: geoLookup ? geoLookup.ll : [] // Enlem, Boylam
+        country: geoLookup?.country || null,
+        city: geoLookup?.city || null,
+        region: geoLookup?.region || null,
+        ll: geoLookup?.ll || []
     };
 
-    // 4. CİHAZ VE TARAYICI ANALİZİ (ua-parser-js ile)
-    const uaString = req.headers['user-agent'] || '';
-    const parser = new UAParser(uaString);
-    const result = parser.getResult(); // { browser, cpu, device, os, engine }
+    // User Agent Parse
+    const uaString = headers['user-agent'] || '';
+    let deviceData = { type: 'Desktop', vendor: 'Generic', model: 'Unknown' };
+    let osData = { name: 'Unknown', version: 'Unknown' };
+    let browserData = { name: 'Unknown', version: 'Unknown' };
 
-    // Cihaz tipini belirle (Mobile, Tablet, Desktop)
-    let deviceType = result.device.type 
-        ? (result.device.type.charAt(0).toUpperCase() + result.device.type.slice(1)) 
-        : 'Desktop'; // Kütüphane desktop'ı undefined dönerse Desktop kabul et
+    try {
+        // UAParser v1/v2 uyumluluğu için basit yapı
+        let parser;
+        try { parser = new UAParser(uaString); } catch(e) { parser = UAParser(uaString); }
+        
+        const result = parser.getResult();
+        
+        if (result?.device?.type) {
+            deviceData.type = result.device.type.charAt(0).toUpperCase() + result.device.type.slice(1);
+        } else if (/bot|crawl|spider|googlebot/i.test(uaString)) {
+            deviceData.type = 'Bot';
+        }
+        
+        if (result?.device?.vendor) deviceData.vendor = result.device.vendor;
+        if (result?.device?.model) deviceData.model = result.device.model;
+        if (result?.os?.name) osData.name = result.os.name;
+        if (result?.browser?.name) browserData.name = result.browser.name;
 
-    // Bot kontrolü (Ekstra güvenlik)
-    if (/bot|crawl|spider|googlebot/i.test(uaString)) {
-        deviceType = 'Bot';
+    } catch (parseErr) {
+        // Parser hatası loglamayı durdurmasın
     }
 
-    // 5. PAZARLAMA VERİLERİ (UTM Parametreleri)
-    const utm = {
-        source: req.query?.utm_source || null,
-        medium: req.query?.utm_medium || null,
-        campaign: req.query?.utm_campaign || null
-    };
+    // User ID Validation
+    const safeUserId = (userId && mongoose.Types.ObjectId.isValid(userId)) ? userId : null;
 
-    // 6. REFERRER (Nereden Geldi?)
-    const referrer = req.headers['referer'] || req.headers['referrer'] || 'Direct';
-
-    // 7. LOGU KAYDET
-    // Hata durumunda sistemi durdurmaması için .catch kullanıyoruz
+    // Async Create (Await kullanmıyoruz ki response süresini uzatmasın, arka planda kaydetsin)
     Log.create({
-        userId: userId || null,
+        userId: safeUserId,
         action,
         ip: hashedIp,
-        sessionID: req.sessionID || null,
-        
         geo: geoData,
-        
-        device: {
-            type: deviceType,
-            vendor: result.device.vendor || 'Generic',
-            model: result.device.model || 'Unknown'
-        },
-        os: {
-            name: result.os.name || 'Unknown',
-            version: result.os.version || 'Unknown'
-        },
-        browser: {
-            name: result.browser.name || 'Unknown',
-            version: result.browser.version || 'Unknown'
-        },
-        userAgent: uaString, // Ham veri yedek
-
-        referrer,
-        utm,
-
+        device: deviceData,
+        os: osData,
+        browser: browserData,
+        userAgent: uaString,
         request: {
             method: req.method,
-            url: req.originalUrl || req.url
+            url: req.originalUrl || req.url || '/'
         },
-
-        metadata // Fiyat, hata kodu vb.
-    }).catch(err => {
-        console.error("LOG WRITE ERROR:", err.message);
-    });
+        metadata
+    }).catch(err => console.error("Log Write Error:", err.message));
 
   } catch (err) {
-    console.error("Logactivity System Error:", err);
+    console.error("Log System Error:", err.message);
   }
 };
 

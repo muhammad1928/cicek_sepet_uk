@@ -1,16 +1,17 @@
 Frontend/
 ├── public/
+│
 │   ├── favicons/
 │   │   ├── apple-touch-icon.png
 │   │   ├── favicon-16x16.png
 │   │   ├── favicon-32x32.png
 │   │   └── favicon.ico
+│   │
 │   ├── robots.txt
 │   └── vite.svg
 │
 ├── src/
 │   ├── assets/
-│   │
 │   │
 │   ├── data/
 │   │   ├──  regions.js
@@ -18,6 +19,27 @@ Frontend/
 │   │
 │   ├── components/
 │   │   ├── admin/
+│   │   │   ├── adminComponents/
+│   │   │   │   └── AdminPanelHeader.jsx
+│   │   │   │
+│   │   │   ├── adminOrderComponents/
+│   │   │   │   ├── OrderCard.jsx
+│   │   │   │   ├── OrderFilters.jsx
+│   │   │   │   ├── OrderMetadata.jsx
+│   │   │   │   └── OrderStats.jsx
+│   │   │   │
+│   │   │   ├── adminUserComponents/
+│   │   │   │   ├── RoleChangeModal.jsx
+│   │   │   │   ├── UserDetailModal.jsx
+│   │   │   │   ├── UserFilters.jsx
+│   │   │   │   └── UserTable.jsx
+│   │   │   │
+│   │   │   ├── adminProductsComponent/
+│   │   │   │   ├── ProductFilters.jsx
+│   │   │   │   ├── ProductCard.jsx
+│   │   │   │   ├── ProductList.jsx
+│   │   │   │   └── ProductForm.jsx
+│   │   │   │
 │   │   │   ├── AdminApplications.jsx
 │   │   │   ├── AdminCoupons.jsx
 │   │   │   ├── AdminDashboard.jsx
@@ -27,18 +49,6 @@ Frontend/
 │   │   │   ├── AdminUsers.jsx
 │   │   │   ├── ApplicationDetailsModal.jsx
 │   │   │   └── UserActivityModal.jsx
-│   │   │
-│   │   ├── adminComponents/
-│   │   │   └── AdminPanelHeader.jsx
-│   │   │
-│   │   ├── adminOrderComponents/
-│   │   │   ├── OrderCard.jsx
-│   │   │   ├── OrderFilters.jsx
-│   │   │   ├── OrderMetadata.jsx
-│   │   │   └── OrderStats.jsx
-│   │   │
-│   │   ├── adminUserComponents/
-│   │   │   (Bu klasör boş görünüyor)
 │   │   │
 │   │   ├── cartSidebar/
 │   │   │   ├── CartItemList.jsx
@@ -171,6 +181,7 @@ backend/
 │   ├── upload.js            # Resim yükleme işlemleri (Cloudinary/S3 vb.)
 │   ├── users.js             # Kullanıcı profili yönetimi
 │   ├── sitemap.js           # 
+│   ├── log.js           # 
 │   └── verifyToken.js       # Güvenlik katmanı (Middleware - JWT kontrolü)
 │
 ├── utils/                   # Yardımcı Araçlar ve Fonksiyonlar
