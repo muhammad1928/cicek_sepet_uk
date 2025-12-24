@@ -1126,7 +1126,9 @@
     "login": "Anmelden",
     "register": "Registrieren",
     "viewCart": "Warenkorb anzeigen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "loggingOut": "Abmelden",
+    "byebye": "Auf Wiedersehen!"
   },
   "login": {
     "welcome": "Willkommen",

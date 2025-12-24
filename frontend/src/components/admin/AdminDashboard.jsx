@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import { publicRequest, userRequest } from "../../requestMethods";
-import { FiUsers, FiShoppingBag, FiBox, FiActivity } from "react-icons/fi";
 
-// --- GRAFİK KÜTÜPHANELERİ ---
+// --- BİLEŞENLER (Klasör ismi düzeltildi: AdminDashboardcomponents) ---
+import DashboardHeader from "./AdminDashboardComponents/DashboardHeader";
+import StatsGrid from "./AdminDashboardComponents/StatsGrid";
+import OrderAnalysisSection from "./AdminDashboardComponents/OrderAnalysisSection";
+import TrafficAnalysisSection from "./AdminDashboardComponents/TrafficAnalysisSection";
+import UserAnalysisSection from "./AdminDashboardComponents/UserAnalysisSection";
+import SearchAnalysisSection from "./AdminDashboardComponents/SearchAnalysisSection"; // YENİ EKLENDİ
+
+// --- CHART.JS KONFIGURASYONU ---
 import {
   Chart as ChartJS,
   ArcElement,
@@ -13,82 +20,79 @@ import {
   BarElement,
   PointElement,
   LineElement,
-  Title
+  Title,
+  Filler
 } from 'chart.js';
-import { Doughnut, Line, Bar } from 'react-chartjs-2';
 
-// Chart.js Kaydı
 ChartJS.register(
-  ArcElement, 
-  Tooltip, 
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Title
+  ArcElement, Tooltip, Legend, CategoryScale, LinearScale, 
+  BarElement, PointElement, LineElement, Title, Filler
 );
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
-    totalProducts: 0
-  });
   const [loading, setLoading] = useState(true);
-
-  // --- GRAFİK STATE'LERİ ---
+  
+  // --- STATE'LER ---
+  const [stats, setStats] = useState({ totalUsers: 0, totalOrders: 0, totalRevenue: 0, totalProducts: 0 });
+  
+  // Grafik Verileri State'leri
   const [statusChartData, setStatusChartData] = useState(null);
   const [revenueChartData, setRevenueChartData] = useState(null);
   const [userRoleChartData, setUserRoleChartData] = useState(null);
   const [userGrowthChartData, setUserGrowthChartData] = useState(null);
+  const [trafficChartData, setTrafficChartData] = useState(null);
+  const [topProducts, setTopProducts] = useState([]);
+  
+  // YENİ: Arama Analizi State'leri
+  const [searchChartData, setSearchChartData] = useState(null);
+  const [topSearchTerms, setTopSearchTerms] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. TOKEN'I AL (LocalStorage'dan)
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = user?.accessToken;
-
-        // 2. HEADER AYARLA (Backend'e "Ben Adminim" demek için)
-        const config = {
-          headers: { token: `Bearer ${token}` }
-        };
-
-        // 3. İSTEKLERİ AT (Config ile birlikte)
-        const [usersRes, ordersRes, productsRes] = await Promise.all([
-          userRequest.get("/users"),   // <--- TOKEN EKLENDİ
-          userRequest.get("/orders"),  // <--- TOKEN EKLENDİ
-          publicRequest.get("/products")         // (Public olabilir ama token zarar vermez)
+        // 1. TÜM VERİLERİ ÇEK
+        const [usersRes, ordersRes, productsRes, logsRes] = await Promise.all([
+          userRequest.get("/users"),
+          userRequest.get("/orders"),
+          publicRequest.get("/products"),
+          userRequest.get("/logs")
         ]);
 
         const users = usersRes.data;
         const orders = ordersRes.data;
-        const revenue = orders.reduce((acc, o) => acc + (o.status !== "İptal" ? o.totalAmount : 0), 0);
+        const products = productsRes.data;
+        const logs = logsRes.data;
 
+        // --- İSTATİSTİK HESAPLAMALARI ---
+        const revenue = orders.reduce((acc, o) => acc + (o.status !== "İptal" ? o.totalAmount : 0), 0);
         setStats({
           totalUsers: users.length,
           totalOrders: orders.length,
           totalRevenue: revenue,
-          totalProducts: productsRes.data.length
+          totalProducts: products.length
         });
 
-        // --- GRAFİK HESAPLAMALARI ---
+        // --- TARİH HELPER (Son 7 Gün) ---
+        const last7Days = [...Array(7)].map((_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          return d.toLocaleDateString('tr-TR');
+        }).reverse();
 
-        // A) Sipariş Durumu (Pasta)
+        // -------------------------------------------------
+        // A) SİPARİŞ DURUM DAĞILIMI
+        // -------------------------------------------------
         const statusCounts = { "Sipariş Alındı": 0, "Hazırlanıyor": 0, "Yola Çıktı": 0, "Teslim Edildi": 0, "İptal": 0 };
         orders.forEach(order => {
            if (order.status === "Sipariş Alındı") statusCounts["Sipariş Alındı"]++;
-           else if (order.status === "Hazırlanıyor" || order.status === "Hazır") statusCounts["Hazırlanıyor"]++;
-           else if (order.status === "Yola Çıktı" || order.status === "Dağıtımda" || order.status === "Kurye Yolda") statusCounts["Yola Çıktı"]++;
+           else if (["Hazırlanıyor", "Hazır"].includes(order.status)) statusCounts["Hazırlanıyor"]++;
+           else if (["Yola Çıktı", "Dağıtımda", "Kurye Yolda"].includes(order.status)) statusCounts["Yola Çıktı"]++;
            else if (order.status === "Teslim Edildi") statusCounts["Teslim Edildi"]++;
-           else if (order.status === "İptal" || order.status === "İptal Talebi") statusCounts["İptal"]++;
+           else if (["İptal", "İptal Talebi"].includes(order.status)) statusCounts["İptal"]++;
         });
 
         setStatusChartData({
-          labels: ['Sipariş Alındı', 'Hazırlanıyor', 'Yola Çıktı', 'Teslim Edildi', 'İptal'],
+          labels: Object.keys(statusCounts),
           datasets: [{
             data: Object.values(statusCounts),
             backgroundColor: ['#3b82f6', '#eab308', '#a855f7', '#22c55e', '#ef4444'],
@@ -96,13 +100,9 @@ const AdminDashboard = () => {
           }],
         });
 
-        // B) Günlük Ciro (Son 7 Gün)
-        const last7Days = [...Array(7)].map((_, i) => {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            return d.toLocaleDateString('tr-TR');
-        }).reverse();
-
+        // -------------------------------------------------
+        // B) GÜNLÜK CİRO
+        // -------------------------------------------------
         const dailyRevenue = last7Days.map(date => {
             return orders
                 .filter(o => new Date(o.createdAt).toLocaleDateString('tr-TR') === date && o.status !== 'İptal')
@@ -115,20 +115,74 @@ const AdminDashboard = () => {
               label: 'Günlük Ciro (£)',
               data: dailyRevenue,
               borderColor: '#db2777',
-              backgroundColor: 'rgba(219, 39, 119, 0.2)',
+              backgroundColor: 'rgba(219, 39, 119, 0.1)',
               tension: 0.4,
               fill: true,
-              pointBackgroundColor: '#fff',
-              pointBorderColor: '#db2777',
-              pointRadius: 5
+              pointBackgroundColor: '#db2777'
             }]
         });
 
-        // C) Kullanıcı Rolleri
-        const roleCounts = { customer: 0, vendor: 0, courier: 0, admin: 0 };
-        users.forEach(u => {
-            if (roleCounts[u.role] !== undefined) roleCounts[u.role]++;
+        // -------------------------------------------------
+        // C) TRAFİK VE ÜRÜN ANALİZİ (LOGLARDAN)
+        // -------------------------------------------------
+        const dailyTraffic = last7Days.map(date => {
+            return logs.filter(l => new Date(l.createdAt).toLocaleDateString('tr-TR') === date).length;
         });
+
+        setTrafficChartData({
+            labels: last7Days,
+            datasets: [{
+                label: 'Sistem Aksiyonu',
+                data: dailyTraffic,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4
+            }]
+        });
+
+        const productViews = {};
+        logs.filter(l => l.action === 'view_product').forEach(l => {
+            const name = l.metadata?.productName || "Bilinmeyen Ürün";
+            productViews[name] = (productViews[name] || 0) + 1;
+        });
+        const sortedProducts = Object.entries(productViews).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        setTopProducts(sortedProducts);
+
+        // -------------------------------------------------
+        // D) ARAMA ANALİZİ (YENİ EKLENDİ)
+        // -------------------------------------------------
+        const searchTerms = {};
+        logs.filter(l => l.action === 'search_query').forEach(l => {
+            const term = l.metadata?.searchTerm?.toLowerCase() || "bilinmiyor";
+            searchTerms[term] = (searchTerms[term] || 0) + 1;
+        });
+        
+        // En çok aranan 5 kelimeyi al
+        const sortedSearchTerms = Object.entries(searchTerms)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        setTopSearchTerms(sortedSearchTerms);
+
+        setSearchChartData({
+            labels: sortedSearchTerms.map(([term]) => term),
+            datasets: [{
+                label: 'Aranma Sayısı',
+                data: sortedSearchTerms.map(([, count]) => count),
+                backgroundColor: '#a855f7',
+                borderRadius: 4,
+                barThickness: 20,
+                indexAxis: 'y' // Yatay bar grafiği için
+            }]
+        });
+
+        // -------------------------------------------------
+        // E) KULLANICI ANALİZİ
+        // -------------------------------------------------
+        const roleCounts = { customer: 0, vendor: 0, courier: 0, admin: 0 };
+        users.forEach(u => { if (roleCounts[u.role] !== undefined) roleCounts[u.role]++; });
 
         setUserRoleChartData({
             labels: ['Müşteri', 'Satıcı', 'Kurye', 'Yönetici'],
@@ -139,7 +193,6 @@ const AdminDashboard = () => {
             }]
         });
 
-        // D) Yeni Üye Katılımı
         const dailyNewUsers = last7Days.map(date => {
             return users.filter(u => new Date(u.createdAt).toLocaleDateString('tr-TR') === date).length;
         });
@@ -165,109 +218,42 @@ const AdminDashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-10 text-center animate-pulse text-gray-500 font-bold">Veriler Yükleniyor...</div>;
+    return <div className="p-10 text-center animate-pulse text-gray-500 font-bold">Veriler Analiz Ediliyor...</div>;
   }
 
   return (
-    <div className="space-y-8 animate-fade-in pb-20">
+    <div className="space-y-8 animate-fade-in pb-20 max-w-[1600px] mx-auto">
       
-      <div className="mb-6 border-b border-gray-100 pb-4">
-        <h2 className="text-3xl font-black text-gray-800 tracking-tight">General</h2>
-        <p className="text-gray-500 text-sm">Platform current status overview.</p>
-      </div>
+      {/* 1. Header */}
+      <DashboardHeader />
 
-      {/* İSTATİSTİK KARTLARI */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Toplam Kullanıcı" value={stats.totalUsers} icon={<FiUsers />} color="blue" />
-        <StatCard title="Toplam Sipariş" value={stats.totalOrders} icon={<FiShoppingBag />} color="purple" />
-        <StatCard title="Aktif Ürünler" value={stats.totalProducts} icon={<FiBox />} color="yellow" />
-        <StatCard title="Toplam Ciro" value={`£${stats.totalRevenue.toLocaleString('en-GB', { minimumFractionDigits: 0 })}`} icon={<FiActivity />} color="green" />
-      </div>
+      {/* 2. Kartlar */}
+      <StatsGrid stats={stats} />
 
-      {/* --- 1. SATIR: SİPARİŞ ANALİZİ --- */}
-      <h3 className="text-xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-pink-500 pl-3">Order Analysis</h3>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
-          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Order Status Distribution</h3>
-          <div className="w-full h-full flex justify-center items-center relative">
-            {statusChartData ? (
-              <Doughnut 
-                data={statusChartData} 
-                options={{ maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }} 
-              />
-            ) : <p className="text-gray-400">No Data</p>}
-          </div>
-        </div>
+      {/* 3. Sipariş Analizi */}
+      <OrderAnalysisSection 
+        statusChartData={statusChartData} 
+        revenueChartData={revenueChartData} 
+      />
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
-           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">Last 7 Days Revenue</h3>
-           <div className="w-full h-full relative">
-             {revenueChartData ? (
-                <Line 
-                  data={revenueChartData} 
-                  options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } } }}
-                />
-             ) : <p className="text-gray-400 text-center mt-20">No Data</p>}
-           </div>
-        </div>
-      </div>
+      {/* 4. Trafik ve Ürün Analizi */}
+      <TrafficAnalysisSection 
+        trafficChartData={trafficChartData} 
+        topProducts={topProducts} 
+      />
 
-      {/* --- 2. SATIR: KULLANICI ANALİZİ --- */}
-      <h3 className="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-blue-500 pl-3">User Analysis</h3>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center h-80">
-          <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">User Role Distribution</h3>
-          <div className="w-full h-full flex justify-center items-center relative">
-            {userRoleChartData ? (
-              <Doughnut 
-                data={userRoleChartData} 
-                options={{ maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }} 
-              />
-            ) : <p className="text-gray-400">No Data</p>}
-          </div>
-        </div>
+      {/* 5. Arama Analizi (YENİ) */}
+      <SearchAnalysisSection 
+        searchChartData={searchChartData} 
+        topSearchTerms={topSearchTerms} 
+      />
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-80">
-           <h3 className="text-sm font-bold text-gray-500 uppercase w-full text-left mb-2">New User Signups (Last 7 Days)</h3>
-           <div className="w-full h-full relative">
-             {userGrowthChartData ? (
-                <Bar 
-                  data={userGrowthChartData} 
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
-                  }}
-                />
-             ) : <p className="text-gray-400 text-center mt-20">No Data</p>}
-           </div>
-        </div>
-      </div>
+      {/* 6. Kullanıcı Analizi */}
+      <UserAnalysisSection 
+        userRoleChartData={userRoleChartData} 
+        userGrowthChartData={userGrowthChartData} 
+      />
 
-    </div>
-  );
-};
-
-const StatCard = ({ title, value, icon, color }) => {
-  const colors = {
-    blue: "bg-blue-50 text-blue-600",
-    purple: "bg-purple-50 text-purple-600",
-    yellow: "bg-yellow-50 text-yellow-600",
-    green: "bg-green-50 text-green-600"
-  };
-
-  return (
-    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-lg transition-all duration-300 group">
-      <div className={`p-4 rounded-2xl text-2xl ${colors[color]} group-hover:scale-110 transition`}>
-        {icon}
-      </div>
-      <div>
-        <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{title}</p>
-        <h4 className="text-2xl font-black text-gray-800">{value}</h4>
-      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // useLocation EKLENDİ
+import { useNavigate, useLocation } from "react-router-dom";
 import { publicRequest } from "../requestMethods";
 import { useCart } from "../context/CartContext";
 import Confetti from "react-confetti";
@@ -13,18 +13,42 @@ const SuccessPage = () => {
   
   const { clearCart, notify } = useCart();
   const navigate = useNavigate();
-  const location = useLocation(); // <--- Gelen veriyi yakalamak için
+  const location = useLocation();
   
   const processedRef = useRef(false);
 
+  // --- YENİ: Sipariş Başarı Loglaması ---
+  const logOrderSuccess = async (createdOrder) => {
+    try {
+      // Sipariş logunu "publicRequest" ile atabiliriz çünkü kullanıcı henüz 
+      // tam oturum açmamış olabilir (Guest Checkout) veya token'ı düşmüş olabilir.
+      // Backend tarafında userId varsa logActivity zaten onu yakalar.
+      await publicRequest.post("/logs/activity", {
+        action: "order_success",
+        metadata: {
+          orderId: createdOrder._id,
+          totalAmount: createdOrder.totalAmount,
+          currency: "GBP",
+          itemCount: createdOrder.items.length
+        }
+      });
+    } catch (err) {
+      console.error("Order log error:", err);
+    }
+  };
+
   useEffect(() => {
     const initializeOrder = async () => {
-      // SENARYO 1: CartSidebar siparişi oluşturup bize elden verdiyse (0 TL)
+      // SENARYO 1: CartSidebar siparişi oluşturup bize elden verdiyse (0 TL veya Kapıda Ödeme)
       if (location.state?.order) {
-        setOrder(location.state.order);
+        const existingOrder = location.state.order;
+        setOrder(existingOrder);
         setLoading(false);
-        // Konfeti için temizlik yapıldığından emin olalım
         clearCart();
+        
+        // Loglama (Eğer daha önce loglanmadıysa basit bir kontrol yapabiliriz ama 
+        // burası render değil effect olduğu için güvenli)
+        logOrderSuccess(existingOrder);
         return; 
       }
 
@@ -47,8 +71,12 @@ const SuccessPage = () => {
         const res = await publicRequest.post("/orders", orderData);
         
         if (res.status === 200) {
-          setOrder(res.data.order);
+          const newOrder = res.data.order;
+          setOrder(newOrder);
           
+          // Loglama
+          logOrderSuccess(newOrder);
+
           // Temizlik
           clearCart(); 
           localStorage.setItem("cart", "[]"); 
@@ -65,7 +93,8 @@ const SuccessPage = () => {
     };
 
     initializeOrder();
-  }, [location.state]); // location.state değişirse tetikle
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]); 
 
   return (
     <div className="min-h-screen bg-green-50 font-sans pt-24 pb-10 px-4 flex justify-center items-start relative overflow-hidden">
@@ -150,16 +179,16 @@ const SuccessPage = () => {
               {/* Toplamlar */}
               <div className="mt-8 pt-6 border-t border-dashed border-gray-200">
                  <div className="flex justify-between text-sm text-gray-500 mb-2">
-                    <span>{t("success.totalAmount")}</span>
-                    <span>£{(order.totalAmount - order.deliveryFee).toFixed(2)}</span>
+                   <span>{t("success.totalAmount")}</span>
+                   <span>£{(order.totalAmount - order.deliveryFee).toFixed(2)}</span>
                  </div>
                  <div className="flex justify-between text-sm text-blue-600 mb-4 font-medium">
-                    <span>{t("success.deliveryFee")}</span>
-                    <span>{order.deliveryFee === 0 ? "Ücretsiz" : `£${order.deliveryFee.toFixed(2)}`}</span>
+                   <span>{t("success.deliveryFee")}</span>
+                   <span>{order.deliveryFee === 0 ? "Ücretsiz" : `£${order.deliveryFee.toFixed(2)}`}</span>
                  </div>
                  <div className="flex justify-between items-center text-2xl font-extrabold text-gray-900 border-t border-gray-100 pt-4">
-                    <span>{t("success.generalTotal")}</span>
-                    <span className="text-pink-600">£{order.totalAmount.toFixed(2)}</span>
+                   <span>{t("success.generalTotal")}</span>
+                   <span className="text-pink-600">£{order.totalAmount.toFixed(2)}</span>
                  </div>
               </div>
             </div>

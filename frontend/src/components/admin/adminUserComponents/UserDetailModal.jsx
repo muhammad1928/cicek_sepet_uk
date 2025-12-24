@@ -1,5 +1,5 @@
 import { FiX, FiUser, FiMaximize } from "react-icons/fi";
-import SecureImage from "../SecureImage"; // SecureImage'ın yolunu doğru ayarlayın
+import SecureImage from "../../SecureImage"; // SecureImage'ın yolunu doğru ayarlayın
 
 const UserDetailModal = ({ user, stats, onClose }) => {
   if (!user) return null;

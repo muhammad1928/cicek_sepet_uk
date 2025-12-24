@@ -1090,7 +1090,9 @@
     "login": "Connexion",
     "register": "Inscription",
     "viewCart": "Voir le panier",
-    "language": "Langue"
+    "language": "Langue",
+    "loggingOut": "Déconnexion",
+    "byebye": "Au revoir !"
   },
   "login": {
     "welcome": "Bienvenue",

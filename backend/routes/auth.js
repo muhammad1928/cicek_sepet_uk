@@ -49,18 +49,31 @@ router.post('/register', async (req, res) => {
   let savedUser = null;
   try {
     // 1. Validasyon
-    const { error } = registerSchema.validate(req.body);
-    if (error) return res.status(400).json({ message: "auth.validationError" });
+    const {
+      error
+    } = registerSchema.validate(req.body);
+    if (error) return res.status(400).json({
+      message: "auth.validationError"
+    });
 
-    const { email, password, fullName, language } = req.body;
+    const {
+      email,
+      password,
+      fullName,
+      language
+    } = req.body;
 
     // 2. Tehlikeli karakter kontrolü (SQL Injection / XSS koruması)
     if (containsForbiddenChars(password)) {
-      return res.status(400).json({ message: "auth.passwordForbiddenChars" });
+      return res.status(400).json({
+        message: "auth.passwordForbiddenChars"
+      });
     }
-    
+
     if (containsForbiddenChars(fullName)) {
-      return res.status(400).json({ message: "auth.nameForbiddenChars" });
+      return res.status(400).json({
+        message: "auth.nameForbiddenChars"
+      });
     }
 
     // 3. Şifre gücü kontrolü (backend'de de yapalım)
@@ -71,14 +84,20 @@ router.post('/register', async (req, res) => {
       number: /[0-9]/.test(password),
       special: /[!@#%^&*()_+\-=\[\]{}|:,.<>?]/.test(password)
     };
-    
+
     if (!Object.values(passwordRules).every(Boolean)) {
-      return res.status(400).json({ message: "auth.passwordWeak" });
+      return res.status(400).json({
+        message: "auth.passwordWeak"
+      });
     }
 
     // 4. Email Kontrolü
-    const checkEmail = await User.findOne({ email: email.toLowerCase().trim() });
-    if (checkEmail) return res.status(400).json({ message: "auth.emailExists" });
+    const checkEmail = await User.findOne({
+      email: email.toLowerCase().trim()
+    });
+    if (checkEmail) return res.status(400).json({
+      message: "auth.emailExists"
+    });
 
     // 5. Şifreleme
     const salt = await bcrypt.genSalt(10);
@@ -93,7 +112,7 @@ router.post('/register', async (req, res) => {
 
     // 8. Kullanıcı Oluşturma - fullName sanitize edildi
     const sanitizedFullName = fullName.trim().replace(/[<>]/g, '');
-    
+
     const newUser = new User({
       fullName: sanitizedFullName,
       email: email.toLowerCase().trim(),
@@ -108,7 +127,9 @@ router.post('/register', async (req, res) => {
     savedUser = await newUser.save();
 
     // 9. Loglama
-    await logActivity(savedUser._id, 'register', req, { method: 'email' });
+    await logActivity(savedUser._id, 'register', req, {
+      method: 'email'
+    });
 
     // 10. Mail Gönderimi
     const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
@@ -134,14 +155,20 @@ router.post('/register', async (req, res) => {
 
     await sendEmail(savedUser.email, t.verifySubject, emailContent);
 
-    res.status(200).json({ message: "auth.registerSuccess" });
+    res.status(200).json({
+      message: "auth.registerSuccess"
+    });
 
   } catch (err) {
     console.error("Register Error:", err);
     if (savedUser && savedUser._id) {
-      try { await User.findByIdAndDelete(savedUser._id); } catch (e) {}
+      try {
+        await User.findByIdAndDelete(savedUser._id);
+      } catch (e) {}
     }
-    res.status(500).json({ message: "common.serverError" });
+    res.status(500).json({
+      message: "common.serverError"
+    });
   }
 });
 // =============================================================================
@@ -268,8 +295,10 @@ router.post('/login', async (req, res) => {
     // Cookie Ayarları
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        // GERÇEK: Cloud Run HTTPS kullandığı için her zaman true olmalı (veya env kontrolü)
+        secure: true,
+        // GERÇEK: Cross-site cookie için 'none' ŞARTTIR.
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .status(200)
@@ -428,36 +457,48 @@ router.post('/reset-password', async (req, res) => {
 });
 
 // =============================================================================
-// 7. ÇIKIŞ YAP (LOGOUT) - GÜNCELLENDİ
+// 7. ÇIKIŞ YAP (LOGOUT) - KESİN VE GARANTİLİ LOGLAMA
 // =============================================================================
 router.post("/logout", async (req, res) => {
   try {
-    // 1. Çıkış yapan kullanıcıyı bulmaya çalış (Refresh Token'dan)
-    const refreshToken = req.cookies.refreshToken;
+    let userId = null;
+
+    // 1. ÖNCE Çereze Bak
+    const refreshToken = req.cookies?.refreshToken;
     
+    // 2. Çerez Yoksa veya Geçersizse Header'a Bak (Bearer Token)
+    const authHeader = req.headers.authorization;
+
     if (refreshToken) {
-      // Token'ı çöz ve kullanıcı ID'sini al
-      jwt.verify(refreshToken, process.env.JWT_REFRESH_SEC, async (err, decoded) => {
-        if (!err && decoded && decoded.id) {
-          // LOGLAMA İŞLEMİ BURADA YAPILIYOR
-          await logActivity(decoded.id, 'logout', req);
-        }
-      });
+      try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SEC);
+        userId = decoded.id;
+      } catch (e) {}
     }
 
-    // 2. Çerezleri Temizle
+    if (!userId && authHeader?.startsWith("Bearer ")) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SEC);
+        userId = decoded.id;
+      } catch (e) {}
+    }
+
+    // 3. Eğer kullanıcı bulunduysa LOG yaz
+    if (userId) {
+      await logActivity(userId, 'logout', req, { status: "success" });
+    }
+
+    // 4. Her iki durumda da temizlik yap
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
-    }).status(200).json({
-      message: "auth.logoutSuccess"
-    });
+      secure: true,
+      sameSite: "none"
+    }).status(200).json({ message: "auth.logoutSuccess" });
 
   } catch (err) {
-    // Hata olsa bile kullanıcıyı çıkış yaptır, log hatası işlemi bozmasın
-    console.error("Logout Log Error:", err);
-    res.clearCookie("refreshToken").status(200).json({ message: "auth.logoutSuccess" });
+    console.error("Logout Genel Hata:", err);
+    res.status(200).json({ message: "auth.logoutSuccess" });
   }
 });
 

@@ -1094,7 +1094,9 @@
     "login": "Giriş Yap",
     "register": "Kayıt Ol",
     "viewCart": "Sepeti Görüntüle",
-    "language": "Dil"
+    "language": "Dil",
+    "loggingOut": "Çıkış yapılıyor...",
+    "byebye": "Görüşmek Üzere!"
   },
   "login": {
     "welcome": "Hosgeldiniz",

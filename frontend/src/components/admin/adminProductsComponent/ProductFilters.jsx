@@ -1,6 +1,6 @@
 import { FiPlus, FiX, FiSearch } from "react-icons/fi";
 // AdminPanelHeader'ın yolu: admin/adminProductsComponent -> admin -> components -> adminComponents
-import AdminPanelHeader from "../../adminComponents/AdminPanelHeader"; 
+import AdminPanelHeader from "../adminComponents/AdminPanelHeader"; 
 
 const ProductFilters = ({ 
   productsCount, 

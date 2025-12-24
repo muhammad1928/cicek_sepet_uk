@@ -16,13 +16,14 @@ const LogSchema = new mongoose.Schema({
     ll: [Number] 
   },
 
-  // --- CİHAZ & TEKNOLOJİ (DÜZELTİLEN KISIM) ---
+  // --- CİHAZ & TEKNOLOJİ (GÜNCELLENEN KISIM) ---
   device: {
     // Mongoose'da alan ismine 'type' dersen karışır. 
     // Bu yüzden { type: String } şeklinde sarmalamamız gerekir.
-    type: { type: String }, 
-    vendor: String, 
-    model: String 
+    type: { type: String }, // Mobile, Desktop, Tablet
+    vendor: String,         // Apple, Samsung
+    model: String,          // iPhone, Galaxy S20
+    name: String            // PC, Mac vb. (ua-parser-js bazen model yerine name döner)
   },
   
   os: {
@@ -58,6 +59,6 @@ const LogSchema = new mongoose.Schema({
 
 // İndeksler (Performans İçin)
 LogSchema.index({ action: 1 });
-LogSchema.index({ createdAt: 1 });
+LogSchema.index({ createdAt: -1 }); // Dashboard'da "en son" kayıtları çekerken hız sağlar
 
 module.exports = mongoose.model('Log', LogSchema);

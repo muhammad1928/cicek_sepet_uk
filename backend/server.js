@@ -31,7 +31,8 @@ const logRoute = require("./routes/log");
 dotenv.config();
 
 const app = express();
-app.set('trust proxy', 1);
+// Bu satırı middleware'lerin en üstüne ekle (cors, json vb. öncesi)
+app.set('trust proxy', true);
 
 // ============================================================
 // 🛡️ GÜVENLİK VE MIDDLEWARE KATMANI (SIRASI ÇOK ÖNEMLİDİR)
@@ -50,27 +51,25 @@ app.use(helmet());
 
 // GÜVENLİ BEYAZ LİSTE (Whitelist)
 const allowedOrigins = [
-  // "http://localhost:5173",                  // Geliştirme ortamı
-  // "https://cicek-sepet-uk.vercel.app",      // Canlı Frontend (Slashsız)
-  // "https://cicek-sepet-uk.vercel.app/",     // Canlı Frontend (Slashlı - Bazen tarayıcı ekler)
-  // "https://fesfu-frontend-909711828478.europe-west2.run.app", // GCP Frontend
-  'https://fesfu.co.uk',      // <--- BUNU EKLE
-  'https://www.fesfu.co.uk',   // <--- BUNU DA EKLE
-  process.env.CLIENT_URL                    // .env dosyasından gelen (Yedek)
+  'https://fesfu.co.uk',
+  'https://www.fesfu.co.uk',
+  // Localhost testlerin için bunu eklemeyi unutma
+  'http://localhost:5173' 
 ];
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // !origin: Postman, Mobile App veya Stripe Webhook gibi "tarayıcı olmayan" istekler.
-    // allowedOrigins.includes(origin): Gelen istek bizim listemizde var mı?
+    // !origin kısmını kaldırmıyoruz ama tam eşleşme arıyoruz
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      // Geliştirme aşamasında hatayı görmek için:
+      console.log("Engellenen Origin:", origin);
       callback(new Error(`CORS Hatası: ${origin} adresine izin verilmiyor.`));
     }
   },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Cookie (Token) transferi için ZORUNLU
+  credentials: true, // BU DOĞRU, KALSIN
 };
 
 app.use(cors(corsOptions));

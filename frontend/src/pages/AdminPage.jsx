@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FiLogOut, FiGrid, FiFileText, FiPackage, FiTruck, FiUsers, FiTag, FiMessageSquare, FiMenu, FiX } from "react-icons/fi";
+import { useNavigate, useLocation } from "react-router-dom"; 
+import { FiLogOut, FiGrid, FiFileText, FiPackage, FiTruck, FiUsers, FiTag, FiMessageSquare, FiMenu, FiX, FiActivity } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
-// --- MODÜLLERİ ÇAĞIRIYORUZ ---
+// --- MODÜLLER ---
 import AdminDashboard from "../components/admin/AdminDashboard";
 import AdminProducts from "../components/admin/AdminProducts";
 import AdminOrders from "../components/admin/AdminOrders";
@@ -10,24 +11,33 @@ import AdminUsers from "../components/admin/AdminUsers";
 import AdminCoupons from "../components/admin/AdminCoupons";
 import AdminApplications from "../components/admin/AdminApplications"; 
 import AdminReviews from "../components/admin/AdminReviews"; 
-import { useTranslation } from "react-i18next";
+import AdminSystemLogs from "../components/admin/AdminSystemLogs"; 
 
 const AdminPage = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("dashboard");
-  
-  // MOBİL İÇİN STATE: Sidebar açık mı kapalı mı?
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Güvenlik Kontrolü
+  // --- TEK VE GÜÇLÜ GÜVENLİK + TAB KONTROLÜ ---
   useEffect(() => {
+    // 1. Güvenlik Kontrolü (Tek seferde hallediyoruz)
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || user.role !== "admin") {
       navigate("/");
+      return; // Admin değilse aşağıya hiç bakma
     }
-  }, [navigate]);
+
+    // 2. URL'e Göre Tab Ayarlama
+    // Eğer URL /admin/logs ise tabı log yap, değilse dashboard yap
+    if (location.pathname.includes("logs")) {
+      setActiveTab("logs");
+    } else {
+      setActiveTab("dashboard");
+    }
+  }, [navigate, location.pathname]); // Sadece bunlar değiştiğinde çalışır
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -35,18 +45,21 @@ const AdminPage = () => {
     navigate("/login");
   };
 
-  // Mobilde menüden bir şeye tıklayınca menüyü kapatmak için yardımcı fonksiyon
   const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-    setIsSidebarOpen(false); // Seçim yapınca menüyü kapat
+    // Eğer logları seçtiysek URL'i manuel güncelliyoruz ki useEffect tetiklensin
+    if (tabName === "logs") {
+      navigate("/admin/logs");
+    } else {
+      setActiveTab(tabName);
+      navigate("/admin"); // Diğer tablar için ana admin yoluna dön
+    }
+    setIsSidebarOpen(false);
   };
 
   return (
-    // pt-20: Navbar yüksekliği kadar boşluk
     <div className="min-h-screen flex bg-gray-100 font-sans pt-20 relative">
       
-      {/* --- MOBİL İÇİN MENÜ AÇMA BUTONU --- */}
-      {/* Sadece mobilde görünür (md:hidden), Navbar'ın altında sol üstte durur */}
+      {/* MOBİL MENÜ BUTONU */}
       <button 
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="md:hidden fixed top-20 left-4 z-50 bg-slate-900 text-white p-3 rounded-lg shadow-lg hover:bg-slate-800 transition-colors"
@@ -54,21 +67,15 @@ const AdminPage = () => {
         {isSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
       </button>
 
-      {/* --- OVERLAY (KARARTMA KATMANI) --- */}
-      {/* Sadece mobilde ve menü açıkken görünür. Arka plana tıklayınca menüyü kapatır. */}
+      {/* OVERLAY */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-20 md:hidden glass effect"
+          className="fixed inset-0 bg-black/50 z-20 md:hidden backdrop-blur-sm"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
-      {/* --- SIDEBAR (SOL MENÜ) --- */}
-      {/* Değişiklikler:
-          1. 'md:translate-x-0': Masaüstünde hep görünür.
-          2. Mobilde 'isSidebarOpen' true ise görünür (translate-x-0), değilse gizlenir (-translate-x-full).
-          3. 'transition-transform': Açılıp kapanma animasyonu eklendi.
-      */}
+      {/* SIDEBAR */}
       <aside className={`
         w-64 bg-slate-900 pt-4 text-white flex flex-col shadow-xl 
         fixed h-[calc(100vh-80px)] top-20 left-0 
@@ -86,68 +93,31 @@ const AdminPage = () => {
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
-          <SidebarBtn 
-            active={activeTab === "dashboard"} 
-            onClick={() => handleTabClick("dashboard")} 
-            icon={<FiGrid />} 
-            label={t("admin.genelBakis")} 
-          />
-          <SidebarBtn 
-            active={activeTab === "applications"} 
-            onClick={() => handleTabClick("applications")} 
-            icon={<FiFileText />} 
-            label={t("admin.applications")} 
-          />
-          <SidebarBtn 
-            active={activeTab === "users"} 
-            onClick={() => handleTabClick("users")} 
-            icon={<FiUsers />} 
-            label={t("admin.users")} 
-          />
-          <SidebarBtn 
-            active={activeTab === "products"} 
-            onClick={() => handleTabClick("products")} 
-            icon={<FiPackage />} 
-            label={t("admin.products")}
-          />
-          <SidebarBtn 
-            active={activeTab === "orders"} 
-            onClick={() => handleTabClick("orders")} 
-            icon={<FiTruck />} 
-            label={t("admin.orders")} 
-          />
-          <SidebarBtn 
-            active={activeTab === "coupons"} 
-            onClick={() => handleTabClick("coupons")} 
-            icon={<FiTag />} 
-            label={t("admin.coupons")}
-          />
-          <SidebarBtn 
-            active={activeTab === "reviews"} 
-            onClick={() => handleTabClick("reviews")} 
-            icon={<FiMessageSquare />} 
-            label={t("common.reviews")} 
-          />
+          <SidebarBtn active={activeTab === "dashboard"} onClick={() => handleTabClick("dashboard")} icon={<FiGrid />} label={t("admin.genelBakis")} />
+          
+          {/* LOGLAR BUTONU */}
+          <SidebarBtn active={activeTab === "logs"} onClick={() => handleTabClick("logs")} icon={<FiActivity />} label="Canlı Trafik (Loglar)" />
+          
+          <SidebarBtn active={activeTab === "applications"} onClick={() => handleTabClick("applications")} icon={<FiFileText />} label={t("admin.applications")} />
+          <SidebarBtn active={activeTab === "users"} onClick={() => handleTabClick("users")} icon={<FiUsers />} label={t("admin.users")} />
+          <SidebarBtn active={activeTab === "products"} onClick={() => handleTabClick("products")} icon={<FiPackage />} label={t("admin.products")} />
+          <SidebarBtn active={activeTab === "orders"} onClick={() => handleTabClick("orders")} icon={<FiTruck />} label={t("admin.orders")} />
+          <SidebarBtn active={activeTab === "coupons"} onClick={() => handleTabClick("coupons")} icon={<FiTag />} label={t("admin.coupons")} />
+          <SidebarBtn active={activeTab === "reviews"} onClick={() => handleTabClick("reviews")} icon={<FiMessageSquare />} label={t("common.reviews")} />
         </nav>
 
         <div className="p-4 border-t border-slate-800">
-          <button 
-            onClick={handleLogout} 
-            className="w-full flex items-center justify-center gap-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white py-3 rounded-xl text-sm font-bold transition border border-red-600/20"
-          >
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white py-3 rounded-xl text-sm font-bold transition border border-red-600/20" >
             <FiLogOut /> {t("common.logout")}
           </button>
         </div>
       </aside>
 
-      {/* --- SAĞ İÇERİK ALANI --- */}
-      {/* Değişiklik: 
-         'ml-64' yerine 'md:ml-64 ml-0' kullanıldı. 
-         Böylece mobilde içerik tam ekran olur, masaüstünde sidebar kadar boşluk bırakır.
-      */}
+      {/* SAĞ İÇERİK ALANI */}
       <main className="flex-1 p-4 md:p-8 md:ml-64 ml-0 w-full transition-all duration-300">
         <div className="max-w-7xl mx-auto animate-fade-in pb-20">
           {activeTab === "dashboard" && <AdminDashboard />}
+          {activeTab === "logs" && <AdminSystemLogs />}
           {activeTab === "applications" && <AdminApplications />}
           {activeTab === "users" && <AdminUsers />}
           {activeTab === "products" && <AdminProducts />}
@@ -161,7 +131,6 @@ const AdminPage = () => {
   );
 };
 
-// Yardımcı Buton Bileşeni (Aynen korundu)
 const SidebarBtn = ({ active, onClick, label, icon }) => (
   <button 
     onClick={onClick} 

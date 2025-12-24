@@ -1089,7 +1089,9 @@
     "login": "Logga in",
     "register": "Registrera dig",
     "viewCart": "Visa varukorg",
-    "language": "Språk"
+    "language": "Språk",
+    "loggingOut": "Loggar ut...",
+    "byebye": "Vi ses snart igen!"
   },
   "login": {
     "welcome": "Välkommen",

@@ -40,6 +40,16 @@ Frontend/
 │   │   │   │   ├── ProductList.jsx
 │   │   │   │   └── ProductForm.jsx
 │   │   │   │
+│   │   │   ├── AdminDashboardComponents/
+│   │   │   │   ├── ChartContainer.jsx
+│   │   │   │   ├── DashboardHeader.jsx
+│   │   │   │   ├── OrderAnalysisSection.jsx
+│   │   │   │   ├── StatsGrid.jsx
+│   │   │   │   ├── TrafficAnalysisSection.jsx
+│   │   │   │   ├── SearchAnalysisSection.jsx
+│   │   │   │   └── UserAnalysisSection.jsx
+│   │   │   │
+│   │   │   ├── AdminSystemLogs.jsx
 │   │   │   ├── AdminApplications.jsx
 │   │   │   ├── AdminCoupons.jsx
 │   │   │   ├── AdminDashboard.jsx

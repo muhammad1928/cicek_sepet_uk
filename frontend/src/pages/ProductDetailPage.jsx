@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { publicRequest } from "../requestMethods";
+import { publicRequest, userRequest } from "../requestMethods"; // userRequest eklendi
 import { useCart } from "../context/CartContext";
 import { useTranslation } from "react-i18next";
 import { FiArrowLeft } from "react-icons/fi";
@@ -13,7 +13,6 @@ import ProductInfo from "../components/productDetails/ProductInfo";
 import ProductActions from "../components/productDetails/ProductActions";
 import ProductReviews from "../components/productDetails/ProductReviews";
 import RelatedProducts from "../components/productDetails/RelatedProducts";
-
 import { CATEGORY_KEY_MAP } from "../data/categoryData"; 
 
 const ProductDetailPage = () => {
@@ -35,6 +34,34 @@ const ProductDetailPage = () => {
     fetchProduct();
   }, [id]);
 
+  // --- YENİ: LOGLAMA ETKİSİ (Ürün Görüntüleme) ---
+  useEffect(() => {
+    if (product) {
+      // Loglama fonksiyonu: Akıllı gecikmeli log (Bounce rate filtreleme için)
+      const logProductView = async () => {
+        try {
+          // userRequest kullanarak log gönderiyoruz (Kullanıcı giriş yapmışsa ID otomatik gider)
+          await userRequest.post("/logs/activity", {
+            action: "view_product",
+            metadata: {
+              productId: product._id,
+              productName: product.title,
+              category: product.category,
+              price: product.price
+            }
+          });
+        } catch (err) {
+          // Sessiz hata: Kullanıcı deneyimini bozmamak için konsola sadece geliştirme modunda basabilirsin
+          console.error("View log error:", err);
+        }
+      };
+
+      // Sayfa yüklendikten 1 saniye sonra logla (Hemen çıkışları/yanlış tıklamaları filtrelemek için)
+      const timer = setTimeout(logProductView, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [product, id]); // id değiştiğinde de tetiklenmesi için eklendi
+
   const fetchProduct = async () => {
     try {
       setLoading(true);
@@ -51,13 +78,12 @@ const ProductDetailPage = () => {
 
   // Çeviri Mantığı
   const getTranslatedTitle = () => {
-
     // if (!product) return "";
     // const categoryKey = product.category;
     // const parentCat = Object.keys(CATEGORY_KEY_MAP).find(key => CATEGORY_KEY_MAP[key] === categoryKey) || 'flowers';
 
     // henuz ceviri yoksa orijinal başlığı döner
-    return product.title; 
+    return product ? product.title : ""; 
   };
   const displayTitle = getTranslatedTitle();
 
@@ -68,6 +94,20 @@ const ProductDetailPage = () => {
           setErrorMsg(t('product.selectVariantError') || "Please select an option!");
           return;
       }
+      
+      // --- YENİ: SEPETE EKLEME LOGU ---
+      // Dashboard dönüşüm oranı (Conversion Rate) takibi için kritik
+      userRequest.post("/logs/activity", {
+        action: "add_to_cart",
+        metadata: {
+          productId: product._id,
+          productName: product.title,
+          price: selectedVariant ? selectedVariant.price : product.price,
+          quantity: quantity,
+          variant: selectedVariant?.name || "Standard"
+        }
+      }).catch(() => {}); // Hata olsa bile sepete eklemeyi engelleme
+
       addToCart(product, quantity, selectedVariant);
       setErrorMsg(""); 
       notify(t('product.addedToCart') || "Added to Cart", "success");

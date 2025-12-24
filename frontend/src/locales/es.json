@@ -1086,7 +1086,9 @@
     "login": "Iniciar sesión",
     "register": "Registrarse",
     "viewCart": "Ver carrito",
-    "language": "Idioma"
+    "language": "Idioma",
+    "loggingOut": "Cerrar sesión ...",
+    "byebye": "¡Adiós!"
   },
   "login": {
     "welcome": "Bienvenido",

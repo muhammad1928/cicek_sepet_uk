@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, useSearchParams } from "react-router-dom"; // useSearchParams eklendi
 import Seo from "../components/Seo";
 import { ProductSkeleton } from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
@@ -9,29 +9,28 @@ import { FiShoppingCart, FiMinus, FiPlus } from "react-icons/fi";
 import { publicRequest } from "../requestMethods"; 
 import { useTranslation } from "react-i18next";
 import CategoryNav from "../components/CategoryNav";
-import Features from "../components/Features"; // <-- YENİ IMPORT
-
-// --- DÜZELTME 1: HARİTA VERİSİNİ IMPORT ET ---
+import Features from "../components/Features";
 import { CATEGORY_KEY_MAP } from "../data/categoryData"; 
 
 const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate(); 
+  const [searchParams, setSearchParams] = useSearchParams(); // URL Parametrelerini oku
   
-  // --- STATE TANIMLAMALARI ---
+  // --- STATE ---
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [loading, setLoading] = useState(true);
-  
   const [maxAlertProd, setMaxAlertProd] = useState(null); 
   const [itemToDelete, setItemToDelete] = useState(null);
 
-  const { cart, addToCart, increaseQuantity, decreaseQuantity, updateItemQuantity, removeFromCart, favorites, toggleFavorite, searchTerm } = useCart();
+  const { cart, addToCart, increaseQuantity, decreaseQuantity, updateItemQuantity, removeFromCart, favorites, toggleFavorite, setSearchTerm } = useCart();
 
-  // --- DÜZELTME 2: ÇEVİRİ YARDIMCI FONKSİYONU ---
+  // URL'den kategori ve arama terimini al
+  const categoryParam = searchParams.get("category") || "all";
+  const searchParam = searchParams.get("search") || "";
+
   const getCatLabel = (key) => {
-    // Eğer key haritada varsa yolunu al, yoksa kendisini kullan
     const mappedKey = CATEGORY_KEY_MAP[key] || key;
     return t(`home.categories1.${mappedKey}`);
   };
@@ -44,7 +43,7 @@ const HomePage = () => {
         const res = await publicRequest.get("/products");
         const active = res.data.filter(p => p.stock > 0 && p.isActive === true);
         setProducts(active);
-        setFilteredProducts(active);
+        // İlk yüklemede filtreleme logic'ini aşağıda useEffec'te yapacağız
       } catch (err) { 
         console.error("Ürün hatası:", err); 
       } finally { 
@@ -54,22 +53,32 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  // --- FİLTRELEME MANTIĞI ---
+  // --- FİLTRELEME MANTIĞI (URL'E GÖRE) ---
   useEffect(() => {
+    if (products.length === 0) return;
+
     let result = products;
 
-    if (selectedCategory !== "all") {
-      result = result.filter(p => p.category === selectedCategory);
+    // 1. Kategori Filtresi
+    if (categoryParam !== "all") {
+      result = result.filter(p => p.category === categoryParam);
     }
 
-    if (searchTerm) {
-      result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    // 2. Arama Filtresi (URL'den gelen search param)
+    if (searchParam) {
+        // Global search context'ini de güncelle ki arama çubuğunda yazı kalsın
+        setSearchTerm(searchParam); 
+        result = result.filter(p => p.title.toLowerCase().includes(searchParam.toLowerCase()));
+    } else {
+        // Eğer URL'de search yoksa context'i temizle (opsiyonel)
+        // setSearchTerm(""); 
     }
 
     setFilteredProducts(result);
-  }, [selectedCategory, searchTerm, products]);
+  }, [categoryParam, searchParam, products, setSearchTerm]);
 
-  // --- YARDIMCI FONKSİYONLAR ---
+
+  // --- CART HANDLERS ---
   const getCartItem = (id) => cart.find(item => item._id === id);
   
   const triggerMaxAlert = (id) => { 
@@ -97,7 +106,6 @@ const HomePage = () => {
     e.stopPropagation(); 
     const val = parseInt(e.target.value); 
     if (isNaN(val) || val < 1) return; 
-    
     if (val > product.stock) { 
       triggerMaxAlert(product._id); 
       updateItemQuantity(product._id, product.stock, product.stock, product.title); 
@@ -124,8 +132,17 @@ const HomePage = () => {
     } 
   };
 
-  const handleCategorySelect = (cat) => {
-    setSelectedCategory(cat);
+  // --- NAVİGASYON HANDLE ---
+  const handleCategorySelect = (catKey) => {
+    // Kategori seçildiğinde URL'i güncelle. 
+    // Eğer 'all' ise parametreyi sil veya 'all' yap.
+    // Mevcut search parametresini koruyup korumamak sana kalmış, burada sıfırlıyoruz (genel davranış).
+    if (catKey === 'all') {
+        navigate('/'); // Ana sayfaya temiz git
+    } else {
+        // Parametreleri güncelle: ?category=rose
+        setSearchParams({ category: catKey });
+    }
   };
 
   return (
@@ -149,9 +166,9 @@ const HomePage = () => {
 
       <Features />
 
-      {/* ÖZELLİKLER BÖLÜMÜ - YENİ EKLENEN KISIM */}  
+      {/* ÖZELLİKLER BÖLÜMÜ */}  
       <CategoryNav 
-        activeCategory={selectedCategory} 
+        activeCategory={categoryParam} 
         onSelectCategory={handleCategorySelect} 
       />
 
@@ -160,29 +177,30 @@ const HomePage = () => {
         {loading ? (
           <ProductSkeleton /> 
         ) : filteredProducts.length === 0 ? (
-          <div className="col-span-full py-16 sm:py-24 px-4 flex justify-center animate-fade-in">
-            <div className="bg-white rounded-[2rem] shadow-xl p-8 sm:p-12 text-center max-w-2xl border border-pink-50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-purple-100 rounded-full blur-[60px] opacity-50"></div>
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-100 rounded-full blur-[60px] opacity-50"></div>
-              <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 animate-bounce-slow inline-block drop-shadow-md">🌸</div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">
-                  {searchTerm ? (
-                    <span>{t('home.searchNotFoundTitle', 'Gizli Bir Hazine mi?')} 🕵️‍♀️</span>
-                  ) : (
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
-                      {t('home.categoryEmptyTitle', 'Harika Şeyler Yolda!')}
-                    </span>
-                  )}
+          
+          /* --- "GREAT FLOWERS" EMPTY STATE MODAL (GÜNCELLENMİŞ TASARIM) --- */
+          <div className="flex justify-center items-center py-16 animate-fade-in">
+             <div className="bg-white rounded-[2rem] shadow-xl p-8 sm:p-12 text-center max-w-lg w-full relative overflow-hidden">
+                {/* Çiçek İkonu */}
+                <div className="mb-6 flex justify-center">
+                    <span className="text-6xl drop-shadow-sm filter">🌸</span>
+                </div>
+
+                {/* Başlık */}
+                <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 mb-4 tracking-tight">
+                    {t('home.greatFlowersComing', 'Great Flowers Are Coming!')}
                 </h3>
-                <p className="text-gray-500 text-base sm:text-lg mb-8 leading-relaxed font-medium max-w-lg mx-auto">
-                  {searchTerm 
-                    ? t('home.searchNotFoundDesc', 'Aradığınız kelimeyle eşleşen bir ürün bulamadık.') 
-                    : t('home.categoryEmptyDesc', 'Bu koleksiyon tükendi! Yeni ürünler hazırlanıyor.')}
+
+                {/* Açıklama */}
+                <p className="text-gray-500 text-base leading-relaxed font-medium">
+                    {searchParam 
+                        ? t('home.searchNotFoundDesc', 'We couldn\'t find exactly what you\'re looking for, but our designers are preparing fresh gifts just for you.')
+                        : t('home.categoryEmptyDesc', 'This collection was so loved that it sold out! Our designers are currently preparing the most special products and fresh gifts just for you.')
+                    }
                 </p>
-              </div>
-            </div>
+             </div>
           </div>
+
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
             {filteredProducts.map((product, index) => {
@@ -197,7 +215,6 @@ const HomePage = () => {
                     className="bg-white rounded-xl sm:rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col relative h-full animate-fade-in-up cursor-pointer hover:-translate-y-1" 
                     style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  
                   {/* Ürün Görseli */}
                   <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden flex-shrink-0">
                     <img 
@@ -205,8 +222,6 @@ const HomePage = () => {
                         alt={product.title} 
                         className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700" 
                     />
-                    
-                    {/* --- DÜZELTME 3: KATEGORİ İSMİNİ GETCATLABEL İLE AL --- */}
                     {product.category && (
                     <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[10px] font-bold uppercase text-gray-600 shadow-sm tracking-wider">
                       {getCatLabel(product.category)}

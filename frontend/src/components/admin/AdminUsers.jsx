@@ -5,10 +5,10 @@ import { useCart } from "../../context/CartContext";
 // Components
 import ConfirmModal from "../ConfirmModal";
 import UserActivityModal from "./UserActivityModal";
-import UserFilters from "../adminUserComponents/UserFilters";
-import UserTable from "../adminUserComponents/UserTable";
-import UserDetailModal from "../adminUserComponents/UserDetailModal";
-import RoleChangeModal from "../adminUserComponents/RoleChangeModal";
+import UserFilters from "./adminUserComponents/UserFilters";
+import UserTable from "./adminUserComponents/UserTable";
+import UserDetailModal from "./adminUserComponents/UserDetailModal";
+import RoleChangeModal from "./adminUserComponents/RoleChangeModal";
 
 const AdminUsers = () => {
   // State

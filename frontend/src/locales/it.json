@@ -1087,7 +1087,9 @@
     "login": "Accedi",
     "register": "Registrati",
     "viewCart": "Vedi carrello",
-    "language": "Lingua"
+    "language": "Lingua",
+    "loggingOut": "Esci",
+    "byebye": "A presto!"
   },
   "login": {
     "welcome": "Benvenuto",

@@ -1065,7 +1065,9 @@
     "login": "Log In",
     "register": "Register",
     "viewCart": "View Cart",
-    "language": "Language"
+    "language": "Language",
+    "loggingOut": "Logging out...",
+    "byebye": "See you soon!"
   },
   "login": {
     "welcome": "Welcome",

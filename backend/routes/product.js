@@ -158,7 +158,7 @@ router.delete('/:id', verifyTokenAndSeller, async (req, res) => {
 });
 
 // =============================================================================
-// 4. TEK ÜRÜN GETİR (GET)
+// 4. TEK ÜRÜN GETİR (GET) - GÜNCELLENDİ: HERKESİ LOGLUYOR
 // =============================================================================
 router.get('/:id', async (req, res) => {
   const cacheKey = `products:${req.params.id}`;
@@ -172,24 +172,29 @@ router.get('/:id', async (req, res) => {
         }
     } catch (e) {}
 
-    // GÜVENLİK: Email'i populate etme!
     const product = await Product.findById(req.params.id)
         .populate('vendor', 'username fullName shopName img'); 
     
     if (!product) return res.status(404).json({ message: "Ürün bulunamadı" });
 
-    // Redis Kaydet (1 saat)
+    // Redis Kaydet
     try {
         if (redisClient && redisClient.isOpen) {
             await redisClient.setEx(cacheKey, 3600, JSON.stringify(product));
         }
     } catch (e) {}
 
-    // Loglama
-    const userId = getUserId(req);
-    if (userId) {
-        try { logActivity(userId, 'view_product', req, { productId: product._id }); } catch(e) {}
-    }
+    // ▼▼▼ LOGLAMA (GÜNCELLENDİ) ▼▼▼
+    // getUserId null dönse bile (misafir kullanıcı) logluyoruz.
+    const userId = getUserId(req); 
+    try { 
+        await logActivity(userId || null, 'view_product', req, { 
+            productId: product._id,
+            productName: product.title,
+            price: product.price
+        }); 
+    } catch(e) { console.error("Log error:", e.message); }
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     res.status(200).json(product);
   } catch (err) {
@@ -198,7 +203,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // =============================================================================
-// 5. TÜM ÜRÜNLERİ GETİR / FİLTRELE (GET ALL)
+// 5. TÜM ÜRÜNLERİ GETİR / FİLTRELE - GÜNCELLENDİ: ARAMA LOGU EKLENDİ
 // =============================================================================
 router.get('/', async (req, res) => {
   const qNew = req.query.new;
@@ -218,38 +223,32 @@ router.get('/', async (req, res) => {
 
     // 2. DB Sorgusu
     let products;
-    // GÜVENLİK: Email hariç populate ayarı
     const populateSettings = { path: 'vendor', select: 'username fullName shopName img' };
 
     if (qNew) {
-      products = await Product.find({ isActive: true })
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .populate(populateSettings);
+      products = await Product.find({ isActive: true }).sort({ createdAt: -1 }).limit(10).populate(populateSettings);
     } else if (qCategory && qCategory !== "all") {
       products = await Product.find({
         isActive: true,
-        $or: [
-            { category: qCategory },
-            { tags: { $in: [qCategory] } }
-        ]
+        $or: [ { category: qCategory }, { tags: { $in: [qCategory] } } ]
       }).sort({ createdAt: -1 }).populate(populateSettings);
-      
     } else if (qSearch) {
+      // ▼▼▼ ARAMA LOGU EKLENDİ ▼▼▼
+      const userId = getUserId(req);
+      try {
+          await logActivity(userId || null, 'search_query', req, { searchTerm: qSearch });
+      } catch(e) {}
+      // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
       products = await Product.find({ 
           isActive: true,
-          $or: [
-            { title: { $regex: qSearch, $options: "i" } },
-            { desc: { $regex: qSearch, $options: "i" } }
-          ]
+          $or: [ { title: { $regex: qSearch, $options: "i" } }, { desc: { $regex: qSearch, $options: "i" } } ]
       }).populate(populateSettings);
     } else {
-      products = await Product.find({ isActive: true })
-        .sort({ createdAt: -1 })
-        .populate(populateSettings);
+      products = await Product.find({ isActive: true }).sort({ createdAt: -1 }).populate(populateSettings);
     }
 
-    // 3. Redis Yaz (10 dakika)
+    // 3. Redis Yaz
     try {
         if (redisClient && redisClient.isOpen) {
             await redisClient.setEx(cacheKey, 600, JSON.stringify(products));
