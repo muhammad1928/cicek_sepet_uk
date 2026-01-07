@@ -19,6 +19,9 @@
     "logoutSuccess": "Déconnexion réussie."
   },
   "common": {
+    "more": "Afficher plus",
+    "showLess": "Afficher moins",
+    "add": "Ajouter",
     "back": "Retour",
     "serverError": "Une erreur serveur s'est produite. Veuillez réessayer plus tard.",
     "loading": "Chargement...",

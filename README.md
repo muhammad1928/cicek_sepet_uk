@@ -189,6 +189,6 @@ Kodlarını yüklemeden önce terminalden şu iki komutu çalıştırıp kontrol
 1.  **Backend klasöründe:** `.gitignore` dosyasını aç, içinde `.env` yazıyor mu?
 2.  **Frontend klasöründe:** `.gitignore` dosyasını aç, içinde `.env` yazıyor mu?
 
-Eğer ikisi de **EVET** ise, bu README ile birlikte projenizi GitHub'a yükleyebilirsiniz. Kimse şifrelerinize erişemez, ama herkes projenizin kalitesini görür.
+Eğer ikisi de **EVET** ise, bu READ ME ile birlikte projenizi GitHub'a yükleyebilirsiniz. Kimse şifrelerinize erişemez, ama herkes projenizin kalitesini görür.
 
 ```

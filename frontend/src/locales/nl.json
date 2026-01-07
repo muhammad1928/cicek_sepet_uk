@@ -19,6 +19,9 @@
     "logoutSuccess": "Uitgelogd."
   },
   "common": {
+    "more": "Meer weergeven",
+    "showLess": "Minder weergeven",
+    "add": "Toevoegen",
     "back": "Terug",
     "serverError": "Er is een serverfout opgetreden. Probeer het later opnieuw.",
     "loading": "Laden...",

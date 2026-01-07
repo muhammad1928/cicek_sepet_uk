@@ -19,6 +19,9 @@
     "logoutSuccess": "Utloggad."
   },
   "common": {
+    "more": "Visa mer",
+    "showLess": "Visa mindre",
+    "add": "Lägg till",
     "back": "Tillbaka",
     "serverError": "Ett serverfel har uppstått. Vänligen försök igen senare.",
     "loading": "Laddar...",

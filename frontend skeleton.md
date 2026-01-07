@@ -15,7 +15,10 @@ Frontend/
 │   │
 │   ├── data/
 │   │   ├──  regions.js
-│   │   └──  categoryData.js
+│   │   └──  categoryData.jsx
+│   │
+│   ├── hooks/
+│   │   └──  useScrollContainer.js
 │   │
 │   ├── components/
 │   │   ├── admin/
@@ -66,6 +69,15 @@ Frontend/
 │   │   │   ├── index.jsx
 │   │   │   ├── SidebarFooter.jsx
 │   │   │   └── SidebarHeader.jsx
+│   │   │
+│   │   ├── nav/
+│   │   │   └── CategoryButton.jsx
+│   │   │
+│   │   ├── homepage/
+│   │   │   ├── ProductGrid.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   ├── HeroSection.jsx
+│   │   │   └──  EmptyState.jsx
 │   │   │
 │   │   ├── navbar/
 │   │   │   ├── CartIcon.jsx
@@ -208,7 +220,3 @@ backend/
 ├── package-lock.json        # Kütüphane versiyon kilit dosyası
 ├── package.json             # Proje ayarları ve bağımlılıklar
 └── server.js                # ANA GİRİŞ DOSYASI (Uygulamayı başlatan dosya)
-
-
-
-https://visa.vfsglobal.com/tur/tr/fra/login

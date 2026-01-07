@@ -19,6 +19,9 @@
     "logoutSuccess": "Çıkış yapıldı."
   },
   "common": {
+    "more": "Daha Fazla Göster",
+    "showLess": "Daha Az Göster",
+    "add": "Ekle",
     "back": "Geri",
     "serverError": "Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.",
     "loading": "Yükleniyor...",

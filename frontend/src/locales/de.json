@@ -19,6 +19,9 @@
     "logoutSuccess": "Abmeldung erfolgreich."
   },
   "common": {
+    "more": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "add": "Hinzufügen",
     "back": "Zurück",
     "serverError": "Ein Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
     "loading": "Wird geladen...",

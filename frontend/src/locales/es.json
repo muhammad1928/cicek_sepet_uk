@@ -19,6 +19,9 @@
     "logoutSuccess": "Sesión cerrada."
   },
   "common": {
+    "more":"Mostrar más",
+    "showLess":"Mostrar menos",
+    "add":"Añadir",
     "back": "Atrás",
     "serverError": "Se produjo un error del servidor. Por favor, inténtelo más tarde.",
     "loading": "Cargando...",

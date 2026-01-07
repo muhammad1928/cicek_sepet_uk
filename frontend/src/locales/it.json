@@ -19,6 +19,9 @@
     "logoutSuccess": "Disconnessione effettuata."
   },
   "common": {
+    "more": "Mostra di più",
+    "showLess": "Mostra di meno",
+    "add": "Aggiungi",
     "back": "Indietro",
     "serverError": "Si è verificato un errore del server. Riprova più tardi.",
     "loading": "Caricamento...",

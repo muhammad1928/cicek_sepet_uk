@@ -19,6 +19,10 @@
     "logoutSuccess": "Logged out successfully."
   },
   "common": {
+    "more": "Show more",
+    "showLess": "Show less",
+    "add": "Add",
+    "edit": "Edit",
     "back": "Back",
     "serverError": "Server error occurred. Please try again later.",
     "loading": "Loading...",

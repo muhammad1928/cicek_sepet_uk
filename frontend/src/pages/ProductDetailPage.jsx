@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { publicRequest, userRequest } from "../requestMethods"; // userRequest eklendi
+import { publicRequest, userRequest } from "../requestMethods"; 
 import { useCart } from "../context/CartContext";
 import { useTranslation } from "react-i18next";
 import { FiArrowLeft } from "react-icons/fi";
 
-// YENİ EKLENEN BİLEŞENLER (productDetails klasöründen)
+// COMPONENTS
 import Seo from "../components/Seo"; 
 import Features from "../components/Features";
 import ProductGallery from "../components/productDetails/ProductGallery"; 
@@ -13,7 +13,6 @@ import ProductInfo from "../components/productDetails/ProductInfo";
 import ProductActions from "../components/productDetails/ProductActions";
 import ProductReviews from "../components/productDetails/ProductReviews";
 import RelatedProducts from "../components/productDetails/RelatedProducts";
-import { CATEGORY_KEY_MAP } from "../data/categoryData"; 
 
 const ProductDetailPage = () => {
   const { t } = useTranslation();
@@ -34,13 +33,11 @@ const ProductDetailPage = () => {
     fetchProduct();
   }, [id]);
 
-  // --- YENİ: LOGLAMA ETKİSİ (Ürün Görüntüleme) ---
+  // LOGLAMA (View Product)
   useEffect(() => {
     if (product) {
-      // Loglama fonksiyonu: Akıllı gecikmeli log (Bounce rate filtreleme için)
       const logProductView = async () => {
         try {
-          // userRequest kullanarak log gönderiyoruz (Kullanıcı giriş yapmışsa ID otomatik gider)
           await userRequest.post("/logs/activity", {
             action: "view_product",
             metadata: {
@@ -51,16 +48,13 @@ const ProductDetailPage = () => {
             }
           });
         } catch (err) {
-          // Sessiz hata: Kullanıcı deneyimini bozmamak için konsola sadece geliştirme modunda basabilirsin
-          console.error("View log error:", err);
+          // Sessiz hata
         }
       };
-
-      // Sayfa yüklendikten 1 saniye sonra logla (Hemen çıkışları/yanlış tıklamaları filtrelemek için)
       const timer = setTimeout(logProductView, 1000);
       return () => clearTimeout(timer);
     }
-  }, [product, id]); // id değiştiğinde de tetiklenmesi için eklendi
+  }, [product, id]);
 
   const fetchProduct = async () => {
     try {
@@ -76,18 +70,13 @@ const ProductDetailPage = () => {
     }
   };
 
-  // Çeviri Mantığı
-  const getTranslatedTitle = () => {
-    // if (!product) return "";
-    // const categoryKey = product.category;
-    // const parentCat = Object.keys(CATEGORY_KEY_MAP).find(key => CATEGORY_KEY_MAP[key] === categoryKey) || 'flowers';
+  const displayTitle = product ? product.title : ""; 
 
-    // henuz ceviri yoksa orijinal başlığı döner
-    return product ? product.title : ""; 
-  };
-  const displayTitle = getTranslatedTitle();
+  // --- HESAPLAMALAR (Parent Component'te yapıp aşağı dağıtıyoruz) ---
+  const displayStock = selectedVariant ? selectedVariant.stock : (product?.stock || 0);
+  const vendorName = product?.vendor?.username || "Fesfu Flowers UK";
 
-  // İşlemler
+  // AKSİYONLAR
   const handleAddToCart = () => {
       const hasVariants = product.variants && product.variants.length > 0;
       if (hasVariants && !selectedVariant) {
@@ -95,8 +84,6 @@ const ProductDetailPage = () => {
           return;
       }
       
-      // --- YENİ: SEPETE EKLEME LOGU ---
-      // Dashboard dönüşüm oranı (Conversion Rate) takibi için kritik
       userRequest.post("/logs/activity", {
         action: "add_to_cart",
         metadata: {
@@ -106,7 +93,7 @@ const ProductDetailPage = () => {
           quantity: quantity,
           variant: selectedVariant?.name || "Standard"
         }
-      }).catch(() => {}); // Hata olsa bile sepete eklemeyi engelleme
+      }).catch(() => {});
 
       addToCart(product, quantity, selectedVariant);
       setErrorMsg(""); 
@@ -120,11 +107,11 @@ const ProductDetailPage = () => {
   };
 
   const handleQuantityChange = (type) => {
-      const currentStock = selectedVariant ? selectedVariant.stock : product.stock;
       if (type === "dec") {
           setQuantity(prev => Math.max(1, prev - 1));
       } else {
-          if (quantity < currentStock) setQuantity(prev => prev + 1);
+          // displayStock değişkenini burada kullanıyoruz
+          if (quantity < displayStock) setQuantity(prev => prev + 1);
           else notify(t('cartContext.maxStockReached'), "warning");
       }
   };
@@ -133,11 +120,9 @@ const ProductDetailPage = () => {
   if (!product) return <div className="min-h-screen flex flex-col items-center justify-center gap-4"><h2 className="text-2xl font-bold text-gray-800">{t("home.notFound")}</h2><button onClick={() => navigate("/")} className="text-blue-600 underline">{t("common.backToHome")}</button></div>;
 
   const isFav = favorites.includes(product._id);
-  const displayStock = selectedVariant ? selectedVariant.stock : product.stock;
-  const vendorName = product.vendor?.username || "Fesfu Flowers UK";
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-white min-h-screen font-sans animate-fade-in">
+    <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-white min-h-screen font-sans animate-fade-in text-gray-800">
       
       <Seo 
         title={`${displayTitle} | Fesfu UK`} 
@@ -145,8 +130,8 @@ const ProductDetailPage = () => {
         image={product.img}
         keywords={`${displayTitle}, ${product.category}, fesfu`}
       />
-
-      {/* Google Schema */}
+      
+      {/* Schema.org Yapısal Veri */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org/",
@@ -164,14 +149,17 @@ const ProductDetailPage = () => {
         })}
       </script>
 
-      <div className="pt-24 pb-20 px-4">
+      <div className="pt-24 pb-20 px-2 sm:px-4 lg:px-8">
         <div className="max-w-7xl mx-auto relative z-10">
             
-            <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-pink-600 mb-6 font-bold transition group w-fit">
+            {/* GERİ BUTONU */}
+            <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-pink-600 mb-6 font-bold transition group w-fit ml-2">
                 <FiArrowLeft className="group-hover:-translate-x-1 transition-transform"/> {t("common.goBack")}
             </button>
 
-            <div className="bg-white rounded-[2rem] shadow-xl border border-white/60 overflow-hidden flex flex-col lg:flex-row gap-0">
+            {/* ÜRÜN KARTI (GALERİ + BİLGİ) */}
+            <div className="bg-white rounded-[2rem] shadow-xl border border-white/60 overflow-hidden flex flex-col lg:flex-row gap-0 mb-12">
+                
                 {/* SOL: Galeri */}
                 <ProductGallery 
                   key={product._id}
@@ -182,11 +170,13 @@ const ProductDetailPage = () => {
                 />
 
                 {/* SAĞ: Bilgi ve Aksiyonlar */}
-                <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col bg-white">
+                <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 flex flex-col bg-white">
                     <ProductInfo 
                       product={product} 
                       t={t} 
                       displayTitle={displayTitle} 
+                      // GÜNCELLEME: Prop olarak vendorName gönderiliyor
+                      vendorName={vendorName}
                     />
                     
                     <ProductActions 
@@ -198,16 +188,15 @@ const ProductDetailPage = () => {
                       handleQuantityChange={handleQuantityChange}
                       handleAddToCart={handleAddToCart}
                       errorMsg={errorMsg}
+                      // GÜNCELLEME: Prop olarak stok gönderiliyor
+                      maxStock={displayStock}
                     />
                 </div>
             </div>
 
-            {/* Güven Bandı */}
-            <div className="mt-16">
-               <Features />
-            </div>
+            {/* --- SIRALAMA GÜNCELLENDİ --- */}
 
-            {/* Yorumlar */}
+            {/* 1. YORUMLAR */}
             <ProductReviews 
               product={product} 
               user={user} 
@@ -216,8 +205,14 @@ const ProductDetailPage = () => {
               onReviewSubmit={fetchProduct} 
             />
 
-            {/* Benzer Ürünler */}
+            {/* 2. BENZER ÜRÜNLER (Yeni Card Tasarımıyla) */}
             <RelatedProducts currentProduct={product} />
+
+            {/* 3. GÜVENLİK / FEATURES */}
+            <div className="mt-16">
+               <Features />
+            </div>
+
         </div>
       </div>
     </div>
