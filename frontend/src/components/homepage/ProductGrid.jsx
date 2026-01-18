@@ -59,8 +59,9 @@ const ProductGrid = ({
     toggleFavorite(id); 
   };
 
+  // 'animate-fade-in' sınıfı, HomePage'deki style tag'inde tanımlandı.
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6 animate-fade-in">
       {products.map((product, index) => (
         <ProductCard
           key={product._id}

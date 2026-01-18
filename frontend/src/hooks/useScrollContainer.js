@@ -1,95 +1,106 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
-// dependencies parametresi: Bu değerler değişirse (örn: kategori değişirse) scroll durumunu tekrar kontrol et
 export const useScrollContainer = (dependencies = []) => {
-  const ref = useRef(null);
+  const scrollRef = useRef(null);
+  
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  
+  const dragState = useRef({ startX: 0, scrollLeft: 0 });
 
-  const checkScroll = () => {
-    if (ref.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = ref.current;
-        
-        // Sol ok: Eğer en başta değilsek (scrollLeft > 0) göster
-        // Hassasiyeti artırmak için 0 yerine 1-2px tolerans tanıdık
-        setCanScrollLeft(scrollLeft > 2); 
-        
-        // Sağ ok: Eğer içerik ekrandan genişse VE sona gelmediysek göster
-        // Math.ceil ve -1 toleransı ile 'pixel-perfect' hatalarını önledik
-        const hasOverflow = scrollWidth > clientWidth;
-        const isAtEnd = Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 1;
-        
-        setCanScrollRight(hasOverflow && !isAtEnd);
-    }
-  };
-
-  // Bağımlılıklar değiştiğinde (örn: alt menü açıldığında) tekrar kontrol et
-  useEffect(() => {
-    checkScroll();
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
     
-    // DOM'un render edilmesi bazen milisaniyeler sürer, garantiye almak için gecikmeli kontrol:
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 2);
+    
+    const hasOverflow = scrollWidth > clientWidth;
+    const isAtEnd = Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 1;
+    setCanScrollRight(hasOverflow && !isAtEnd);
+  }, []);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(checkScroll);
     const t1 = setTimeout(checkScroll, 50);
     const t2 = setTimeout(checkScroll, 300);
 
     window.addEventListener('resize', checkScroll);
+    
     return () => {
-        window.removeEventListener('resize', checkScroll);
-        clearTimeout(t1);
-        clearTimeout(t2);
+      cancelAnimationFrame(frame);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('resize', checkScroll);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...dependencies]); // Burası önemli: Kategori değişince tetiklenir
+  }, [checkScroll, ...dependencies]);
 
-  const scrollBy = (direction) => {
-    if (ref.current) {
-      const scrollAmount = direction === 'left' ? -300 : 300;
-      ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      // Kaydırma işlemi bittikten sonra okları güncelle (300ms animasyon süresi kadar bekle)
-      setTimeout(checkScroll, 350);
-    }
-  };
+  const scrollBy = useCallback((direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    
+    const scrollAmount = direction === 'left' ? -300 : 300;
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    setTimeout(checkScroll, 350);
+  }, [checkScroll]);
 
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - ref.current.offsetLeft);
-    setScrollLeft(ref.current.scrollLeft);
-  };
-  
-  const handleMouseLeave = () => {
-      setIsDragging(false);
-  };
-  
-  const handleMouseUp = () => {
-      setIsDragging(false);
-      // Sürükleme bitince okları tekrar kontrol et
-      checkScroll(); 
-  };
-  
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - ref.current.offsetLeft;
-    const walk = (x - startX) * 2; // Kaydırma hızı çarpanı
-    ref.current.scrollLeft = scrollLeft - walk;
+  const onMouseDown = useCallback((e) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    
+    dragState.current = {
+      startX: e.pageX - el.offsetLeft,
+      scrollLeft: el.scrollLeft
+    };
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    setTimeout(() => setIsDragging(false), 10);
     checkScroll();
-  };
+  }, [checkScroll]);
 
+  const onMouseMove = useCallback((e) => {
+    const el = scrollRef.current;
+    if (!el || e.buttons !== 1) return;
+    
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - dragState.current.startX) * 2;
+    el.scrollLeft = dragState.current.scrollLeft - walk;
+    
+    if (Math.abs(walk) > 5) {
+      setIsDragging(true);
+    }
+    checkScroll();
+  }, [checkScroll]);
+
+  const scrollToStart = useCallback(() => {
+    requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (el) {
+        el.scrollTo({ left: 0, behavior: 'auto' });
+      }
+    });
+  }, []);
+
+  // Return individual values, not nested objects
   return {
-    ref,
+    scrollRef,
     canScrollLeft,
     canScrollRight,
     isDragging,
     scrollBy,
-    handlers: {
-        onScroll: checkScroll, // Kullanıcı eliyle kaydırırsa da tetikle
-        onMouseDown: handleMouseDown,
-        onMouseLeave: handleMouseLeave,
-        onMouseUp: handleMouseUp,
-        onMouseMove: handleMouseMove
-    }
+    scrollToStart,
+    onScroll: checkScroll,
+    onMouseDown,
+    onMouseLeave,
+    onMouseUp,
+    onMouseMove
   };
 };

@@ -97,7 +97,7 @@ export const CATEGORY_KEY_MAP = {
 
 // MEVCUT GRUPLAR (Sizin gönderdiğiniz)
 export const CATEGORY_GROUPS = [
-  // ... burası aynı kalabilir, yukarıdaki gibi ...
+ // ... (Boş bırakmıştınız, burayı değiştirmedim) ...
 ];
 
 // YENİ EKLENEN: MENU_STRUCTURE (Görsel Navigasyon Verisi)
@@ -108,14 +108,7 @@ export const MENU_STRUCTURE = [
     icon: <IoFlowerOutline />, 
     activeGradient: 'from-pink-500 via-rose-500 to-fuchsia-500',
     itemColor: 'text-pink-600',
-    theme: {
-        bg: 'bg-pink-50',
-        border: 'border-pink-100',
-        text: 'text-pink-600',
-        hoverBorder: 'hover:border-pink-300',
-        iconBg: 'bg-pink-100',
-        activeRing: 'ring-pink-200'
-    },
+    theme: { bg: 'bg-pink-50', border: 'border-pink-100', text: 'text-pink-600', hoverBorder: 'hover:border-pink-300', iconBg: 'bg-pink-100', activeRing: 'ring-pink-200' },
     subItems: [
       { key: 'designFlowers', label: 'home.categories1.flowers.designFlowers', icon: <GiStarsStack/> },
       { key: 'rose', label: 'home.categories1.flowers.rose', icon: <GiRose/> }, 
@@ -134,14 +127,7 @@ export const MENU_STRUCTURE = [
     icon: <FaGift />, 
     activeGradient: 'from-cyan-500 via-sky-500 to-blue-600',
     itemColor: 'text-sky-600',
-    theme: {
-        bg: 'bg-sky-50',
-        border: 'border-sky-100',
-        text: 'text-sky-600',
-        hoverBorder: 'hover:border-sky-300',
-        iconBg: 'bg-sky-100',
-        activeRing: 'ring-sky-200'
-    },
+    theme: { bg: 'bg-sky-50', border: 'border-sky-100', text: 'text-sky-600', hoverBorder: 'hover:border-sky-300', iconBg: 'bg-sky-100', activeRing: 'ring-sky-200' },
     subItems: [
       { key: 'personalized', label: 'home.categories1.gifts.personalized', icon: <FaGem/> },
       { key: 'birthday', label: 'home.categories1.gifts.birthday', icon: <FaBirthdayCake/> },
@@ -160,14 +146,7 @@ export const MENU_STRUCTURE = [
     icon: <FaCookieBite />, 
     activeGradient: 'from-orange-500 via-amber-500 to-yellow-500',
     itemColor: 'text-amber-600',
-    theme: {
-        bg: 'bg-orange-50',
-        border: 'border-orange-100',
-        text: 'text-orange-600',
-        hoverBorder: 'hover:border-orange-300',
-        iconBg: 'bg-orange-100',
-        activeRing: 'ring-orange-200'
-    },
+    theme: { bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-600', hoverBorder: 'hover:border-orange-300', iconBg: 'bg-orange-100', activeRing: 'ring-orange-200' },
     subItems: [
       { key: 'chocolate_box', label: 'home.categories1.edible.chocolate_box', icon: <GiChocolateBar/> },
       { key: 'fruit_basket', label: 'home.categories1.edible.fruit_basket', icon: <GiFruitBowl/> },
@@ -184,14 +163,7 @@ export const MENU_STRUCTURE = [
     icon: <FaTshirt />, 
     activeGradient: 'from-violet-600 via-purple-600 to-indigo-600',
     itemColor: 'text-purple-600',
-    theme: {
-        bg: 'bg-purple-50',
-        border: 'border-purple-100',
-        text: 'text-purple-600',
-        hoverBorder: 'hover:border-purple-300',
-        iconBg: 'bg-purple-100',
-        activeRing: 'ring-purple-200'
-    },
+    theme: { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-600', hoverBorder: 'hover:border-purple-300', iconBg: 'bg-purple-100', activeRing: 'ring-purple-200' },
     subItems: [
         { 
             key: 'women', 
@@ -257,14 +229,7 @@ export const MENU_STRUCTURE = [
     icon: <FiMoreHorizontal />, 
     activeGradient: 'from-gray-500 via-slate-500 to-zinc-600',
     itemColor: 'text-slate-600',
-    theme: {
-        bg: 'bg-slate-50',
-        border: 'border-slate-100',
-        text: 'text-slate-600',
-        hoverBorder: 'hover:border-slate-300',
-        iconBg: 'bg-slate-100',
-        activeRing: 'ring-slate-200'
-    },
+    theme: { bg: 'bg-slate-50', border: 'border-slate-100', text: 'text-slate-600', hoverBorder: 'hover:border-slate-300', iconBg: 'bg-slate-100', activeRing: 'ring-slate-200' },
     subItems: [
       { key: 'home_decor', label: 'home.categories1.others.home_decor', icon: <FaHome/> },
       { key: 'tech', label: 'home.categories1.others.tech', icon: <FaCreditCard/> },
@@ -274,3 +239,34 @@ export const MENU_STRUCTURE = [
     ]
   }
 ];
+
+// --- HİYERARŞİ VE YARDIMCI FONKSİYONLAR (HomePage için) ---
+
+// 1. Kategori Ağacı (Hangi ana başlık altında neler var?)
+export const CATEGORY_HIERARCHY = {
+  flowers: ['flowers', 'designFlowers', 'rose', 'bouquet', 'orchid', 'special', 'daisy', 'tulip', 'indoor_flowers', 'unique'],
+  gifts: ['gifts', 'gift', 'personalized', 'birthday', 'anniversary', 'for_her', 'for_him', 'for_kids', 'giftcard', 'books', 'crypto'],
+  edible: ['edible', 'chocolate_box', 'fruit_basket', 'cake', 'cookies', 'snack', 'chocolate', 'drinks'],
+  clothing: [
+    'clothing', 
+    'women', 'w_dresses', 'w_bag', 'w_perfume', 'w_accessory', 'w_tops', 'w_skirts', 'w_pants', 'w_sleep', 'w_active',
+    'men', 'm_shirts', 'm_suits', 'm_bag', 'm_perfume', 'm_hoodies', 'm_pants', 'm_active',
+    'baby', 'b_body', 'b_rompers', 'b_shoes', 'b_acc',
+    'kids', 'k_tops', 'k_dresses', 'k_active', 'k_shoes'
+  ],
+  other: ['other', 'home_decor', 'tech', 'sports', 'stationery', 'proteinPowder']
+};
+
+// 2. Yardımcı Fonksiyon: Bir anahtar kelime verildiğinde, onunla ilişkili tüm alt kategorileri bulur.
+// Örn: getRelatedCategories('edible') -> ['edible', 'cake', 'cookies', ...]
+export const getRelatedCategories = (key) => {
+  if (!key || key === 'all') return [];
+  
+  // Ana kategori mi? (Örn: edible)
+  if (CATEGORY_HIERARCHY[key]) {
+    return CATEGORY_HIERARCHY[key];
+  }
+
+  // Değilse, belki bir alt gruptur veya tekil kategoridir, kendisini dizi içinde dön.
+  return [key];
+};

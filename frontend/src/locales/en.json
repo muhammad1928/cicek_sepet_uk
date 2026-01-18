@@ -19,6 +19,8 @@
     "logoutSuccess": "Logged out successfully."
   },
   "common": {
+    "loadMore": "Load More",
+    "endOfResults": "End of Results",
     "more": "Show more",
     "showLess": "Show less",
     "add": "Add",

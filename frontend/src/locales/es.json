@@ -19,6 +19,8 @@
     "logoutSuccess": "Sesión cerrada."
   },
   "common": {
+    "loadMore": "Cargar más",
+    "endOfResults": "Fin de los resultados",
     "more":"Mostrar más",
     "showLess":"Mostrar menos",
     "add":"Añadir",

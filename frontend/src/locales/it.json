@@ -19,6 +19,8 @@
     "logoutSuccess": "Disconnessione effettuata."
   },
   "common": {
+    "loadMore": "Carica di più",
+    "endOfResults": "Fine dei risultati",
     "more": "Mostra di più",
     "showLess": "Mostra di meno",
     "add": "Aggiungi",

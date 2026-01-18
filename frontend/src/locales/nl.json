@@ -19,6 +19,8 @@
     "logoutSuccess": "Uitgelogd."
   },
   "common": {
+    "loadMore": "Meer laden",
+    "endOfResults": "Einde van de resultaten",
     "more": "Meer weergeven",
     "showLess": "Minder weergeven",
     "add": "Toevoegen",

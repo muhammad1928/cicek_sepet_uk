@@ -19,6 +19,8 @@
     "logoutSuccess": "Utloggad."
   },
   "common": {
+    "loadMore": "Ladda mer",
+    "endOfResults": "Slutet av resultat",
     "more": "Visa mer",
     "showLess": "Visa mindre",
     "add": "Lägg till",

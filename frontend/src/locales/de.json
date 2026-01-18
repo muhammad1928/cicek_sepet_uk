@@ -19,6 +19,8 @@
     "logoutSuccess": "Abmeldung erfolgreich."
   },
   "common": {
+    "loadMore": "Mehr laden",
+    "endOfResults": "Ende der Ergebnisse",
     "more": "Mehr anzeigen",
     "showLess": "Weniger anzeigen",
     "add": "Hinzufügen",

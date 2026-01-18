@@ -19,6 +19,8 @@
     "logoutSuccess": "Déconnexion réussie."
   },
   "common": {
+    "loadMore": "Charger plus",
+    "endOfResults": "Fin des résultats",
     "more": "Afficher plus",
     "showLess": "Afficher moins",
     "add": "Ajouter",

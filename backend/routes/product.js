@@ -13,6 +13,7 @@ const {
 
 const BAD_WORDS = ["aptal", "salak", "gerizekali", "dolandirici", "sahtekar", "scam", "fraud", "idiot"];
 
+// Token'dan User ID Çözümleme
 const getUserId = (req) => {
   try {
     const authHeader = req.headers.token;
@@ -26,23 +27,22 @@ const getUserId = (req) => {
 };
 
 // --- YARDIMCI: Cache Temizleme Fonksiyonu ---
+// Ürün eklendiğinde, güncellendiğinde veya silindiğinde çalışır.
 const clearProductCache = async (productId) => {
     try {
         if (redisClient && redisClient.isOpen) {
             // 1. Tekil ürün cache'ini sil
-            await redisClient.del(`products:${productId}`);
+            if (productId) {
+                await redisClient.del(`products:${productId}`);
+            }
             
-            // 2. Listeleme cache'lerini sil (Wildcard/Pattern silme)
-            // Redis'te doğrudan pattern silme yoktur, scan ile bulup silmek gerekir.
-            // Güvenli ve basit yöntem: En sık kullanılan list keylerini manuel silmektir.
-            // Not: Prod ortamında 'scan' döngüsü daha sağlıklıdır.
+            // 2. Listeleme cache'lerini sil
+            // Yeni ürün eklenince sayfa sıralaması bozulur, bu yüzden listeleri temizliyoruz.
             const keys = await redisClient.keys('products:list:*');
             if (keys.length > 0) {
                 await redisClient.del(keys);
             }
-            
-            // Satıcı ürün listesini de temizleyelim (Opsiyonel ama iyi olur)
-            // Ancak vendorId parametresi burada olmadığı için genel temizlik yapıyoruz.
+            console.log("⚡ Redis Cache temizlendi (Ürün ID ve Listeler).");
         }
     } catch (e) {
         console.log("Redis cache temizleme hatası:", e.message);
@@ -61,17 +61,12 @@ router.post('/', verifyTokenAndSeller, async (req, res) => {
         productData.vendor = req.user.id;
     }
 
-    // --- RESİM SENKRONİZASYONU (POST) ---
-    // 1. Eğer imgs dizisi geldi ve doluysa -> İlk resmi 'img' alanına kopyala (Thumbnail için)
+    // --- RESİM SENKRONİZASYONU ---
     if (productData.imgs && productData.imgs.length > 0) {
         productData.img = productData.imgs[0];
-    }
-    // 2. Eğer imgs yok ama tekil img geldiyse -> Onu diziye çevir
-    else if (productData.img) {
+    } else if (productData.img) {
         productData.imgs = [productData.img];
-    }
-    // 3. Hiçbiri yoksa -> Boşalt
-    else {
+    } else {
         productData.imgs = [];
         productData.img = "";
     }
@@ -108,14 +103,12 @@ router.put('/:id', verifyTokenAndSeller, async (req, res) => {
 
     const updateData = { ...req.body };
 
-    // --- RESİM SENKRONİZASYONU (PUT - KRİTİK KISIM) ---
-    // Frontend'den 'imgs' dizisi geldiyse, 'img' alanını da buna göre güncellemek ZORUNDAYIZ.
-    // Aksi takdirde imgs güncellenir ama ana resim (img) eski kalır.
+    // --- RESİM SENKRONİZASYONU ---
     if (updateData.imgs) {
         if (updateData.imgs.length > 0) {
-            updateData.img = updateData.imgs[0]; // İlk resmi ana resim yap
+            updateData.img = updateData.imgs[0];
         } else {
-            updateData.img = ""; // Dizi boşsa ana resmi sil
+            updateData.img = "";
         }
     }
 
@@ -125,7 +118,7 @@ router.put('/:id', verifyTokenAndSeller, async (req, res) => {
       { new: true }
     );
     
-    // Cache temizle (Eski resimlerin görünmemesi için şart)
+    // Cache temizle
     await clearProductCache(req.params.id);
 
     res.status(200).json(updatedProduct);
@@ -158,59 +151,10 @@ router.delete('/:id', verifyTokenAndSeller, async (req, res) => {
 });
 
 // =============================================================================
-// 4. TEK ÜRÜN GETİR (GET) - GÜNCELLENDİ: HERKESİ LOGLUYOR
+// 4. TEK ÜRÜN GETİR (GET) - (Redis Aktif)
 // =============================================================================
 router.get('/:id', async (req, res) => {
   const cacheKey = `products:${req.params.id}`;
-
-  try {
-    // Redis Kontrol
-    try {
-        if (redisClient && redisClient.isOpen) {
-            const cachedData = await redisClient.get(cacheKey);
-            if (cachedData) return res.status(200).json(JSON.parse(cachedData));
-        }
-    } catch (e) {}
-
-    const product = await Product.findById(req.params.id)
-        .populate('vendor', 'username fullName shopName img'); 
-    
-    if (!product) return res.status(404).json({ message: "Ürün bulunamadı" });
-
-    // Redis Kaydet
-    try {
-        if (redisClient && redisClient.isOpen) {
-            await redisClient.setEx(cacheKey, 3600, JSON.stringify(product));
-        }
-    } catch (e) {}
-
-    // ▼▼▼ LOGLAMA (GÜNCELLENDİ) ▼▼▼
-    // getUserId null dönse bile (misafir kullanıcı) logluyoruz.
-    const userId = getUserId(req); 
-    try { 
-        await logActivity(userId || null, 'view_product', req, { 
-            productId: product._id,
-            productName: product.title,
-            price: product.price
-        }); 
-    } catch(e) { console.error("Log error:", e.message); }
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-    res.status(200).json(product);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// =============================================================================
-// 5. TÜM ÜRÜNLERİ GETİR / FİLTRELE - GÜNCELLENDİ: ARAMA LOGU EKLENDİ
-// =============================================================================
-router.get('/', async (req, res) => {
-  const qNew = req.query.new;
-  const qCategory = req.query.category;
-  const qSearch = req.query.search;
-
-  const cacheKey = `products:list:${JSON.stringify(req.query)}`;
 
   try {
     // 1. Redis Oku
@@ -219,43 +163,137 @@ router.get('/', async (req, res) => {
             const cachedData = await redisClient.get(cacheKey);
             if (cachedData) return res.status(200).json(JSON.parse(cachedData));
         }
-    } catch (e) {}
-
-    // 2. DB Sorgusu
-    let products;
-    const populateSettings = { path: 'vendor', select: 'username fullName shopName img' };
-
-    if (qNew) {
-      products = await Product.find({ isActive: true }).sort({ createdAt: -1 }).limit(10).populate(populateSettings);
-    } else if (qCategory && qCategory !== "all") {
-      products = await Product.find({
-        isActive: true,
-        $or: [ { category: qCategory }, { tags: { $in: [qCategory] } } ]
-      }).sort({ createdAt: -1 }).populate(populateSettings);
-    } else if (qSearch) {
-      // ▼▼▼ ARAMA LOGU EKLENDİ ▼▼▼
-      const userId = getUserId(req);
-      try {
-          await logActivity(userId || null, 'search_query', req, { searchTerm: qSearch });
-      } catch(e) {}
-      // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-      products = await Product.find({ 
-          isActive: true,
-          $or: [ { title: { $regex: qSearch, $options: "i" } }, { desc: { $regex: qSearch, $options: "i" } } ]
-      }).populate(populateSettings);
-    } else {
-      products = await Product.find({ isActive: true }).sort({ createdAt: -1 }).populate(populateSettings);
+    } catch (e) {
+        console.log("Redis okuma hatası:", e.message);
     }
 
-    // 3. Redis Yaz
+    // 2. DB Sorgusu
+    const product = await Product.findById(req.params.id)
+        .populate('vendor', 'username fullName shopName img'); 
+    
+    if (!product) return res.status(404).json({ message: "Ürün bulunamadı" });
+
+    // 3. Redis Yaz (1 Saatlik Cache)
     try {
         if (redisClient && redisClient.isOpen) {
-            await redisClient.setEx(cacheKey, 600, JSON.stringify(products));
+            await redisClient.setEx(cacheKey, 3600, JSON.stringify(product));
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log("Redis yazma hatası:", e.message);
+    }
 
-    res.status(200).json(products);
+    // 4. Loglama
+    const userId = getUserId(req); 
+    try { 
+        if (typeof logActivity === 'function') {
+            await logActivity(userId || null, 'view_product', req, { 
+                productId: product._id,
+                productName: product.title,
+                price: product.price
+            }); 
+        }
+    } catch(e) { console.error("Log error:", e.message); }
+
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// =============================================================================
+// 5. TÜM ÜRÜNLERİ GETİR / FİLTRELE (PAGINATION + REDIS AKTİF)
+// =============================================================================
+router.get('/', async (req, res) => {
+  const qNew = req.query.new;
+  const qSearch = req.query.search;
+  
+  // Frontend'den virgülle ayrılmış kategoriler gelebilir
+  const qCategories = req.query.categories ? req.query.categories.split(',') : null;
+
+  // --- PAGINATION AYARLARI ---
+  const page = parseInt(req.query.page) || 1;      // Hangi sayfa? (Varsayılan 1)
+  const limit = parseInt(req.query.limit) || 8;    // Sayfada kaç ürün? (Varsayılan 8)
+  const skip = (page - 1) * limit;                 // Kaç ürün atlanacak?
+
+  // Cache anahtarı: Tüm query parametrelerini içerir (page, limit, category, search)
+  const cacheKey = `products:list:${JSON.stringify(req.query)}`;
+
+  try {
+    // -----------------------------------------------------
+    // 1. Redis Oku (AKTİF)
+    // -----------------------------------------------------
+    try {
+        if (redisClient && redisClient.isOpen) {
+            const cachedData = await redisClient.get(cacheKey);
+            if (cachedData) {
+                return res.status(200).json(JSON.parse(cachedData));
+            }
+        }
+    } catch (e) {
+        console.log("Redis okuma hatası:", e.message);
+    }
+
+    // -----------------------------------------------------
+    // 2. DB Sorgusunu Hazırla
+    // -----------------------------------------------------
+    let query = { isActive: true };
+
+    if (qNew) {
+      // Yeni ürünler (query zaten isActive: true)
+    } else if (qCategories && qCategories.length > 0) {
+      // Kategori Filtresi (Çoklu)
+      query.$or = [
+        { category: { $in: qCategories } },
+        { tags: { $in: qCategories } }
+      ];
+    } else if (qSearch) {
+      // Arama Filtresi + Loglama
+      const userId = getUserId(req); 
+      try {
+          if(typeof logActivity === 'function') {
+             await logActivity(userId || null, 'search_query', req, { searchTerm: qSearch });
+          }
+      } catch(e) {}
+
+      query.$or = [
+        { title: { $regex: qSearch, $options: "i" } },
+        { desc: { $regex: qSearch, $options: "i" } }
+      ];
+    }
+
+    // -----------------------------------------------------
+    // 3. Veritabanından Çek
+    // -----------------------------------------------------
+    const populateSettings = { path: 'vendor', select: 'username fullName shopName img' };
+    
+    // Toplam sayıyı bul (Frontend 'Load More' butonu için gerekli)
+    const totalItems = await Product.countDocuments(query);
+
+    const products = await Product.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)   // Pagination: Atla
+      .limit(limit) // Pagination: Limitle
+      .populate(populateSettings);
+
+    const responseData = {
+        products,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page
+    };
+
+    // -----------------------------------------------------
+    // 4. Redis Yaz (AKTİF - 5 Dakika)
+    // -----------------------------------------------------
+    try {
+        if (redisClient && redisClient.isOpen) {
+            await redisClient.setEx(cacheKey, 300, JSON.stringify(responseData));
+        }
+    } catch (e) {
+        console.log("Redis yazma hatası:", e.message);
+    }
+
+    res.status(200).json(responseData);
 
   } catch (err) {
     console.error("Liste Hatası:", err);
@@ -268,7 +306,6 @@ router.get('/', async (req, res) => {
 // =============================================================================
 router.get('/vendor/:vendorId', async (req, res) => {
   try {
-    // GÜVENLİK: Email hariç populate
     const products = await Product.find({ vendor: req.params.vendorId })
         .sort({ createdAt: -1 })
         .populate('vendor', 'username shopName img'); 
@@ -305,7 +342,7 @@ router.post('/:id/reviews', verifyToken, async (req, res) => {
 
     await product.save();
 
-    // Cache temizle (Yorum eklendiğinde de cache silinmeli)
+    // Cache temizle
     await clearProductCache(req.params.id);
 
     res.status(200).json(product);

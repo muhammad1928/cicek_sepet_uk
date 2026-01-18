@@ -129,7 +129,7 @@ const AdminProducts = () => {
   };
 
   // Filter
-  const filteredProducts = products.filter(p => {
+  const filteredProducts = products?.filter(p => {
     const term = searchTerm.toLowerCase();
     return p.title.toLowerCase().includes(term) || (p.vendor?.username?.toLowerCase() || "").includes(term);
   });
