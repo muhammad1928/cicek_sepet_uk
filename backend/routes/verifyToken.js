@@ -3,11 +3,19 @@ const jwt = require("jsonwebtoken");
 // 1. TEMEL DOĞRULAMA (Giriş Yapmış mı?)
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.token || req.headers.authorization;
+  
   if (authHeader) {
-    const token = authHeader.split(" ")[1];
+    // "Bearer <token>" formatını veya sadece token'ı destekle
+    const token = authHeader.startsWith("Bearer ") 
+      ? authHeader.split(" ")[1] 
+      : authHeader;
+
     jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-      if (err) return res.status(403).json({ message: "Token geçersiz!" });
-      req.user = user; // Token içindeki (id, role) bilgisini request'e ekle
+      // Token geçersizse veya süresi dolmuşsa 403 yerine 401 dönüyoruz.
+      // Bu sayede frontend interceptor'ı token yenilemesi gerektiğini anlar.
+      if (err) return res.status(401).json({ message: "Token geçersiz veya süresi dolmuş!" });
+      
+      req.user = user;
       next();
     });
   } else {
@@ -16,12 +24,8 @@ const verifyToken = (req, res, next) => {
 };
 
 // 2. YETKİLENDİRME (Kendi Hesabı veya Admin)
-// Örn: Kullanıcı kendi siparişlerini görebilir, Admin herkesinkini görebilir.
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    // req.params.id (URL'deki ID) ile giriş yapan kişinin ID'si (req.user.id) aynı mı?
-    // Veya giriş yapan kişi Admin mi?
-    // Veya URL'deki ID 'find' gibi bir kelime değilse ve vendorId parametresi varsa (Satıcı kontrolü için)
     if (req.user.id === req.params.id || req.user.id === req.params.userId || req.user.id === req.params.vendorId || req.user.role === "admin") {
       next();
     } else {
@@ -41,7 +45,7 @@ const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
-// 4. SATICI VEYA ADMIN (Ürün Yönetimi İçin)
+// 4. SATICI VEYA ADMIN
 const verifyTokenAndSeller = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.role === "vendor" || req.user.role === "admin") {
@@ -52,7 +56,7 @@ const verifyTokenAndSeller = (req, res, next) => {
   });
 };
 
-// 5. KURYE VEYA ADMIN (İş Havuzu İçin)
+// 5. KURYE VEYA ADMIN
 const verifyTokenAndCourier = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.role === "courier" || req.user.role === "admin") {
@@ -63,7 +67,7 @@ const verifyTokenAndCourier = (req, res, next) => {
   });
 };
 
-// 6. ÇALIŞAN (Kurye, Satıcı veya Admin - Sipariş Durumu Güncellemek İçin)
+// 6. ÇALIŞAN
 const verifyTokenAndWorker = (req, res, next) => {
   verifyToken(req, res, () => {
     if (["admin", "vendor", "courier"].includes(req.user.role)) {

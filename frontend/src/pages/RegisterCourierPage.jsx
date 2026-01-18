@@ -73,13 +73,22 @@ const RegisterCourierPage = () => {
 
   const handleAppChange = (e) => setAppData({ ...appData, [e.target.name]: e.target.value });
 
-  const handleUpload = async (e) => {
+const handleUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return;
-    setUploading(true); const data = new FormData(); data.append("file", file);
-    try { const res = await publicRequest.post("/upload", data); setLicenseFile(res.data); notify(t("registerCourier.driverLicenseSuccess") + " ✅", "success"); } 
-    catch { notify(t("registerCourier.uploadError"), "error"); } finally { setUploading(false); }
+    setUploading(true); 
+    const data = new FormData(); 
+    data.append("file", file);
+    try { 
+        // DÜZELTME BURADA: publicRequest -> userRequest oldu.
+        // Artık header'da token gönderiyor.
+        const res = await userRequest.post("/upload", data); 
+        setLicenseFile(res.data); 
+        notify(t("registerCourier.driverLicenseSuccess") + " ✅", "success"); 
+    } 
+    catch { notify(t("registerCourier.uploadError"), "error"); } 
+    finally { setUploading(false); }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!acceptedTerms) return notify(t("registerCourier.acceptTermsWarning"), "warning");

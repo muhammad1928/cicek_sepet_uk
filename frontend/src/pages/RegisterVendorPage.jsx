@@ -73,6 +73,7 @@ const RegisterVendorPage = () => {
   };
 
   // Güvenli Resim Yükleme (Backend Üzerinden)
+// Güvenli Resim Yükleme (Backend Üzerinden)
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -82,7 +83,8 @@ const RegisterVendorPage = () => {
     data.append("file", file);
 
     try {
-      const res = await publicRequest.post("/upload", data);
+      // DÜZELTME BURADA: publicRequest -> userRequest oldu.
+      const res = await userRequest.post("/upload", data);
       setDocFile(res.data);
       notify(t("vendor.documentLoaded") + " ✅", "success");
     } catch (err) {
@@ -91,7 +93,7 @@ const RegisterVendorPage = () => {
       setUploading(false);
     }
   };
-
+  
   // Form Gönderme
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -262,10 +264,10 @@ const RegisterVendorPage = () => {
                  <LocationPicker onSelect={handleLocationSelect} />
                  
                  <div>
-                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("vendor.address")}</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase mb-1 block">{t("vendor.adress")}</label>
                     <textarea 
                       name="address" 
-                      placeholder={t("vendor.addressPlaceholder")} 
+                      placeholder={t("vendor.adressPlaceholder")} 
                       value={appData.address} 
                       onChange={handleAppChange} 
                       className="w-full p-3 border rounded text-sm h-24 resize-none outline-none focus:border-purple-500 bg-white" 

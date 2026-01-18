@@ -37,13 +37,29 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initialForm);
 
   // API Call
+// API Call
   const fetchProducts = async () => {
     try {
-      const res = await userRequest.get("/products"); 
-      setProducts(res.data);
-    } catch (err) { console.log(err); }
+      // Backend artık pagination objesi döndürüyor { products: [], totalItems: ... }
+      // Ancak admin panelinde genelde hepsini görmek istersin veya sayfalama eklersin.
+      // Şimdilik limit=1000 diyerek geçici bir çözüm yapabiliriz veya sadece gelen array'i alabiliriz.
+      const res = await userRequest.get("/products?limit=1000"); 
+      
+      // DÜZELTME BURADA:
+      if (res.data && Array.isArray(res.data.products)) {
+         setProducts(res.data.products);
+      } else if (Array.isArray(res.data)) {
+         // Eski tip array dönerse diye yedek kontrol
+         setProducts(res.data);
+      } else {
+         setProducts([]);
+      }
+    } catch (err) { 
+      console.log(err); 
+      // Hata durumunda boş array set et ki .filter patlamasın
+      setProducts([]);
+    }
   };
-  
   useEffect(() => { fetchProducts(); }, []);
 
   // --- HANDLERS (Mantık) ---
@@ -129,10 +145,12 @@ const AdminProducts = () => {
   };
 
   // Filter
+  // Filter - Güvenlik kontrolü eklendi (? işareti ile optional chaining)
   const filteredProducts = products?.filter(p => {
     const term = searchTerm.toLowerCase();
-    return p.title.toLowerCase().includes(term) || (p.vendor?.username?.toLowerCase() || "").includes(term);
-  });
+    // vendor kontrolünde de ? kullanarak patlamayı önledik
+    return p.title?.toLowerCase().includes(term) || (p.vendor?.username?.toLowerCase() || "").includes(term);
+  }) || []; // Eğer products null ise boş dizi döndür
 
   return (
     <div className="space-y-6 pt-2 max-w-7xl mx-auto animate-fade-in">

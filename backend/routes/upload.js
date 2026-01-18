@@ -3,11 +3,9 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const axios = require('axios');
 
-const { 
-  verifyTokenAndAuthorization,
-} = require('./verifyToken'); // GÜVENLİK İMPORTU
+// DÜZELTME 1: Sadece verifyToken'ı alıyoruz
+const { verifyToken } = require('./verifyToken'); 
 
-// Cloudinary Ayarları
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -17,20 +15,19 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// 1. RESİM YÜKLEME (Tam Güvenli Mod)
-router.post('/', verifyTokenAndAuthorization, upload.single('file'), async (req, res) => {
+// 1. RESİM YÜKLEME
+// DÜZELTME 2: verifyTokenAndAuthorization -> verifyToken olarak değiştirildi.
+// Artık URL'de ID aramıyor, sadece geçerli token var mı diye bakıyor.
+router.post('/', verifyToken, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json("Dosya yok!");
 
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
 
-    // GÜVENLİK GÜNCELLEMESİ: type: 'authenticated'
-    // Bu modda yüklenen resmin URL'si dışarıdan ASLA açılamaz.
-    // Sadece bizim backend'imiz (imzalı istek ile) erişebilir.
     const result = await cloudinary.uploader.upload(dataURI, {
       folder: "ciceksepeti_belgeler",
-      type: "authenticated", // <--- KRİTİK DEĞİŞİKLİK
+      type: "authenticated",
       access_mode: "authenticated"
     });
 
@@ -41,34 +38,25 @@ router.post('/', verifyTokenAndAuthorization, upload.single('file'), async (req,
   }
 });
 
-// 2. GÜVENLİ RESİM GÖRÜNTÜLEME (PROXY)
-router.get('/secure-image', verifyTokenAndAuthorization, async (req, res) => {
+// 2. GÜVENLİ RESİM GÖRÜNTÜLEME
+// Burası da verifyToken olarak değiştirildi.
+router.get('/secure-image', verifyToken, async (req, res) => {
   try {
     const imageUrl = req.query.url;
-    
     if (!imageUrl) return res.status(400).json("URL gerekli.");
 
-    // Cloudinary 'authenticated' resimleri çekmek için özel imza gerekir.
-    // Ancak bizim backend'imiz axios ile istek atarken "Basic Auth" veya imzalı URL oluşturabilir.
-    // Basitlik için Cloudinary'nin 'private_download_url' metodunu kullanıyoruz:
-    
-    // URL'den public_id'yi çıkarıyoruz (Basit parser)
-    // Örn: .../upload/v123/ciceksepeti_belgeler/resim.jpg -> ciceksepeti_belgeler/resim
     const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.[a-z]+$/);
-    
     let downloadUrl = imageUrl;
 
     if (publicIdMatch) {
-        // Eğer public_id bulursak imzalı URL oluştururuz
         const publicId = publicIdMatch[1];
         downloadUrl = cloudinary.url(publicId, {
             type: 'authenticated',
-            sign_url: true, // <--- İMZA EKLİYORUZ
+            sign_url: true,
             secure: true
         });
     }
 
-    // Şimdi imzalı URL ile resmi çekip Frontend'e akıtıyoruz
     const response = await axios({
       url: downloadUrl,
       method: 'GET',
